@@ -1,0 +1,145 @@
+:host {
+  position: relative;
+  display: block;
+  min-width: 0;
+  font-family: var(--cr-font-family);
+  color: var(--cr-color-text);
+}
+
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  height: 100%;
+  overflow: hidden;
+  background: var(--cr-color-surface);
+  border: 1px solid var(--cr-color-disabled);
+  border-radius: var(--cr-radius-l);
+  box-shadow: 0 1px 2px color-mix(in oklab, var(--cr-color-text) 6%, transparent);
+  transition: box-shadow 0.25s, scale 0.25s, border-color 0.25s;
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  gap: var(--cr-spacing-xs);
+  padding: var(--cr-spacing-sm) var(--cr-spacing-sm) 0;
+}
+
+.title {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  font-size: var(--cr-font-size-s);
+  font-weight: var(--cr-font-weight-bold);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.handle,
+.remove {
+  display: grid;
+  flex-shrink: 0;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  color: var(--cr-color-text-muted);
+  background: none;
+  border: 0;
+  border-radius: var(--cr-radius-m);
+}
+
+.handle {
+  cursor: grab;
+  touch-action: none;
+}
+
+.handle svg {
+  fill: currentColor;
+}
+
+.remove {
+  cursor: pointer;
+}
+
+.handle:hover,
+.remove:hover {
+  color: var(--cr-color-primary-text);
+  background: var(--cr-color-primary-subtle);
+}
+
+.handle:focus-visible,
+.remove:focus-visible {
+  outline: 2px solid var(--cr-color-focus);
+  outline-offset: 1px;
+}
+
+.body {
+  flex: 1;
+  min-height: 0;
+  padding: var(--cr-spacing-sm) var(--cr-spacing-lg) var(--cr-spacing-lg);
+  overflow: auto;
+}
+
+.resize {
+  position: absolute;
+  right: 2px;
+  bottom: 2px;
+  width: 18px;
+  height: 18px;
+  cursor: nwse-resize;
+  touch-action: none;
+  background:
+    linear-gradient(135deg, transparent 0 55%, var(--cr-color-border) 55% 62%, transparent 62% 72%, var(--cr-color-border) 72% 79%, transparent 79%);
+  border-radius: 0 0 var(--cr-radius-l) 0;
+  opacity: 0.7;
+}
+
+.resize:hover {
+  opacity: 1;
+}
+
+/* En édition, la carte s'attrape en maintenant le clic dessus. */
+:host([data-editable]) .card {
+  cursor: grab;
+}
+
+/* Hors édition, ni poignée ni coin. */
+:host(:not([data-editable])) .handle,
+:host(:not([data-editable])) .resize {
+  display: none;
+}
+
+/* Attrapé : le widget se soulève au-dessus des autres. */
+:host([data-lifted]) {
+  z-index: 5;
+}
+
+:host([data-lifted]) .card {
+  border-color: var(--cr-color-primary);
+  box-shadow: 0 24px 48px -16px color-mix(in oklab, var(--cr-color-primary) 45%, transparent);
+  scale: 1.02;
+}
+
+:host([data-lifted]) .card,
+:host([data-lifted]) .handle {
+  cursor: grabbing;
+  user-select: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card {
+    transition: none;
+  }
+  :host([data-lifted]) .card {
+    scale: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .card {
+    border-color: CanvasText;
+  }
+}

@@ -131,7 +131,7 @@ test('everything is sent with the form and reset puts it back', async ({ page })
 });
 
 test('box lays its children out with theme spacing', async ({ page }) => {
-  const box = page.locator('cr-box').first();
+  const box = form(page).locator('cr-box').first();
   await expect(box).toHaveCSS('display', 'grid');
   await expect(box).toHaveCSS('gap', '24px');
   await expect(box).toHaveCSS('padding', '24px');

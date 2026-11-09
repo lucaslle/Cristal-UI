@@ -9,6 +9,7 @@ import { AccordionAnimation, AccordionVariant } from "./utils/accordion";
 import { BoxDisplay } from "./components/cr-box/cr-box";
 import { ButtonSize, ButtonType, ButtonVariant } from "./components/cr-button/cr-button";
 import { CardValue } from "./components/cr-card-input/cr-card-input";
+import { DashboardItem } from "./utils/dashboard-keys";
 import { InputType } from "./components/cr-input/cr-input";
 import { PopupAnimation } from "./utils/popup";
 import { StepperVariant } from "./utils/stepper";
@@ -17,6 +18,7 @@ export { AccordionAnimation, AccordionVariant } from "./utils/accordion";
 export { BoxDisplay } from "./components/cr-box/cr-box";
 export { ButtonSize, ButtonType, ButtonVariant } from "./components/cr-button/cr-button";
 export { CardValue } from "./components/cr-card-input/cr-card-input";
+export { DashboardItem } from "./utils/dashboard-keys";
 export { InputType } from "./components/cr-input/cr-input";
 export { PopupAnimation } from "./utils/popup";
 export { StepperVariant } from "./utils/stepper";
@@ -271,6 +273,50 @@ export namespace Components {
           * @default 'on'
          */
         "value": string;
+    }
+    /**
+     * Tableau de bord : une grille de cr-widget que l'utilisateur déplace par leur poignée et redimensionne par leur coin.
+     * Les autres widgets s'écartent pendant le déplacement, puis tout se tasse vers le haut.
+     */
+    interface CrDashboard {
+        /**
+          * Nombre de colonnes de la grille.
+          * @default 12
+         */
+        "columns": number;
+        /**
+          * Permet de déplacer et de redimensionner les widgets.
+          * @default true
+         */
+        "editable": boolean;
+        /**
+          * Espace entre les widgets, en pixels.
+          * @default 16
+         */
+        "gap": number;
+        /**
+          * Nom du tableau de bord, lu par les lecteurs d'écran.
+          * @default 'Tableau de bord'
+         */
+        "label": string;
+        /**
+          * Revient à la disposition de départ et oublie celle enregistrée.
+         */
+        "reset": () => Promise<void>;
+        /**
+          * Hauteur d'une ligne, en pixels.
+          * @default 80
+         */
+        "rowHeight": number;
+        /**
+          * Largeur (px) sous laquelle les widgets s'empilent sur toute la largeur, sans poignées.
+          * @default 480
+         */
+        "stackBelow": number;
+        /**
+          * Clé localStorage : la disposition de l'utilisateur est retenue d'une visite à l'autre.
+         */
+        "storageKey"?: string;
     }
     /**
      * Fenêtre modale, basée sur l'élément dialog natif.
@@ -676,6 +722,59 @@ export namespace Components {
          */
         "value": string;
     }
+    /**
+     * Carte d'un cr-dashboard. Se déplace par sa poignée et se redimensionne par son coin.
+     * Donnez-lui un id pour retrouver sa place dans les réglages enregistrés.
+     */
+    interface CrWidget {
+        /**
+          * Hauteur en lignes.
+          * @default 2
+         */
+        "h": number;
+        /**
+          * Titre affiché dans l'en-tête.
+         */
+        "label": string;
+        /**
+          * Hauteur maximale en lignes.
+          * @default 12
+         */
+        "maxH": number;
+        /**
+          * Largeur maximale en colonnes.
+          * @default 12
+         */
+        "maxW": number;
+        /**
+          * Hauteur minimale en lignes.
+          * @default 1
+         */
+        "minH": number;
+        /**
+          * Largeur minimale en colonnes.
+          * @default 1
+         */
+        "minW": number;
+        /**
+          * Ajoute un bouton × qui émet crRemove.
+          * @default false
+         */
+        "removable": boolean;
+        /**
+          * Largeur en colonnes.
+          * @default 3
+         */
+        "w": number;
+        /**
+          * Colonne de départ (à partir de 0) ; sans valeur, le widget prend la première place libre.
+         */
+        "x"?: number;
+        /**
+          * Ligne de départ (à partir de 0).
+         */
+        "y"?: number;
+    }
 }
 export interface CrAccordionItemCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -688,6 +787,10 @@ export interface CrCardInputCustomEvent<T> extends CustomEvent<T> {
 export interface CrCheckboxCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLCrCheckboxElement;
+}
+export interface CrDashboardCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLCrDashboardElement;
 }
 export interface CrDialogCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -728,6 +831,10 @@ export interface CrTagInputCustomEvent<T> extends CustomEvent<T> {
 export interface CrTextareaCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLCrTextareaElement;
+}
+export interface CrWidgetCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLCrWidgetElement;
 }
 declare global {
     /**
@@ -828,6 +935,27 @@ declare global {
     var HTMLCrCheckboxElement: {
         prototype: HTMLCrCheckboxElement;
         new (): HTMLCrCheckboxElement;
+    };
+    interface HTMLCrDashboardElementEventMap {
+        "crLayoutChange": DashboardItem[];
+    }
+    /**
+     * Tableau de bord : une grille de cr-widget que l'utilisateur déplace par leur poignée et redimensionne par leur coin.
+     * Les autres widgets s'écartent pendant le déplacement, puis tout se tasse vers le haut.
+     */
+    interface HTMLCrDashboardElement extends Components.CrDashboard, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLCrDashboardElementEventMap>(type: K, listener: (this: HTMLCrDashboardElement, ev: CrDashboardCustomEvent<HTMLCrDashboardElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLCrDashboardElementEventMap>(type: K, listener: (this: HTMLCrDashboardElement, ev: CrDashboardCustomEvent<HTMLCrDashboardElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLCrDashboardElement: {
+        prototype: HTMLCrDashboardElement;
+        new (): HTMLCrDashboardElement;
     };
     interface HTMLCrDialogElementEventMap {
         "crClose": void;
@@ -1042,6 +1170,28 @@ declare global {
         prototype: HTMLCrTextareaElement;
         new (): HTMLCrTextareaElement;
     };
+    interface HTMLCrWidgetElementEventMap {
+        "crRemove": void;
+        "crWidgetUpdate": void;
+    }
+    /**
+     * Carte d'un cr-dashboard. Se déplace par sa poignée et se redimensionne par son coin.
+     * Donnez-lui un id pour retrouver sa place dans les réglages enregistrés.
+     */
+    interface HTMLCrWidgetElement extends Components.CrWidget, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLCrWidgetElementEventMap>(type: K, listener: (this: HTMLCrWidgetElement, ev: CrWidgetCustomEvent<HTMLCrWidgetElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLCrWidgetElementEventMap>(type: K, listener: (this: HTMLCrWidgetElement, ev: CrWidgetCustomEvent<HTMLCrWidgetElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLCrWidgetElement: {
+        prototype: HTMLCrWidgetElement;
+        new (): HTMLCrWidgetElement;
+    };
     interface HTMLElementTagNameMap {
         "cr-accordion": HTMLCrAccordionElement;
         "cr-accordion-item": HTMLCrAccordionItemElement;
@@ -1050,6 +1200,7 @@ declare global {
         "cr-card": HTMLCrCardElement;
         "cr-card-input": HTMLCrCardInputElement;
         "cr-checkbox": HTMLCrCheckboxElement;
+        "cr-dashboard": HTMLCrDashboardElement;
         "cr-dialog": HTMLCrDialogElement;
         "cr-drawer": HTMLCrDrawerElement;
         "cr-input": HTMLCrInputElement;
@@ -1061,6 +1212,7 @@ declare global {
         "cr-table": HTMLCrTableElement;
         "cr-tag-input": HTMLCrTagInputElement;
         "cr-textarea": HTMLCrTextareaElement;
+        "cr-widget": HTMLCrWidgetElement;
     }
 }
 declare namespace LocalJSX {
@@ -1343,6 +1495,50 @@ declare namespace LocalJSX {
           * @default 'on'
          */
         "value"?: string;
+    }
+    /**
+     * Tableau de bord : une grille de cr-widget que l'utilisateur déplace par leur poignée et redimensionne par leur coin.
+     * Les autres widgets s'écartent pendant le déplacement, puis tout se tasse vers le haut.
+     */
+    interface CrDashboard {
+        /**
+          * Nombre de colonnes de la grille.
+          * @default 12
+         */
+        "columns"?: number;
+        /**
+          * Permet de déplacer et de redimensionner les widgets.
+          * @default true
+         */
+        "editable"?: boolean;
+        /**
+          * Espace entre les widgets, en pixels.
+          * @default 16
+         */
+        "gap"?: number;
+        /**
+          * Nom du tableau de bord, lu par les lecteurs d'écran.
+          * @default 'Tableau de bord'
+         */
+        "label"?: string;
+        /**
+          * Émis après chaque déplacement ou redimensionnement ; detail : id, x, y, w, h de chaque widget.
+         */
+        "onCrLayoutChange"?: (event: CrDashboardCustomEvent<DashboardItem[]>) => void;
+        /**
+          * Hauteur d'une ligne, en pixels.
+          * @default 80
+         */
+        "rowHeight"?: number;
+        /**
+          * Largeur (px) sous laquelle les widgets s'empilent sur toute la largeur, sans poignées.
+          * @default 480
+         */
+        "stackBelow"?: number;
+        /**
+          * Clé localStorage : la disposition de l'utilisateur est retenue d'une visite à l'autre.
+         */
+        "storageKey"?: string;
     }
     /**
      * Fenêtre modale, basée sur l'élément dialog natif.
@@ -1812,6 +2008,67 @@ declare namespace LocalJSX {
          */
         "value"?: string;
     }
+    /**
+     * Carte d'un cr-dashboard. Se déplace par sa poignée et se redimensionne par son coin.
+     * Donnez-lui un id pour retrouver sa place dans les réglages enregistrés.
+     */
+    interface CrWidget {
+        /**
+          * Hauteur en lignes.
+          * @default 2
+         */
+        "h"?: number;
+        /**
+          * Titre affiché dans l'en-tête.
+         */
+        "label": string;
+        /**
+          * Hauteur maximale en lignes.
+          * @default 12
+         */
+        "maxH"?: number;
+        /**
+          * Largeur maximale en colonnes.
+          * @default 12
+         */
+        "maxW"?: number;
+        /**
+          * Hauteur minimale en lignes.
+          * @default 1
+         */
+        "minH"?: number;
+        /**
+          * Largeur minimale en colonnes.
+          * @default 1
+         */
+        "minW"?: number;
+        /**
+          * Émis par le bouton × : retirez alors le widget de votre liste.
+         */
+        "onCrRemove"?: (event: CrWidgetCustomEvent<void>) => void;
+        /**
+          * Interne : prévient le tableau de bord qu'une position ou une taille a changé.
+         */
+        "onCrWidgetUpdate"?: (event: CrWidgetCustomEvent<void>) => void;
+        /**
+          * Ajoute un bouton × qui émet crRemove.
+          * @default false
+         */
+        "removable"?: boolean;
+        /**
+          * Largeur en colonnes.
+          * @default 3
+         */
+        "w"?: number;
+        /**
+          * Colonne de départ (à partir de 0) ; sans valeur, le widget prend la première place libre.
+         */
+        "x"?: number;
+        /**
+          * Ligne de départ (à partir de 0).
+         */
+        "y"?: number;
+    }
 
     interface CrAccordionAttributes {
         "multiple": boolean;
@@ -1870,6 +2127,15 @@ declare namespace LocalJSX {
         "error": string;
         "required": boolean;
         "disabled": boolean;
+    }
+    interface CrDashboardAttributes {
+        "columns": number;
+        "rowHeight": number;
+        "gap": number;
+        "editable": boolean;
+        "label": string;
+        "stackBelow": number;
+        "storageKey": string;
     }
     interface CrDialogAttributes {
         "open": boolean;
@@ -1962,6 +2228,18 @@ declare namespace LocalJSX {
         "required": boolean;
         "disabled": boolean;
     }
+    interface CrWidgetAttributes {
+        "label": string;
+        "x": number;
+        "y": number;
+        "w": number;
+        "h": number;
+        "minW": number;
+        "minH": number;
+        "maxW": number;
+        "maxH": number;
+        "removable": boolean;
+    }
 
     interface IntrinsicElements {
         "cr-accordion": Omit<CrAccordion, keyof CrAccordionAttributes> & { [K in keyof CrAccordion & keyof CrAccordionAttributes]?: CrAccordion[K] } & { [K in keyof CrAccordion & keyof CrAccordionAttributes as `attr:${K}`]?: CrAccordionAttributes[K] } & { [K in keyof CrAccordion & keyof CrAccordionAttributes as `prop:${K}`]?: CrAccordion[K] };
@@ -1971,6 +2249,7 @@ declare namespace LocalJSX {
         "cr-card": CrCard;
         "cr-card-input": Omit<CrCardInput, keyof CrCardInputAttributes> & { [K in keyof CrCardInput & keyof CrCardInputAttributes]?: CrCardInput[K] } & { [K in keyof CrCardInput & keyof CrCardInputAttributes as `attr:${K}`]?: CrCardInputAttributes[K] } & { [K in keyof CrCardInput & keyof CrCardInputAttributes as `prop:${K}`]?: CrCardInput[K] } & OneOf<"label", CrCardInput["label"], CrCardInputAttributes["label"]>;
         "cr-checkbox": Omit<CrCheckbox, keyof CrCheckboxAttributes> & { [K in keyof CrCheckbox & keyof CrCheckboxAttributes]?: CrCheckbox[K] } & { [K in keyof CrCheckbox & keyof CrCheckboxAttributes as `attr:${K}`]?: CrCheckboxAttributes[K] } & { [K in keyof CrCheckbox & keyof CrCheckboxAttributes as `prop:${K}`]?: CrCheckbox[K] } & OneOf<"label", CrCheckbox["label"], CrCheckboxAttributes["label"]>;
+        "cr-dashboard": Omit<CrDashboard, keyof CrDashboardAttributes> & { [K in keyof CrDashboard & keyof CrDashboardAttributes]?: CrDashboard[K] } & { [K in keyof CrDashboard & keyof CrDashboardAttributes as `attr:${K}`]?: CrDashboardAttributes[K] } & { [K in keyof CrDashboard & keyof CrDashboardAttributes as `prop:${K}`]?: CrDashboard[K] };
         "cr-dialog": Omit<CrDialog, keyof CrDialogAttributes> & { [K in keyof CrDialog & keyof CrDialogAttributes]?: CrDialog[K] } & { [K in keyof CrDialog & keyof CrDialogAttributes as `attr:${K}`]?: CrDialogAttributes[K] } & { [K in keyof CrDialog & keyof CrDialogAttributes as `prop:${K}`]?: CrDialog[K] } & OneOf<"label", CrDialog["label"], CrDialogAttributes["label"]>;
         "cr-drawer": Omit<CrDrawer, keyof CrDrawerAttributes> & { [K in keyof CrDrawer & keyof CrDrawerAttributes]?: CrDrawer[K] } & { [K in keyof CrDrawer & keyof CrDrawerAttributes as `attr:${K}`]?: CrDrawerAttributes[K] } & { [K in keyof CrDrawer & keyof CrDrawerAttributes as `prop:${K}`]?: CrDrawer[K] } & OneOf<"label", CrDrawer["label"], CrDrawerAttributes["label"]>;
         "cr-input": Omit<CrInput, keyof CrInputAttributes> & { [K in keyof CrInput & keyof CrInputAttributes]?: CrInput[K] } & { [K in keyof CrInput & keyof CrInputAttributes as `attr:${K}`]?: CrInputAttributes[K] } & { [K in keyof CrInput & keyof CrInputAttributes as `prop:${K}`]?: CrInput[K] } & OneOf<"label", CrInput["label"], CrInputAttributes["label"]>;
@@ -1982,6 +2261,7 @@ declare namespace LocalJSX {
         "cr-table": Omit<CrTable, keyof CrTableAttributes> & { [K in keyof CrTable & keyof CrTableAttributes]?: CrTable[K] } & { [K in keyof CrTable & keyof CrTableAttributes as `attr:${K}`]?: CrTableAttributes[K] } & { [K in keyof CrTable & keyof CrTableAttributes as `prop:${K}`]?: CrTable[K] } & OneOf<"label", CrTable["label"], CrTableAttributes["label"]>;
         "cr-tag-input": Omit<CrTagInput, keyof CrTagInputAttributes> & { [K in keyof CrTagInput & keyof CrTagInputAttributes]?: CrTagInput[K] } & { [K in keyof CrTagInput & keyof CrTagInputAttributes as `attr:${K}`]?: CrTagInputAttributes[K] } & { [K in keyof CrTagInput & keyof CrTagInputAttributes as `prop:${K}`]?: CrTagInput[K] } & OneOf<"label", CrTagInput["label"], CrTagInputAttributes["label"]>;
         "cr-textarea": Omit<CrTextarea, keyof CrTextareaAttributes> & { [K in keyof CrTextarea & keyof CrTextareaAttributes]?: CrTextarea[K] } & { [K in keyof CrTextarea & keyof CrTextareaAttributes as `attr:${K}`]?: CrTextareaAttributes[K] } & { [K in keyof CrTextarea & keyof CrTextareaAttributes as `prop:${K}`]?: CrTextarea[K] } & OneOf<"label", CrTextarea["label"], CrTextareaAttributes["label"]>;
+        "cr-widget": Omit<CrWidget, keyof CrWidgetAttributes> & { [K in keyof CrWidget & keyof CrWidgetAttributes]?: CrWidget[K] } & { [K in keyof CrWidget & keyof CrWidgetAttributes as `attr:${K}`]?: CrWidgetAttributes[K] } & { [K in keyof CrWidget & keyof CrWidgetAttributes as `prop:${K}`]?: CrWidget[K] } & OneOf<"label", CrWidget["label"], CrWidgetAttributes["label"]>;
     }
 }
 export { LocalJSX as JSX };
@@ -2019,6 +2299,11 @@ declare module "@stencil/core" {
              * Case à cocher.
              */
             "cr-checkbox": LocalJSX.IntrinsicElements["cr-checkbox"] & JSXBase.HTMLAttributes<HTMLCrCheckboxElement>;
+            /**
+             * Tableau de bord : une grille de cr-widget que l'utilisateur déplace par leur poignée et redimensionne par leur coin.
+             * Les autres widgets s'écartent pendant le déplacement, puis tout se tasse vers le haut.
+             */
+            "cr-dashboard": LocalJSX.IntrinsicElements["cr-dashboard"] & JSXBase.HTMLAttributes<HTMLCrDashboardElement>;
             /**
              * Fenêtre modale, basée sur l'élément dialog natif.
              */
@@ -2063,6 +2348,11 @@ declare module "@stencil/core" {
              * Zone de texte sur plusieurs lignes qui grandit d'une ligne à la fois, avec un léger rebond.
              */
             "cr-textarea": LocalJSX.IntrinsicElements["cr-textarea"] & JSXBase.HTMLAttributes<HTMLCrTextareaElement>;
+            /**
+             * Carte d'un cr-dashboard. Se déplace par sa poignée et se redimensionne par son coin.
+             * Donnez-lui un id pour retrouver sa place dans les réglages enregistrés.
+             */
+            "cr-widget": LocalJSX.IntrinsicElements["cr-widget"] & JSXBase.HTMLAttributes<HTMLCrWidgetElement>;
         }
     }
 }
