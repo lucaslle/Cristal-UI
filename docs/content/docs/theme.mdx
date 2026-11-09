@@ -1,58 +1,74 @@
 ---
 title: Thème
-description: Adapter les couleurs, espacements et rayons avec les design tokens.
+description: Adapter Cristal à votre identité visuelle, en une ligne de CSS.
 ---
 
-import ThemeCustom from '@/demos/theme-custom';
+import { ThemeBuilder } from '@/components/theme-builder';
 
-Toutes les valeurs visuelles de Cristal sont des **variables CSS** préfixées par `--cr-`. Pour changer l'apparence, redéfinissez-les après l'import de `@cristal/tokens/tokens.css`.
+## Une seule couleur à choisir
 
-## Exemple : un thème noir aux angles droits
+Pour donner votre couleur à toute l'application, une ligne suffit, après l'import de `@cristal/tokens/tokens.css` :
 
-<Preview>
-  <ThemeCustom />
-</Preview>
-
-```css title="cristal-theme.css"
+```css title="theme.css"
 :root {
-  --cr-color-primary: #000000;
-  --cr-color-primary-hover: #333333;
-  --cr-color-primary-subtle: #e2e8f0;
-  --cr-color-primary-subtle-hover: #cbd5e0;
-  --cr-color-focus: #000000;
-  --cr-radius-m: 0px;
+  --cr-color-primary: #e11d48;
 }
 ```
 
-Les variables peuvent aussi être redéfinies sur un conteneur, pour ne changer qu'une partie de la page.
+Toutes les autres nuances sont **calculées automatiquement** à partir de cette couleur :
+
+- le survol (plus foncé pour une couleur foncée, plus clair pour une couleur claire) ;
+- le fond clair des boutons secondaires et des options survolées ;
+- une version assez foncée pour être lue comme texte, contour ou indicateur de focus sur fond blanc ;
+- la couleur du texte posé sur la couleur principale : blanc sur une couleur foncée, noir sur une couleur claire.
+
+## Générateur de thème
+
+Choisissez une couleur et un arrondi : l'aperçu se met à jour, les contrastes sont vérifiés, et il ne reste qu'à copier le CSS.
+
+<ThemeBuilder />
+
+## Un thème pour une partie de la page
+
+Ajoutez la classe `cr-theme` à un conteneur et redéfinissez la couleur sur ce conteneur : seuls les composants qu'il contient changent.
+
+```tsx
+<section className="cr-theme" style={{ '--cr-color-primary': '#0f766e' }}>
+  <CrButton>Bouton sarcelle</CrButton>
+</section>
+```
 
 <Callout type="warn">
-  Vérifiez les contrastes de vos couleurs : au moins 4,5:1 pour le texte et 3:1 pour les contours de champs et l'indicateur de focus.
+  Le générateur vérifie les contrastes de votre couleur. Les couleurs de milieu de gamme (ni vraiment claires, ni vraiment foncées) peuvent rester sous le seuil de 4,5:1 : le générateur l'indique alors.
 </Callout>
 
-## Couleurs
+## Aller plus loin : toutes les variables
+
+Chaque valeur est une variable CSS préfixée par `--cr-`, que vous pouvez redéfinir. Les couleurs dérivées affichent la formule qui les calcule.
+
+### Couleurs
 
 <TokenTable prefix="--cr-color" />
 
-## Espacements
+### Espacements
 
 <TokenTable prefix="--cr-spacing" />
 
-## Hauteurs de contrôle
+### Hauteurs de contrôle
 
 <TokenTable prefix="--cr-control" />
 
-## Typographie
+### Typographie
 
 <TokenTable prefix="--cr-font" />
 
-## Rayons et ombres
+### Rayons et ombres
 
 <TokenTable prefix="--cr-radius" />
 
 <TokenTable prefix="--cr-shadow" />
 
-## Aller plus loin : les parts CSS
+### Parts CSS
 
 Pour un réglage plus fin, chaque composant expose des **parts** stylables depuis l'extérieur avec `::part()`. Elles sont listées en bas de chaque page de composant.
 

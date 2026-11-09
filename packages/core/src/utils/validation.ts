@@ -1,8 +1,9 @@
-export type FieldKind = 'text' | 'email' | 'url' | 'number' | 'checkbox' | 'select';
+export type FieldKind = 'text' | 'email' | 'url' | 'number' | 'checkbox' | 'select' | 'select-multiple';
 
 const missing: Partial<Record<FieldKind, string>> = {
   checkbox: 'Cochez cette case pour continuer.',
   select: 'Choisissez une option dans la liste.',
+  'select-multiple': 'Choisissez au moins une option dans la liste.',
 };
 
 const mismatch: Partial<Record<FieldKind, string>> = {

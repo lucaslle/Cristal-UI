@@ -240,6 +240,16 @@ export namespace Components {
          */
         "label": string;
         /**
+          * Affiche « Recherche en cours… » pendant le chargement des options (avec remote).
+          * @default false
+         */
+        "loading": boolean;
+        /**
+          * Permet de choisir plusieurs options.
+          * @default false
+         */
+        "multiple": boolean;
+        /**
           * Nom envoyé avec le formulaire.
          */
         "name"?: string;
@@ -248,15 +258,30 @@ export namespace Components {
          */
         "placeholder"?: string;
         /**
+          * Recherche côté serveur (avec searchable) : pas de filtre local, l'application remplace les options à chaque crSearch.
+          * @default false
+         */
+        "remote": boolean;
+        /**
           * Rend le choix obligatoire.
           * @default false
          */
         "required": boolean;
         /**
-          * Valeur de l'option sélectionnée.
+          * Ajoute un champ de recherche en haut de la liste.
+          * @default false
+         */
+        "searchable": boolean;
+        /**
+          * Valeur de l'option sélectionnée (liste simple).
           * @default ''
          */
         "value": string;
+        /**
+          * Valeurs des options sélectionnées (avec multiple).
+          * @default []
+         */
+        "values": string[];
     }
 }
 export interface CrCheckboxCustomEvent<T> extends CustomEvent<T> {
@@ -404,7 +429,8 @@ declare global {
         new (): HTMLCrMenuElement;
     };
     interface HTMLCrSelectElementEventMap {
-        "crChange": string;
+        "crChange": string | string[];
+        "crSearch": string;
     }
     /**
      * Liste déroulante. Les options sont des éléments option enfants.
@@ -709,27 +735,56 @@ declare namespace LocalJSX {
          */
         "label": string;
         /**
+          * Affiche « Recherche en cours… » pendant le chargement des options (avec remote).
+          * @default false
+         */
+        "loading"?: boolean;
+        /**
+          * Permet de choisir plusieurs options.
+          * @default false
+         */
+        "multiple"?: boolean;
+        /**
           * Nom envoyé avec le formulaire.
          */
         "name"?: string;
         /**
-          * Émis quand la sélection change ; detail : la valeur.
+          * Émis quand la sélection change ; detail : la valeur, ou le tableau des valeurs avec multiple.
          */
-        "onCrChange"?: (event: CrSelectCustomEvent<string>) => void;
+        "onCrChange"?: (event: CrSelectCustomEvent<string | string[]>) => void;
+        /**
+          * Émis 300 ms après la dernière frappe dans la recherche (avec remote) ; detail : le texte recherché.
+         */
+        "onCrSearch"?: (event: CrSelectCustomEvent<string>) => void;
         /**
           * Texte affiché tant qu'aucune option n'est choisie.
          */
         "placeholder"?: string;
+        /**
+          * Recherche côté serveur (avec searchable) : pas de filtre local, l'application remplace les options à chaque crSearch.
+          * @default false
+         */
+        "remote"?: boolean;
         /**
           * Rend le choix obligatoire.
           * @default false
          */
         "required"?: boolean;
         /**
-          * Valeur de l'option sélectionnée.
+          * Ajoute un champ de recherche en haut de la liste.
+          * @default false
+         */
+        "searchable"?: boolean;
+        /**
+          * Valeur de l'option sélectionnée (liste simple).
           * @default ''
          */
         "value"?: string;
+        /**
+          * Valeurs des options sélectionnées (avec multiple).
+          * @default []
+         */
+        "values"?: string[];
     }
 
     interface CrButtonAttributes {
@@ -784,6 +839,10 @@ declare namespace LocalJSX {
         "label": string;
         "name": string;
         "value": string;
+        "multiple": boolean;
+        "searchable": boolean;
+        "remote": boolean;
+        "loading": boolean;
         "placeholder": string;
         "hint": string;
         "error": string;

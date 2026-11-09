@@ -4,7 +4,7 @@ export interface ListOption {
   disabled: boolean;
 }
 
-const normalize = (text: string) =>
+export const normalize = (text: string) =>
   text
     .normalize('NFD')
     .replace(/[̀-ͯ]/g, '')

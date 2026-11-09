@@ -1,9 +1,12 @@
 import { AttachInternals, Build, Component, Element, Event, EventEmitter, Listen, Prop, State, h } from '@stencil/core';
-import { FieldText, RequiredMark, describedBy } from '../../utils/field';
-import { ListOption, edgeIndex, keyMove, matchIndex, readOptions, revealInList, watchOptions } from '../../utils/listbox';
-import { Popup, PopupAnimation, createPopup } from '../../utils/popup';
+import { FieldHeader, describedBy } from '../../utils/field';
+import { ListOption, readOptions, revealInList, watchOptions } from '../../utils/listbox';
+import { firstEnabled, formValue, summary, toggle, visibleIndices } from '../../utils/selection';
+import { selectKeyboard } from '../../utils/select-keyboard';
+import { selectPopup } from '../../utils/select-popup';
+import { PopupAnimation } from '../../utils/popup';
 import { PopupPanel } from '../../utils/popup-view';
-import { ComboTrigger, OptionList } from '../../utils/listbox-view';
+import { ComboTrigger, SelectPanel } from '../../utils/listbox-view';
 import { handleInvalid, missingMessage } from '../../utils/validation';
 
 /**
@@ -12,6 +15,7 @@ import { handleInvalid, missingMessage } from '../../utils/validation';
  * @part control - Le bouton qui ouvre la liste.
  * @part listbox - La liste des options.
  * @part option - Une option.
+ * @part search - Le champ de recherche (avec searchable).
  * @part hint - Le texte d'aide.
  * @part error - Le message d'erreur.
  */
@@ -29,8 +33,18 @@ export class CrSelect {
   @Prop() label!: string;
   /** Nom envoyé avec le formulaire. */
   @Prop({ reflect: true }) name?: string;
-  /** Valeur de l'option sélectionnée. */
+  /** Valeur de l'option sélectionnée (liste simple). */
   @Prop({ mutable: true }) value = '';
+  /** Valeurs des options sélectionnées (avec multiple). */
+  @Prop({ mutable: true }) values: string[] = [];
+  /** Permet de choisir plusieurs options. */
+  @Prop() multiple = false;
+  /** Ajoute un champ de recherche en haut de la liste. */
+  @Prop() searchable = false;
+  /** Recherche côté serveur (avec searchable) : pas de filtre local, l'application remplace les options à chaque crSearch. */
+  @Prop() remote = false;
+  /** Affiche « Recherche en cours… » pendant le chargement des options (avec remote). */
+  @Prop() loading = false;
   /** Texte affiché tant qu'aucune option n'est choisie. */
   @Prop() placeholder?: string;
   /** Texte d'aide, lu par les lecteurs d'écran. */
@@ -44,29 +58,38 @@ export class CrSelect {
   /** Animation d'ouverture et de fermeture de la liste. */
   @Prop() animation: PopupAnimation = 'fade';
 
-  /** Émis quand la sélection change ; detail : la valeur. */
-  @Event() crChange: EventEmitter<string>;
+  /** Émis quand la sélection change ; detail : la valeur, ou le tableau des valeurs avec multiple. */
+  @Event() crChange: EventEmitter<string | string[]>;
+  /** Émis 300 ms après la dernière frappe dans la recherche (avec remote) ; detail : le texte recherché. */
+  @Event() crSearch: EventEmitter<string>;
 
   @State() options: ListOption[] = [];
   @State() open = false;
   @State() active = -1;
   @State() touched = false;
+  @State() query = '';
 
   private trigger?: HTMLButtonElement;
   private listbox?: HTMLElement;
+  search?: HTMLInputElement;
   private unwatch?: () => void;
-  private initialValue?: string;
-  private typed = { text: '', at: 0 };
-  private nextActive?: number;
-  private popup?: Popup;
+  private initial?: string[];
+  private labels = new Map<string, string>();
+  private keys = selectKeyboard(this);
+  private popup = selectPopup(this);
 
   connectedCallback() {
-    if (Build.isBrowser) this.unwatch = watchOptions(this.el, (options) => (this.options = options));
+    if (Build.isBrowser) this.unwatch = watchOptions(this.el, this.onOptions);
   }
+
+  private onOptions = (options: ListOption[]) => {
+    this.options = options;
+    if (this.remote) this.active = firstEnabled(options, this.visible());
+  };
 
   disconnectedCallback() {
     this.unwatch?.();
-    this.popup?.destroy();
+    this.popup.destroy();
   }
 
   componentWillLoad() {
@@ -74,17 +97,17 @@ export class CrSelect {
   }
 
   componentDidRender() {
-    if (!this.popup && this.listbox && this.trigger) {
-      this.popup = createPopup({ popup: this.listbox, anchor: this.trigger, host: this.el, onOpen: this.onOpen, onClose: () => (this.open = false) });
-    }
-    this.internals.setFormValue(this.selectedValue() || null);
-    const missing = this.required && !this.selectedValue();
-    this.internals.setValidity(missing ? { valueMissing: true } : {}, missing ? missingMessage('select') : '', this.trigger);
+    this.popup.attach(this.listbox, this.trigger);
+    const chosen = this.selection();
+    this.options.forEach((option) => chosen.includes(option.value) && this.labels.set(option.value, option.label));
+    const missing = this.required && !this.selection().length;
+    this.internals.setFormValue(formValue(this.name, this.selection(), this.multiple));
+    this.internals.setValidity({ valueMissing: missing }, missing ? missingMessage(this.kind()) : '', this.trigger);
     if (this.open) revealInList(this.listbox?.querySelector<HTMLElement>('[data-active]'));
   }
 
   formResetCallback() {
-    if (this.initialValue !== undefined) this.value = this.initialValue;
+    if (this.initial) this.setSelection(this.initial);
     this.touched = false;
   }
 
@@ -98,101 +121,68 @@ export class CrSelect {
     handleInvalid(event, this.el, this.trigger);
   }
 
-  private selectedValue() {
-    return this.value || (this.placeholder ? '' : (this.options.find((option) => !option.disabled)?.value ?? ''));
+  private kind = () => (this.multiple ? 'select-multiple' : 'select');
+
+  selection(): string[] {
+    if (this.multiple) return this.values;
+    const value = this.value || (this.placeholder ? '' : (this.options.find((option) => !option.disabled)?.value ?? ''));
+    return value ? [value] : [];
   }
 
-  private select(index: number) {
+  private setSelection = (next: string[]) => (this.multiple ? (this.values = next) : (this.value = next[0] ?? ''));
+
+  visible = () => (this.searchable && !this.remote ? visibleIndices(this.options, this.query) : [...this.options.keys()]);
+
+  select(index: number) {
     const option = this.options[index];
     if (!option || option.disabled) return;
     this.touched = true;
-    if (option.value !== this.selectedValue()) {
-      this.initialValue ??= this.selectedValue();
-      this.value = option.value;
-      this.crChange.emit(this.value);
+    const current = this.selection();
+    const next = this.multiple ? toggle(current, option.value) : [option.value];
+    if (next.join('\n') !== current.join('\n')) {
+      this.initial ??= current;
+      this.setSelection(next);
+      this.crChange.emit(this.multiple ? next : next[0]);
     }
-    this.popup?.close(this.listbox?.querySelector<HTMLElement>(`#option-${index}`) ?? undefined);
+    if (!this.multiple) this.close(this.listbox?.querySelector<HTMLElement>(`#option-${index}`) ?? undefined);
   }
 
-  private onOpen = () => {
-    this.open = true;
-    const selected = this.options.findIndex((option) => option.value === this.selectedValue());
-    this.active = this.nextActive ?? (selected >= 0 ? selected : edgeIndex(this.options, 'first'));
-    this.nextActive = undefined;
-  };
-
-  private show(index?: number) {
-    this.nextActive = index;
-    this.active = index ?? this.active;
-    this.popup?.open();
-  }
-
-  private typeAhead(key: string) {
-    const now = Date.now();
-    this.typed = { text: now - this.typed.at < 500 ? this.typed.text + key : key, at: now };
-    const from = this.popup?.isOpen() ? this.active : this.options.findIndex((option) => option.value === this.selectedValue());
-    const index = matchIndex(this.options, this.typed.text, this.typed.text.length > 1 ? from - 1 : from);
-    if (index >= 0) this.show(index);
-  }
-
-  private onKeyDown = (event: KeyboardEvent) => {
-    const open = !!this.popup?.isOpen();
-    const move = keyMove(event.key, this.options, this.active);
-    if (move !== undefined) {
-      event.preventDefault();
-      if (!open) return this.show();
-      this.active = move;
-    } else if (open && (event.key === 'Enter' || event.key === ' ' || event.key === 'Tab')) {
-      if (event.key !== 'Tab') event.preventDefault();
-      this.select(this.active);
-    } else if (open && event.key === 'Escape') {
-      event.preventDefault();
-      event.stopPropagation();
-      this.popup?.close();
-    } else if (event.key === ' ' || event.key === 'Enter') {
-      event.preventDefault();
-      this.show();
-    } else if (event.key.length === 1 && !event.ctrlKey && !event.metaKey && !event.altKey) {
-      event.preventDefault();
-      this.typeAhead(event.key);
-    }
-  };
+  close = (picked?: HTMLElement) => this.popup.close(picked);
+  isOpen = () => this.popup.isOpen();
+  show = (index?: number) => this.popup.show(index);
+  setQuery = (query: string) => this.keys.setQuery(query);
 
   render() {
     const id = 'control';
-    const selected = this.options.find((option) => option.value === this.selectedValue());
-    const error = this.error || (this.touched && this.required && !selected ? missingMessage('select') : '');
+    const selection = this.selection();
+    const text = summary(this.options, selection, this.labels);
+    const visible = this.visible();
+    const error = this.error || (this.touched && this.required && !selection.length ? missingMessage(this.kind()) : '');
     return (
       <div class="field">
-        <label class="label" id="label" htmlFor={id} part="label">
-          {this.label}
-          <RequiredMark required={this.required} />
-        </label>
-        <FieldText id={id} hint={this.hint} error={error} />
+        <FieldHeader id={id} labelId="label" label={this.label} required={this.required} hint={this.hint} error={error} />
         <ComboTrigger
           ref={(el) => (this.trigger = el)}
           open={this.open}
-          active={this.active}
+          active={this.searchable ? -1 : this.active}
           required={this.required}
           disabled={this.disabled}
           error={error}
           describedBy={describedBy({ id, hint: this.hint, error })}
-          text={selected?.label ?? this.placeholder}
-          isPlaceholder={!selected}
-          onKeyDown={this.onKeyDown}
-          onClick={() => (this.popup?.isOpen() ? this.popup.close() : this.show())}
+          text={text || this.placeholder}
+          isPlaceholder={!text}
+          onKeyDown={this.keys.onKeyDown}
+          onClick={() => (this.isOpen() ? this.close() : this.show())}
         />
         <PopupPanel panelRef={(el) => (this.listbox = el)} part="listbox" animation={this.animation}>
-          <div class="list" id="listbox" role="listbox" aria-labelledby="label">
-          <OptionList
-            options={this.options}
-            selected={selected}
-            active={this.active}
-            open={this.open}
+          <SelectPanel
+            {...{ options: this.options, visible, selection, multiple: this.multiple, active: this.active, open: this.open, searchable: this.searchable, query: this.query, loading: this.loading }}
+            searchRef={(el) => (this.search = el)}
+            onQuery={this.setQuery}
+            onKeyDown={this.keys.onKeyDown}
             onHover={(index) => (this.active = index)}
             onPick={(index) => this.select(index)}
           />
-          </div>
         </PopupPanel>
       </div>
     );

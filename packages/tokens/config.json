@@ -1,11 +1,22 @@
 {
-  "source": ["src/**/*.json"],
+  "source": [
+    "src/**/*.json"
+  ],
   "platforms": {
     "css": {
       "transformGroup": "css",
       "prefix": "cr",
       "buildPath": "build/",
-      "files": [{ "destination": "tokens.css", "format": "css/variables" }]
+      "files": [
+        {
+          "destination": "tokens.css",
+          "format": "css/variables",
+          "options": {
+            "outputReferences": true,
+            "selector": ":root, .cr-theme"
+          }
+        }
+      ]
     }
   }
 }

@@ -55,7 +55,7 @@
 
 .item[aria-selected='true'] {
   font-weight: var(--cr-font-weight-bold);
-  color: var(--cr-color-primary);
+  color: var(--cr-color-primary-text);
 }
 
 .item[aria-disabled='true'] {

@@ -16,6 +16,18 @@ Importer les tokens une seule fois, à la racine de l'application (`app/layout.t
 import '@cristal/tokens/tokens.css';
 ```
 
+## Thème
+
+Une ligne suffit pour donner votre couleur à toute l'application ; les nuances (survol, fond clair, texte lisible, focus) sont calculées automatiquement :
+
+```css
+:root {
+  --cr-color-primary: #e11d48;
+}
+```
+
+Pour un thème limité à une zone : classe `cr-theme` sur le conteneur et `--cr-color-primary` redéfinie dessus. Un générateur avec vérification des contrastes est disponible sur la page « Thème » de la documentation.
+
 ## Utilisation
 
 ### React
@@ -67,8 +79,11 @@ Ils participent au `<form>` parent comme des champs natifs (valeur envoyée, val
 | `placeholder` | `cr-input`, `cr-select` | texte indicatif / texte affiché tant qu'aucune option n'est choisie |
 | `autocomplete` | `cr-input` | comme le champ natif |
 | `checked`, `indeterminate` | `cr-checkbox` | état de la case |
+| `multiple`, `values` | `cr-select` | choix multiple ; `values` est le tableau des valeurs choisies |
+| `searchable` | `cr-select` | champ de recherche en haut de la liste |
+| `remote`, `loading` | `cr-select` | recherche côté serveur (avec `searchable`) : pas de filtre local, `onCrSearch` donne le texte tapé ; `loading` affiche « Recherche en cours… » |
 
-Événements : `onCrInput` (`cr-input`, à chaque frappe) et `onCrChange` (tous). La valeur est dans `event.detail`.
+Événements : `onCrInput` (`cr-input`, à chaque frappe), `onCrSearch` (`cr-select` avec `remote`, 300 ms après la dernière frappe) et `onCrChange` (tous). La valeur est dans `event.detail`.
 
 ```tsx
 <CrSelect label="Pays" name="country" placeholder="Choisir un pays" required>
