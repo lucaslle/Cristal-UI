@@ -67,6 +67,8 @@ Ils participent au `<form>` parent comme des champs natifs (valeur envoyée, val
 | `placeholder` | `cr-input`, `cr-select` | texte indicatif / texte affiché tant qu'aucune option n'est choisie |
 | `autocomplete` | `cr-input` | comme le champ natif |
 | `checked`, `indeterminate` | `cr-checkbox` | état de la case |
+| `multiple`, `values` | `cr-select` | choix multiple ; `values` est le tableau des valeurs choisies |
+| `searchable` | `cr-select` | champ de recherche en haut de la liste |
 
 Événements : `onCrInput` (`cr-input`, à chaque frappe) et `onCrChange` (tous). La valeur est dans `event.detail`.
 
