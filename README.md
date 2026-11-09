@@ -154,6 +154,25 @@ Méthodes `next()`, `previous()`, `goTo(index)` ; événements `onCrStepChange` 
 </CrStepper>
 ```
 
+### Tableau : `cr-table`
+
+Chaque utilisateur règle les colonnes : ordre (glisser un en-tête ou Alt + flèches), largeur (bord droit de l'en-tête ou Maj + flèches), colonnes fixées (F) et masquées (M ou menu « Colonnes »), densité des lignes et « Réinitialiser ».
+
+| Propriété | Description |
+|---|---|
+| `label` | titre du tableau |
+| `columns` | `{ key, label, width?, align?, pinned?, hidden?, badges? }[]` |
+| `variant` | `default`, `striped`, `cards`, `minimal`, `grid` |
+| `rows` | un objet par ligne, avec une valeur par `key` |
+| `density` | `comfortable`, `normal` (par défaut), `compact` |
+| `storageKey` | clé localStorage pour retenir les réglages |
+
+Événement `onCrLayoutChange` avec la présentation dans `event.detail`.
+
+```tsx
+<CrTable label="Commandes" columns={columns} rows={rows} storageKey="commandes" />
+```
+
 ## Développement
 
 ```bash

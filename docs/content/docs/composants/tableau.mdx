@@ -1,0 +1,91 @@
+---
+title: Tableau
+description: Tableau dont chaque utilisateur règle les colonnes. Balise cr-table, composant React CrTable.
+---
+
+import TableOrders from '@/demos/table-orders';
+
+## Exemple
+
+Chaque utilisateur règle le tableau à son goût : glissez un en-tête pour déplacer la colonne, tirez le bord droit d'un en-tête pour changer sa largeur (double-clic pour l'ajuster au contenu), choisissez les colonnes affichées dans « Colonnes » et la hauteur des lignes avec « Confortable », « Normale » ou « Compacte ». « Réinitialiser » revient à la présentation de départ.
+
+<Preview column>
+  <TableOrders />
+</Preview>
+
+<include>../../../demos/table-orders.tsx</include>
+
+## Styles
+
+La propriété `variant` change l'allure du tableau ; choisissez-en un dans l'exemple ci-dessus :
+
+| Valeur | Allure |
+|---|---|
+| `default` | en-tête teinté, traits fins entre les lignes, légère ombre (par défaut) |
+| `striped` | lignes alternées, sans traits |
+| `cards` | chaque ligne est une carte posée sur un fond teinté, bordée de violet au survol |
+| `minimal` | sans cadre ni fond d'en-tête, un trait marqué sous les titres |
+| `grid` | toutes les cases bordées, façon tableur ; la case survolée est encadrée |
+
+Les en-têtes restent collés en haut quand le tableau défile : fixez sa hauteur avec la variable CSS `--cr-table-max-height` (par exemple `400px`).
+
+## Pastilles de statut
+
+Avec `badges`, une colonne affiche certaines valeurs en pastilles colorées : `{ Payée: 'success', 'En attente': 'warning' }`. Tons disponibles : `primary`, `success`, `warning`, `danger`, `neutral`. Le texte reste lisible (contraste d'au moins 4,5:1) et la couleur n'est jamais la seule information : la valeur est toujours écrite.
+
+## Colonnes et lignes
+
+`columns` décrit les colonnes, dans leur ordre de départ :
+
+| Champ | Description |
+|---|---|
+| `key` | clé de la valeur dans chaque ligne (obligatoire) |
+| `label` | titre de la colonne (obligatoire) |
+| `width` | largeur en pixels, 160 par défaut (de 64 à 640) |
+| `align` | `end` pour aligner à droite, par exemple les montants |
+| `pinned` | colonne fixée à gauche, qui reste visible quand le tableau défile |
+| `hidden` | colonne masquée au départ |
+| `badges` | valeurs affichées en pastilles, avec leur ton |
+
+`rows` est un tableau d'objets, avec une valeur par `key`. Les valeurs sont affichées comme du texte : formatez les montants et les dates avant de les passer.
+
+## Retenir les réglages
+
+Avec `storageKey`, les réglages (ordre, largeurs, colonnes fixées et masquées, densité) sont enregistrés dans le navigateur et retrouvés à la visite suivante. `onCrLayoutChange` les donne aussi dans `event.detail` à chaque changement, pour les enregistrer côté serveur par exemple.
+
+## Clavier
+
+Placez le focus sur un en-tête avec Tab :
+
+| Touche | Action |
+|---|---|
+| ← → | en-tête voisin |
+| Début / Fin | premier / dernier en-tête |
+| Alt + ← → | déplace la colonne |
+| Maj + ← → | réduit ou élargit la colonne de 16 pixels |
+| Entrée | ajuste la largeur au contenu |
+| F | fixe la colonne à gauche, ou la libère |
+| M | masque la colonne |
+
+Le pied du tableau rappelle ces raccourcis et résume la présentation : « 6 colonnes sur 7 · 1 fixée · lignes normales ».
+
+## Animations
+
+- La colonne attrapée vole au-dessus des autres, et un trait violet montre où elle sera posée.
+- Après un déplacement, chaque colonne glisse de son ancienne place à la nouvelle.
+- Une ombre apparaît sous les colonnes fixées dès que le tableau défile.
+
+<Callout>
+  Si l'utilisateur a demandé à son système de réduire les animations, les colonnes changent de place sans glisser.
+</Callout>
+
+## Accessibilité
+
+- C'est un vrai tableau (`table`, `th scope="col"`), nommé par son titre.
+- Chaque réglage à la souris a son équivalent au clavier, décrit sur chaque en-tête.
+- Chaque action est annoncée : « Statut déplacée en position 3 sur 7. », « Produit fixée à gauche. », « Région masquée : 6 colonnes sur 7. ».
+- Une colonne fixée est annoncée « fixée » ; au moins une colonne reste toujours affichée.
+
+## API
+
+<ApiReference tag="cr-table" />

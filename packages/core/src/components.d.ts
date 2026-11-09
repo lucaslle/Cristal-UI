@@ -10,11 +10,13 @@ import { ButtonSize, ButtonType, ButtonVariant } from "./components/cr-button/cr
 import { InputType } from "./components/cr-input/cr-input";
 import { PopupAnimation } from "./utils/popup";
 import { StepperVariant } from "./utils/stepper";
+import { TableColumn, TableDensity, TableLayout, TableVariant } from "./utils/table-layout";
 export { AccordionAnimation, AccordionVariant } from "./utils/accordion";
 export { ButtonSize, ButtonType, ButtonVariant } from "./components/cr-button/cr-button";
 export { InputType } from "./components/cr-input/cr-input";
 export { PopupAnimation } from "./utils/popup";
 export { StepperVariant } from "./utils/stepper";
+export { TableColumn, TableDensity, TableLayout, TableVariant } from "./utils/table-layout";
 export namespace Components {
     /**
      * Accordéon : sections cr-accordion-item qui s'ouvrent et se ferment.
@@ -387,6 +389,39 @@ export namespace Components {
          */
         "variant": StepperVariant;
     }
+    /**
+     * Tableau dont chaque utilisateur règle les colonnes : largeur, ordre, colonnes fixées et masquées, densité des lignes.
+     */
+    interface CrTable {
+        /**
+          * Colonnes : key, label, width (px, 160 par défaut), align ('start' ou 'end'), pinned, hidden.
+          * @default []
+         */
+        "columns": TableColumn[];
+        /**
+          * Hauteur des lignes.
+          * @default 'normal'
+         */
+        "density": TableDensity;
+        /**
+          * Titre du tableau.
+         */
+        "label": string;
+        /**
+          * Lignes : un objet par ligne, avec une valeur par clé de colonne.
+          * @default []
+         */
+        "rows": Record<string, unknown>[];
+        /**
+          * Clé localStorage : les réglages de l'utilisateur sont retenus d'une visite à l'autre.
+         */
+        "storageKey"?: string;
+        /**
+          * Style : default, striped (lignes alternées), cards (lignes en cartes), minimal ou grid (façon tableur).
+          * @default 'default'
+         */
+        "variant": TableVariant;
+    }
 }
 export interface CrAccordionItemCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -419,6 +454,10 @@ export interface CrSelectCustomEvent<T> extends CustomEvent<T> {
 export interface CrStepperCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLCrStepperElement;
+}
+export interface CrTableCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLCrTableElement;
 }
 declare global {
     /**
@@ -620,6 +659,26 @@ declare global {
         prototype: HTMLCrStepperElement;
         new (): HTMLCrStepperElement;
     };
+    interface HTMLCrTableElementEventMap {
+        "crLayoutChange": TableLayout;
+    }
+    /**
+     * Tableau dont chaque utilisateur règle les colonnes : largeur, ordre, colonnes fixées et masquées, densité des lignes.
+     */
+    interface HTMLCrTableElement extends Components.CrTable, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLCrTableElementEventMap>(type: K, listener: (this: HTMLCrTableElement, ev: CrTableCustomEvent<HTMLCrTableElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLCrTableElementEventMap>(type: K, listener: (this: HTMLCrTableElement, ev: CrTableCustomEvent<HTMLCrTableElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLCrTableElement: {
+        prototype: HTMLCrTableElement;
+        new (): HTMLCrTableElement;
+    };
     interface HTMLElementTagNameMap {
         "cr-accordion": HTMLCrAccordionElement;
         "cr-accordion-item": HTMLCrAccordionItemElement;
@@ -633,6 +692,7 @@ declare global {
         "cr-select": HTMLCrSelectElement;
         "cr-step": HTMLCrStepElement;
         "cr-stepper": HTMLCrStepperElement;
+        "cr-table": HTMLCrTableElement;
     }
 }
 declare namespace LocalJSX {
@@ -1061,6 +1121,43 @@ declare namespace LocalJSX {
          */
         "variant"?: StepperVariant;
     }
+    /**
+     * Tableau dont chaque utilisateur règle les colonnes : largeur, ordre, colonnes fixées et masquées, densité des lignes.
+     */
+    interface CrTable {
+        /**
+          * Colonnes : key, label, width (px, 160 par défaut), align ('start' ou 'end'), pinned, hidden.
+          * @default []
+         */
+        "columns"?: TableColumn[];
+        /**
+          * Hauteur des lignes.
+          * @default 'normal'
+         */
+        "density"?: TableDensity;
+        /**
+          * Titre du tableau.
+         */
+        "label": string;
+        /**
+          * Émis à chaque réglage ; detail : les colonnes (ordre, largeur, fixée, masquée) et la densité.
+         */
+        "onCrLayoutChange"?: (event: CrTableCustomEvent<TableLayout>) => void;
+        /**
+          * Lignes : un objet par ligne, avec une valeur par clé de colonne.
+          * @default []
+         */
+        "rows"?: Record<string, unknown>[];
+        /**
+          * Clé localStorage : les réglages de l'utilisateur sont retenus d'une visite à l'autre.
+         */
+        "storageKey"?: string;
+        /**
+          * Style : default, striped (lignes alternées), cards (lignes en cartes), minimal ou grid (façon tableur).
+          * @default 'default'
+         */
+        "variant"?: TableVariant;
+    }
 
     interface CrAccordionAttributes {
         "multiple": boolean;
@@ -1147,6 +1244,12 @@ declare namespace LocalJSX {
         "navigation": boolean;
         "label": string;
     }
+    interface CrTableAttributes {
+        "label": string;
+        "variant": TableVariant;
+        "density": TableDensity;
+        "storageKey": string;
+    }
 
     interface IntrinsicElements {
         "cr-accordion": Omit<CrAccordion, keyof CrAccordionAttributes> & { [K in keyof CrAccordion & keyof CrAccordionAttributes]?: CrAccordion[K] } & { [K in keyof CrAccordion & keyof CrAccordionAttributes as `attr:${K}`]?: CrAccordionAttributes[K] } & { [K in keyof CrAccordion & keyof CrAccordionAttributes as `prop:${K}`]?: CrAccordion[K] };
@@ -1161,6 +1264,7 @@ declare namespace LocalJSX {
         "cr-select": Omit<CrSelect, keyof CrSelectAttributes> & { [K in keyof CrSelect & keyof CrSelectAttributes]?: CrSelect[K] } & { [K in keyof CrSelect & keyof CrSelectAttributes as `attr:${K}`]?: CrSelectAttributes[K] } & { [K in keyof CrSelect & keyof CrSelectAttributes as `prop:${K}`]?: CrSelect[K] } & OneOf<"label", CrSelect["label"], CrSelectAttributes["label"]>;
         "cr-step": Omit<CrStep, keyof CrStepAttributes> & { [K in keyof CrStep & keyof CrStepAttributes]?: CrStep[K] } & { [K in keyof CrStep & keyof CrStepAttributes as `attr:${K}`]?: CrStepAttributes[K] } & { [K in keyof CrStep & keyof CrStepAttributes as `prop:${K}`]?: CrStep[K] } & OneOf<"label", CrStep["label"], CrStepAttributes["label"]>;
         "cr-stepper": Omit<CrStepper, keyof CrStepperAttributes> & { [K in keyof CrStepper & keyof CrStepperAttributes]?: CrStepper[K] } & { [K in keyof CrStepper & keyof CrStepperAttributes as `attr:${K}`]?: CrStepperAttributes[K] } & { [K in keyof CrStepper & keyof CrStepperAttributes as `prop:${K}`]?: CrStepper[K] };
+        "cr-table": Omit<CrTable, keyof CrTableAttributes> & { [K in keyof CrTable & keyof CrTableAttributes]?: CrTable[K] } & { [K in keyof CrTable & keyof CrTableAttributes as `attr:${K}`]?: CrTableAttributes[K] } & { [K in keyof CrTable & keyof CrTableAttributes as `prop:${K}`]?: CrTable[K] } & OneOf<"label", CrTable["label"], CrTableAttributes["label"]>;
     }
 }
 export { LocalJSX as JSX };
@@ -1215,6 +1319,10 @@ declare module "@stencil/core" {
              * Progression en étapes. Les étapes sont des éléments cr-step enfants.
              */
             "cr-stepper": LocalJSX.IntrinsicElements["cr-stepper"] & JSXBase.HTMLAttributes<HTMLCrStepperElement>;
+            /**
+             * Tableau dont chaque utilisateur règle les colonnes : largeur, ordre, colonnes fixées et masquées, densité des lignes.
+             */
+            "cr-table": LocalJSX.IntrinsicElements["cr-table"] & JSXBase.HTMLAttributes<HTMLCrTableElement>;
         }
     }
 }

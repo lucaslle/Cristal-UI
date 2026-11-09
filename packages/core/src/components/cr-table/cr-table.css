@@ -1,0 +1,230 @@
+:host {
+  --cr-table-row-padding: 10px;
+  display: block;
+  font-family: var(--cr-font-family);
+  font-size: var(--cr-font-size-m);
+  color: var(--cr-color-text);
+  --cr-table-head: color-mix(in oklab, var(--cr-color-primary-subtle) 45%, var(--cr-color-surface));
+  --cr-table-hover: color-mix(in oklab, var(--cr-color-primary-subtle) 60%, var(--cr-color-surface));
+  overflow: hidden;
+  background: var(--cr-color-surface);
+  border: 1px solid var(--cr-color-disabled);
+  border-radius: var(--cr-radius-l);
+  box-shadow: 0 1px 2px color-mix(in oklab, var(--cr-color-text) 6%, transparent), 0 12px 32px -18px color-mix(in oklab, var(--cr-color-primary) 35%, transparent);
+}
+
+:host([data-density='comfortable']) {
+  --cr-table-row-padding: 16px;
+}
+
+:host([data-density='compact']) {
+  --cr-table-row-padding: 4px;
+}
+
+.scroll {
+  position: relative;
+  max-height: var(--cr-table-max-height, none);
+  overflow: auto;
+}
+
+table {
+  table-layout: fixed;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+th,
+td {
+  box-sizing: border-box;
+  padding: var(--cr-table-row-padding) var(--cr-spacing-lg);
+  overflow: hidden;
+  text-align: start;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  background: var(--cr-color-surface);
+  border-bottom: 1px solid var(--cr-color-disabled);
+  transition: padding 0.25s;
+}
+
+th.end,
+td.end {
+  text-align: end;
+  font-variant-numeric: tabular-nums;
+}
+
+/* En-tête collé en haut quand le tableau défile verticalement (--cr-table-max-height). */
+th {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  font-size: var(--cr-font-size-s);
+  font-weight: var(--cr-font-weight-bold);
+  color: var(--cr-color-text-muted);
+  letter-spacing: 0.02em;
+  background: var(--cr-table-head);
+  cursor: grab;
+  user-select: none;
+  touch-action: pan-y;
+}
+
+th:focus-visible {
+  z-index: 3;
+  outline: 2px solid var(--cr-color-focus);
+  outline-offset: -2px;
+}
+
+tr:last-child td {
+  border-bottom: 0;
+}
+
+tbody tr:hover td {
+  background: var(--cr-table-hover);
+}
+
+/* Pastilles de statut */
+.chip {
+  --tone: var(--cr-color-primary);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 1px 10px;
+  font-size: var(--cr-font-size-s);
+  font-weight: var(--cr-font-weight-medium);
+  color: oklch(from var(--tone) min(l, 0.45) c h);
+  background: color-mix(in oklab, var(--tone) 12%, var(--cr-color-surface));
+  border: 1px solid color-mix(in oklab, var(--tone) 25%, transparent);
+  border-radius: 999px;
+}
+
+.chip::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  background: currentColor;
+  border-radius: 50%;
+}
+
+.chip.success {
+  --tone: var(--cr-color-success);
+}
+
+.chip.warning {
+  --tone: var(--cr-color-warning, #d97706);
+}
+
+.chip.danger {
+  --tone: var(--cr-color-danger);
+}
+
+.chip.neutral {
+  --tone: var(--cr-color-text-muted);
+}
+
+.text {
+  display: inline;
+}
+
+.pin {
+  margin-inline-start: var(--cr-spacing-xs);
+  vertical-align: -2px;
+  color: var(--cr-color-primary-text);
+}
+
+/* Colonnes fixées : collées à gauche, avec une ombre dès que le tableau défile. */
+td.pinned {
+  position: sticky;
+  z-index: 1;
+}
+
+th.pinned {
+  z-index: 3;
+}
+
+.pinned-last {
+  transition: box-shadow 0.25s;
+}
+
+.scrolled .pinned-last {
+  box-shadow: 6px 0 8px -6px color-mix(in oklab, var(--cr-color-text) 35%, transparent);
+}
+
+/* Poignée de largeur, à droite de chaque en-tête. */
+.handle {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 8px;
+  cursor: col-resize;
+  touch-action: none;
+}
+
+.handle::after {
+  content: '';
+  position: absolute;
+  top: 25%;
+  bottom: 25%;
+  right: 3px;
+  width: 2px;
+  background: var(--cr-color-disabled);
+  border-radius: 1px;
+  transition: background 0.15s;
+}
+
+.handle:hover::after {
+  background: var(--cr-color-primary);
+}
+
+/* La colonne attrapée vole au-dessus des autres. */
+.flying {
+  position: relative;
+  z-index: 4;
+  background: var(--cr-color-surface);
+  box-shadow: 0 0 0 1px var(--cr-color-primary), var(--cr-shadow-m);
+  cursor: grabbing;
+}
+
+th.flying {
+  color: var(--cr-color-primary-text);
+}
+
+.drop {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  z-index: 5;
+  width: 3px;
+  margin-left: -1px;
+  background: var(--cr-color-primary);
+  border-radius: 2px;
+  pointer-events: none;
+}
+
+.drop[hidden] {
+  display: none;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  th,
+  td,
+  .pinned-last {
+    transition: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .flying,
+  .drop {
+    outline: 2px solid Highlight;
+  }
+}

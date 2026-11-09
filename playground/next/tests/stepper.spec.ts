@@ -5,6 +5,8 @@ const current = (page: Page, name: string) => stepper(page, name).locator('li[ar
 
 test.beforeEach(async ({ page }) => {
   await page.goto('/');
+  // Avant l'hydratation, React n'a pas encore donné leur variant aux steppers.
+  await expect(page.locator('cr-stepper[variant="line"]')).toHaveCount(1);
 });
 
 test('line: Next and Back move one step, update the list and announce the step', async ({ page }) => {
