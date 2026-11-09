@@ -16,6 +16,18 @@ Importer les tokens une seule fois, à la racine de l'application (`app/layout.t
 import '@cristal/tokens/tokens.css';
 ```
 
+## Thème
+
+Une ligne suffit pour donner votre couleur à toute l'application ; les nuances (survol, fond clair, texte lisible, focus) sont calculées automatiquement :
+
+```css
+:root {
+  --cr-color-primary: #e11d48;
+}
+```
+
+Pour un thème limité à une zone : classe `cr-theme` sur le conteneur et `--cr-color-primary` redéfinie dessus. Un générateur avec vérification des contrastes est disponible sur la page « Thème » de la documentation.
+
 ## Utilisation
 
 ### React
