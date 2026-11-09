@@ -117,6 +117,25 @@ Contenu dans le slot par défaut, boutons d'action dans `slot="footer"`. L'évé
 
 Conteneur avec `slot="header"`, contenu par défaut et `slot="footer"`. L'en-tête et le pied ne sont affichés que s'ils sont fournis.
 
+### Accordéon : `cr-accordion`, `cr-accordion-item`
+
+| Propriété | Composant | Description |
+|---|---|---|
+| `multiple` | `cr-accordion` | plusieurs sections ouvertes à la fois |
+| `variant` | `cr-accordion` | `list` (par défaut), `steps` (étapes reliées, méthode `next()` et événement `onCrComplete`), `panels` (panneaux côte à côte) |
+| `animation` | `cr-accordion` | `slide` (par défaut), `accent-bar`, `cascade` |
+| `numbered`, `toggleAll`, `headingLevel` | `cr-accordion` | numéros 01, 02… ; bouton « Tout ouvrir / Tout fermer » ; niveau des titres (3 par défaut) |
+| `label`, `open`, `disabled`, `done` | `cr-accordion-item` | titre ; section ouverte ; désactivée ; étape terminée |
+
+Contenu de la section dans le slot par défaut, valeur à droite du titre dans `slot="meta"`. `onCrToggle` est émis à chaque ouverture ou fermeture.
+
+```tsx
+<CrAccordion animation="accent-bar" numbered>
+  <CrAccordionItem label="Conception" open>Maquettes validées.</CrAccordionItem>
+  <CrAccordionItem label="Lancement">Mise en ligne.</CrAccordionItem>
+</CrAccordion>
+```
+
 ## Développement
 
 ```bash

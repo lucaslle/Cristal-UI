@@ -25,3 +25,13 @@ test('open menu has no WCAG 2.1 AA violations detectable by axe', async ({ page 
   await page.waitForTimeout(700);
   expect((await audit(page)).violations).toEqual([]);
 });
+
+test('open accordions have no WCAG 2.1 AA violations detectable by axe', async ({ page }) => {
+  await page.goto('/');
+  await page.getByRole('button', { name: 'Tout ouvrir' }).click();
+  await page.getByRole('button', { name: 'Continuer' }).first().click();
+  await page.getByRole('button', { name: /Développement/ }).click();
+  await page.getByRole('button', { name: /Total/ }).click();
+  await page.waitForTimeout(1200);
+  expect((await audit(page)).violations).toEqual([]);
+});

@@ -5,13 +5,78 @@
  * It contains typing information for all components that exist in this project.
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
+import { AccordionAnimation, AccordionVariant } from "./utils/accordion";
 import { ButtonSize, ButtonType, ButtonVariant } from "./components/cr-button/cr-button";
 import { InputType } from "./components/cr-input/cr-input";
 import { PopupAnimation } from "./utils/popup";
+export { AccordionAnimation, AccordionVariant } from "./utils/accordion";
 export { ButtonSize, ButtonType, ButtonVariant } from "./components/cr-button/cr-button";
 export { InputType } from "./components/cr-input/cr-input";
 export { PopupAnimation } from "./utils/popup";
 export namespace Components {
+    /**
+     * Accordéon : sections cr-accordion-item qui s'ouvrent et se ferment.
+     */
+    interface CrAccordion {
+        /**
+          * Animation d'ouverture : slide, accent-bar (barre qui pousse sur le côté) ou cascade (le contenu arrive ligne par ligne).
+          * @default 'slide'
+         */
+        "animation": AccordionAnimation;
+        /**
+          * Niveau de titre des en-têtes (2 à 6).
+          * @default 3
+         */
+        "headingLevel": number;
+        /**
+          * Permet d'ouvrir plusieurs sections à la fois.
+          * @default false
+         */
+        "multiple": boolean;
+        /**
+          * Étapes : valide l'étape ouverte, la ferme et ouvre la suivante.
+         */
+        "next": () => Promise<CustomEvent<void>>;
+        /**
+          * Numérote les sections (01, 02…).
+          * @default false
+         */
+        "numbered": boolean;
+        /**
+          * Ajoute un bouton « Tout ouvrir / Tout fermer » : les sections s'ouvrent l'une après l'autre, et se ferment dans l'ordre inverse.
+          * @default false
+         */
+        "toggleAll": boolean;
+        /**
+          * Présentation : liste, étapes reliées par une ligne (steps) ou panneaux côte à côte (panels).
+          * @default 'list'
+         */
+        "variant": AccordionVariant;
+    }
+    /**
+     * Section d'un accordéon, à placer dans cr-accordion.
+     */
+    interface CrAccordionItem {
+        /**
+          * Désactive la section.
+          * @default false
+         */
+        "disabled": boolean;
+        /**
+          * Étape terminée (variant="steps") ; mis à true par next().
+          * @default false
+         */
+        "done": boolean;
+        /**
+          * Titre de la section.
+         */
+        "label": string;
+        /**
+          * Section ouverte.
+          * @default false
+         */
+        "open": boolean;
+    }
     /**
      * Bouton d'action.
      */
@@ -284,6 +349,14 @@ export namespace Components {
         "values": string[];
     }
 }
+export interface CrAccordionCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLCrAccordionElement;
+}
+export interface CrAccordionItemCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLCrAccordionItemElement;
+}
 export interface CrCheckboxCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLCrCheckboxElement;
@@ -309,6 +382,46 @@ export interface CrSelectCustomEvent<T> extends CustomEvent<T> {
     target: HTMLCrSelectElement;
 }
 declare global {
+    interface HTMLCrAccordionElementEventMap {
+        "crComplete": void;
+    }
+    /**
+     * Accordéon : sections cr-accordion-item qui s'ouvrent et se ferment.
+     */
+    interface HTMLCrAccordionElement extends Components.CrAccordion, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLCrAccordionElementEventMap>(type: K, listener: (this: HTMLCrAccordionElement, ev: CrAccordionCustomEvent<HTMLCrAccordionElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLCrAccordionElementEventMap>(type: K, listener: (this: HTMLCrAccordionElement, ev: CrAccordionCustomEvent<HTMLCrAccordionElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLCrAccordionElement: {
+        prototype: HTMLCrAccordionElement;
+        new (): HTMLCrAccordionElement;
+    };
+    interface HTMLCrAccordionItemElementEventMap {
+        "crToggle": boolean;
+    }
+    /**
+     * Section d'un accordéon, à placer dans cr-accordion.
+     */
+    interface HTMLCrAccordionItemElement extends Components.CrAccordionItem, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLCrAccordionItemElementEventMap>(type: K, listener: (this: HTMLCrAccordionItemElement, ev: CrAccordionItemCustomEvent<HTMLCrAccordionItemElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLCrAccordionItemElementEventMap>(type: K, listener: (this: HTMLCrAccordionItemElement, ev: CrAccordionItemCustomEvent<HTMLCrAccordionItemElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLCrAccordionItemElement: {
+        prototype: HTMLCrAccordionItemElement;
+        new (): HTMLCrAccordionItemElement;
+    };
     /**
      * Bouton d'action.
      */
@@ -450,6 +563,8 @@ declare global {
         new (): HTMLCrSelectElement;
     };
     interface HTMLElementTagNameMap {
+        "cr-accordion": HTMLCrAccordionElement;
+        "cr-accordion-item": HTMLCrAccordionItemElement;
         "cr-button": HTMLCrButtonElement;
         "cr-card": HTMLCrCardElement;
         "cr-checkbox": HTMLCrCheckboxElement;
@@ -463,6 +578,73 @@ declare global {
 declare namespace LocalJSX {
     type OneOf<K extends string, PropT, AttrT = PropT> = { [P in K]: PropT } & { [P in `attr:${K}`]?: never } | { [P in `attr:${K}`]: AttrT } & { [P in K]?: never };
 
+    /**
+     * Accordéon : sections cr-accordion-item qui s'ouvrent et se ferment.
+     */
+    interface CrAccordion {
+        /**
+          * Animation d'ouverture : slide, accent-bar (barre qui pousse sur le côté) ou cascade (le contenu arrive ligne par ligne).
+          * @default 'slide'
+         */
+        "animation"?: AccordionAnimation;
+        /**
+          * Niveau de titre des en-têtes (2 à 6).
+          * @default 3
+         */
+        "headingLevel"?: number;
+        /**
+          * Permet d'ouvrir plusieurs sections à la fois.
+          * @default false
+         */
+        "multiple"?: boolean;
+        /**
+          * Numérote les sections (01, 02…).
+          * @default false
+         */
+        "numbered"?: boolean;
+        /**
+          * Émis quand next() valide la dernière étape.
+         */
+        "onCrComplete"?: (event: CrAccordionCustomEvent<void>) => void;
+        /**
+          * Ajoute un bouton « Tout ouvrir / Tout fermer » : les sections s'ouvrent l'une après l'autre, et se ferment dans l'ordre inverse.
+          * @default false
+         */
+        "toggleAll"?: boolean;
+        /**
+          * Présentation : liste, étapes reliées par une ligne (steps) ou panneaux côte à côte (panels).
+          * @default 'list'
+         */
+        "variant"?: AccordionVariant;
+    }
+    /**
+     * Section d'un accordéon, à placer dans cr-accordion.
+     */
+    interface CrAccordionItem {
+        /**
+          * Désactive la section.
+          * @default false
+         */
+        "disabled"?: boolean;
+        /**
+          * Étape terminée (variant="steps") ; mis à true par next().
+          * @default false
+         */
+        "done"?: boolean;
+        /**
+          * Titre de la section.
+         */
+        "label": string;
+        /**
+          * Émis quand la section s'ouvre ou se ferme ; detail : true si ouverte.
+         */
+        "onCrToggle"?: (event: CrAccordionItemCustomEvent<boolean>) => void;
+        /**
+          * Section ouverte.
+          * @default false
+         */
+        "open"?: boolean;
+    }
     /**
      * Bouton d'action.
      */
@@ -787,6 +969,20 @@ declare namespace LocalJSX {
         "values"?: string[];
     }
 
+    interface CrAccordionAttributes {
+        "multiple": boolean;
+        "variant": AccordionVariant;
+        "animation": AccordionAnimation;
+        "numbered": boolean;
+        "toggleAll": boolean;
+        "headingLevel": number;
+    }
+    interface CrAccordionItemAttributes {
+        "label": string;
+        "open": boolean;
+        "disabled": boolean;
+        "done": boolean;
+    }
     interface CrButtonAttributes {
         "variant": ButtonVariant;
         "size": ButtonSize;
@@ -852,6 +1048,8 @@ declare namespace LocalJSX {
     }
 
     interface IntrinsicElements {
+        "cr-accordion": Omit<CrAccordion, keyof CrAccordionAttributes> & { [K in keyof CrAccordion & keyof CrAccordionAttributes]?: CrAccordion[K] } & { [K in keyof CrAccordion & keyof CrAccordionAttributes as `attr:${K}`]?: CrAccordionAttributes[K] } & { [K in keyof CrAccordion & keyof CrAccordionAttributes as `prop:${K}`]?: CrAccordion[K] };
+        "cr-accordion-item": Omit<CrAccordionItem, keyof CrAccordionItemAttributes> & { [K in keyof CrAccordionItem & keyof CrAccordionItemAttributes]?: CrAccordionItem[K] } & { [K in keyof CrAccordionItem & keyof CrAccordionItemAttributes as `attr:${K}`]?: CrAccordionItemAttributes[K] } & { [K in keyof CrAccordionItem & keyof CrAccordionItemAttributes as `prop:${K}`]?: CrAccordionItem[K] } & OneOf<"label", CrAccordionItem["label"], CrAccordionItemAttributes["label"]>;
         "cr-button": Omit<CrButton, keyof CrButtonAttributes> & { [K in keyof CrButton & keyof CrButtonAttributes]?: CrButton[K] } & { [K in keyof CrButton & keyof CrButtonAttributes as `attr:${K}`]?: CrButtonAttributes[K] } & { [K in keyof CrButton & keyof CrButtonAttributes as `prop:${K}`]?: CrButton[K] };
         "cr-card": CrCard;
         "cr-checkbox": Omit<CrCheckbox, keyof CrCheckboxAttributes> & { [K in keyof CrCheckbox & keyof CrCheckboxAttributes]?: CrCheckbox[K] } & { [K in keyof CrCheckbox & keyof CrCheckboxAttributes as `attr:${K}`]?: CrCheckboxAttributes[K] } & { [K in keyof CrCheckbox & keyof CrCheckboxAttributes as `prop:${K}`]?: CrCheckbox[K] } & OneOf<"label", CrCheckbox["label"], CrCheckboxAttributes["label"]>;
@@ -866,6 +1064,14 @@ export { LocalJSX as JSX };
 declare module "@stencil/core" {
     export namespace JSX {
         interface IntrinsicElements {
+            /**
+             * Accordéon : sections cr-accordion-item qui s'ouvrent et se ferment.
+             */
+            "cr-accordion": LocalJSX.IntrinsicElements["cr-accordion"] & JSXBase.HTMLAttributes<HTMLCrAccordionElement>;
+            /**
+             * Section d'un accordéon, à placer dans cr-accordion.
+             */
+            "cr-accordion-item": LocalJSX.IntrinsicElements["cr-accordion-item"] & JSXBase.HTMLAttributes<HTMLCrAccordionItemElement>;
             /**
              * Bouton d'action.
              */

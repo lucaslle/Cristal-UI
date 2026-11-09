@@ -1,0 +1,146 @@
+/* Étapes : pastilles reliées par une ligne qui se remplit quand l'étape est validée. */
+:host([data-variant='steps']) {
+  display: grid;
+  grid-template-columns: 28px 1fr;
+  column-gap: var(--cr-spacing-sm);
+}
+
+:host([data-variant='steps']) .item {
+  background: none;
+  border: 0;
+}
+
+:host([data-variant='steps']) .header {
+  padding-inline-start: var(--cr-spacing-sm);
+}
+
+.marker {
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  box-sizing: border-box;
+  width: 28px;
+  height: 28px;
+  margin-top: 10px;
+  font-size: var(--cr-font-size-s);
+  font-weight: var(--cr-font-weight-bold);
+  color: var(--cr-color-text-muted);
+  background: var(--cr-color-surface);
+  border: 2px solid var(--cr-color-border);
+  border-radius: 50%;
+  transition: color 0.3s, background 0.3s, border-color 0.3s, box-shadow 0.3s;
+}
+
+:host([open]) .marker {
+  color: var(--cr-color-primary-text);
+  border-color: var(--cr-color-primary-text);
+  box-shadow: 0 0 0 4px var(--cr-color-primary-subtle);
+}
+
+:host([done]) .marker {
+  color: var(--cr-color-on-primary);
+  background: var(--cr-color-primary);
+  border-color: var(--cr-color-primary);
+}
+
+.tick {
+  animation: cr-tick 0.35s cubic-bezier(0.2, 0.8, 0.2, 1.4);
+}
+
+@keyframes cr-tick {
+  from {
+    transform: scale(0);
+  }
+}
+
+:host([data-variant='steps']:not([data-last]))::before,
+:host([data-variant='steps']:not([data-last]))::after {
+  content: '';
+  position: absolute;
+  top: 38px;
+  bottom: -10px;
+  left: 13px;
+  width: 2px;
+  background: var(--cr-color-disabled);
+}
+
+:host([data-variant='steps']:not([data-last]))::after {
+  background: var(--cr-color-primary);
+  transform: scaleY(0);
+  transform-origin: top;
+  transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+:host([data-variant='steps'][done]:not([data-last]))::after {
+  transform: scaleY(1);
+}
+
+/* Panneaux côte à côte : celui qu'on choisit s'élargit, les autres se replient en bandes. */
+:host([data-variant='panels']) {
+  flex: 0 0 var(--cr-accordion-fold, 56px);
+  min-width: 0;
+  transition: flex-grow 0.5s cubic-bezier(0.2, 0.8, 0.2, 1), flex-basis 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+:host([data-variant='panels'][open]) {
+  flex: 1 1 0;
+}
+
+:host([data-variant='panels']) .item {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+:host([data-variant='panels']:not([open])) .header {
+  flex: 1;
+  justify-content: flex-start;
+  padding: var(--cr-spacing-lg) 0;
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+}
+
+:host([data-variant='panels']:not([open])) .meta {
+  display: none;
+}
+
+:host([data-variant='panels']) .panel {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+}
+
+:host([data-variant='panels'][open]) .content {
+  animation: cr-panel-in 0.4s 0.2s cubic-bezier(0.2, 0.8, 0.2, 1) backwards;
+}
+
+@keyframes cr-panel-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :host,
+  :host::after,
+  .item::before,
+  .chevron,
+  .number,
+  .marker {
+    transition: none !important;
+  }
+  .tick,
+  .content {
+    animation: none !important;
+  }
+}
+
+@media (forced-colors: active) {
+  .item {
+    border-color: CanvasText;
+  }
+  :host([data-variant='steps']) .item {
+    border: 0;
+  }
+}
