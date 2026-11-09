@@ -7,8 +7,10 @@
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 import { ButtonSize, ButtonType, ButtonVariant } from "./components/cr-button/cr-button";
 import { InputType } from "./components/cr-input/cr-input";
+import { PopupAnimation } from "./utils/popup";
 export { ButtonSize, ButtonType, ButtonVariant } from "./components/cr-button/cr-button";
 export { InputType } from "./components/cr-input/cr-input";
+export { PopupAnimation } from "./utils/popup";
 export namespace Components {
     /**
      * Bouton d'action.
@@ -189,9 +191,33 @@ export namespace Components {
         "value": string;
     }
     /**
+     * Menu d'actions. Les actions sont des éléments option enfants.
+     */
+    interface CrMenu {
+        /**
+          * Animation d'ouverture et de fermeture du menu.
+          * @default 'fade'
+         */
+        "animation": PopupAnimation;
+        /**
+          * Désactive le bouton.
+          * @default false
+         */
+        "disabled": boolean;
+        /**
+          * Libellé du bouton qui ouvre le menu.
+         */
+        "label": string;
+    }
+    /**
      * Liste déroulante. Les options sont des éléments option enfants.
      */
     interface CrSelect {
+        /**
+          * Animation d'ouverture et de fermeture de la liste.
+          * @default 'fade'
+         */
+        "animation": PopupAnimation;
         /**
           * Désactive la liste.
           * @default false
@@ -244,6 +270,10 @@ export interface CrDrawerCustomEvent<T> extends CustomEvent<T> {
 export interface CrInputCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLCrInputElement;
+}
+export interface CrMenuCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLCrMenuElement;
 }
 export interface CrSelectCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -349,6 +379,26 @@ declare global {
         prototype: HTMLCrInputElement;
         new (): HTMLCrInputElement;
     };
+    interface HTMLCrMenuElementEventMap {
+        "crSelect": string;
+    }
+    /**
+     * Menu d'actions. Les actions sont des éléments option enfants.
+     */
+    interface HTMLCrMenuElement extends Components.CrMenu, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLCrMenuElementEventMap>(type: K, listener: (this: HTMLCrMenuElement, ev: CrMenuCustomEvent<HTMLCrMenuElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLCrMenuElementEventMap>(type: K, listener: (this: HTMLCrMenuElement, ev: CrMenuCustomEvent<HTMLCrMenuElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLCrMenuElement: {
+        prototype: HTMLCrMenuElement;
+        new (): HTMLCrMenuElement;
+    };
     interface HTMLCrSelectElementEventMap {
         "crChange": string;
     }
@@ -376,6 +426,7 @@ declare global {
         "cr-dialog": HTMLCrDialogElement;
         "cr-drawer": HTMLCrDrawerElement;
         "cr-input": HTMLCrInputElement;
+        "cr-menu": HTMLCrMenuElement;
         "cr-select": HTMLCrSelectElement;
     }
 }
@@ -597,9 +648,37 @@ declare namespace LocalJSX {
         "value"?: string;
     }
     /**
+     * Menu d'actions. Les actions sont des éléments option enfants.
+     */
+    interface CrMenu {
+        /**
+          * Animation d'ouverture et de fermeture du menu.
+          * @default 'fade'
+         */
+        "animation"?: PopupAnimation;
+        /**
+          * Désactive le bouton.
+          * @default false
+         */
+        "disabled"?: boolean;
+        /**
+          * Libellé du bouton qui ouvre le menu.
+         */
+        "label": string;
+        /**
+          * Émis quand une action est choisie ; detail : sa valeur.
+         */
+        "onCrSelect"?: (event: CrMenuCustomEvent<string>) => void;
+    }
+    /**
      * Liste déroulante. Les options sont des éléments option enfants.
      */
     interface CrSelect {
+        /**
+          * Animation d'ouverture et de fermeture de la liste.
+          * @default 'fade'
+         */
+        "animation"?: PopupAnimation;
         /**
           * Désactive la liste.
           * @default false
@@ -687,6 +766,11 @@ declare namespace LocalJSX {
         "required": boolean;
         "disabled": boolean;
     }
+    interface CrMenuAttributes {
+        "label": string;
+        "animation": PopupAnimation;
+        "disabled": boolean;
+    }
     interface CrSelectAttributes {
         "label": string;
         "name": string;
@@ -696,6 +780,7 @@ declare namespace LocalJSX {
         "error": string;
         "required": boolean;
         "disabled": boolean;
+        "animation": PopupAnimation;
     }
 
     interface IntrinsicElements {
@@ -705,6 +790,7 @@ declare namespace LocalJSX {
         "cr-dialog": Omit<CrDialog, keyof CrDialogAttributes> & { [K in keyof CrDialog & keyof CrDialogAttributes]?: CrDialog[K] } & { [K in keyof CrDialog & keyof CrDialogAttributes as `attr:${K}`]?: CrDialogAttributes[K] } & { [K in keyof CrDialog & keyof CrDialogAttributes as `prop:${K}`]?: CrDialog[K] } & OneOf<"label", CrDialog["label"], CrDialogAttributes["label"]>;
         "cr-drawer": Omit<CrDrawer, keyof CrDrawerAttributes> & { [K in keyof CrDrawer & keyof CrDrawerAttributes]?: CrDrawer[K] } & { [K in keyof CrDrawer & keyof CrDrawerAttributes as `attr:${K}`]?: CrDrawerAttributes[K] } & { [K in keyof CrDrawer & keyof CrDrawerAttributes as `prop:${K}`]?: CrDrawer[K] } & OneOf<"label", CrDrawer["label"], CrDrawerAttributes["label"]>;
         "cr-input": Omit<CrInput, keyof CrInputAttributes> & { [K in keyof CrInput & keyof CrInputAttributes]?: CrInput[K] } & { [K in keyof CrInput & keyof CrInputAttributes as `attr:${K}`]?: CrInputAttributes[K] } & { [K in keyof CrInput & keyof CrInputAttributes as `prop:${K}`]?: CrInput[K] } & OneOf<"label", CrInput["label"], CrInputAttributes["label"]>;
+        "cr-menu": Omit<CrMenu, keyof CrMenuAttributes> & { [K in keyof CrMenu & keyof CrMenuAttributes]?: CrMenu[K] } & { [K in keyof CrMenu & keyof CrMenuAttributes as `attr:${K}`]?: CrMenuAttributes[K] } & { [K in keyof CrMenu & keyof CrMenuAttributes as `prop:${K}`]?: CrMenu[K] } & OneOf<"label", CrMenu["label"], CrMenuAttributes["label"]>;
         "cr-select": Omit<CrSelect, keyof CrSelectAttributes> & { [K in keyof CrSelect & keyof CrSelectAttributes]?: CrSelect[K] } & { [K in keyof CrSelect & keyof CrSelectAttributes as `attr:${K}`]?: CrSelectAttributes[K] } & { [K in keyof CrSelect & keyof CrSelectAttributes as `prop:${K}`]?: CrSelect[K] } & OneOf<"label", CrSelect["label"], CrSelectAttributes["label"]>;
     }
 }
@@ -736,6 +822,10 @@ declare module "@stencil/core" {
              * Champ de saisie de texte.
              */
             "cr-input": LocalJSX.IntrinsicElements["cr-input"] & JSXBase.HTMLAttributes<HTMLCrInputElement>;
+            /**
+             * Menu d'actions. Les actions sont des éléments option enfants.
+             */
+            "cr-menu": LocalJSX.IntrinsicElements["cr-menu"] & JSXBase.HTMLAttributes<HTMLCrMenuElement>;
             /**
              * Liste déroulante. Les options sont des éléments option enfants.
              */
