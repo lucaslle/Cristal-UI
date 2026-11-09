@@ -240,6 +240,11 @@ export namespace Components {
          */
         "label": string;
         /**
+          * Permet de choisir plusieurs options.
+          * @default false
+         */
+        "multiple": boolean;
+        /**
           * Nom envoyé avec le formulaire.
          */
         "name"?: string;
@@ -253,10 +258,20 @@ export namespace Components {
          */
         "required": boolean;
         /**
-          * Valeur de l'option sélectionnée.
+          * Ajoute un champ de recherche en haut de la liste.
+          * @default false
+         */
+        "searchable": boolean;
+        /**
+          * Valeur de l'option sélectionnée (liste simple).
           * @default ''
          */
         "value": string;
+        /**
+          * Valeurs des options sélectionnées (avec multiple).
+          * @default []
+         */
+        "values": string[];
     }
 }
 export interface CrCheckboxCustomEvent<T> extends CustomEvent<T> {
@@ -404,7 +419,7 @@ declare global {
         new (): HTMLCrMenuElement;
     };
     interface HTMLCrSelectElementEventMap {
-        "crChange": string;
+        "crChange": string | string[];
     }
     /**
      * Liste déroulante. Les options sont des éléments option enfants.
@@ -709,13 +724,18 @@ declare namespace LocalJSX {
          */
         "label": string;
         /**
+          * Permet de choisir plusieurs options.
+          * @default false
+         */
+        "multiple"?: boolean;
+        /**
           * Nom envoyé avec le formulaire.
          */
         "name"?: string;
         /**
-          * Émis quand la sélection change ; detail : la valeur.
+          * Émis quand la sélection change ; detail : la valeur, ou le tableau des valeurs avec multiple.
          */
-        "onCrChange"?: (event: CrSelectCustomEvent<string>) => void;
+        "onCrChange"?: (event: CrSelectCustomEvent<string | string[]>) => void;
         /**
           * Texte affiché tant qu'aucune option n'est choisie.
          */
@@ -726,10 +746,20 @@ declare namespace LocalJSX {
          */
         "required"?: boolean;
         /**
-          * Valeur de l'option sélectionnée.
+          * Ajoute un champ de recherche en haut de la liste.
+          * @default false
+         */
+        "searchable"?: boolean;
+        /**
+          * Valeur de l'option sélectionnée (liste simple).
           * @default ''
          */
         "value"?: string;
+        /**
+          * Valeurs des options sélectionnées (avec multiple).
+          * @default []
+         */
+        "values"?: string[];
     }
 
     interface CrButtonAttributes {
@@ -784,6 +814,8 @@ declare namespace LocalJSX {
         "label": string;
         "name": string;
         "value": string;
+        "multiple": boolean;
+        "searchable": boolean;
         "placeholder": string;
         "hint": string;
         "error": string;

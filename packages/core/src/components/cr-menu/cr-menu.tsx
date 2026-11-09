@@ -2,6 +2,7 @@ import { Build, Component, Element, Event, EventEmitter, Prop, State, h } from '
 import { ListOption, edgeIndex, keyMove, matchIndex, readOptions, revealInList, watchOptions } from '../../utils/listbox';
 import { Popup, PopupAnimation, createPopup } from '../../utils/popup';
 import { PopupPanel } from '../../utils/popup-view';
+import { nextTyped } from '../../utils/selection';
 
 /**
  * Menu d'actions. Les actions sont des éléments option enfants.
@@ -113,8 +114,7 @@ export class CrMenu {
     } else if (event.key === 'Tab') {
       this.close(false);
     } else if (event.key.length === 1 && !event.ctrlKey && !event.metaKey && !event.altKey) {
-      const now = Date.now();
-      this.typed = { text: now - this.typed.at < 500 ? this.typed.text + event.key : event.key, at: now };
+      this.typed = nextTyped(this.typed, event.key);
       this.focus(matchIndex(this.items, this.typed.text, this.typed.text.length > 1 ? this.active - 1 : this.active));
     }
   };

@@ -28,3 +28,17 @@ export const RequiredMark = ({ required }: { required: boolean }) =>
       {' *'}
     </span>
   );
+
+interface FieldHeaderProps extends FieldTextProps {
+  label: string;
+  required: boolean;
+  labelId?: string;
+}
+
+export const FieldHeader = ({ id, label, required, labelId, hint, error }: FieldHeaderProps) => [
+  <label class="label" id={labelId} htmlFor={id} part="label">
+    {label}
+    <RequiredMark required={required} />
+  </label>,
+  <FieldText id={id} hint={hint} error={error} />,
+];

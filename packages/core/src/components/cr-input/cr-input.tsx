@@ -1,5 +1,5 @@
 import { AttachInternals, Component, Element, Event, EventEmitter, Listen, Prop, State, h } from '@stencil/core';
-import { FieldText, RequiredMark, describedBy } from '../../utils/field';
+import { FieldHeader, describedBy } from '../../utils/field';
 import { handleInvalid, kindOf, validationMessage } from '../../utils/validation';
 
 export type InputType = 'text' | 'email' | 'password' | 'number' | 'tel' | 'url' | 'search';
@@ -92,11 +92,7 @@ export class CrInput {
     const error = this.error || (this.touched ? validationMessage(this.input?.validity, kindOf(this.type)) : '');
     return (
       <div class="field">
-        <label class="label" htmlFor={id} part="label">
-          {this.label}
-          <RequiredMark required={this.required} />
-        </label>
-        <FieldText id={id} hint={this.hint} error={error} />
+        <FieldHeader id={id} label={this.label} required={this.required} hint={this.hint} error={error} />
         <input
           ref={(el) => (this.input = el)}
           id={id}
