@@ -1,6 +1,8 @@
 import { AttachInternals, Build, Component, Element, Event, EventEmitter, Listen, Prop, State, h } from '@stencil/core';
 import { FieldText, RequiredMark, describedBy } from '../../utils/field';
-import { ListOption, edgeIndex, followAnchor, isOpen, keyMove, matchIndex, readOptions, watchOptions } from '../../utils/listbox';
+import { ListOption, edgeIndex, keyMove, matchIndex, readOptions, revealInList, watchOptions } from '../../utils/listbox';
+import { Popup, PopupAnimation, createPopup } from '../../utils/popup';
+import { PopupPanel } from '../../utils/popup-view';
 import { ComboTrigger, OptionList } from '../../utils/listbox-view';
 import { handleInvalid, missingMessage } from '../../utils/validation';
 
@@ -15,7 +17,7 @@ import { handleInvalid, missingMessage } from '../../utils/validation';
  */
 @Component({
   tag: 'cr-select',
-  styleUrls: ['../../global/field.css', 'cr-select.css'],
+  styleUrls: ['../../global/field.css', '../../global/popup.css', 'cr-select.css'],
   shadow: { delegatesFocus: true },
   formAssociated: true,
 })
@@ -39,6 +41,8 @@ export class CrSelect {
   @Prop({ reflect: true }) required = false;
   /** Désactive la liste. */
   @Prop({ reflect: true }) disabled = false;
+  /** Animation d'ouverture et de fermeture de la liste. */
+  @Prop() animation: PopupAnimation = 'fade';
 
   /** Émis quand la sélection change ; detail : la valeur. */
   @Event() crChange: EventEmitter<string>;
@@ -54,7 +58,7 @@ export class CrSelect {
   private initialValue?: string;
   private typed = { text: '', at: 0 };
   private nextActive?: number;
-  private unfollow?: () => void;
+  private popup?: Popup;
 
   connectedCallback() {
     if (Build.isBrowser) this.unwatch = watchOptions(this.el, (options) => (this.options = options));
@@ -62,7 +66,7 @@ export class CrSelect {
 
   disconnectedCallback() {
     this.unwatch?.();
-    this.unfollow?.();
+    this.popup?.destroy();
   }
 
   componentWillLoad() {
@@ -70,11 +74,13 @@ export class CrSelect {
   }
 
   componentDidRender() {
-    if (this.trigger && this.listbox) this.trigger.popoverTargetElement = this.listbox;
+    if (!this.popup && this.listbox && this.trigger) {
+      this.popup = createPopup({ popup: this.listbox, anchor: this.trigger, host: this.el, onOpen: this.onOpen, onClose: () => (this.open = false) });
+    }
     this.internals.setFormValue(this.selectedValue() || null);
     const missing = this.required && !this.selectedValue();
     this.internals.setValidity(missing ? { valueMissing: true } : {}, missing ? missingMessage('select') : '', this.trigger);
-    if (this.open) this.listbox?.querySelector('[data-active]')?.scrollIntoView({ block: 'nearest' });
+    if (this.open) revealInList(this.listbox?.querySelector<HTMLElement>('[data-active]'));
   }
 
   formResetCallback() {
@@ -105,34 +111,32 @@ export class CrSelect {
       this.value = option.value;
       this.crChange.emit(this.value);
     }
-    this.listbox?.hidePopover();
+    this.popup?.close(this.listbox?.querySelector<HTMLElement>(`#option-${index}`) ?? undefined);
   }
 
-  private onToggle = (event: ToggleEvent) => {
-    this.open = event.newState === 'open';
-    if (!this.open) return this.unfollow?.();
+  private onOpen = () => {
+    this.open = true;
     const selected = this.options.findIndex((option) => option.value === this.selectedValue());
     this.active = this.nextActive ?? (selected >= 0 ? selected : edgeIndex(this.options, 'first'));
     this.nextActive = undefined;
-    if (this.listbox && this.trigger) this.unfollow = followAnchor(this.listbox, this.trigger);
   };
 
   private show(index?: number) {
     this.nextActive = index;
     this.active = index ?? this.active;
-    if (!isOpen(this.listbox)) this.listbox?.showPopover();
+    this.popup?.open();
   }
 
   private typeAhead(key: string) {
     const now = Date.now();
     this.typed = { text: now - this.typed.at < 500 ? this.typed.text + key : key, at: now };
-    const from = isOpen(this.listbox) ? this.active : this.options.findIndex((option) => option.value === this.selectedValue());
+    const from = this.popup?.isOpen() ? this.active : this.options.findIndex((option) => option.value === this.selectedValue());
     const index = matchIndex(this.options, this.typed.text, this.typed.text.length > 1 ? from - 1 : from);
     if (index >= 0) this.show(index);
   }
 
   private onKeyDown = (event: KeyboardEvent) => {
-    const open = isOpen(this.listbox);
+    const open = !!this.popup?.isOpen();
     const move = keyMove(event.key, this.options, this.active);
     if (move !== undefined) {
       event.preventDefault();
@@ -141,6 +145,10 @@ export class CrSelect {
     } else if (open && (event.key === 'Enter' || event.key === ' ' || event.key === 'Tab')) {
       if (event.key !== 'Tab') event.preventDefault();
       this.select(this.active);
+    } else if (open && event.key === 'Escape') {
+      event.preventDefault();
+      event.stopPropagation();
+      this.popup?.close();
     } else if (event.key === ' ' || event.key === 'Enter') {
       event.preventDefault();
       this.show();
@@ -172,18 +180,10 @@ export class CrSelect {
           text={selected?.label ?? this.placeholder}
           isPlaceholder={!selected}
           onKeyDown={this.onKeyDown}
+          onClick={() => (this.popup?.isOpen() ? this.popup.close() : this.show())}
         />
-        <div
-          ref={(el) => (this.listbox = el)}
-          id="listbox"
-          class="listbox"
-          part="listbox"
-          role="listbox"
-          aria-labelledby="label"
-          popover="auto"
-          onToggle={this.onToggle}
-          onMouseDown={(event: MouseEvent) => event.preventDefault()}
-        >
+        <PopupPanel panelRef={(el) => (this.listbox = el)} part="listbox" animation={this.animation}>
+          <div class="list" id="listbox" role="listbox" aria-labelledby="label">
           <OptionList
             options={this.options}
             selected={selected}
@@ -192,7 +192,8 @@ export class CrSelect {
             onHover={(index) => (this.active = index)}
             onPick={(index) => this.select(index)}
           />
-        </div>
+          </div>
+        </PopupPanel>
       </div>
     );
   }

@@ -4,6 +4,7 @@ description: Choix d'une valeur parmi plusieurs. Balise cr-select, composant Rea
 ---
 
 import SelectBasic from '@/demos/select-basic';
+import SelectAnimated from '@/demos/select-animated';
 
 ## Exemple
 
@@ -14,6 +15,16 @@ Les options s'écrivent comme en HTML, avec des éléments `<option>` enfants (`
 </Preview>
 
 <include>../../../demos/select-basic.tsx</include>
+
+## Animations
+
+Comme le [menu](/docs/composants/menu#animations), la liste accepte une propriété `animation` : `fade` (par défaut), `anchor-pop`, `turn-over`, `card-deal`, `drum-roll`, `outline-trace` ou `tile-build`.
+
+<Preview>
+  <SelectAnimated />
+</Preview>
+
+<include>../../../demos/select-animated.tsx</include>
 
 ## Clavier
 

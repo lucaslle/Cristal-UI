@@ -1,5 +1,6 @@
 import { CrButton, CrCard, CrCheckbox, CrInput, CrSelect } from '@cristal/react/ssr';
 import { FormDemo } from './form-demo';
+import { MenuDemo } from './menu-demo';
 import { OverlayDemo } from './overlay-demo';
 
 const row = { display: 'flex', gap: 'var(--cr-spacing-sm)', alignItems: 'center', marginBottom: 'var(--cr-spacing-lg)' };
@@ -55,6 +56,9 @@ export default function Page() {
 
       <h2>Formulaire</h2>
       <FormDemo />
+
+      <h2>Menus</h2>
+      <MenuDemo />
 
       <h2>Modale et drawer</h2>
       <OverlayDemo />
