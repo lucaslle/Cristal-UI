@@ -26,20 +26,20 @@
 :host([variant='secondary']) {
   --cr-button-background: var(--cr-color-primary-subtle);
   --cr-button-background-hover: var(--cr-color-primary-subtle-hover);
-  --cr-button-color: var(--cr-color-primary);
+  --cr-button-color: var(--cr-color-primary-text);
 }
 
 :host([variant='outline']) {
   --cr-button-background: transparent;
   --cr-button-background-hover: var(--cr-color-primary-subtle);
-  --cr-button-color: var(--cr-color-primary);
-  --cr-button-border: var(--cr-color-primary);
+  --cr-button-color: var(--cr-color-primary-text);
+  --cr-button-border: var(--cr-color-primary-text);
 }
 
 :host([variant='link']) {
   --cr-button-background: transparent;
   --cr-button-background-hover: transparent;
-  --cr-button-color: var(--cr-color-primary);
+  --cr-button-color: var(--cr-color-primary-text);
 }
 
 :host([full-width]) {

@@ -9,7 +9,7 @@
 }
 
 .trigger[aria-expanded='true'] {
-  border-color: var(--cr-color-primary);
+  border-color: var(--cr-color-primary-text);
 }
 
 .trigger[aria-expanded='true'] .chevron {
