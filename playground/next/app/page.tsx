@@ -1,5 +1,7 @@
 import type React from 'react';
-import { CrButton, CrCard, CrCheckbox, CrInput, CrSelect } from '@cristal/react/ssr';
+import { CrAccordion, CrAccordionItem, CrButton, CrCard, CrCheckbox, CrInput, CrSelect } from '@cristal/react/ssr';
+import { AccordionDemo } from './accordion-demo';
+import { StepperDemo } from './stepper-demo';
 import { FormDemo } from './form-demo';
 import { MenuDemo } from './menu-demo';
 import { SelectDemo } from './select-demo';
@@ -71,6 +73,18 @@ export default function Page() {
 
       <h2>Recherche côté serveur</h2>
       <RemoteSelectDemo />
+
+      <h2>Accordéons</h2>
+      <CrAccordion data-testid="ssr-accordion" numbered>
+        <CrAccordionItem label="Livraison" open>
+          Expédition sous 48 h.
+        </CrAccordionItem>
+        <CrAccordionItem label="Retours">30 jours pour changer d'avis.</CrAccordionItem>
+      </CrAccordion>
+      <AccordionDemo />
+
+      <h2>Étapes</h2>
+      <StepperDemo />
 
       <h2>Menus</h2>
       <MenuDemo />

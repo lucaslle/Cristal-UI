@@ -1,0 +1,133 @@
+:host {
+  position: relative;
+  display: block;
+  font-family: var(--cr-font-family);
+  color: var(--cr-color-text);
+  outline: none;
+}
+
+:host([hidden]) {
+  display: none;
+}
+
+:host([data-direction]) .content {
+  animation: cr-step-in 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+:host([data-direction='back']) .content {
+  animation-name: cr-step-in-back;
+}
+
+@keyframes cr-step-in {
+  from {
+    opacity: 0;
+    transform: translateX(16px);
+  }
+}
+
+@keyframes cr-step-in-back {
+  from {
+    opacity: 0;
+    transform: translateX(-16px);
+  }
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* Timeline : pastilles reliées par une ligne qui se remplit quand l'étape est validée. */
+:host([data-variant='timeline']) {
+  display: grid;
+  grid-template-columns: 28px 1fr;
+  column-gap: var(--cr-spacing-lg);
+  padding-bottom: var(--cr-spacing-lg);
+}
+
+.title {
+  display: flex;
+  align-items: center;
+  min-height: 28px;
+  margin: 0 0 var(--cr-spacing-sm);
+  font-weight: var(--cr-font-weight-bold);
+}
+
+:host([data-state='todo']) .title {
+  color: var(--cr-color-text-muted);
+}
+
+.marker {
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  box-sizing: border-box;
+  width: 28px;
+  height: 28px;
+  font-size: var(--cr-font-size-s);
+  font-weight: var(--cr-font-weight-bold);
+  color: var(--cr-color-text-muted);
+  background: var(--cr-color-surface);
+  border: 2px solid var(--cr-color-border);
+  border-radius: 50%;
+  transition: color 0.3s, background 0.3s, border-color 0.3s, box-shadow 0.3s;
+}
+
+:host([data-state='current']) .marker {
+  color: var(--cr-color-primary-text);
+  border-color: var(--cr-color-primary-text);
+  box-shadow: 0 0 0 4px var(--cr-color-primary-subtle);
+}
+
+:host([data-state='done']) .marker {
+  color: var(--cr-color-on-primary);
+  background: var(--cr-color-primary);
+  border-color: var(--cr-color-primary);
+}
+
+.tick {
+  animation: cr-tick 0.35s cubic-bezier(0.2, 0.8, 0.2, 1.4);
+}
+
+@keyframes cr-tick {
+  from {
+    transform: scale(0);
+  }
+}
+
+:host([data-variant='timeline']:not([data-last]))::before,
+:host([data-variant='timeline']:not([data-last]))::after {
+  content: '';
+  position: absolute;
+  top: 32px;
+  bottom: 4px;
+  left: 13px;
+  width: 2px;
+  background: var(--cr-color-disabled);
+}
+
+:host([data-variant='timeline']:not([data-last]))::after {
+  background: var(--cr-color-primary);
+  transform: scaleY(0);
+  transform-origin: top;
+  transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+:host([data-variant='timeline'][data-state='done']:not([data-last]))::after {
+  transform: scaleY(1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :host::after,
+  .marker {
+    transition: none !important;
+  }
+  .content,
+  .tick {
+    animation: none !important;
+  }
+}

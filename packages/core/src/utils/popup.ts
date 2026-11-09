@@ -10,7 +10,7 @@ interface PopupOptions {
   onClose: () => void;
 }
 
-const reducedMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+export const reducedMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 const settle = (popup: HTMLElement) =>
   Promise.all(popup.getAnimations({ subtree: true }).map((animation) => animation.finished.catch(() => undefined)));
