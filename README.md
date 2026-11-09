@@ -81,8 +81,9 @@ Ils participent au `<form>` parent comme des champs natifs (valeur envoyée, val
 | `checked`, `indeterminate` | `cr-checkbox` | état de la case |
 | `multiple`, `values` | `cr-select` | choix multiple ; `values` est le tableau des valeurs choisies |
 | `searchable` | `cr-select` | champ de recherche en haut de la liste |
+| `remote`, `loading` | `cr-select` | recherche côté serveur (avec `searchable`) : pas de filtre local, `onCrSearch` donne le texte tapé ; `loading` affiche « Recherche en cours… » |
 
-Événements : `onCrInput` (`cr-input`, à chaque frappe) et `onCrChange` (tous). La valeur est dans `event.detail`.
+Événements : `onCrInput` (`cr-input`, à chaque frappe), `onCrSearch` (`cr-select` avec `remote`, 300 ms après la dernière frappe) et `onCrChange` (tous). La valeur est dans `event.detail`.
 
 ```tsx
 <CrSelect label="Pays" name="country" placeholder="Choisir un pays" required>

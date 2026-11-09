@@ -7,6 +7,7 @@ import SelectBasic from '@/demos/select-basic';
 import SelectAnimated from '@/demos/select-animated';
 import SelectMultiple from '@/demos/select-multiple';
 import SelectSearchable from '@/demos/select-searchable';
+import SelectRemote from '@/demos/select-remote';
 
 ## Exemple
 
@@ -37,6 +38,22 @@ Avec `searchable`, un champ de recherche apparaît en haut de la liste ouverte e
 </Preview>
 
 <include>../../../demos/select-searchable.tsx</include>
+
+## Recherche côté serveur
+
+Quand les options viennent d'une API, ajoutez `remote` à `searchable`. La liste ne filtre plus rien elle-même : elle émet `onCrSearch` avec le texte tapé (`event.detail`), 300 ms après la dernière frappe pour ne pas appeler l'API à chaque lettre, et affiche exactement les `<option>` que vous lui donnez. Pendant l'appel, `loading` affiche et annonce « Recherche en cours… ».
+
+- À la fermeture, la recherche est vidée et `onCrSearch` est émis avec un texte vide : remettez alors vos options par défaut.
+- Les options choisies gardent leur libellé dans le bouton même quand elles ne font plus partie des résultats, y compris avec `multiple`.
+- Ignorez les réponses arrivées dans le désordre : seule la dernière recherche compte (voir `latest` dans l'exemple).
+
+L'exemple interroge l'API publique des communes (geo.api.gouv.fr), par nom ou par code postal.
+
+<Preview column>
+  <SelectRemote />
+</Preview>
+
+<include>../../../demos/select-remote.tsx</include>
 
 Par défaut, sans ces propriétés, la liste reste une liste simple sans recherche.
 
@@ -75,6 +92,7 @@ Avec `required`, l'envoi du formulaire est bloqué tant qu'aucune option n'est c
 
 - Avec `multiple`, la liste est annoncée comme « à sélection multiple » (`aria-multiselectable`) et chaque option comme cochée ou non.
 - Avec `searchable`, le champ de recherche est étiqueté « Rechercher dans la liste », l'option active reste annoncée pendant la frappe, et « Aucun résultat » est lu quand rien ne correspond. Dans le champ, Espace tape un espace : on choisit avec Entrée.
+- Avec `remote`, la liste est marquée occupée (`aria-busy`) pendant `loading`, et « Recherche en cours… » est lu.
 
 ## API
 

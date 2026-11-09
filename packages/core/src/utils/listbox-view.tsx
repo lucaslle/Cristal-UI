@@ -123,6 +123,7 @@ export const ComboTrigger = (props: ComboTriggerProps) => (
 interface SelectPanelProps extends Omit<OptionListProps, 'visible'> {
   visible: number[];
   searchable: boolean;
+  loading: boolean;
   query: string;
   searchRef: (el: HTMLInputElement) => void;
   onQuery: (query: string) => void;
@@ -133,12 +134,12 @@ export const SelectPanel = (props: SelectPanelProps) => [
   props.searchable && (
     <SearchBox inputRef={props.searchRef} query={props.query} active={props.active} onQuery={props.onQuery} onKeyDown={props.onKeyDown} />
   ),
-  <div class="list" id="listbox" role="listbox" aria-labelledby="label" aria-multiselectable={props.multiple ? 'true' : undefined}>
+  <div class="list" id="listbox" role="listbox" aria-labelledby="label" aria-multiselectable={props.multiple ? 'true' : undefined} aria-busy={props.loading ? 'true' : undefined}>
     <OptionList {...props} />
   </div>,
   props.searchable && (
     <p class="empty" role="status">
-      {props.visible.length ? '' : 'Aucun résultat'}
+      {props.loading ? 'Recherche en cours…' : props.visible.length ? '' : 'Aucun résultat'}
     </p>
   ),
 ];

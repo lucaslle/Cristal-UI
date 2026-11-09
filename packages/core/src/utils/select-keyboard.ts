@@ -1,5 +1,7 @@
 import { ListOption, matchIndex } from './listbox';
-import { firstEnabled, keyAction, moveWithin, nextTyped, visibleIndices } from './selection';
+import { firstEnabled, keyAction, moveWithin, nextTyped } from './selection';
+
+const SEARCH_DELAY = 300;
 
 export interface SelectHost {
   options: ListOption[];
@@ -7,7 +9,9 @@ export interface SelectHost {
   query: string;
   multiple: boolean;
   searchable: boolean;
+  remote: boolean;
   search?: HTMLInputElement;
+  crSearch: { emit(query: string): unknown };
   isOpen(): boolean;
   visible(): number[];
   selection(): string[];
@@ -18,12 +22,21 @@ export interface SelectHost {
 
 export const selectKeyboard = (host: SelectHost) => {
   let typed = { text: '', at: 0 };
+  let timer: ReturnType<typeof setTimeout> | undefined;
+
+  const setQuery = (query: string) => {
+    host.query = query;
+    if (host.search && host.search.value !== query) host.search.value = query;
+    host.active = firstEnabled(host.options, host.visible());
+    if (!host.remote) return;
+    clearTimeout(timer);
+    timer = setTimeout(() => host.crSearch.emit(query), SEARCH_DELAY);
+  };
 
   const typeKey = (key: string) => {
     if (host.searchable) {
-      host.query = key;
-      if (host.search) host.search.value = key;
-      return host.show(firstEnabled(host.options, visibleIndices(host.options, key)));
+      setQuery(key);
+      return host.show(host.active);
     }
     typed = nextTyped(typed, key);
     const from = host.isOpen() ? host.active : host.options.findIndex((option) => host.selection().includes(option.value));
@@ -46,10 +59,5 @@ export const selectKeyboard = (host: SelectHost) => {
     else typeKey(event.key);
   };
 
-  const onQuery = (query: string) => {
-    host.query = query;
-    host.active = firstEnabled(host.options, visibleIndices(host.options, query));
-  };
-
-  return { onKeyDown, onQuery };
+  return { onKeyDown, setQuery };
 };
