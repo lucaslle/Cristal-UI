@@ -1,3 +1,4 @@
+import type React from 'react';
 import { CrButton, CrCard, CrCheckbox, CrInput, CrSelect } from '@cristal/react/ssr';
 import { FormDemo } from './form-demo';
 import { MenuDemo } from './menu-demo';
@@ -28,6 +29,12 @@ export default function Page() {
       <div style={row}>
         <CrButton disabled>Désactivé</CrButton>
         <CrButton loading>Chargement</CrButton>
+      </div>
+
+      <h2>Thème local</h2>
+      <div className="cr-theme" data-testid="local-theme" style={{ ...row, '--cr-color-primary': '#e11d48' } as React.CSSProperties}>
+        <CrButton>Thème rose</CrButton>
+        <CrButton variant="secondary">Secondaire rose</CrButton>
       </div>
 
       <h2>États des champs</h2>
