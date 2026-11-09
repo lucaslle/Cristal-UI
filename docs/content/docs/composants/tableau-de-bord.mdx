@@ -1,0 +1,64 @@
+---
+title: Tableau de bord
+description: Grille de widgets que chaque utilisateur déplace et redimensionne. Balises cr-dashboard et cr-widget, composants React CrDashboard et CrWidget.
+---
+
+import DashboardBasic from '@/demos/dashboard-basic';
+
+## Exemple
+
+Chaque `CrWidget` a un titre (`label`), une position (`x`, `y`, en cases à partir de 0) et une taille (`w` colonnes, `h` lignes). L'utilisateur le déplace par sa poignée ⠿ et change sa taille en tirant son coin : la grille apparaît, l'emplacement visé est dessiné en pointillés, les autres widgets s'écartent pendant le déplacement puis tout se tasse vers le haut.
+
+<Preview column>
+  <DashboardBasic />
+</Preview>
+
+<include>../../../demos/dashboard-basic.tsx</include>
+
+## Grille
+
+| Propriété de `CrDashboard` | Rôle |
+|---|---|
+| `columns` | nombre de colonnes (12 par défaut) |
+| `rowHeight` | hauteur d'une ligne en pixels (80 par défaut) |
+| `gap` | espace entre les widgets en pixels (16 par défaut) |
+| `editable` | `false` pour figer la disposition (sans poignées) |
+| `stackBelow` | largeur en pixels sous laquelle les widgets s'empilent (480 par défaut) |
+| `storageKey` | retient la disposition de l'utilisateur d'une visite à l'autre |
+
+`onCrLayoutChange` donne la disposition (`id`, `x`, `y`, `w`, `h` de chaque widget) après chaque changement, pour l'enregistrer côté serveur par exemple ; la méthode `reset()` revient à la disposition de départ.
+
+## Widgets
+
+- Donnez un `id` à chaque widget : c'est lui qui retrouve sa place dans la disposition enregistrée.
+- Sans `x` ni `y`, un widget prend la première place libre : pratique pour ajouter un widget depuis une liste.
+- `minW`, `minH`, `maxW` et `maxH` bornent la taille ; `removable` ajoute un bouton × qui émet `onCrRemove` (retirez alors le widget de votre liste).
+- Le slot `actions` place des boutons dans l'en-tête.
+
+## Clavier
+
+Sur la poignée d'un widget (Tab) :
+
+| Touche | Action |
+|---|---|
+| ← → ↑ ↓ | déplace le widget d'une case |
+| Maj + ← → | une colonne de moins ou de plus |
+| Maj + ↑ ↓ | une ligne de moins ou de plus |
+
+Chaque changement est annoncé : « Ventes : colonne 3, ligne 1. », « Ventes : 4 colonnes sur 3 lignes. ».
+
+## Petit écran
+
+Sous 480 pixels de large (`stackBelow` pour changer ce seuil), les widgets s'empilent sur toute la largeur, dans l'ordre de la grille, et les poignées disparaissent.
+
+<Callout>
+  Si l'utilisateur a demandé à son système de réduire les animations, les widgets changent de place sans glisser.
+</Callout>
+
+## API
+
+<ApiReference tag="cr-dashboard" />
+
+## API de CrWidget
+
+<ApiReference tag="cr-widget" />

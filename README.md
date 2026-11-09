@@ -94,6 +94,16 @@ Ils participent au `<form>` parent comme des champs natifs (valeur envoyée, val
 </CrSelect>
 ```
 
+### Tableau de bord : `cr-dashboard`, `cr-widget`
+
+Grille de widgets déplacés par leur poignée et redimensionnés par leur coin ; les autres s'écartent puis tout se tasse vers le haut. Au clavier : flèches pour déplacer, Maj + flèches pour la taille.
+
+```tsx
+<CrDashboard columns={12} rowHeight={80} storageKey="mon-tableau" onCrLayoutChange={(e) => save(e.detail)}>
+  <CrWidget id="ventes" label="Ventes" x={0} y={0} w={4} h={2}>…</CrWidget>
+</CrDashboard>
+```
+
 ### Champs spécialisés
 
 | Composant | Rôle |
