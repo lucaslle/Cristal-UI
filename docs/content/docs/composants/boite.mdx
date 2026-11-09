@@ -1,0 +1,39 @@
+---
+title: Boîte
+description: Remplaçant de div pour la mise en page, avec les valeurs du thème. Balise cr-box, composant React CrBox.
+---
+
+import BoxLayout from '@/demos/box-layout';
+
+## Exemple
+
+`CrBox` remplace une `div` : espacements, flex et grille se règlent avec des propriétés, et les enfants restent des enfants directs, donc flex et grille s'appliquent bien à eux.
+
+<Preview column>
+  <BoxLayout />
+</Preview>
+
+<include>../../../demos/box-layout.tsx</include>
+
+## Valeurs
+
+| Propriété | Valeurs |
+|---|---|
+| `display` | `block` (par défaut), `flex`, `grid`, `inline-flex`, `inline-block`, `none` |
+| `direction` | `row`, `column` (et leurs inverses) |
+| `gap`, `padding` | `xs` 4px, `sm` 8px, `lg` 16px, `xl` 24px, `2xl` 32px, `3xl` 48px, ou toute valeur CSS ; `padding="sm xl"` donne vertical puis horizontal |
+| `align`, `justify` | comme `align-items` et `justify-content` : `center`, `space-between`… |
+| `wrap` | passe à la ligne quand la place manque |
+| `columns` | grille : `3` colonnes égales, ou `220px` pour autant de colonnes d'au moins 220px que la place le permet |
+| `background` | `surface`, `muted`, `subtle`, `primary` (texte adapté), ou toute couleur CSS |
+| `radius` | `m`, `l`, `full`, ou toute valeur CSS |
+| `border`, `shadow` | bordure fine, ombre douce |
+| `maxWidth` | largeur maximale, centrée |
+
+<Callout>
+  `CrBox` n'a pas de rôle : comme une `div`, elle ne dit rien aux lecteurs d'écran. Pour une zone qui a un sens (navigation, liste, article), gardez l'élément HTML adapté.
+</Callout>
+
+## API
+
+<ApiReference tag="cr-box" />

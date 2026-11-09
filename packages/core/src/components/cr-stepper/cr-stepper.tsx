@@ -37,7 +37,7 @@ export class CrStepper {
 
   private ball?: HTMLElement;
   private hop?: { from: number; to: number };
-  private focus?: { step?: HTMLCrStepElement; nav: boolean };
+  private focusState?: { step?: HTMLCrStepElement; nav: boolean };
 
   private steps = () => Array.from(this.el.children).filter((child): child is HTMLCrStepElement => child.tagName === 'CR-STEP');
 
@@ -45,7 +45,7 @@ export class CrStepper {
   onCurrentChange(next: number, previous: number) {
     const labels = this.steps().map((step) => step.label);
     this.el.dataset.direction = next < previous ? 'back' : 'forward';
-    this.focus = { step: this.steps().find((step) => step.contains(document.activeElement)), nav: !!this.el.shadowRoot?.activeElement };
+    this.focusState = { step: this.steps().find((step) => step.contains(document.activeElement)), nav: !!this.el.shadowRoot?.activeElement };
     this.hop = { from: previous, to: next };
     this.announce = next >= labels.length ? 'Toutes les étapes sont terminées.' : `Étape ${next + 1} sur ${labels.length} : ${labels[next]}`;
     this.refresh();
@@ -85,8 +85,8 @@ export class CrStepper {
       this.ball.animate([from, { left: `calc((${from.left} + ${to.left}) / 2)`, bottom: top }, to], { duration: 520, easing: EASE });
     }
     this.hop = undefined;
-    const focus = this.focus;
-    this.focus = undefined;
+    const focus = this.focusState;
+    this.focusState = undefined;
     if (focus) requestAnimationFrame(() => this.restoreFocus(focus));
   }
 

@@ -81,6 +81,8 @@ Ils participent au `<form>` parent comme des champs natifs (valeur envoyée, val
 | `checked`, `indeterminate` | `cr-checkbox` | état de la case |
 | `multiple`, `values` | `cr-select` | choix multiple ; `values` est le tableau des valeurs choisies |
 | `searchable` | `cr-select` | champ de recherche en haut de la liste |
+| `strength` | `cr-input` | jauge de sécurité du mot de passe |
+| `completions` | `cr-input` | suggestions affichées en gris, acceptées avec flèche droite |
 | `remote`, `loading` | `cr-select` | recherche côté serveur (avec `searchable`) : pas de filtre local, `onCrSearch` donne le texte tapé ; `loading` affiche « Recherche en cours… » |
 
 Événements : `onCrInput` (`cr-input`, à chaque frappe), `onCrSearch` (`cr-select` avec `remote`, 300 ms après la dernière frappe) et `onCrChange` (tous). La valeur est dans `event.detail`.
@@ -90,6 +92,23 @@ Ils participent au `<form>` parent comme des champs natifs (valeur envoyée, val
   <option value="fr">France</option>
   <option value="be">Belgique</option>
 </CrSelect>
+```
+
+### Champs spécialisés
+
+| Composant | Rôle |
+|---|---|
+| `cr-textarea` | texte sur plusieurs lignes qui grandit d'une ligne à la fois (`rows`, `maxRows`, slot `end`) |
+| `cr-otp` | code à usage unique, une case par chiffre (`length`, `onCrComplete`) |
+| `cr-card-input` | carte bancaire : numéro groupé, puis expiration et CVC (`name`, `name-expiry`, `name-cvc`) ; `preview` ajoute une carte dessinée qui se remplit et se retourne, `holder` le champ Titulaire ; `variant="card"` fait tout saisir directement sur la carte |
+| `cr-tag-input` | étiquettes ajoutées avec Entrée ou virgule, retirées avec × (`values`, `onCrChange`) |
+
+### Mise en page : `cr-box`
+
+Remplaçant de `div` : `display`, `direction`, `gap`, `padding`, `align`, `justify`, `wrap`, `columns`, `background`, `radius`, `border`, `shadow`, `maxWidth`. Les espacements acceptent les valeurs du thème (`xs`, `sm`, `lg`, `xl`, `2xl`, `3xl`) ou toute valeur CSS.
+
+```tsx
+<CrBox display="grid" columns="220px" gap="lg" padding="xl">…</CrBox>
 ```
 
 ### Modale et panneau latéral : `cr-dialog`, `cr-drawer`

@@ -1,5 +1,6 @@
 import { AttachInternals, Component, Element, Event, EventEmitter, Listen, Prop, State, h } from '@stencil/core';
 import { FieldHeader, describedBy } from '../../utils/field';
+import { Ghost, StrengthMeter, completionFor } from '../../utils/input-extras';
 import { handleInvalid, kindOf, validationMessage } from '../../utils/validation';
 
 export type InputType = 'text' | 'email' | 'password' | 'number' | 'tel' | 'url' | 'search';
@@ -41,6 +42,10 @@ export class CrInput {
   @Prop({ reflect: true }) required = false;
   /** Désactive le champ. */
   @Prop({ reflect: true }) disabled = false;
+  /** Affiche une jauge de sécurité sous le champ (pour type="password"). */
+  @Prop() strength = false;
+  /** Suggestions : la suite de la première qui prolonge la saisie s'affiche en gris ; flèche droite ou clic pour l'accepter. */
+  @Prop() completions?: string[];
 
   /** Émis à chaque frappe ; detail : la valeur. */
   @Event() crInput: EventEmitter<string>;
@@ -48,6 +53,8 @@ export class CrInput {
   @Event() crChange: EventEmitter<string>;
 
   @State() touched = false;
+  @State() focused = false;
+  @State() filled = false;
 
   private input?: HTMLInputElement;
   private initialValue?: string;
@@ -83,20 +90,40 @@ export class CrInput {
     this.crInput.emit(this.value);
   };
 
+  private accept = () => {
+    const completion = completionFor(this.value, this.completions);
+    if (!completion) return;
+    this.initialValue ??= this.value;
+    this.value = completion;
+    this.filled = true;
+    this.crInput.emit(this.value);
+  };
+
   private onKeyDown = (event: KeyboardEvent) => {
+    const input = event.target as HTMLInputElement;
+    // selectionStart vaut null pour type="email" : la position du curseur n'est alors pas connue.
+    const atEnd = input.selectionStart === null || input.selectionStart === input.value.length;
+    if (event.key === 'ArrowRight' && atEnd && completionFor(this.value, this.completions)) {
+      event.preventDefault();
+      this.accept();
+    }
     if (event.key === 'Enter') this.internals.form?.requestSubmit();
   };
 
   render() {
     const id = 'control';
     const error = this.error || (this.touched ? validationMessage(this.input?.validity, kindOf(this.type)) : '');
+    const completion = this.focused ? completionFor(this.value, this.completions) : undefined;
+    const extra = [this.strength && `${id}-strength`, completion && `${id}-completion`, this.filled && `${id}-filled`].filter(Boolean).join(' ');
+    const described = [describedBy({ id, hint: this.hint, error }), extra].filter(Boolean).join(' ') || undefined;
     return (
       <div class="field">
         <FieldHeader id={id} label={this.label} required={this.required} hint={this.hint} error={error} />
+        <div class="box">
+        <Ghost value={this.value} completion={completion} onAccept={this.accept} />
         <input
           ref={(el) => (this.input = el)}
           id={id}
-          class="control"
           part="control"
           type={this.type}
           name={this.name}
@@ -106,14 +133,22 @@ export class CrInput {
           required={this.required}
           disabled={this.disabled}
           aria-invalid={error ? 'true' : undefined}
-          aria-describedby={describedBy({ id, hint: this.hint, error })}
-          onInput={this.onInput}
+          class={{ control: true, flash: this.filled }}
+          aria-autocomplete={this.completions ? 'inline' : undefined}
+          aria-describedby={described}
+          onFocus={() => (this.focused = true)}
+          onBlur={() => (this.focused = false)}
+          onInput={(event) => ((this.filled = false), this.onInput(event))}
           onChange={() => {
             this.touched = true;
             this.crChange.emit(this.value);
           }}
           onKeyDown={this.onKeyDown}
         />
+        </div>
+        {completion && <span id={`${id}-completion`} class="sr-only">{`Suggestion : ${completion}. Flèche droite pour l'accepter.`}</span>}
+        {this.filled && <span id={`${id}-filled`} class="filled-hint">Complété pour vous</span>}
+        {this.strength && <StrengthMeter id={`${id}-strength`} password={this.value} />}
       </div>
     );
   }
