@@ -1,4 +1,13 @@
 {
   "title": "Composants",
-  "pages": ["bouton", "champ-texte", "liste-deroulante", "case-a-cocher", "modale", "drawer", "carte"]
+  "pages": [
+    "bouton",
+    "champ-texte",
+    "liste-deroulante",
+    "case-a-cocher",
+    "menu",
+    "modale",
+    "drawer",
+    "carte"
+  ]
 }
