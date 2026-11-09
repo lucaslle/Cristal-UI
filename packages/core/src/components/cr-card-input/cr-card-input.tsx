@@ -8,11 +8,12 @@ export interface CardValue {
   number: string;
   expiry: string;
   cvc: string;
+  holder: string;
 }
 
 /**
  * Carte bancaire : numéro groupé par 4 pendant la frappe, puis date d'expiration et cryptogramme qui apparaissent.
- * Envoie name (numéro sans espaces), name-expiry et name-cvc avec le formulaire.
+ * Envoie name (numéro sans espaces), name-expiry, name-cvc (et name-holder avec holder) avec le formulaire.
  * @part label - Le libellé.
  * @part control - Le champ du numéro.
  */
@@ -40,6 +41,8 @@ export class CrCardInput {
   @Prop({ reflect: true }) disabled = false;
   /** Affiche une carte dessinée qui se remplit pendant la frappe et se retourne pour le cryptogramme. */
   @Prop() preview = false;
+  /** Ajoute le champ « Titulaire » (nom inscrit sur la carte), envoyé sous name-holder. */
+  @Prop() holder = false;
 
   /** Émis à chaque frappe ; detail : numéro (chiffres), date d'expiration et cryptogramme. */
   @Event() crInput: EventEmitter<CardValue>;
@@ -47,6 +50,7 @@ export class CrCardInput {
   @State() digits = '';
   @State() expiry = '';
   @State() cvc = '';
+  @State() holderName = '';
   @State() touched = false;
   @State() cvcFocused = false;
 
@@ -59,7 +63,7 @@ export class CrCardInput {
   }
 
   formResetCallback() {
-    this.digits = this.expiry = this.cvc = '';
+    this.digits = this.expiry = this.cvc = this.holderName = '';
     this.touched = false;
   }
 
@@ -76,13 +80,14 @@ export class CrCardInput {
   componentDidRender() {
     const message = this.message();
     const data = new FormData();
-    if (this.name && this.digits) [['', this.digits], ['-expiry', this.expiry], ['-cvc', this.cvc]].forEach(([suffix, value]) => data.append(`${this.name}${suffix}`, value));
+    const fields = [['', this.digits], ['-expiry', this.expiry], ['-cvc', this.cvc], ...(this.holder ? [['-holder', this.holderName.trim()]] : [])];
+    if (this.name && this.digits) fields.forEach(([suffix, value]) => data.append(`${this.name}${suffix}`, value));
     this.internals.setFormValue(this.digits ? data : null);
     this.internals.setValidity(message ? { customError: true } : {}, message, this.input);
   }
 
   private emit() {
-    this.crInput.emit({ number: this.digits, expiry: this.expiry, cvc: this.cvc });
+    this.crInput.emit({ number: this.digits, expiry: this.expiry, cvc: this.cvc, holder: this.holderName });
   }
 
   private onNumber = (event: Event) => {
@@ -107,7 +112,7 @@ export class CrCardInput {
     const blur = () => (this.touched = this.touched || !!this.digits);
     return (
       <div class="field">
-        {this.preview && <CardVisual digits={this.digits} expiry={this.expiry} cvc={this.cvc} flipped={this.cvcFocused} />}
+        {this.preview && <CardVisual digits={this.digits} expiry={this.expiry} cvc={this.cvc} holder={this.holderName} flipped={this.cvcFocused} />}
         <FieldHeader id={id} label={this.label} required={this.required} hint={this.hint} error={error} />
         <div class="card">
           <div class="number">
@@ -134,6 +139,13 @@ export class CrCardInput {
           </div>
           {complete && (
             <div class="extra">
+              {this.holder && (
+                <label class="mini holder-field">
+                  <span>Titulaire</span>
+                  <input class="control" value={this.holderName} autocomplete="cc-name" placeholder="Nom sur la carte" disabled={this.disabled} aria-describedby={described} onBlur={blur}
+                    onInput={(event) => ((this.holderName = (event.target as HTMLInputElement).value), this.emit())} />
+                </label>
+              )}
               <label class="mini">
                 <span>Expiration</span>
                 <input class="control" value={this.expiry} inputMode="numeric" autocomplete="cc-exp" placeholder="MM/AA" maxLength={5} disabled={this.disabled}

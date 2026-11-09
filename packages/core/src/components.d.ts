@@ -181,7 +181,7 @@ export namespace Components {
     }
     /**
      * Carte bancaire : numéro groupé par 4 pendant la frappe, puis date d'expiration et cryptogramme qui apparaissent.
-     * Envoie name (numéro sans espaces), name-expiry et name-cvc avec le formulaire.
+     * Envoie name (numéro sans espaces), name-expiry, name-cvc (et name-holder avec holder) avec le formulaire.
      */
     interface CrCardInput {
         /**
@@ -197,6 +197,11 @@ export namespace Components {
           * Texte d'aide, lu par les lecteurs d'écran.
          */
         "hint"?: string;
+        /**
+          * Ajoute le champ « Titulaire » (nom inscrit sur la carte), envoyé sous name-holder.
+          * @default false
+         */
+        "holder": boolean;
         /**
           * Libellé affiché au-dessus du numéro.
          */
@@ -783,7 +788,7 @@ declare global {
     }
     /**
      * Carte bancaire : numéro groupé par 4 pendant la frappe, puis date d'expiration et cryptogramme qui apparaissent.
-     * Envoie name (numéro sans espaces), name-expiry et name-cvc avec le formulaire.
+     * Envoie name (numéro sans espaces), name-expiry, name-cvc (et name-holder avec holder) avec le formulaire.
      */
     interface HTMLCrCardInputElement extends Components.CrCardInput, HTMLStencilElement {
         addEventListener<K extends keyof HTMLCrCardInputElementEventMap>(type: K, listener: (this: HTMLCrCardInputElement, ev: CrCardInputCustomEvent<HTMLCrCardInputElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -1227,7 +1232,7 @@ declare namespace LocalJSX {
     }
     /**
      * Carte bancaire : numéro groupé par 4 pendant la frappe, puis date d'expiration et cryptogramme qui apparaissent.
-     * Envoie name (numéro sans espaces), name-expiry et name-cvc avec le formulaire.
+     * Envoie name (numéro sans espaces), name-expiry, name-cvc (et name-holder avec holder) avec le formulaire.
      */
     interface CrCardInput {
         /**
@@ -1247,6 +1252,11 @@ declare namespace LocalJSX {
           * Texte d'aide, lu par les lecteurs d'écran.
          */
         "hint"?: string;
+        /**
+          * Ajoute le champ « Titulaire » (nom inscrit sur la carte), envoyé sous name-holder.
+          * @default false
+         */
+        "holder"?: boolean;
         /**
           * Libellé affiché au-dessus du numéro.
          */
@@ -1837,6 +1847,7 @@ declare namespace LocalJSX {
         "required": boolean;
         "disabled": boolean;
         "preview": boolean;
+        "holder": boolean;
     }
     interface CrCheckboxAttributes {
         "label": string;
@@ -1990,7 +2001,7 @@ declare module "@stencil/core" {
             "cr-card": LocalJSX.IntrinsicElements["cr-card"] & JSXBase.HTMLAttributes<HTMLCrCardElement>;
             /**
              * Carte bancaire : numéro groupé par 4 pendant la frappe, puis date d'expiration et cryptogramme qui apparaissent.
-             * Envoie name (numéro sans espaces), name-expiry et name-cvc avec le formulaire.
+             * Envoie name (numéro sans espaces), name-expiry, name-cvc (et name-holder avec holder) avec le formulaire.
              */
             "cr-card-input": LocalJSX.IntrinsicElements["cr-card-input"] & JSXBase.HTMLAttributes<HTMLCrCardInputElement>;
             /**

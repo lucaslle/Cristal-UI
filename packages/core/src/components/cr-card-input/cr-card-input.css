@@ -29,6 +29,7 @@
 /* Le numéro complet, la date d'expiration et le cryptogramme glissent depuis la droite. */
 .extra {
   display: flex;
+  flex-wrap: wrap;
   gap: var(--cr-spacing-sm);
   animation: cr-slide-in 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
@@ -44,6 +45,14 @@
 .mini .control {
   width: 96px;
   font-variant-numeric: tabular-nums;
+}
+
+.holder-field {
+  flex: 1 1 100%;
+}
+
+.holder-field .control {
+  width: 100%;
 }
 
 .mini:last-child .control {

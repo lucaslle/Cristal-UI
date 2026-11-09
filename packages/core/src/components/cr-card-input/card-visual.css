@@ -1,12 +1,34 @@
-/* Carte dessinée : 3D, se retourne pour le cryptogramme. */
+/* Carte dessinée au format réel (85,6 × 54 mm), en 3D : elle se retourne pour le cryptogramme. */
 .visual {
+  --card-a: var(--cr-color-primary);
+  --card-b: oklch(from var(--cr-color-primary) calc(l * 0.5) c h);
+  --card-glow: color-mix(in oklab, var(--cr-color-primary) 55%, white);
   position: relative;
-  width: min(320px, 100%);
-  aspect-ratio: 1.586;
+  width: min(340px, 100%);
+  aspect-ratio: 85.6 / 54;
   margin-bottom: var(--cr-spacing-sm);
-  font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
-  color: var(--cr-color-on-primary);
-  perspective: 900px;
+  font-family: 'OCR A Std', 'OCR A Extended', ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+  color: #f4f4f5;
+  container-type: inline-size;
+  perspective: 1000px;
+}
+
+.visual[data-brand='visa'] {
+  --card-a: #1d3fb8;
+  --card-b: #0b1446;
+  --card-glow: #4f8bff;
+}
+
+.visual[data-brand='mastercard'] {
+  --card-a: #3a3a40;
+  --card-b: #0d0d10;
+  --card-glow: #ff8a3d;
+}
+
+.visual[data-brand='amex'] {
+  --card-a: #5fa8b8;
+  --card-b: #1f5f77;
+  --card-glow: #d8f1f5;
 }
 
 .face {
@@ -15,23 +37,29 @@
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  padding: 18px 20px;
+  padding: 6cqw 7cqw;
   overflow: hidden;
-  background:
-    radial-gradient(120% 90% at 100% 0%, color-mix(in oklab, var(--cr-color-primary) 55%, white) 0%, transparent 55%),
-    linear-gradient(135deg, var(--cr-color-primary), oklch(from var(--cr-color-primary) calc(l * 0.55) c h));
-  border-radius: 16px;
-  box-shadow: 0 18px 40px -18px color-mix(in oklab, var(--cr-color-primary) 70%, transparent);
+  isolation: isolate;
+  border-radius: 4.5cqw;
+  box-shadow:
+    0 1px 0 rgb(255 255 255 / 0.25) inset,
+    0 22px 40px -20px rgb(0 0 0 / 0.55),
+    0 8px 16px -8px rgb(0 0 0 / 0.35);
   backface-visibility: hidden;
-  transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+  transition: transform 0.7s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
-.face::after {
-  content: '';
+/* Fond : dégradé du réseau, halo, guilloche et reflet. Il se fond quand le réseau change. */
+.skin {
   position: absolute;
   inset: 0;
-  background: linear-gradient(115deg, transparent 30%, rgb(255 255 255 / 0.18) 45%, transparent 60%);
-  pointer-events: none;
+  z-index: -1;
+  background:
+    linear-gradient(115deg, transparent 35%, rgb(255 255 255 / 0.16) 48%, transparent 62%),
+    repeating-radial-gradient(circle at 120% -20%, rgb(255 255 255 / 0.05) 0 1px, transparent 1px 7px),
+    radial-gradient(90% 120% at 100% 0%, color-mix(in oklab, var(--card-glow) 55%, transparent) 0%, transparent 60%),
+    linear-gradient(135deg, var(--card-a), var(--card-b));
+  animation: cr-card-fade 0.5s ease-out;
 }
 
 .back {
@@ -46,36 +74,66 @@
   transform: rotateY(0);
 }
 
-.top {
+.row {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  gap: 3cqw;
 }
 
-.chip rect {
-  fill: #e9c46a;
+.row.end {
+  justify-content: space-between;
+  margin-top: auto;
+}
+
+/* Puce EMV dorée avec ses contacts. */
+.chip {
+  display: block;
+  width: 13.5cqw;
+  aspect-ratio: 46 / 36;
+  margin-top: 9cqw;
+  background:
+    radial-gradient(60% 80% at 30% 20%, rgb(255 255 255 / 0.55), transparent 70%),
+    linear-gradient(135deg, #f8e3a3, #d4a94e 45%, #f2d27d 70%, #b8892f);
+  border-radius: 1.6cqw;
+  box-shadow: inset 0 0 0 1px rgb(120 84 20 / 0.45);
+}
+
+.chip svg {
+  display: block;
+  width: 100%;
+  height: 100%;
 }
 
 .chip path {
   fill: none;
-  stroke: rgb(0 0 0 / 0.25);
-  stroke-width: 1.2;
+  stroke: rgb(110 76 18 / 0.55);
+  stroke-width: 1.3;
 }
 
-.brand {
-  font-family: var(--cr-font-family);
-  font-size: var(--cr-font-size-m);
-  font-weight: var(--cr-font-weight-bold);
-  font-style: italic;
-  animation: cr-card-fade 0.4s ease-out;
+.contactless {
+  width: 6.5cqw;
+  height: auto;
+  margin-top: 9cqw;
+  opacity: 0.85;
 }
 
+.contactless path {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+}
+
+/* Chiffres en relief, comme embossés. */
 .digits {
   display: flex;
-  margin-top: auto;
-  font-size: clamp(15px, 6vw, 21px);
-  letter-spacing: 0.06em;
+  margin-top: 6cqw;
+  font-size: 7.4cqw;
+  letter-spacing: 0.04em;
   white-space: pre;
+  text-shadow:
+    0 1px 0 rgb(0 0 0 / 0.45),
+    0 -1px 0 rgb(255 255 255 / 0.3);
 }
 
 .char {
@@ -84,57 +142,123 @@
 }
 
 .char.empty {
-  opacity: 0.55;
+  opacity: 0.5;
   animation: none;
 }
 
 .char.gap {
-  width: 0.6em;
+  width: 0.55em;
 }
 
-.bottom {
+.valid {
   display: flex;
-  flex-direction: column;
-  margin-top: 14px;
+  align-items: center;
+  gap: 1.5cqw;
+  margin: 2.5cqw 0 0 26cqw;
 }
 
 .caption {
   font-family: var(--cr-font-family);
-  font-size: 10px;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
+  font-size: 2.2cqw;
+  line-height: 1.1;
+  letter-spacing: 0.05em;
   opacity: 0.85;
 }
 
 .expiry {
-  font-size: var(--cr-font-size-m);
+  font-size: 4.6cqw;
+  text-shadow: 0 1px 0 rgb(0 0 0 / 0.45);
+}
+
+.holder {
+  overflow: hidden;
+  font-size: 4.2cqw;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  text-shadow: 0 1px 0 rgb(0 0 0 / 0.45);
+}
+
+.holder.empty {
+  opacity: 0.6;
+}
+
+/* Réseaux : noms stylisés (pas les logos déposés). */
+.brand {
+  flex-shrink: 0;
+  font-family: var(--cr-font-family);
+  font-weight: 800;
+  line-height: 1;
+  animation: cr-card-fade 0.4s ease-out;
+}
+
+.brand.visa {
+  font-size: 7cqw;
+  font-style: italic;
+  letter-spacing: -0.02em;
+}
+
+.brand.mastercard {
+  padding: 1.2cqw 2.4cqw;
+  font-size: 3.6cqw;
+  background: linear-gradient(90deg, rgb(235 0 27 / 0.85), rgb(247 158 27 / 0.85));
+  border-radius: 999px;
+}
+
+.brand.amex {
+  padding: 1cqw 1.6cqw;
+  font-size: 2.6cqw;
+  text-align: center;
+  white-space: pre-line;
+  border: 0.4cqw solid currentColor;
+  border-radius: 1cqw;
 }
 
 .stripe {
-  height: 40px;
-  margin: 4px -20px 18px;
-  background: rgb(0 0 0 / 0.75);
+  height: 17cqw;
+  margin: 2cqw -7cqw 5cqw;
+  background: linear-gradient(#111, #2a2a2a 50%, #111);
 }
 
 .signature {
   display: flex;
   align-items: center;
-  justify-content: flex-end;
-  height: 36px;
-  padding: 0 12px;
-  color: #1f2937;
-  background: repeating-linear-gradient(135deg, #f3f4f6 0 6px, #e5e7eb 6px 12px);
-  border-radius: 4px;
+  height: 11cqw;
+}
+
+.lines {
+  flex: 1;
+  height: 100%;
+  background: repeating-linear-gradient(-12deg, #f5f5f4 0 3px, #e7e5e4 3px 6px);
+  border-radius: 1cqw 0 0 1cqw;
 }
 
 .cvc {
-  font-size: var(--cr-font-size-m);
-  letter-spacing: 0.2em;
+  display: grid;
+  place-items: center;
+  height: 100%;
+  padding: 0 3cqw;
+  font-size: 4.6cqw;
+  font-style: italic;
+  color: #1f2937;
+  background: #fff;
+  border-radius: 0 1cqw 1cqw 0;
 }
 
-.back .caption {
-  margin-top: 6px;
-  text-align: end;
+.fine {
+  margin: 3cqw 0 0;
+  font-family: var(--cr-font-family);
+  font-size: 2.2cqw;
+  line-height: 1.3;
+  opacity: 0.75;
+}
+
+.hologram {
+  width: 14cqw;
+  height: 9cqw;
+  background: conic-gradient(from 90deg, #f0abfc, #93c5fd, #86efac, #fde68a, #f0abfc);
+  border-radius: 1cqw;
+  opacity: 0.85;
 }
 
 @keyframes cr-card-digit {
@@ -147,7 +271,6 @@
 @keyframes cr-card-fade {
   from {
     opacity: 0;
-    transform: translateX(8px);
   }
 }
 
@@ -156,7 +279,8 @@
     transition: none;
   }
   .char,
-  .brand {
+  .brand,
+  .skin {
     animation: none;
   }
 }

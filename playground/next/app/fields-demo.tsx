@@ -22,7 +22,7 @@ export function FieldsDemo() {
           <CrOtp label="Code reçu par SMS" name="code" hint="6 chiffres" onCrComplete={(event) => setComplete(event.detail)} />
           <p role="status">{complete && `Code complet : ${complete}`}</p>
         </CrBox>
-        <CrCardInput label="Carte bancaire" name="card" hint="Carte de test : 4242 4242 4242 4242" preview />
+        <CrCardInput label="Carte bancaire" name="card" hint="Carte de test : 4242 4242 4242 4242" preview holder />
         <CrInput label="Nouveau mot de passe" name="password" type="password" autocomplete="new-password" strength />
         <CrTextarea label="Note" name="note" placeholder="Écrivez une note…" maxRows={5}>
           <CrButton slot="end" size="xs" aria-label="Envoyer la note" type="submit">
