@@ -7,13 +7,19 @@ import DashboardBasic from '@/demos/dashboard-basic';
 
 ## Exemple
 
-Chaque `CrWidget` a un titre (`label`), une position (`x`, `y`, en cases à partir de 0) et une taille (`w` colonnes, `h` lignes). L'utilisateur le déplace par sa poignée ⠿ et change sa taille en tirant son coin : la grille apparaît, l'emplacement visé est dessiné en pointillés, les autres widgets s'écartent pendant le déplacement puis tout se tasse vers le haut.
+Chaque `CrWidget` a un titre (`label`), une position (`x`, `y`, en cases à partir de 0) et une taille (`w` colonnes, `h` lignes). L'utilisateur le déplace par sa poignée ⠿, ou en maintenant le clic n'importe où sur la carte, et change sa taille en tirant son coin : la grille apparaît, l'emplacement visé est dessiné en pointillés, les autres widgets s'écartent pendant le déplacement puis tout se tasse vers le haut.
 
 <Preview column>
   <DashboardBasic />
 </Preview>
 
 <include>../../../demos/dashboard-basic.tsx</include>
+
+## Attraper une carte
+
+- Par la poignée ⠿ : le déplacement commence tout de suite.
+- N'importe où sur la carte : maintenez le clic un instant (300 ms) sans bouger, la carte se soulève, puis déplacez-la. Un clic suivi d'un mouvement rapide sélectionne du texte comme d'habitude, et maintenir le clic sur un bouton, une case à cocher, un lien ou un champ ne soulève pas la carte.
+- Au doigt, sur écran tactile, seule la poignée déplace la carte : glisser sur la carte fait défiler la page.
 
 ## Grille
 

@@ -96,7 +96,7 @@ Ils participent au `<form>` parent comme des champs natifs (valeur envoyée, val
 
 ### Tableau de bord : `cr-dashboard`, `cr-widget`
 
-Grille de widgets déplacés par leur poignée et redimensionnés par leur coin ; les autres s'écartent puis tout se tasse vers le haut. Au clavier : flèches pour déplacer, Maj + flèches pour la taille.
+Grille de widgets déplacés par leur poignée (ou en maintenant le clic sur la carte) et redimensionnés par leur coin ; les autres s'écartent puis tout se tasse vers le haut. Au clavier : flèches pour déplacer, Maj + flèches pour la taille.
 
 ```tsx
 <CrDashboard columns={12} rowHeight={80} storageKey="mon-tableau" onCrLayoutChange={(e) => save(e.detail)}>

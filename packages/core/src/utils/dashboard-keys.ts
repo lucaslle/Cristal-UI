@@ -40,3 +40,18 @@ export const saveItems = (storageKey: string | undefined, items: DashboardItem[]
     // Stockage indisponible (navigation privée) : la disposition vaut pour la session.
   }
 };
+
+export const plain = (layout: GridItem[]): DashboardItem[] => layout.map(({ id, x, y, w, h }) => ({ id, x, y, w, h }));
+
+/** Position et taille déclarées sur un cr-widget (x et y à -1 : première place libre). */
+export const itemOf = (widget: HTMLCrWidgetElement, id: string, columns: number): GridItem => ({
+  id,
+  x: widget.x ?? -1,
+  y: widget.y ?? -1,
+  w: Math.min(widget.w ?? 3, columns),
+  h: widget.h ?? 2,
+  minW: widget.minW ?? 1,
+  minH: widget.minH ?? 1,
+  maxW: widget.maxW ?? columns,
+  maxH: widget.maxH ?? 12,
+});

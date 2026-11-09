@@ -90,3 +90,40 @@ test('others slide into place, except with reduced motion', async ({ page }) => 
   await page.keyboard.press('Shift+ArrowDown');
   expect(await widget(page, 'visites').evaluate((el) => el.getAnimations().length)).toBe(0);
 });
+
+test('holding the click anywhere on a card lifts it, then it follows the pointer', async ({ page }) => {
+  const value = widget(page, 'revenus').getByText('48 920 €');
+  const box = (await value.boundingBox())!;
+  await page.mouse.move(box.x + 20, box.y + 10);
+  await page.mouse.down();
+  await page.waitForTimeout(400);
+  await expect(widget(page, 'revenus')).toHaveAttribute('data-lifted', '');
+  await page.mouse.move(box.x + 330, box.y + 30, { steps: 10 });
+  await page.mouse.up();
+  await expect(widget(page, 'revenus')).not.toHaveAttribute('data-lifted', '');
+  expect(await area(page, 'revenus')).toBe('4 / span 4 | 1 / span 2');
+  expect(await page.evaluate(() => getSelection()?.toString())).toBe('');
+});
+
+test('a quick press and move does not drag the card (text stays selectable)', async ({ page }) => {
+  const value = widget(page, 'revenus').getByText('48 920 €');
+  const box = (await value.boundingBox())!;
+  await page.mouse.move(box.x + 2, box.y + 10);
+  await page.mouse.down();
+  await page.mouse.move(box.x + 300, box.y + 10, { steps: 6 });
+  await page.waitForTimeout(400);
+  await page.mouse.up();
+  await expect(widget(page, 'revenus')).not.toHaveAttribute('data-lifted', '');
+  expect(await area(page, 'revenus')).toBe('1 / span 4 | 1 / span 2');
+});
+
+test('holding the click on a control inside the card does not lift it', async ({ page }) => {
+  const checkbox = widget(page, 'taches').getByRole('checkbox').last();
+  const box = (await checkbox.boundingBox())!;
+  await page.mouse.move(box.x + 5, box.y + 5);
+  await page.mouse.down();
+  await page.waitForTimeout(400);
+  await expect(widget(page, 'taches')).not.toHaveAttribute('data-lifted', '');
+  await page.mouse.up();
+  await expect(checkbox).toBeChecked();
+});

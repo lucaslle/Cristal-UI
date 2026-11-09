@@ -47,3 +47,31 @@ export const settle = (el: HTMLElement) => {
   el.style.translate = '';
   if (from && !reducedMotion()) el.animate([{ translate: from }, { translate: '0 0' }], { duration: 220, easing: EASE });
 };
+
+const CONTROLS = 'a[href], button, input, select, textarea, label, summary, [contenteditable="true"], [contenteditable=""], [role="button"], [role="checkbox"], [role="slider"], [role="textbox"]';
+
+/** Vrai si le pointeur est sur un contrôle du widget : maintenir le clic dessus ne doit pas soulever la carte. */
+export const onControl = (path: EventTarget[], widget: HTMLElement) => {
+  for (const el of path) {
+    if (el === widget) return false;
+    if (el instanceof Element && (el.matches(CONTROLS) || (el.tagName.startsWith('CR-') && el.tagName !== 'CR-BOX'))) return true;
+  }
+  return false;
+};
+
+export const HOLD_DELAY = 300;
+
+/** Appui maintenu : onHold est appelé après HOLD_DELAY sans bouger ; un mouvement ou un relâchement avant l'annule. */
+export const holdStill = (event: PointerEvent, onHold: () => void) => {
+  const stop = () => {
+    clearTimeout(timer);
+    window.removeEventListener('pointermove', move);
+    window.removeEventListener('pointerup', stop);
+    window.removeEventListener('pointercancel', stop);
+  };
+  const move = (e: PointerEvent) => Math.hypot(e.clientX - event.clientX, e.clientY - event.clientY) > 6 && stop();
+  const timer = setTimeout(() => (stop(), onHold()), HOLD_DELAY);
+  window.addEventListener('pointermove', move);
+  window.addEventListener('pointerup', stop);
+  window.addEventListener('pointercancel', stop);
+};

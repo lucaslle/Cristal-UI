@@ -101,6 +101,11 @@
   opacity: 1;
 }
 
+/* En édition, la carte s'attrape en maintenant le clic dessus. */
+:host([data-editable]) .card {
+  cursor: grab;
+}
+
 /* Hors édition, ni poignée ni coin. */
 :host(:not([data-editable])) .handle,
 :host(:not([data-editable])) .resize {
@@ -118,8 +123,10 @@
   scale: 1.02;
 }
 
+:host([data-lifted]) .card,
 :host([data-lifted]) .handle {
   cursor: grabbing;
+  user-select: none;
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -86,3 +86,7 @@ export const rowsOf = (items: GridItem[]) => Math.max(0, ...items.map((item) => 
 
 export const sameLayout = (a: GridItem[], b: GridItem[]) =>
   a.length === b.length && a.every((item) => b.some((o) => o.id === item.id && o.x === item.x && o.y === item.y && o.w === item.w && o.h === item.h));
+
+/** Place les widgets sans position (x ou y négatif) à la première place libre, puis tasse. */
+export const placeAll = (items: GridItem[], columns: number) =>
+  compact(items.reduce<GridItem[]>((all, item) => [...all, item.x < 0 || item.y < 0 ? firstFree(all, item, columns) : item], []));

@@ -1,7 +1,7 @@
 import { Component, Element, Event, EventEmitter, Host, Listen, Method, Prop, State, h } from '@stencil/core';
-import { rectsOf, settle, slide, track } from '../../utils/dashboard-drag';
-import { DashboardItem, describe, keyLayout, loadItems, saveItems } from '../../utils/dashboard-keys';
-import { GridItem, compact, firstFree, moveItem, resizeItem, rowsOf, sameLayout } from '../../utils/grid-layout';
+import { holdStill, onControl, rectsOf, settle, slide, track } from '../../utils/dashboard-drag';
+import { DashboardItem, describe, itemOf, keyLayout, loadItems, plain, saveItems } from '../../utils/dashboard-keys';
+import { GridItem, moveItem, placeAll, resizeItem, rowsOf, sameLayout } from '../../utils/grid-layout';
 
 /**
  * Tableau de bord : une grille de cr-widget que l'utilisateur déplace par leur poignée et redimensionne par leur coin.
@@ -43,24 +43,14 @@ export class CrDashboard {
   private widgets = () => Array.from(this.el.children).filter((child): child is HTMLCrWidgetElement => child.tagName === 'CR-WIDGET');
   private idOf = (widget: Element) => widget.id || `widget-${this.widgets().indexOf(widget as HTMLCrWidgetElement)}`;
 
-  private fromProps(widget: HTMLCrWidgetElement): GridItem {
-    const max = this.columns;
-    return { id: this.idOf(widget), x: widget.x ?? -1, y: widget.y ?? -1, w: Math.min(widget.w ?? 3, max), h: widget.h ?? 2, minW: widget.minW ?? 1, minH: widget.minH ?? 1, maxW: widget.maxW ?? max, maxH: widget.maxH ?? 12 };
-  }
+  private fromProps = (widget: HTMLCrWidgetElement) => itemOf(widget, this.idOf(widget), this.columns);
 
   /** Met la grille en accord avec les widgets présents : garde les places connues, place les nouveaux. */
   private sync = (fresh = false) => {
-    const saved = fresh ? loadItems(this.storageKey) : [];
-    let next: GridItem[] = [];
-    for (const widget of this.widgets()) {
-      const props = this.fromProps(widget);
-      const known = fresh ? saved.find((s) => s.id === props.id) : this.layout.find((i) => i.id === props.id);
-      const item = known ? { ...props, ...known } : props;
-      next.push(item.x < 0 || item.y < 0 ? firstFree(next, item, this.columns) : item);
-    }
-    next = compact(next);
-    if (fresh) this.initial = compact(this.widgets().map((w) => this.fromProps(w)).reduce<GridItem[]>((all, item) => [...all, item.x < 0 ? firstFree(all, item, this.columns) : item], []));
-    this.apply(next, undefined, !fresh);
+    const known: DashboardItem[] = fresh ? loadItems(this.storageKey) : this.layout;
+    const props = this.widgets().map(this.fromProps);
+    if (fresh) this.initial = placeAll(props, this.columns);
+    this.apply(placeAll(props.map((item) => ({ ...item, ...known.find((k) => k.id === item.id) })), this.columns), undefined, !fresh);
   };
 
   componentDidLoad() {
@@ -103,7 +93,7 @@ export class CrDashboard {
 
   private commit(message: string) {
     this.message = message;
-    const items = this.layout.map(({ id, x, y, w, h }) => ({ id, x, y, w, h }));
+    const items = plain(this.layout);
     saveItems(this.storageKey, items);
     this.crLayoutChange.emit(items);
   }
@@ -114,7 +104,7 @@ export class CrDashboard {
     if (this.initial) this.apply(this.initial);
     saveItems(this.storageKey, null);
     this.message = 'Disposition d’origine rétablie.';
-    this.crLayoutChange.emit(this.layout.map(({ id, x, y, w, h }) => ({ id, x, y, w, h })));
+    this.crLayoutChange.emit(plain(this.layout));
   }
 
   @Listen('crWidgetUpdate')
@@ -132,10 +122,22 @@ export class CrDashboard {
   @Listen('pointerdown', { passive: false })
   onPointerDown(event: PointerEvent) {
     const path = event.composedPath() as HTMLElement[];
+    const widget = path.find((el) => el.tagName === 'CR-WIDGET' && el.parentElement === this.el) as HTMLCrWidgetElement | undefined;
+    if (!widget || !this.editable || this.narrow || event.button !== 0) return;
     const part = path.find((el) => el.getAttribute?.('part') === 'handle' || el.getAttribute?.('part') === 'resize');
-    const widget = path.find((el) => el.tagName === 'CR-WIDGET' && el.parentElement === this.el);
-    if (!part || !widget || !this.editable || !this.grid || this.narrow || event.button !== 0) return;
-    const resize = part.getAttribute('part') === 'resize';
+    if (part) return this.drag(event, widget, part, part.getAttribute('part') === 'resize');
+    // Appui maintenu sur la carte (souris, stylet) : elle se soulève puis suit le pointeur. Au doigt, la poignée seule, pour garder le défilement.
+    if (event.pointerType === 'touch' || onControl(path, widget)) return;
+    holdStill(event, () => {
+      getSelection()?.removeAllRanges();
+      document.documentElement.style.userSelect = 'none';
+      widget.toggleAttribute('data-lifted', true);
+      this.drag(event, widget, widget, false);
+    });
+  }
+
+  private drag(event: PointerEvent, widget: HTMLCrWidgetElement, target: HTMLElement, resize: boolean) {
+    if (!this.grid) return;
     const id = this.idOf(widget);
     const base = this.layout;
     const origin = base.find((i) => i.id === id)!;
@@ -143,7 +145,7 @@ export class CrDashboard {
     const stepY = this.rowHeight + this.gap;
     track(
       event,
-      part,
+      target,
       (dx, dy) => {
         widget.toggleAttribute('data-lifted', true);
         const next = resize
@@ -156,10 +158,10 @@ export class CrDashboard {
       },
       (moved) => {
         widget.removeAttribute('data-lifted');
+        document.documentElement.style.userSelect = '';
         settle(widget);
         this.ghost = undefined;
-        const item = this.layout.find((i) => i.id === id)!;
-        if (moved) this.commit(describe(item, (widget as HTMLCrWidgetElement).label, resize));
+        if (moved) this.commit(describe(this.layout.find((i) => i.id === id)!, widget.label, resize));
       },
     );
   }
