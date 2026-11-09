@@ -11,7 +11,7 @@ import { reducedMotion } from '../../utils/popup';
  */
 @Component({
   tag: 'cr-accordion-item',
-  styleUrls: ['cr-accordion-item.css', 'variants.css'],
+  styleUrls: ['cr-accordion-item.css', 'panels.css'],
   shadow: { delegatesFocus: true },
 })
 export class CrAccordionItem {
@@ -23,8 +23,6 @@ export class CrAccordionItem {
   @Prop({ mutable: true, reflect: true }) open = false;
   /** Désactive la section. */
   @Prop({ reflect: true }) disabled = false;
-  /** Étape terminée (variant="steps") ; mis à true par next(). */
-  @Prop({ mutable: true, reflect: true }) done = false;
 
   /** Émis quand la section s'ouvre ou se ferme ; detail : true si ouverte. */
   @Event() crToggle: EventEmitter<boolean>;
@@ -33,6 +31,7 @@ export class CrAccordionItem {
 
   private panel?: HTMLElement;
   private content?: HTMLSlotElement;
+  private box?: HTMLElement;
   private pending?: boolean;
   private running?: Animation;
 
@@ -53,7 +52,6 @@ export class CrAccordionItem {
       numbered: accordion?.numbered ?? accordion?.hasAttribute('numbered') ?? false,
       level: accordion?.headingLevel ?? Number(accordion?.getAttribute('heading-level') ?? 3),
       index: siblings.indexOf(this.el),
-      last: siblings[siblings.length - 1] === this.el,
     };
   }
 
@@ -65,7 +63,8 @@ export class CrAccordionItem {
     this.running?.cancel();
     const { variant, animation } = this.config();
     if (open && animation === 'cascade') reveal(this.content?.assignedElements({ flatten: true }) ?? []);
-    if (reducedMotion() || variant === 'panels') {
+    if (variant === 'panels') return this.widen(panel, open);
+    if (reducedMotion()) {
       this.closing = false;
       return;
     }
@@ -79,26 +78,24 @@ export class CrAccordionItem {
     };
   }
 
+  /** Panneaux : pendant l'élargissement, le contenu ne défile pas et reste invisible, puis apparaît en fondu. */
+  private widen(panel: HTMLElement, open: boolean) {
+    this.closing = false;
+    if (!open || reducedMotion() || this.el.hasAttribute('data-instant') || !this.box) return;
+    panel.style.overflow = 'hidden';
+    this.running = this.box.animate([{ opacity: 0, transform: 'translateY(8px)' }, { opacity: 1, transform: 'none' }], { duration: 300, delay: 400, easing: EASE, fill: 'backwards' });
+    this.running.onfinish = this.running.oncancel = () => (panel.style.overflow = '');
+  }
+
   private toggle = () => {
     if (this.config().variant === 'panels' && this.open) return;
     this.open = !this.open;
   };
 
   render() {
-    const { variant, animation, numbered, level, index, last } = this.config();
+    const { variant, animation, numbered, level, index } = this.config();
     return (
-      <Host data-variant={variant} data-animation={animation} data-last={last ? '' : undefined}>
-        {variant === 'steps' && (
-          <span class="marker" aria-hidden="true">
-            {this.done ? (
-              <svg class="tick" viewBox="0 0 24 24" width="16" height="16">
-                <path d="M5 12l5 5 9-10" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" />
-              </svg>
-            ) : (
-              index + 1
-            )}
-          </span>
-        )}
+      <Host data-variant={variant} data-animation={animation}>
         <div class="item">
           <div role="heading" aria-level={level}>
             <button
@@ -112,10 +109,7 @@ export class CrAccordionItem {
               onClick={this.toggle}
             >
               {numbered && <span class="number">{String(index + 1).padStart(2, '0')}</span>}
-              <span class="label">
-                {this.label}
-                {variant === 'steps' && this.done && <span class="sr-only">(terminée)</span>}
-              </span>
+              <span class="label">{this.label}</span>
               <span class="meta">
                 <slot name="meta" />
               </span>
@@ -127,7 +121,7 @@ export class CrAccordionItem {
             </button>
           </div>
           <div ref={(el) => (this.panel = el)} id="panel" class="panel" part="panel" role="region" aria-labelledby="header" hidden={!this.open && !this.closing}>
-            <div class="content">
+            <div ref={(el) => (this.box = el)} class="content">
               <slot ref={(el) => (this.content = el as HTMLSlotElement)} />
             </div>
           </div>

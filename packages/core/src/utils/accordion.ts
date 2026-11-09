@@ -1,6 +1,6 @@
 import { reducedMotion } from './popup';
 
-export type AccordionVariant = 'list' | 'steps' | 'panels';
+export type AccordionVariant = 'list' | 'panels';
 export type AccordionAnimation = 'slide' | 'accent-bar' | 'cascade';
 
 export const EASE = 'cubic-bezier(0.2, 0.8, 0.2, 1)';

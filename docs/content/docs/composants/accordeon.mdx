@@ -6,13 +6,12 @@ description: Sections qui s'ouvrent et se ferment. Balises cr-accordion et cr-ac
 import AccordionBasic from '@/demos/accordion-basic';
 import AccordionExpandAll from '@/demos/accordion-expand-all';
 import AccordionPanels from '@/demos/accordion-panels';
-import AccordionSteps from '@/demos/accordion-steps';
 import AccordionAccent from '@/demos/accordion-accent';
 import AccordionCascade from '@/demos/accordion-cascade';
 
 ## Exemple
 
-Chaque section est un `CrAccordionItem` avec un `label`. Par défaut, ouvrir une section ferme les autres ; avec `multiple`, plusieurs peuvent rester ouvertes. `open` ouvre une section au départ, et `onCrToggle` signale chaque ouverture ou fermeture (`event.detail` vaut `true` à l'ouverture).
+Chaque section est un `CrAccordionItem` avec un `label`. Pour un parcours en plusieurs étapes, voyez plutôt le composant [Étapes](/docs/composants/etapes). Par défaut, ouvrir une section ferme les autres ; avec `multiple`, plusieurs peuvent rester ouvertes. `open` ouvre une section au départ, et `onCrToggle` signale chaque ouverture ou fermeture (`event.detail` vaut `true` à l'ouverture).
 
 <Preview column>
   <AccordionBasic />
@@ -39,16 +38,6 @@ Avec `variant="panels"`, les sections sont des panneaux verticaux : celui qu'on 
 </Preview>
 
 <include>../../../demos/accordion-panels.tsx</include>
-
-## Étapes
-
-Avec `variant="steps"`, les sections deviennent des étapes numérotées reliées par une ligne. La méthode `next()` valide l'étape ouverte : elle se ferme, sa pastille se coche, la ligne se remplit et l'étape suivante s'ouvre, avec le focus sur son titre. Après la dernière étape, `onCrComplete` est émis. Pour empêcher d'ouvrir une étape à l'avance, mettez `disabled` sur ses `CrAccordionItem`.
-
-<Preview column>
-  <AccordionSteps />
-</Preview>
-
-<include>../../../demos/accordion-steps.tsx</include>
 
 ## Animations
 
@@ -89,7 +78,6 @@ Avec `cascade`, `data-cr-count` donne la valeur finale (`"19.9"`) d'un élément
 
 - Suit le modèle « accordion » du W3C (ARIA Authoring Practices) : chaque titre est un bouton dans un titre de niveau 3 (`headingLevel` pour en changer), qui indique s'il est ouvert (`aria-expanded`) et pilote une région nommée par ce titre.
 - Une section fermée est retirée de l'ordre du clavier et des lecteurs d'écran.
-- En mode étapes, une étape validée est annoncée « terminée ».
 - Le graphique de l'exemple « cascade » porte un `role="img"` et une description : faites de même pour vos propres visuels.
 
 ## API

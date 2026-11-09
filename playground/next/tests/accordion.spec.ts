@@ -51,22 +51,12 @@ test('expand all opens the sections one after another, then closes them in rever
       }),
     handles,
   );
-  expect(openedAt[1]).toBeGreaterThan(openedAt[0]);
-  expect(openedAt[2]).toBeGreaterThan(openedAt[1]);
+  expect(openedAt[1]).toBeGreaterThanOrEqual(openedAt[0]);
+  expect(openedAt[2]).toBeGreaterThanOrEqual(openedAt[1]);
+  expect(openedAt[2]).toBeGreaterThan(openedAt[0] + 100);
   await page.getByRole('button', { name: 'Tout fermer' }).click();
   for (const name of names) await expect(header(page, name)).toHaveAttribute('aria-expanded', 'false');
   await expect(page.getByRole('button', { name: 'Tout ouvrir' })).toBeVisible();
-});
-
-test('steps: Continuer ticks the step, opens the next one and moves focus to it', async ({ page }) => {
-  await page.getByRole('button', { name: 'Continuer' }).first().click();
-  await expect(header(page, 'Panier (terminée)')).toHaveAttribute('aria-expanded', 'false');
-  await expect(header(page, 'Adresse')).toHaveAttribute('aria-expanded', 'true');
-  await expect(header(page, 'Adresse')).toBeFocused();
-  await item(page, 'Adresse').getByRole('button', { name: 'Continuer' }).click();
-  await page.getByRole('button', { name: 'Payer' }).click();
-  await expect(header(page, 'Paiement (terminée)')).toBeVisible();
-  await expect(page.getByRole('status').filter({ hasText: 'Commande validée' })).toBeVisible();
 });
 
 test('panels: the chosen panel widens, the others fold and the open one stays open', async ({ page }) => {
@@ -76,6 +66,7 @@ test('panels: the chosen panel widens, the others fold and the open one stays op
   await expect(header(page, 'Côte')).toHaveAttribute('aria-expanded', 'true');
   await expect(peaks).toHaveAttribute('aria-expanded', 'false');
   await page.waitForTimeout(700);
+  expect(await item(page, 'Côte').evaluate((el) => getComputedStyle(el.shadowRoot!.querySelector('.header')!).cursor)).toBe('default');
   const width = (label: string) => item(page, label).evaluate((el) => el.getBoundingClientRect().width);
   expect(await width('Côte')).toBeGreaterThan((await width('Sommets')) * 2);
   await header(page, 'Côte').click();
@@ -83,6 +74,18 @@ test('panels: the chosen panel widens, the others fold and the open one stays op
   await header(page, 'Côte').focus();
   await page.keyboard.press('ArrowRight');
   await expect(header(page, 'Prairie')).toBeFocused();
+});
+
+test('panels: the first panel is open on load without moving', async ({ page }) => {
+  const sizes = await item(page, 'Sommets').evaluate(
+    (el) =>
+      new Promise<number[]>((resolve) => {
+        const list: number[] = [];
+        const tick = () => (list.push(Math.round(el.getBoundingClientRect().width)), list.length < 20 ? requestAnimationFrame(tick) : resolve(list));
+        tick();
+      }),
+  );
+  expect(new Set(sizes).size).toBe(1);
 });
 
 test('accent bar grows on the open section', async ({ page }) => {

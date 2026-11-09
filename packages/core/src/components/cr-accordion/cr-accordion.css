@@ -9,10 +9,6 @@
   gap: var(--cr-spacing-sm);
 }
 
-:host([variant='steps']) .items {
-  gap: 0;
-}
-
 :host([variant='panels']) .items {
   flex-direction: row;
   height: var(--cr-accordion-height, 280px);

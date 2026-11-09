@@ -1,0 +1,152 @@
+import { Component, Element, Event, EventEmitter, Host, Method, Prop, State, Watch, forceUpdate, h } from '@stencil/core';
+import { EASE } from '../../utils/accordion';
+import { reducedMotion } from '../../utils/popup';
+import { StepperVariant, ballPosition, stepState } from '../../utils/stepper';
+import { BlocksView, GaugeView, LineView, NumberView, PathView } from '../../utils/stepper-views';
+
+const STATUS = { done: 'terminée', current: 'en cours', todo: 'à venir' };
+
+/**
+ * Progression en étapes. Les étapes sont des éléments cr-step enfants.
+ * @slot - Les étapes cr-step.
+ * @part nav - Les boutons Précédent et Suivant.
+ */
+@Component({
+  tag: 'cr-stepper',
+  styleUrls: ['cr-stepper.css', 'shapes.css'],
+  shadow: true,
+})
+export class CrStepper {
+  @Element() el!: HTMLCrStepperElement;
+
+  /** Index de l'étape en cours (0 pour la première) ; vaut le nombre d'étapes quand tout est terminé. */
+  @Prop({ mutable: true }) current = 0;
+  /** Présentation : line (Bead Line), number (Big Number), path (Skill Path), blocks (Level Blocks), gauge (Gauge Arc) ou timeline (verticale). */
+  @Prop({ reflect: true }) variant: StepperVariant = 'line';
+  /** Ajoute les boutons « Précédent » et « Suivant » (« Terminer » à la dernière étape). */
+  @Prop() navigation = false;
+  /** Nom de la progression, lu par les lecteurs d'écran. */
+  @Prop() label = 'Progression';
+
+  /** Émis à chaque changement d'étape ; detail : l'index de la nouvelle étape. */
+  @Event() crStepChange: EventEmitter<number>;
+  /** Émis quand la dernière étape est validée. */
+  @Event() crComplete: EventEmitter<void>;
+
+  @State() announce = '';
+
+  private ball?: HTMLElement;
+  private hop?: { from: number; to: number };
+  private focus?: { step?: HTMLCrStepElement; nav: boolean };
+
+  private steps = () => Array.from(this.el.children).filter((child): child is HTMLCrStepElement => child.tagName === 'CR-STEP');
+
+  @Watch('current')
+  onCurrentChange(next: number, previous: number) {
+    const labels = this.steps().map((step) => step.label);
+    this.el.dataset.direction = next < previous ? 'back' : 'forward';
+    this.focus = { step: this.steps().find((step) => step.contains(document.activeElement)), nav: !!this.el.shadowRoot?.activeElement };
+    this.hop = { from: previous, to: next };
+    this.announce = next >= labels.length ? 'Toutes les étapes sont terminées.' : `Étape ${next + 1} sur ${labels.length} : ${labels[next]}`;
+    this.refresh();
+    this.crStepChange.emit(next);
+    if (next >= labels.length) this.crComplete.emit();
+  }
+
+  @Watch('variant')
+  refresh() {
+    this.steps().forEach((step) => forceUpdate(step));
+  }
+
+  /** Passe à l'étape suivante ; après la dernière, toutes les étapes sont terminées. */
+  @Method()
+  async next() {
+    this.current = Math.min(this.current + 1, this.steps().length);
+  }
+
+  /** Revient à l'étape précédente. */
+  @Method()
+  async previous() {
+    this.current = Math.max(this.current - 1, 0);
+  }
+
+  /** Va directement à une étape (index à partir de 0). */
+  @Method()
+  async goTo(index: number) {
+    this.current = Math.max(0, Math.min(index, this.steps().length));
+  }
+
+  componentDidRender() {
+    const count = this.steps().length;
+    if (this.hop && this.ball && !reducedMotion()) {
+      const from = ballPosition(this.hop.from, count);
+      const to = ballPosition(this.hop.to, count);
+      const top = `${Math.max(parseFloat(from.bottom), parseFloat(to.bottom)) + 12}%`;
+      this.ball.animate([from, { left: `calc((${from.left} + ${to.left}) / 2)`, bottom: top }, to], { duration: 520, easing: EASE });
+    }
+    this.hop = undefined;
+    const focus = this.focus;
+    this.focus = undefined;
+    if (focus) requestAnimationFrame(() => this.restoreFocus(focus));
+  }
+
+  /** Le focus était dans une étape qui vient de se masquer, ou sur un bouton qui a disparu : on le replace. */
+  private restoreFocus({ step, nav }: { step?: HTMLCrStepElement; nav: boolean }) {
+    const target = this.steps()[this.current];
+    if (step && step !== target) return (target ?? this.el).focus();
+    if (nav && !this.el.shadowRoot?.activeElement) this.el.shadowRoot?.querySelector<HTMLElement>('.nav cr-button:not([disabled])')?.focus();
+  }
+
+  private view(labels: string[], current: number) {
+    const props = { labels, current };
+    if (this.variant === 'number') return <NumberView {...props} />;
+    if (this.variant === 'path') return <PathView {...props} />;
+    if (this.variant === 'blocks') return <BlocksView {...props} ballRef={(el) => (this.ball = el)} />;
+    if (this.variant === 'gauge') return <GaugeView {...props} />;
+    if (this.variant === 'line') return <LineView {...props} />;
+    return null;
+  }
+
+  render() {
+    const labels = this.steps().map((step) => step.label ?? step.getAttribute('label') ?? '');
+    const count = labels.length;
+    const current = Math.min(this.current, count);
+    const titled = this.navigation && !['number', 'timeline'].includes(this.variant);
+    return (
+      <Host tabIndex={-1}>
+        <div class="stepper" role="group" aria-label={this.label}>
+          {this.variant !== 'timeline' && (
+            <ol class="sr-only">
+              {labels.map((label, i) => (
+                <li aria-current={i === current ? 'step' : undefined}>
+                  {label} : {STATUS[stepState(i, current)]}
+                </li>
+              ))}
+            </ol>
+          )}
+          {this.view(labels, current)}
+          {titled && (
+            <div key={`title-${current}`} class="title" aria-hidden="true">
+              <strong>{labels[current] ?? 'Terminé'}</strong>
+              <span>
+                Étape {Math.min(current + 1, count)} sur {count}
+              </span>
+            </div>
+          )}
+          <p class="sr-only" aria-live="polite">
+            {this.announce}
+          </p>
+          <slot />
+          {this.navigation && (
+            <div class="nav" part="nav">
+              <cr-button variant="secondary" disabled={current === 0} onClick={() => this.previous()}>
+                Précédent
+              </cr-button>
+              {current < count && <cr-button onClick={() => this.next()}>{current === count - 1 ? 'Terminer' : 'Suivant'}</cr-button>}
+            </div>
+          )}
+        </div>
+      </Host>
+    );
+  }
+}

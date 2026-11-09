@@ -76,15 +76,6 @@
   padding: 0 var(--cr-spacing-lg) var(--cr-spacing-lg);
 }
 
-.sr-only {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  overflow: hidden;
-  clip-path: inset(50%);
-  white-space: nowrap;
-}
-
 /* Accent Bar : une barre en dégradé pousse le long de la section ouverte, le numéro s'allume. */
 :host([data-animation='accent-bar']) .item::before {
   content: '';

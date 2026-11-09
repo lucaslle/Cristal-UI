@@ -1,4 +1,4 @@
-import { Component, Element, Event, EventEmitter, Listen, Method, Prop, State, Watch, forceUpdate, h } from '@stencil/core';
+import { Component, Element, Listen, Prop, State, Watch, forceUpdate, h } from '@stencil/core';
 import { AccordionAnimation, AccordionVariant } from '../../utils/accordion';
 import { reducedMotion } from '../../utils/popup';
 
@@ -26,7 +26,7 @@ export class CrAccordion {
 
   /** Permet d'ouvrir plusieurs sections à la fois. */
   @Prop() multiple = false;
-  /** Présentation : liste, étapes reliées par une ligne (steps) ou panneaux côte à côte (panels). */
+  /** Présentation : liste ou panneaux côte à côte (panels). */
   @Prop({ reflect: true }) variant: AccordionVariant = 'list';
   /** Animation d'ouverture : slide, accent-bar (barre qui pousse sur le côté) ou cascade (le contenu arrive ligne par ligne). */
   @Prop() animation: AccordionAnimation = 'slide';
@@ -36,9 +36,6 @@ export class CrAccordion {
   @Prop() toggleAll = false;
   /** Niveau de titre des en-têtes (2 à 6). */
   @Prop() headingLevel = 3;
-
-  /** Émis quand next() valide la dernière étape. */
-  @Event() crComplete: EventEmitter<void>;
 
   @State() allOpen = false;
 
@@ -65,7 +62,11 @@ export class CrAccordion {
     await customElements.whenDefined('cr-accordion-item');
     const items = this.items();
     const first = items.find((item) => !item.disabled);
-    if (first && !items.some((item) => item.open)) first.open = true;
+    if (!first || items.some((item) => item.open)) return;
+    // Ouvert d'emblée, sans transition : rien ne bouge au chargement.
+    first.dataset.instant = '';
+    first.open = true;
+    requestAnimationFrame(() => requestAnimationFrame(() => delete first.dataset.instant));
   }
 
   @Listen('crToggle')
@@ -86,20 +87,6 @@ export class CrAccordion {
     if (current < 0) return;
     event.preventDefault();
     items[(move(current, items.length) + items.length) % items.length].focus();
-  }
-
-  /** Étapes : valide l'étape ouverte, la ferme et ouvre la suivante. */
-  @Method()
-  async next() {
-    const items = this.items();
-    const current = items.findIndex((item) => item.open);
-    if (current < 0) return;
-    items[current].done = true;
-    items[current].open = false;
-    const following = items.slice(current + 1).find((item) => !item.disabled);
-    if (!following) return this.crComplete.emit();
-    following.open = true;
-    following.focus();
   }
 
   private setAll(open: boolean) {

@@ -1,29 +1,29 @@
 'use client';
 
 import { useRef, useState } from 'react';
-import { CrAccordion, CrAccordionItem, CrButton } from '@cristal/react';
+import { CrButton, CrStep, CrStepper } from '@cristal/react';
 
-export default function AccordionSteps() {
-  const steps = useRef<HTMLCrAccordionElement>(null);
+export default function StepperTimeline() {
+  const steps = useRef<HTMLCrStepperElement>(null);
   const [complete, setComplete] = useState(false);
   const next = () => steps.current?.next();
 
   return (
     <div style={{ width: '100%' }}>
-      <CrAccordion ref={steps} variant="steps" onCrComplete={() => setComplete(true)}>
-        <CrAccordionItem label="Panier" open>
+      <CrStepper ref={steps} variant="timeline" label="Commande" onCrComplete={() => setComplete(true)}>
+        <CrStep label="Panier">
           <p>3 articles, 128,40 €</p>
           <CrButton size="s" onClick={next}>Continuer</CrButton>
-        </CrAccordionItem>
-        <CrAccordionItem label="Adresse">
+        </CrStep>
+        <CrStep label="Adresse">
           <p>12 rue des Lilas, 69001 Lyon</p>
           <CrButton size="s" onClick={next}>Continuer</CrButton>
-        </CrAccordionItem>
-        <CrAccordionItem label="Paiement">
+        </CrStep>
+        <CrStep label="Paiement">
           <p>Carte se terminant par 4242</p>
           <CrButton size="s" onClick={next}>Payer</CrButton>
-        </CrAccordionItem>
-      </CrAccordion>
+        </CrStep>
+      </CrStepper>
       <p role="status">{complete ? 'Commande validée.' : ''}</p>
     </div>
   );

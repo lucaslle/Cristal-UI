@@ -9,10 +9,12 @@ import { AccordionAnimation, AccordionVariant } from "./utils/accordion";
 import { ButtonSize, ButtonType, ButtonVariant } from "./components/cr-button/cr-button";
 import { InputType } from "./components/cr-input/cr-input";
 import { PopupAnimation } from "./utils/popup";
+import { StepperVariant } from "./utils/stepper";
 export { AccordionAnimation, AccordionVariant } from "./utils/accordion";
 export { ButtonSize, ButtonType, ButtonVariant } from "./components/cr-button/cr-button";
 export { InputType } from "./components/cr-input/cr-input";
 export { PopupAnimation } from "./utils/popup";
+export { StepperVariant } from "./utils/stepper";
 export namespace Components {
     /**
      * Accordéon : sections cr-accordion-item qui s'ouvrent et se ferment.
@@ -34,10 +36,6 @@ export namespace Components {
          */
         "multiple": boolean;
         /**
-          * Étapes : valide l'étape ouverte, la ferme et ouvre la suivante.
-         */
-        "next": () => Promise<CustomEvent<void>>;
-        /**
           * Numérote les sections (01, 02…).
           * @default false
          */
@@ -48,7 +46,7 @@ export namespace Components {
          */
         "toggleAll": boolean;
         /**
-          * Présentation : liste, étapes reliées par une ligne (steps) ou panneaux côte à côte (panels).
+          * Présentation : liste ou panneaux côte à côte (panels).
           * @default 'list'
          */
         "variant": AccordionVariant;
@@ -62,11 +60,6 @@ export namespace Components {
           * @default false
          */
         "disabled": boolean;
-        /**
-          * Étape terminée (variant="steps") ; mis à true par next().
-          * @default false
-         */
-        "done": boolean;
         /**
           * Titre de la section.
          */
@@ -348,10 +341,52 @@ export namespace Components {
          */
         "values": string[];
     }
-}
-export interface CrAccordionCustomEvent<T> extends CustomEvent<T> {
-    detail: T;
-    target: HTMLCrAccordionElement;
+    /**
+     * Étape d'un cr-stepper. Son contenu n'est affiché que pendant l'étape.
+     */
+    interface CrStep {
+        /**
+          * Nom de l'étape.
+         */
+        "label": string;
+    }
+    /**
+     * Progression en étapes. Les étapes sont des éléments cr-step enfants.
+     */
+    interface CrStepper {
+        /**
+          * Index de l'étape en cours (0 pour la première) ; vaut le nombre d'étapes quand tout est terminé.
+          * @default 0
+         */
+        "current": number;
+        /**
+          * Va directement à une étape (index à partir de 0).
+         */
+        "goTo": (index: number) => Promise<void>;
+        /**
+          * Nom de la progression, lu par les lecteurs d'écran.
+          * @default 'Progression'
+         */
+        "label": string;
+        /**
+          * Ajoute les boutons « Précédent » et « Suivant » (« Terminer » à la dernière étape).
+          * @default false
+         */
+        "navigation": boolean;
+        /**
+          * Passe à l'étape suivante ; après la dernière, toutes les étapes sont terminées.
+         */
+        "next": () => Promise<void>;
+        /**
+          * Revient à l'étape précédente.
+         */
+        "previous": () => Promise<void>;
+        /**
+          * Présentation : line (Bead Line), number (Big Number), path (Skill Path), blocks (Level Blocks), gauge (Gauge Arc) ou timeline (verticale).
+          * @default 'line'
+         */
+        "variant": StepperVariant;
+    }
 }
 export interface CrAccordionItemCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -381,22 +416,15 @@ export interface CrSelectCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLCrSelectElement;
 }
+export interface CrStepperCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLCrStepperElement;
+}
 declare global {
-    interface HTMLCrAccordionElementEventMap {
-        "crComplete": void;
-    }
     /**
      * Accordéon : sections cr-accordion-item qui s'ouvrent et se ferment.
      */
     interface HTMLCrAccordionElement extends Components.CrAccordion, HTMLStencilElement {
-        addEventListener<K extends keyof HTMLCrAccordionElementEventMap>(type: K, listener: (this: HTMLCrAccordionElement, ev: CrAccordionCustomEvent<HTMLCrAccordionElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
-        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
-        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
-        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
-        removeEventListener<K extends keyof HTMLCrAccordionElementEventMap>(type: K, listener: (this: HTMLCrAccordionElement, ev: CrAccordionCustomEvent<HTMLCrAccordionElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
-        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
-        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
-        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
     }
     var HTMLCrAccordionElement: {
         prototype: HTMLCrAccordionElement;
@@ -562,6 +590,36 @@ declare global {
         prototype: HTMLCrSelectElement;
         new (): HTMLCrSelectElement;
     };
+    /**
+     * Étape d'un cr-stepper. Son contenu n'est affiché que pendant l'étape.
+     */
+    interface HTMLCrStepElement extends Components.CrStep, HTMLStencilElement {
+    }
+    var HTMLCrStepElement: {
+        prototype: HTMLCrStepElement;
+        new (): HTMLCrStepElement;
+    };
+    interface HTMLCrStepperElementEventMap {
+        "crStepChange": number;
+        "crComplete": void;
+    }
+    /**
+     * Progression en étapes. Les étapes sont des éléments cr-step enfants.
+     */
+    interface HTMLCrStepperElement extends Components.CrStepper, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLCrStepperElementEventMap>(type: K, listener: (this: HTMLCrStepperElement, ev: CrStepperCustomEvent<HTMLCrStepperElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLCrStepperElementEventMap>(type: K, listener: (this: HTMLCrStepperElement, ev: CrStepperCustomEvent<HTMLCrStepperElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLCrStepperElement: {
+        prototype: HTMLCrStepperElement;
+        new (): HTMLCrStepperElement;
+    };
     interface HTMLElementTagNameMap {
         "cr-accordion": HTMLCrAccordionElement;
         "cr-accordion-item": HTMLCrAccordionItemElement;
@@ -573,6 +631,8 @@ declare global {
         "cr-input": HTMLCrInputElement;
         "cr-menu": HTMLCrMenuElement;
         "cr-select": HTMLCrSelectElement;
+        "cr-step": HTMLCrStepElement;
+        "cr-stepper": HTMLCrStepperElement;
     }
 }
 declare namespace LocalJSX {
@@ -603,16 +663,12 @@ declare namespace LocalJSX {
          */
         "numbered"?: boolean;
         /**
-          * Émis quand next() valide la dernière étape.
-         */
-        "onCrComplete"?: (event: CrAccordionCustomEvent<void>) => void;
-        /**
           * Ajoute un bouton « Tout ouvrir / Tout fermer » : les sections s'ouvrent l'une après l'autre, et se ferment dans l'ordre inverse.
           * @default false
          */
         "toggleAll"?: boolean;
         /**
-          * Présentation : liste, étapes reliées par une ligne (steps) ou panneaux côte à côte (panels).
+          * Présentation : liste ou panneaux côte à côte (panels).
           * @default 'list'
          */
         "variant"?: AccordionVariant;
@@ -626,11 +682,6 @@ declare namespace LocalJSX {
           * @default false
          */
         "disabled"?: boolean;
-        /**
-          * Étape terminée (variant="steps") ; mis à true par next().
-          * @default false
-         */
-        "done"?: boolean;
         /**
           * Titre de la section.
          */
@@ -968,6 +1019,48 @@ declare namespace LocalJSX {
          */
         "values"?: string[];
     }
+    /**
+     * Étape d'un cr-stepper. Son contenu n'est affiché que pendant l'étape.
+     */
+    interface CrStep {
+        /**
+          * Nom de l'étape.
+         */
+        "label": string;
+    }
+    /**
+     * Progression en étapes. Les étapes sont des éléments cr-step enfants.
+     */
+    interface CrStepper {
+        /**
+          * Index de l'étape en cours (0 pour la première) ; vaut le nombre d'étapes quand tout est terminé.
+          * @default 0
+         */
+        "current"?: number;
+        /**
+          * Nom de la progression, lu par les lecteurs d'écran.
+          * @default 'Progression'
+         */
+        "label"?: string;
+        /**
+          * Ajoute les boutons « Précédent » et « Suivant » (« Terminer » à la dernière étape).
+          * @default false
+         */
+        "navigation"?: boolean;
+        /**
+          * Émis quand la dernière étape est validée.
+         */
+        "onCrComplete"?: (event: CrStepperCustomEvent<void>) => void;
+        /**
+          * Émis à chaque changement d'étape ; detail : l'index de la nouvelle étape.
+         */
+        "onCrStepChange"?: (event: CrStepperCustomEvent<number>) => void;
+        /**
+          * Présentation : line (Bead Line), number (Big Number), path (Skill Path), blocks (Level Blocks), gauge (Gauge Arc) ou timeline (verticale).
+          * @default 'line'
+         */
+        "variant"?: StepperVariant;
+    }
 
     interface CrAccordionAttributes {
         "multiple": boolean;
@@ -981,7 +1074,6 @@ declare namespace LocalJSX {
         "label": string;
         "open": boolean;
         "disabled": boolean;
-        "done": boolean;
     }
     interface CrButtonAttributes {
         "variant": ButtonVariant;
@@ -1046,6 +1138,15 @@ declare namespace LocalJSX {
         "disabled": boolean;
         "animation": PopupAnimation;
     }
+    interface CrStepAttributes {
+        "label": string;
+    }
+    interface CrStepperAttributes {
+        "current": number;
+        "variant": StepperVariant;
+        "navigation": boolean;
+        "label": string;
+    }
 
     interface IntrinsicElements {
         "cr-accordion": Omit<CrAccordion, keyof CrAccordionAttributes> & { [K in keyof CrAccordion & keyof CrAccordionAttributes]?: CrAccordion[K] } & { [K in keyof CrAccordion & keyof CrAccordionAttributes as `attr:${K}`]?: CrAccordionAttributes[K] } & { [K in keyof CrAccordion & keyof CrAccordionAttributes as `prop:${K}`]?: CrAccordion[K] };
@@ -1058,6 +1159,8 @@ declare namespace LocalJSX {
         "cr-input": Omit<CrInput, keyof CrInputAttributes> & { [K in keyof CrInput & keyof CrInputAttributes]?: CrInput[K] } & { [K in keyof CrInput & keyof CrInputAttributes as `attr:${K}`]?: CrInputAttributes[K] } & { [K in keyof CrInput & keyof CrInputAttributes as `prop:${K}`]?: CrInput[K] } & OneOf<"label", CrInput["label"], CrInputAttributes["label"]>;
         "cr-menu": Omit<CrMenu, keyof CrMenuAttributes> & { [K in keyof CrMenu & keyof CrMenuAttributes]?: CrMenu[K] } & { [K in keyof CrMenu & keyof CrMenuAttributes as `attr:${K}`]?: CrMenuAttributes[K] } & { [K in keyof CrMenu & keyof CrMenuAttributes as `prop:${K}`]?: CrMenu[K] } & OneOf<"label", CrMenu["label"], CrMenuAttributes["label"]>;
         "cr-select": Omit<CrSelect, keyof CrSelectAttributes> & { [K in keyof CrSelect & keyof CrSelectAttributes]?: CrSelect[K] } & { [K in keyof CrSelect & keyof CrSelectAttributes as `attr:${K}`]?: CrSelectAttributes[K] } & { [K in keyof CrSelect & keyof CrSelectAttributes as `prop:${K}`]?: CrSelect[K] } & OneOf<"label", CrSelect["label"], CrSelectAttributes["label"]>;
+        "cr-step": Omit<CrStep, keyof CrStepAttributes> & { [K in keyof CrStep & keyof CrStepAttributes]?: CrStep[K] } & { [K in keyof CrStep & keyof CrStepAttributes as `attr:${K}`]?: CrStepAttributes[K] } & { [K in keyof CrStep & keyof CrStepAttributes as `prop:${K}`]?: CrStep[K] } & OneOf<"label", CrStep["label"], CrStepAttributes["label"]>;
+        "cr-stepper": Omit<CrStepper, keyof CrStepperAttributes> & { [K in keyof CrStepper & keyof CrStepperAttributes]?: CrStepper[K] } & { [K in keyof CrStepper & keyof CrStepperAttributes as `attr:${K}`]?: CrStepperAttributes[K] } & { [K in keyof CrStepper & keyof CrStepperAttributes as `prop:${K}`]?: CrStepper[K] };
     }
 }
 export { LocalJSX as JSX };
@@ -1104,6 +1207,14 @@ declare module "@stencil/core" {
              * Liste déroulante. Les options sont des éléments option enfants.
              */
             "cr-select": LocalJSX.IntrinsicElements["cr-select"] & JSXBase.HTMLAttributes<HTMLCrSelectElement>;
+            /**
+             * Étape d'un cr-stepper. Son contenu n'est affiché que pendant l'étape.
+             */
+            "cr-step": LocalJSX.IntrinsicElements["cr-step"] & JSXBase.HTMLAttributes<HTMLCrStepElement>;
+            /**
+             * Progression en étapes. Les étapes sont des éléments cr-step enfants.
+             */
+            "cr-stepper": LocalJSX.IntrinsicElements["cr-stepper"] & JSXBase.HTMLAttributes<HTMLCrStepperElement>;
         }
     }
 }

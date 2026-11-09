@@ -1,6 +1,7 @@
 import type React from 'react';
 import { CrAccordion, CrAccordionItem, CrButton, CrCard, CrCheckbox, CrInput, CrSelect } from '@cristal/react/ssr';
 import { AccordionDemo } from './accordion-demo';
+import { StepperDemo } from './stepper-demo';
 import { FormDemo } from './form-demo';
 import { MenuDemo } from './menu-demo';
 import { SelectDemo } from './select-demo';
@@ -81,6 +82,9 @@ export default function Page() {
         <CrAccordionItem label="Retours">30 jours pour changer d'avis.</CrAccordionItem>
       </CrAccordion>
       <AccordionDemo />
+
+      <h2>Étapes</h2>
+      <StepperDemo />
 
       <h2>Menus</h2>
       <MenuDemo />

@@ -1,16 +1,12 @@
 'use client';
 
 import type React from 'react';
-import { useRef, useState } from 'react';
-import { CrAccordion, CrAccordionItem, CrButton } from '@cristal/react';
+import { CrAccordion, CrAccordionItem } from '@cristal/react';
 
 const grid = { display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: 'var(--cr-spacing-xl)' };
 const scene = (from: string, to: string): React.CSSProperties => ({ height: '100%', minHeight: 140, borderRadius: 'var(--cr-radius-m)', background: `linear-gradient(160deg, ${from}, ${to})` });
 
 export function AccordionDemo() {
-  const steps = useRef<HTMLCrAccordionElement>(null);
-  const [complete, setComplete] = useState(false);
-
   return (
     <div style={grid}>
       <section>
@@ -38,25 +34,6 @@ export function AccordionDemo() {
             <div style={scene('#14532d', '#4ade80')} />
           </CrAccordionItem>
         </CrAccordion>
-      </section>
-
-      <section>
-        <h3>Commande</h3>
-        <CrAccordion ref={steps} variant="steps" onCrComplete={() => setComplete(true)}>
-          <CrAccordionItem label="Panier" open>
-            <p>3 articles</p>
-            <CrButton size="s" onClick={() => steps.current?.next()}>Continuer</CrButton>
-          </CrAccordionItem>
-          <CrAccordionItem label="Adresse">
-            <p>12 rue des Lilas, 69001 Lyon</p>
-            <CrButton size="s" onClick={() => steps.current?.next()}>Continuer</CrButton>
-          </CrAccordionItem>
-          <CrAccordionItem label="Paiement">
-            <p>Carte se terminant par 4242</p>
-            <CrButton size="s" onClick={() => steps.current?.next()}>Payer</CrButton>
-          </CrAccordionItem>
-        </CrAccordion>
-        <p role="status">{complete ? 'Commande validée' : ''}</p>
       </section>
 
       <section>

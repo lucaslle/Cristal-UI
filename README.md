@@ -122,10 +122,10 @@ Conteneur avec `slot="header"`, contenu par défaut et `slot="footer"`. L'en-tê
 | Propriété | Composant | Description |
 |---|---|---|
 | `multiple` | `cr-accordion` | plusieurs sections ouvertes à la fois |
-| `variant` | `cr-accordion` | `list` (par défaut), `steps` (étapes reliées, méthode `next()` et événement `onCrComplete`), `panels` (panneaux côte à côte) |
+| `variant` | `cr-accordion` | `list` (par défaut) ou `panels` (panneaux côte à côte) |
 | `animation` | `cr-accordion` | `slide` (par défaut), `accent-bar`, `cascade` |
 | `numbered`, `toggleAll`, `headingLevel` | `cr-accordion` | numéros 01, 02… ; bouton « Tout ouvrir / Tout fermer » ; niveau des titres (3 par défaut) |
-| `label`, `open`, `disabled`, `done` | `cr-accordion-item` | titre ; section ouverte ; désactivée ; étape terminée |
+| `label`, `open`, `disabled` | `cr-accordion-item` | titre ; section ouverte ; désactivée |
 
 Contenu de la section dans le slot par défaut, valeur à droite du titre dans `slot="meta"`. `onCrToggle` est émis à chaque ouverture ou fermeture.
 
@@ -134,6 +134,24 @@ Contenu de la section dans le slot par défaut, valeur à droite du titre dans `
   <CrAccordionItem label="Conception" open>Maquettes validées.</CrAccordionItem>
   <CrAccordionItem label="Lancement">Mise en ligne.</CrAccordionItem>
 </CrAccordion>
+```
+
+### Étapes : `cr-stepper`, `cr-step`
+
+| Propriété | Composant | Description |
+|---|---|---|
+| `current` | `cr-stepper` | étape en cours (0 pour la première), vaut le nombre d'étapes quand tout est terminé |
+| `variant` | `cr-stepper` | `line` (par défaut), `number`, `path`, `blocks`, `gauge`, `timeline` |
+| `navigation` | `cr-stepper` | boutons « Précédent » et « Suivant » |
+| `label` | `cr-stepper`, `cr-step` | nom de la progression ; nom de l'étape |
+
+Méthodes `next()`, `previous()`, `goTo(index)` ; événements `onCrStepChange` et `onCrComplete`. Seul le contenu de l'étape en cours est affiché.
+
+```tsx
+<CrStepper label="Inscription" variant="gauge" navigation>
+  <CrStep label="Compte">…</CrStep>
+  <CrStep label="Profil">…</CrStep>
+</CrStepper>
 ```
 
 ## Développement
