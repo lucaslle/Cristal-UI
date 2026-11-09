@@ -60,7 +60,7 @@
   background:
     linear-gradient(115deg, transparent 35%, rgb(255 255 255 / 0.16) 48%, transparent 62%),
     repeating-radial-gradient(circle at 120% -20%, rgb(255 255 255 / 0.05) 0 1px, transparent 1px 7px),
-    radial-gradient(90% 120% at 100% 0%, color-mix(in oklab, var(--card-glow) 55%, transparent) 0%, transparent 60%),
+    radial-gradient(90% 120% at 100% 0%, color-mix(in oklab, var(--card-glow) var(--glow, 55%), transparent) 0%, transparent 60%),
     linear-gradient(135deg, var(--card-a), var(--card-b));
   animation: cr-card-fade 0.5s ease-out;
 }
@@ -188,6 +188,7 @@
 
 /* Réseaux : noms stylisés (pas les logos déposés). */
 .brand {
+  display: inline-block;
   flex-shrink: 0;
   font-family: var(--cr-font-family);
   font-weight: 800;

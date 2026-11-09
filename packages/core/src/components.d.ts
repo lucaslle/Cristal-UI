@@ -220,6 +220,11 @@ export namespace Components {
           * @default false
          */
         "required": boolean;
+        /**
+          * fields : champs classiques ; card : tout se saisit directement sur la carte dessinée.
+          * @default 'fields'
+         */
+        "variant": 'fields' | 'card';
     }
     /**
      * Case à cocher.
@@ -1279,6 +1284,11 @@ declare namespace LocalJSX {
           * @default false
          */
         "required"?: boolean;
+        /**
+          * fields : champs classiques ; card : tout se saisit directement sur la carte dessinée.
+          * @default 'fields'
+         */
+        "variant"?: 'fields' | 'card';
     }
     /**
      * Case à cocher.
@@ -1848,6 +1858,7 @@ declare namespace LocalJSX {
         "disabled": boolean;
         "preview": boolean;
         "holder": boolean;
+        "variant": 'fields' | 'card';
     }
     interface CrCheckboxAttributes {
         "label": string;

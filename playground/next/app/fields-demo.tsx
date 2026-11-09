@@ -23,6 +23,7 @@ export function FieldsDemo() {
           <p role="status">{complete && `Code complet : ${complete}`}</p>
         </CrBox>
         <CrCardInput label="Carte bancaire" name="card" hint="Carte de test : 4242 4242 4242 4242" preview holder />
+        <CrCardInput label="Carte (saisie sur la carte)" name="oncard" variant="card" holder />
         <CrInput label="Nouveau mot de passe" name="password" type="password" autocomplete="new-password" strength />
         <CrTextarea label="Note" name="note" placeholder="Écrivez une note…" maxRows={5}>
           <CrButton slot="end" size="xs" aria-label="Envoyer la note" type="submit">

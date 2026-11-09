@@ -135,26 +135,45 @@ test('box lays its children out with theme spacing', async ({ page }) => {
   await expect(box).toHaveCSS('display', 'grid');
   await expect(box).toHaveCSS('gap', '24px');
   await expect(box).toHaveCSS('padding', '24px');
-  expect(await box.evaluate((el) => el.children.length)).toBe(6);
+  expect(await box.evaluate((el) => el.children.length)).toBe(7);
 });
 
 test('card preview: fills while typing, shows the network and flips for the CVC', async ({ page }) => {
-  const visual = page.locator('cr-card-input .visual');
+  const card = page.locator('cr-card-input[name="card"]');
+  const visual = card.locator('.visual');
   await expect(visual).toHaveAttribute('aria-hidden', 'true');
-  const number = form(page).getByRole('textbox', { name: 'Carte bancaire' });
+  const number = card.getByRole('textbox', { name: 'Carte bancaire' });
   await number.pressSequentially('4242', { delay: 20 });
   await expect(visual.locator('.brand.visa').first()).toHaveText('VISA');
   await expect(visual).toHaveAttribute('data-brand', 'visa');
   await expect(visual.locator('.digits')).toHaveText('4242 •••• •••• ••••');
   await number.pressSequentially('424242424242');
-  await form(page).getByRole('textbox', { name: 'Titulaire' }).fill('Mia Dupont');
+  await card.getByRole('textbox', { name: 'Titulaire' }).fill('Mia Dupont');
   await expect(visual.locator('.holder')).toHaveText('MIA DUPONT');
-  await form(page).getByRole('textbox', { name: 'Expiration' }).fill('1299');
+  await card.getByRole('textbox', { name: 'Expiration' }).fill('1299');
   await expect(visual.locator('.expiry')).toHaveText('12/99');
-  await form(page).getByRole('textbox', { name: 'CVC' }).focus();
+  await card.getByRole('textbox', { name: 'CVC' }).focus();
   await expect(visual).toHaveClass(/flipped/);
-  await form(page).getByRole('textbox', { name: 'CVC' }).fill('123');
+  await card.getByRole('textbox', { name: 'CVC' }).fill('123');
   await expect(visual.locator('.cvc')).toHaveText('123');
   await number.focus();
   await expect(visual).not.toHaveClass(/flipped/);
+});
+
+test('card variant: every field is typed on the card, which flips for the CVC', async ({ page }) => {
+  const host = page.locator('cr-card-input[name="oncard"]');
+  const number = host.getByRole('textbox', { name: 'Carte (saisie sur la carte)' });
+  await number.pressSequentially('5555555555554444', { delay: 5 });
+  await expect(number).toHaveValue('5555 5555 5555 4444');
+  await expect(host.locator('.editor')).toHaveAttribute('data-brand', 'mastercard');
+  await host.getByRole('textbox', { name: /VALABLE/ }).fill('0929');
+  await host.getByRole('textbox', { name: 'Titulaire' }).fill('Mia Dupont');
+  const cvc = host.getByRole('textbox', { name: /Cryptogramme/ });
+  await cvc.focus();
+  await expect(host.locator('.editor')).toHaveClass(/flipped/);
+  await cvc.fill('123');
+  await host.getByRole('textbox', { name: 'Titulaire' }).focus();
+  await expect(host.locator('.editor')).not.toHaveClass(/flipped/);
+  await form(page).getByRole('button', { name: 'Soumettre' }).click();
+  await expect(page.getByTestId('fields-sent')).toContainText('"oncard":"5555555555554444","oncard-expiry":"09/29","oncard-cvc":"123","oncard-holder":"Mia Dupont"');
 });

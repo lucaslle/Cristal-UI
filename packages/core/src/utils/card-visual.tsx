@@ -16,7 +16,7 @@ const BRAND_NAMES: Record<CardBrand, string> = { visa: 'VISA', mastercard: 'mast
 /** Numéro affiché sur la carte : les chiffres tapés, puis des points pour le reste. */
 const shown = (digits: string) => groupCard(digits.padEnd(cardLength(digits), '•'));
 
-const Chip = () => (
+export const Chip = () => (
   <span class="chip">
     <svg viewBox="0 0 46 36" width="46" height="36">
       <path d="M1 12h14M1 24h14M31 12h14M31 24h14M15 1v34M31 1v34M15 12q8 6 16 0M15 24q8-6 16 0" />
@@ -24,13 +24,13 @@ const Chip = () => (
   </span>
 );
 
-const Contactless = () => (
+export const Contactless = () => (
   <svg class="contactless" viewBox="0 0 24 24" width="22" height="22">
     <path d="M7 8.5a5 5 0 0 1 0 7M10.5 6a9 9 0 0 1 0 12M14 3.5a13 13 0 0 1 0 17" />
   </svg>
 );
 
-const Brand = ({ brand }: { brand: CardBrand }) =>
+export const Brand = ({ brand }: { brand: CardBrand }) =>
   brand && (
     <span key={brand} class={`brand ${brand}`}>
       {BRAND_NAMES[brand]}

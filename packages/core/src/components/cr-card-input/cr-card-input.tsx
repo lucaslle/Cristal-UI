@@ -1,4 +1,5 @@
 import { AttachInternals, Component, Element, Event, EventEmitter, Listen, Prop, State, h } from '@stencil/core';
+import { CardEditor, CardFields, CardInputs } from '../../utils/card-layouts';
 import { CardVisual } from '../../utils/card-visual';
 import { cardError, cardLength, caretAfter, digitsOf, expiryError, formatExpiry, groupCard } from '../../utils/card';
 import { FieldHeader, describedBy } from '../../utils/field';
@@ -19,7 +20,7 @@ export interface CardValue {
  */
 @Component({
   tag: 'cr-card-input',
-  styleUrls: ['../../global/field.css', 'cr-card-input.css', 'card-visual.css'],
+  styleUrls: ['../../global/field.css', 'cr-card-input.css', 'card-visual.css', 'card-editor.css'],
   shadow: { delegatesFocus: true },
   formAssociated: true,
 })
@@ -43,6 +44,8 @@ export class CrCardInput {
   @Prop() preview = false;
   /** Ajoute le champ « Titulaire » (nom inscrit sur la carte), envoyé sous name-holder. */
   @Prop() holder = false;
+  /** fields : champs classiques ; card : tout se saisit directement sur la carte dessinée. */
+  @Prop() variant: 'fields' | 'card' = 'fields';
 
   /** Émis à chaque frappe ; detail : numéro (chiffres), date d'expiration et cryptogramme. */
   @Event() crInput: EventEmitter<CardValue>;
@@ -53,6 +56,8 @@ export class CrCardInput {
   @State() holderName = '';
   @State() touched = false;
   @State() cvcFocused = false;
+  /** Champs que l'utilisateur a quittés : leur erreur peut s'afficher. */
+  @State() left: string[] = [];
 
   private input?: HTMLInputElement;
 
@@ -65,10 +70,17 @@ export class CrCardInput {
   formResetCallback() {
     this.digits = this.expiry = this.cvc = this.holderName = '';
     this.touched = false;
+    this.left = [];
   }
 
   formDisabledCallback(disabled: boolean) {
     this.disabled = disabled;
+  }
+
+  /** Champ dont parle le message d'erreur courant. */
+  private errorField() {
+    if (!this.digits || cardError(this.digits)) return 'number';
+    return expiryError(this.expiry) ? 'expiry' : 'cvc';
   }
 
   private message() {
@@ -102,65 +114,52 @@ export class CrCardInput {
     this.emit();
   };
 
+  /** Attributs des quatre champs, partagés par les deux présentations. */
+  private inputs(described: string | undefined, wrong: string): CardInputs {
+    const blur = (field: string) => () => !this.left.includes(field) && (this.left = [...this.left, field]);
+    const common = { disabled: this.disabled, 'aria-describedby': described };
+    const typed = (set: (value: string) => string) => (event: Event) => {
+      const input = event.target as HTMLInputElement;
+      input.value = set(input.value);
+      this.emit();
+    };
+    const invalid = (field: string) => (wrong === field ? 'true' : undefined);
+    return {
+      number: { ...common, onBlur: blur('number'), ref: (el: HTMLInputElement) => (this.input = el), id: 'control', part: 'control', value: groupCard(this.digits), inputMode: 'numeric', autocomplete: 'cc-number', required: this.required, 'aria-invalid': invalid('number'), onInput: this.onNumber },
+      holder: { ...common, onBlur: blur('holder'), id: 'holder', value: this.holderName, autocomplete: 'cc-name', onInput: typed((value) => (this.holderName = value)) },
+      expiry: { ...common, onBlur: blur('expiry'), id: 'expiry', value: this.expiry, inputMode: 'numeric', autocomplete: 'cc-exp', maxLength: 5, 'aria-invalid': invalid('expiry'), onInput: typed((value) => (this.expiry = formatExpiry(value))) },
+      cvc: {
+        ...common,
+        id: 'cvc',
+        value: this.cvc,
+        inputMode: 'numeric',
+        autocomplete: 'cc-csc',
+        maxLength: 4,
+        'aria-invalid': invalid('cvc'),
+        onFocus: () => (this.cvcFocused = true),
+        onBlur: () => ((this.cvcFocused = false), blur('cvc')()),
+        onInput: typed((value) => (this.cvc = digitsOf(value).slice(0, 4))),
+      },
+    };
+  }
+
   render() {
     const id = 'control';
-    const error = this.error || (this.touched ? this.message() : '');
-    const described = describedBy({ id, hint: this.hint, error });
     const complete = this.digits.length === cardLength(this.digits);
-    // Le contour rouge va au champ dont parle l'erreur affichée.
-    const wrong = !error ? '' : !complete || cardError(this.digits) ? 'number' : expiryError(this.expiry) ? 'expiry' : 'cvc';
-    const blur = () => (this.touched = this.touched || !!this.digits);
+    // Une erreur s'affiche une fois le champ concerné quitté, ou à l'envoi ; le contour rouge va à ce champ.
+    const field = this.errorField();
+    const error = this.error || (this.touched || this.left.includes(field) ? this.message() : '');
+    const wrong = error ? field : '';
+    const inputs = this.inputs(describedBy({ id, hint: this.hint, error }), wrong);
     return (
       <div class="field">
-        {this.preview && <CardVisual digits={this.digits} expiry={this.expiry} cvc={this.cvc} holder={this.holderName} flipped={this.cvcFocused} />}
+        {this.preview && this.variant !== 'card' && <CardVisual digits={this.digits} expiry={this.expiry} cvc={this.cvc} holder={this.holderName} flipped={this.cvcFocused} />}
         <FieldHeader id={id} label={this.label} required={this.required} hint={this.hint} error={error} />
-        <div class="card">
-          <div class="number">
-            <svg class="icon" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
-              <rect x="2.5" y="5" width="19" height="14" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.6" />
-              <path d="M2.5 9.5h19M6 15h4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
-            </svg>
-            <input
-              ref={(el) => (this.input = el)}
-              id={id}
-              class="control"
-              part="control"
-              value={groupCard(this.digits)}
-              inputMode="numeric"
-              autocomplete="cc-number"
-              placeholder="1234 5678 9012 3456"
-              required={this.required}
-              disabled={this.disabled}
-              aria-invalid={wrong === 'number' ? 'true' : undefined}
-              aria-describedby={described}
-              onInput={this.onNumber}
-              onBlur={blur}
-            />
-          </div>
-          {complete && (
-            <div class="extra">
-              {this.holder && (
-                <label class="mini holder-field">
-                  <span>Titulaire</span>
-                  <input class="control" value={this.holderName} autocomplete="cc-name" placeholder="Nom sur la carte" disabled={this.disabled} aria-describedby={described} onBlur={blur}
-                    onInput={(event) => ((this.holderName = (event.target as HTMLInputElement).value), this.emit())} />
-                </label>
-              )}
-              <label class="mini">
-                <span>Expiration</span>
-                <input class="control" value={this.expiry} inputMode="numeric" autocomplete="cc-exp" placeholder="MM/AA" maxLength={5} disabled={this.disabled}
-                  aria-invalid={wrong === 'expiry' ? 'true' : undefined} aria-describedby={described} onBlur={blur}
-                  onInput={(event) => ((this.expiry = formatExpiry((event.target as HTMLInputElement).value)), ((event.target as HTMLInputElement).value = this.expiry), this.emit())} />
-              </label>
-              <label class="mini">
-                <span>CVC</span>
-                <input class="control" value={this.cvc} inputMode="numeric" autocomplete="cc-csc" placeholder="123" maxLength={4} disabled={this.disabled} aria-invalid={wrong === 'cvc' ? 'true' : undefined} aria-describedby={described}
-                  onFocus={() => (this.cvcFocused = true)} onBlur={() => ((this.cvcFocused = false), blur())}
-                  onInput={(event) => ((this.cvc = digitsOf((event.target as HTMLInputElement).value).slice(0, 4)), ((event.target as HTMLInputElement).value = this.cvc), this.emit())} />
-              </label>
-            </div>
-          )}
-        </div>
+        {this.variant === 'card' ? (
+          <CardEditor inputs={inputs} digits={this.digits} holder={this.holder} flipped={this.cvcFocused} />
+        ) : (
+          <CardFields inputs={inputs} complete={complete} holder={this.holder} />
+        )}
       </div>
     );
   }

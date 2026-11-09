@@ -4,6 +4,7 @@ description: Numéro de carte groupé pendant la frappe, puis date d'expiration 
 ---
 
 import CardInputBasic from '@/demos/card-input-basic';
+import CardInputEditor from '@/demos/card-input-editor';
 
 ## Exemple
 
@@ -18,6 +19,16 @@ Avec `holder`, un champ « Titulaire » est ajouté (`autocomplete="cc-name"`, e
 </Preview>
 
 <include>../../../demos/card-input-basic.tsx</include>
+
+## Saisie sur la carte
+
+Avec `variant="card"`, tout s'écrit directement sur la carte : le numéro au centre, la date à côté de « Valable jusqu'à », le titulaire en bas (avec `holder`), et la carte se retourne pour saisir le cryptogramme sur le panneau de signature. Ce sont de vrais champs, chacun avec son libellé visible ; le texte blanc reste lisible sur toutes les couleurs de carte.
+
+<Preview column>
+  <CardInputEditor />
+</Preview>
+
+<include>../../../demos/card-input-editor.tsx</include>
 
 ## Formulaire et validation
 
