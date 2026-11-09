@@ -1,8 +1,13 @@
 {
   "title": "Composants",
   "pages": [
+    "boite",
     "bouton",
     "champ-texte",
+    "zone-de-texte",
+    "code",
+    "carte-bancaire",
+    "etiquettes",
     "liste-deroulante",
     "case-a-cocher",
     "menu",

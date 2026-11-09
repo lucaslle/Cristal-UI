@@ -68,7 +68,7 @@ export class CrMenu {
     return this.panel?.querySelector<HTMLElement>(`#item-${index}`) ?? undefined;
   }
 
-  private focus(index: number) {
+  private focusItem(index: number) {
     if (index < 0) return;
     this.active = index;
     this.item(index)?.focus({ preventScroll: true });
@@ -77,7 +77,7 @@ export class CrMenu {
 
   private openAt(edge: 'first' | 'last') {
     this.popup?.open();
-    this.focus(edgeIndex(this.items, edge));
+    this.focusItem(edgeIndex(this.items, edge));
   }
 
   private close(focusTrigger: boolean, picked?: HTMLElement) {
@@ -103,7 +103,7 @@ export class CrMenu {
     const move = keyMove(event.key, this.items, this.active);
     if (move !== undefined) {
       event.preventDefault();
-      this.focus(move);
+      this.focusItem(move);
     } else if (event.key === 'Enter' || event.key === ' ') {
       event.preventDefault();
       this.activate(this.active);
@@ -115,7 +115,7 @@ export class CrMenu {
       this.close(false);
     } else if (event.key.length === 1 && !event.ctrlKey && !event.metaKey && !event.altKey) {
       this.typed = nextTyped(this.typed, event.key);
-      this.focus(matchIndex(this.items, this.typed.text, this.typed.text.length > 1 ? this.active - 1 : this.active));
+      this.focusItem(matchIndex(this.items, this.typed.text, this.typed.text.length > 1 ? this.active - 1 : this.active));
     }
   };
 
@@ -153,7 +153,7 @@ export class CrMenu {
               style={{ '--i': `${index}` }}
               aria-disabled={item.disabled ? 'true' : undefined}
               data-active={this.open && index === this.active ? '' : undefined}
-              onMouseMove={() => !item.disabled && index !== this.active && this.focus(index)}
+              onMouseMove={() => !item.disabled && index !== this.active && this.focusItem(index)}
               onClick={() => this.activate(index)}
             >
               {item.label}

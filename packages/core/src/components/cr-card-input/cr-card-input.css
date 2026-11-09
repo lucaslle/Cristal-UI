@@ -1,0 +1,64 @@
+.card {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--cr-spacing-sm);
+  align-items: flex-end;
+}
+
+.number {
+  position: relative;
+  display: flex;
+  flex: 1 1 240px;
+  align-items: center;
+}
+
+.icon {
+  position: absolute;
+  left: var(--cr-spacing-sm);
+  color: var(--cr-color-text-muted);
+  pointer-events: none;
+}
+
+.number .control {
+  width: 100%;
+  padding-left: 40px;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.04em;
+}
+
+/* Le numéro complet, la date d'expiration et le cryptogramme glissent depuis la droite. */
+.extra {
+  display: flex;
+  gap: var(--cr-spacing-sm);
+  animation: cr-slide-in 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.mini {
+  display: flex;
+  flex-direction: column;
+  gap: var(--cr-spacing-xs);
+  font-size: var(--cr-font-size-s);
+  font-weight: var(--cr-font-weight-medium);
+}
+
+.mini .control {
+  width: 96px;
+  font-variant-numeric: tabular-nums;
+}
+
+.mini:last-child .control {
+  width: 72px;
+}
+
+@keyframes cr-slide-in {
+  from {
+    opacity: 0;
+    transform: translateX(24px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .extra {
+    animation: none;
+  }
+}

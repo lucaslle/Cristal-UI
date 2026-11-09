@@ -1,0 +1,122 @@
+.otp {
+  position: relative;
+  display: flex;
+  gap: var(--cr-spacing-sm);
+  width: max-content;
+}
+
+/* Le vrai champ couvre les cases : un seul champ pour les lecteurs d'écran, le collage et le remplissage automatique. */
+.otp-input {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  width: 100%;
+  padding: 0;
+  font-size: 16px;
+  color: transparent;
+  caret-color: transparent;
+  background: transparent;
+  border: 0;
+  outline: none;
+  cursor: text;
+}
+
+.otp-input::selection {
+  background: transparent;
+}
+
+.box {
+  display: grid;
+  place-items: center;
+  box-sizing: border-box;
+  width: 44px;
+  height: 52px;
+  font-size: var(--cr-font-size-l);
+  font-weight: var(--cr-font-weight-bold);
+  font-variant-numeric: tabular-nums;
+  background: var(--cr-color-surface);
+  border: 1px solid var(--cr-color-border);
+  border-radius: var(--cr-radius-m);
+  transition: border-color 0.2s, background 0.25s, box-shadow 0.2s, color 0.25s;
+}
+
+.box.filled {
+  border-color: var(--cr-color-primary-text);
+}
+
+.box.active {
+  border-color: var(--cr-color-focus);
+  box-shadow: 0 0 0 3px var(--cr-color-primary-subtle);
+}
+
+.box.active::after {
+  content: '';
+  width: 2px;
+  height: 22px;
+  background: var(--cr-color-text);
+  animation: cr-caret 1s steps(1) infinite;
+}
+
+.digit {
+  animation: cr-digit 0.25s cubic-bezier(0.2, 0.8, 0.2, 1.4);
+}
+
+/* Toutes les cases remplies : elles passent au vert l'une après l'autre, en vague. */
+.complete .box {
+  --mint: oklch(from var(--cr-color-success) min(l, 0.45) c h);
+  color: var(--mint);
+  background: color-mix(in oklab, var(--cr-color-success) 12%, var(--cr-color-surface));
+  border-color: var(--mint);
+  transition-delay: calc(var(--i) * 70ms);
+  animation: cr-wave 0.45s calc(var(--i) * 70ms) ease-out;
+}
+
+.invalid .box {
+  border-color: var(--cr-color-danger);
+}
+
+.otp-input:disabled ~ .box {
+  color: var(--cr-color-on-disabled);
+  background: var(--cr-color-disabled);
+}
+
+@keyframes cr-digit {
+  from {
+    opacity: 0;
+    transform: translateY(6px) scale(0.6);
+  }
+}
+
+@keyframes cr-wave {
+  40% {
+    transform: translateY(-4px);
+  }
+}
+
+@keyframes cr-caret {
+  50% {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .box,
+  .digit,
+  .box.active::after,
+  .complete .box {
+    animation: none;
+    transition: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .box.active {
+    outline: 2px solid Highlight;
+  }
+}
+
+.otp:focus-within {
+  border-radius: var(--cr-radius-m);
+  outline: 2px solid var(--cr-color-focus);
+  outline-offset: 4px;
+}

@@ -3,6 +3,7 @@ import { CrAccordion, CrAccordionItem, CrButton, CrCard, CrCheckbox, CrInput, Cr
 import { AccordionDemo } from './accordion-demo';
 import { StepperDemo } from './stepper-demo';
 import { TableDemo } from './table-demo';
+import { FieldsDemo } from './fields-demo';
 import { FormDemo } from './form-demo';
 import { MenuDemo } from './menu-demo';
 import { SelectDemo } from './select-demo';
@@ -86,6 +87,9 @@ export default function Page() {
 
       <h2>Étapes</h2>
       <StepperDemo />
+
+      <h2>Champs animés</h2>
+      <FieldsDemo />
 
       <h2>Tableau</h2>
       <TableDemo />

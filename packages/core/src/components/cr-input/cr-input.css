@@ -1,3 +1,133 @@
-.control {
-  width: 100%;
+.box {
+  position: relative;
+  display: flex;
+}
+
+.box .control {
+  flex: 1;
+  min-width: 0;
+}
+
+/* Complétion fantôme : posée sur le champ, la partie déjà tapée est invisible, la suite en gris.
+   shortcut: alignement juste tant que le texte ne défile pas dans le champ ; au-delà, la suite peut se décaler. */
+.ghost {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  padding: 0 calc(var(--cr-spacing-sm) + 1px);
+  overflow: hidden;
+  font-size: var(--cr-font-size-m);
+  white-space: pre;
+  pointer-events: none;
+}
+
+.typed {
+  visibility: hidden;
+}
+
+.rest {
+  color: var(--cr-color-text-muted);
+  cursor: pointer;
+  pointer-events: auto;
+  animation: cr-ghost-in 0.2s ease-out;
+}
+
+.flash {
+  animation: cr-fill 0.5s ease-out;
+}
+
+.filled-hint {
+  font-size: var(--cr-font-size-s);
+  color: oklch(from var(--cr-color-success) min(l, 0.45) c h);
+  animation: cr-ghost-in 0.3s ease-out;
+}
+
+@keyframes cr-ghost-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes cr-fill {
+  from {
+    color: var(--cr-color-text-muted);
+    box-shadow: 0 0 0 3px color-mix(in oklab, var(--cr-color-success) 30%, transparent);
+  }
+}
+
+/* Jauge de sécurité du mot de passe */
+.strength {
+  --level: var(--cr-color-danger);
+  display: flex;
+  flex-direction: column;
+  gap: var(--cr-spacing-xs);
+}
+
+.level-2 {
+  --level: var(--cr-color-warning, #d97706);
+}
+
+.level-3 {
+  --level: var(--cr-color-primary);
+}
+
+.level-4 {
+  --level: var(--cr-color-success);
+}
+
+.segments {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--cr-spacing-xs);
+}
+
+.segment {
+  height: 4px;
+  overflow: hidden;
+  background: var(--cr-color-disabled);
+  border-radius: 2px;
+}
+
+.segment::before {
+  content: '';
+  display: block;
+  height: 100%;
+  background: var(--level);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1), background 0.3s;
+}
+
+.segment.on::before {
+  transform: scaleX(1);
+}
+
+.strength-text {
+  align-self: flex-end;
+  min-height: 1.2em;
+  font-size: var(--cr-font-size-s);
+  font-weight: var(--cr-font-weight-bold);
+  color: oklch(from var(--level) min(l, 0.45) c h);
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rest,
+  .flash,
+  .filled-hint {
+    animation: none;
+  }
+  .segment::before {
+    transition: none;
+  }
 }

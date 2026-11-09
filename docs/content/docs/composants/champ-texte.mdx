@@ -5,6 +5,7 @@ description: Saisie de texte, e-mail, mot de passe ou nombre. Balise cr-input, c
 
 import InputBasic from '@/demos/input-basic';
 import FormComplete from '@/demos/form-complete';
+import InputExtras from '@/demos/input-extras';
 
 ## Exemples
 
@@ -28,6 +29,17 @@ Les erreurs de saisie s'affichent toutes seules, en français, **quand on quitte
 | `type="number"` non numérique | Saisissez un nombre. |
 
 À l'envoi, le focus va sur le **premier champ en erreur**, et son message est lu par les lecteurs d'écran. Pour une erreur venant du serveur (« cette adresse est déjà utilisée »), passez votre propre message avec `error` : il remplace le message automatique.
+
+## Sécurité du mot de passe et complétion
+
+- Avec `strength` (pour `type="password"`), une jauge en quatre segments se remplit et change de couleur pendant la frappe ; le niveau est écrit et annoncé : « Sécurité : Bon ». La note tient compte de la longueur, des majuscules et minuscules, des chiffres et des symboles.
+- Avec `completions`, la suite de la première suggestion qui prolonge la saisie s'affiche en gris derrière le texte. Flèche droite ou un clic sur la suite l'accepte : elle se remplit, et « Complété pour vous » s'affiche. Le champ est marqué `aria-autocomplete="inline"` et la suggestion est lue avec la description du champ.
+
+<Preview column>
+  <InputExtras />
+</Preview>
+
+<include>../../../demos/input-extras.tsx</include>
 
 ## Dans un formulaire
 

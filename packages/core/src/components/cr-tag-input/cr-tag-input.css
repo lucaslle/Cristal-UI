@@ -1,0 +1,108 @@
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--cr-spacing-xs);
+  align-items: center;
+  box-sizing: border-box;
+  min-height: var(--cr-control-m);
+  padding: var(--cr-spacing-xs) var(--cr-spacing-sm);
+  background: var(--cr-color-surface);
+  border: 1px solid var(--cr-color-border);
+  border-radius: var(--cr-radius-m);
+  cursor: text;
+}
+
+.tags:focus-within {
+  outline: 2px solid var(--cr-color-focus);
+  outline-offset: 2px;
+}
+
+.tags.invalid {
+  border-color: var(--cr-color-danger);
+}
+
+.tags.disabled {
+  background: var(--cr-color-disabled);
+  cursor: not-allowed;
+}
+
+.list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--cr-spacing-xs);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Chaque mot validé saute dans une pastille. */
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 2px 4px 2px 10px;
+  font-size: var(--cr-font-size-s);
+  font-weight: var(--cr-font-weight-medium);
+  color: var(--cr-color-primary-text);
+  background: var(--cr-color-primary-subtle);
+  border: 1px solid color-mix(in oklab, var(--cr-color-primary) 30%, transparent);
+  border-radius: 999px;
+  animation: cr-tag-pop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.remove {
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  color: inherit;
+  background: none;
+  border: 0;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.remove:hover {
+  background: color-mix(in oklab, var(--cr-color-primary) 15%, transparent);
+}
+
+.remove:focus-visible {
+  outline: 2px solid var(--cr-color-focus);
+  outline-offset: 1px;
+}
+
+.entry {
+  flex: 1 0 80px;
+  min-width: 80px;
+  min-height: 28px;
+  padding: 0;
+  font-family: inherit;
+  font-size: var(--cr-font-size-m);
+  color: var(--cr-color-text);
+  background: transparent;
+  border: 0;
+  outline: none;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+@keyframes cr-tag-pop {
+  from {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tag {
+    animation: none;
+  }
+}

@@ -42,3 +42,14 @@ test('table with its columns menu open has no WCAG 2.1 AA violations detectable 
   await page.waitForTimeout(400);
   expect((await audit(page)).violations).toEqual([]);
 });
+
+test('animated fields have no WCAG 2.1 AA violations detectable by axe', async ({ page }) => {
+  await page.goto('/');
+  const form = page.locator('form', { has: page.getByLabel('Code reçu par SMS') });
+  await form.getByRole('textbox', { name: 'Code reçu par SMS' }).fill('482913');
+  await form.getByRole('textbox', { name: 'Carte bancaire' }).fill('4242424242424242');
+  await form.getByLabel('Nouveau mot de passe').fill('Sunset42');
+  await form.getByLabel('Adresse de contact').pressSequentially('mia@mail.co');
+  await page.waitForTimeout(800);
+  expect((await audit(page)).violations).toEqual([]);
+});

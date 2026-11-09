@@ -1,0 +1,52 @@
+.grow {
+  --line: 24px;
+  --pad: 8px;
+  position: relative;
+}
+
+.control,
+.mirror {
+  box-sizing: border-box;
+  width: 100%;
+  padding: var(--pad) var(--cr-spacing-sm);
+  font-family: inherit;
+  font-size: var(--cr-font-size-m);
+  line-height: var(--line);
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
+}
+
+/* La hauteur suit le nombre de lignes, avec un léger rebond à chaque nouvelle ligne. */
+.control {
+  display: block;
+  height: calc(var(--lines) * var(--line) + 2 * var(--pad) + 2px);
+  resize: none;
+  transition: height 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.has-end .control,
+.has-end .mirror {
+  padding-right: calc(var(--cr-spacing-sm) + 40px);
+}
+
+.mirror {
+  position: absolute;
+  top: 0;
+  left: 0;
+  visibility: hidden;
+  border: 1px solid transparent;
+  pointer-events: none;
+}
+
+.end {
+  position: absolute;
+  right: var(--cr-spacing-xs);
+  bottom: var(--cr-spacing-xs);
+  display: flex;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .control {
+    transition: none;
+  }
+}

@@ -6,13 +6,17 @@
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 import { AccordionAnimation, AccordionVariant } from "./utils/accordion";
+import { BoxDisplay } from "./components/cr-box/cr-box";
 import { ButtonSize, ButtonType, ButtonVariant } from "./components/cr-button/cr-button";
+import { CardValue } from "./components/cr-card-input/cr-card-input";
 import { InputType } from "./components/cr-input/cr-input";
 import { PopupAnimation } from "./utils/popup";
 import { StepperVariant } from "./utils/stepper";
 import { TableColumn, TableDensity, TableLayout, TableVariant } from "./utils/table-layout";
 export { AccordionAnimation, AccordionVariant } from "./utils/accordion";
+export { BoxDisplay } from "./components/cr-box/cr-box";
 export { ButtonSize, ButtonType, ButtonVariant } from "./components/cr-button/cr-button";
+export { CardValue } from "./components/cr-card-input/cr-card-input";
 export { InputType } from "./components/cr-input/cr-input";
 export { PopupAnimation } from "./utils/popup";
 export { StepperVariant } from "./utils/stepper";
@@ -73,6 +77,69 @@ export namespace Components {
         "open": boolean;
     }
     /**
+     * Remplaçant de div pour la mise en page : espacements, flex et grille avec les valeurs du thème.
+     * Les enfants restent des enfants directs : flex et grille s'appliquent à eux.
+     * Valeurs d'espacement : xs, sm, lg, xl, 2xl, 3xl, ou toute valeur CSS (« 12px »).
+     */
+    interface CrBox {
+        /**
+          * Alignement sur l'axe secondaire (align-items) : start, center, end, stretch, baseline.
+         */
+        "align"?: string;
+        /**
+          * Fond : surface, subtle, muted, primary, ou toute couleur CSS.
+         */
+        "background"?: string;
+        /**
+          * Ajoute une bordure fine.
+          * @default false
+         */
+        "border": boolean;
+        /**
+          * Grille : un nombre de colonnes égales (« 3 ») ou une largeur minimale de colonne (« 220px »).
+         */
+        "columns"?: string;
+        /**
+          * Sens des éléments en flex : row (en ligne) ou column (empilés).
+         */
+        "direction"?: 'row' | 'column' | 'row-reverse' | 'column-reverse';
+        /**
+          * Type d'affichage.
+          * @default 'block'
+         */
+        "display": BoxDisplay;
+        /**
+          * Espace entre les enfants (flex et grille).
+         */
+        "gap"?: string;
+        /**
+          * Répartition sur l'axe principal (justify-content) : start, center, end, space-between…
+         */
+        "justify"?: string;
+        /**
+          * Largeur maximale (« 640px », « 60ch »…), centrée.
+         */
+        "maxWidth"?: string;
+        /**
+          * Marge intérieure : une valeur, ou deux (« sm xl » : vertical puis horizontal).
+         */
+        "padding"?: string;
+        /**
+          * Arrondi : m, l, full, ou toute valeur CSS.
+         */
+        "radius"?: string;
+        /**
+          * Ajoute une ombre douce.
+          * @default false
+         */
+        "shadow": boolean;
+        /**
+          * Passe à la ligne quand la place manque (flex).
+          * @default false
+         */
+        "wrap": boolean;
+    }
+    /**
      * Bouton d'action.
      */
     interface CrButton {
@@ -111,6 +178,38 @@ export namespace Components {
      * Carte de contenu.
      */
     interface CrCard {
+    }
+    /**
+     * Carte bancaire : numéro groupé par 4 pendant la frappe, puis date d'expiration et cryptogramme qui apparaissent.
+     * Envoie name (numéro sans espaces), name-expiry et name-cvc avec le formulaire.
+     */
+    interface CrCardInput {
+        /**
+          * Désactive les champs.
+          * @default false
+         */
+        "disabled": boolean;
+        /**
+          * Message d'erreur ; remplace le message automatique.
+         */
+        "error"?: string;
+        /**
+          * Texte d'aide, lu par les lecteurs d'écran.
+         */
+        "hint"?: string;
+        /**
+          * Libellé affiché au-dessus du numéro.
+         */
+        "label": string;
+        /**
+          * Nom envoyé avec le formulaire (name, name-expiry, name-cvc).
+         */
+        "name"?: string;
+        /**
+          * Rend la saisie obligatoire.
+          * @default false
+         */
+        "required": boolean;
     }
     /**
      * Case à cocher.
@@ -210,6 +309,10 @@ export namespace Components {
          */
         "autocomplete"?: string;
         /**
+          * Suggestions : la suite de la première qui prolonge la saisie s'affiche en gris ; flèche droite ou clic pour l'accepter.
+         */
+        "completions"?: string[];
+        /**
           * Désactive le champ.
           * @default false
          */
@@ -239,6 +342,11 @@ export namespace Components {
           * @default false
          */
         "required": boolean;
+        /**
+          * Affiche une jauge de sécurité sous le champ (pour type="password").
+          * @default false
+         */
+        "strength": boolean;
         /**
           * Type de saisie.
           * @default 'text'
@@ -272,6 +380,47 @@ export namespace Components {
           * Libellé du bouton qui ouvre le menu.
          */
         "label": string;
+    }
+    /**
+     * Code à usage unique (reçu par SMS ou e-mail), une case par chiffre.
+     */
+    interface CrOtp {
+        /**
+          * Désactive le champ.
+          * @default false
+         */
+        "disabled": boolean;
+        /**
+          * Message d'erreur ; remplace le message automatique.
+         */
+        "error"?: string;
+        /**
+          * Texte d'aide, lu par les lecteurs d'écran.
+         */
+        "hint"?: string;
+        /**
+          * Libellé affiché au-dessus des cases.
+         */
+        "label": string;
+        /**
+          * Nombre de chiffres.
+          * @default 6
+         */
+        "length": number;
+        /**
+          * Nom envoyé avec le formulaire.
+         */
+        "name"?: string;
+        /**
+          * Rend la saisie obligatoire.
+          * @default false
+         */
+        "required": boolean;
+        /**
+          * Code saisi (chiffres).
+          * @default ''
+         */
+        "value": string;
     }
     /**
      * Liste déroulante. Les options sont des éléments option enfants.
@@ -422,10 +571,104 @@ export namespace Components {
          */
         "variant": TableVariant;
     }
+    /**
+     * Saisie d'étiquettes : chaque mot validé (Entrée ou virgule) devient une pastille, retirable avec ×.
+     */
+    interface CrTagInput {
+        /**
+          * Désactive le champ.
+          * @default false
+         */
+        "disabled": boolean;
+        /**
+          * Message d'erreur ; remplace le message automatique.
+         */
+        "error"?: string;
+        /**
+          * Texte d'aide, lu par les lecteurs d'écran.
+         */
+        "hint"?: string;
+        /**
+          * Libellé affiché au-dessus du champ.
+         */
+        "label": string;
+        /**
+          * Nom envoyé avec le formulaire, une fois par étiquette.
+         */
+        "name"?: string;
+        /**
+          * Texte indicatif affiché quand le champ est vide.
+         */
+        "placeholder"?: string;
+        /**
+          * Demande au moins une étiquette.
+          * @default false
+         */
+        "required": boolean;
+        /**
+          * Étiquettes saisies.
+          * @default []
+         */
+        "values": string[];
+    }
+    /**
+     * Zone de texte sur plusieurs lignes qui grandit d'une ligne à la fois, avec un léger rebond.
+     */
+    interface CrTextarea {
+        /**
+          * Désactive le champ.
+          * @default false
+         */
+        "disabled": boolean;
+        /**
+          * Message d'erreur ; remplace le message automatique.
+         */
+        "error"?: string;
+        /**
+          * Texte d'aide, lu par les lecteurs d'écran.
+         */
+        "hint"?: string;
+        /**
+          * Libellé affiché au-dessus du champ.
+         */
+        "label": string;
+        /**
+          * Nombre de lignes au-delà duquel le champ défile au lieu de grandir.
+          * @default 8
+         */
+        "maxRows": number;
+        /**
+          * Nom envoyé avec le formulaire.
+         */
+        "name"?: string;
+        /**
+          * Texte indicatif affiché quand le champ est vide.
+         */
+        "placeholder"?: string;
+        /**
+          * Rend la saisie obligatoire.
+          * @default false
+         */
+        "required": boolean;
+        /**
+          * Nombre de lignes au départ.
+          * @default 1
+         */
+        "rows": number;
+        /**
+          * Texte saisi.
+          * @default ''
+         */
+        "value": string;
+    }
 }
 export interface CrAccordionItemCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLCrAccordionItemElement;
+}
+export interface CrCardInputCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLCrCardInputElement;
 }
 export interface CrCheckboxCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -447,6 +690,10 @@ export interface CrMenuCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLCrMenuElement;
 }
+export interface CrOtpCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLCrOtpElement;
+}
 export interface CrSelectCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLCrSelectElement;
@@ -458,6 +705,14 @@ export interface CrStepperCustomEvent<T> extends CustomEvent<T> {
 export interface CrTableCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLCrTableElement;
+}
+export interface CrTagInputCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLCrTagInputElement;
+}
+export interface CrTextareaCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLCrTextareaElement;
 }
 declare global {
     /**
@@ -490,6 +745,17 @@ declare global {
         new (): HTMLCrAccordionItemElement;
     };
     /**
+     * Remplaçant de div pour la mise en page : espacements, flex et grille avec les valeurs du thème.
+     * Les enfants restent des enfants directs : flex et grille s'appliquent à eux.
+     * Valeurs d'espacement : xs, sm, lg, xl, 2xl, 3xl, ou toute valeur CSS (« 12px »).
+     */
+    interface HTMLCrBoxElement extends Components.CrBox, HTMLStencilElement {
+    }
+    var HTMLCrBoxElement: {
+        prototype: HTMLCrBoxElement;
+        new (): HTMLCrBoxElement;
+    };
+    /**
      * Bouton d'action.
      */
     interface HTMLCrButtonElement extends Components.CrButton, HTMLStencilElement {
@@ -506,6 +772,27 @@ declare global {
     var HTMLCrCardElement: {
         prototype: HTMLCrCardElement;
         new (): HTMLCrCardElement;
+    };
+    interface HTMLCrCardInputElementEventMap {
+        "crInput": CardValue;
+    }
+    /**
+     * Carte bancaire : numéro groupé par 4 pendant la frappe, puis date d'expiration et cryptogramme qui apparaissent.
+     * Envoie name (numéro sans espaces), name-expiry et name-cvc avec le formulaire.
+     */
+    interface HTMLCrCardInputElement extends Components.CrCardInput, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLCrCardInputElementEventMap>(type: K, listener: (this: HTMLCrCardInputElement, ev: CrCardInputCustomEvent<HTMLCrCardInputElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLCrCardInputElementEventMap>(type: K, listener: (this: HTMLCrCardInputElement, ev: CrCardInputCustomEvent<HTMLCrCardInputElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLCrCardInputElement: {
+        prototype: HTMLCrCardInputElement;
+        new (): HTMLCrCardInputElement;
     };
     interface HTMLCrCheckboxElementEventMap {
         "crChange": boolean;
@@ -608,6 +895,27 @@ declare global {
         prototype: HTMLCrMenuElement;
         new (): HTMLCrMenuElement;
     };
+    interface HTMLCrOtpElementEventMap {
+        "crInput": string;
+        "crComplete": string;
+    }
+    /**
+     * Code à usage unique (reçu par SMS ou e-mail), une case par chiffre.
+     */
+    interface HTMLCrOtpElement extends Components.CrOtp, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLCrOtpElementEventMap>(type: K, listener: (this: HTMLCrOtpElement, ev: CrOtpCustomEvent<HTMLCrOtpElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLCrOtpElementEventMap>(type: K, listener: (this: HTMLCrOtpElement, ev: CrOtpCustomEvent<HTMLCrOtpElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLCrOtpElement: {
+        prototype: HTMLCrOtpElement;
+        new (): HTMLCrOtpElement;
+    };
     interface HTMLCrSelectElementEventMap {
         "crChange": string | string[];
         "crSearch": string;
@@ -679,20 +987,65 @@ declare global {
         prototype: HTMLCrTableElement;
         new (): HTMLCrTableElement;
     };
+    interface HTMLCrTagInputElementEventMap {
+        "crChange": string[];
+    }
+    /**
+     * Saisie d'étiquettes : chaque mot validé (Entrée ou virgule) devient une pastille, retirable avec ×.
+     */
+    interface HTMLCrTagInputElement extends Components.CrTagInput, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLCrTagInputElementEventMap>(type: K, listener: (this: HTMLCrTagInputElement, ev: CrTagInputCustomEvent<HTMLCrTagInputElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLCrTagInputElementEventMap>(type: K, listener: (this: HTMLCrTagInputElement, ev: CrTagInputCustomEvent<HTMLCrTagInputElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLCrTagInputElement: {
+        prototype: HTMLCrTagInputElement;
+        new (): HTMLCrTagInputElement;
+    };
+    interface HTMLCrTextareaElementEventMap {
+        "crInput": string;
+    }
+    /**
+     * Zone de texte sur plusieurs lignes qui grandit d'une ligne à la fois, avec un léger rebond.
+     */
+    interface HTMLCrTextareaElement extends Components.CrTextarea, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLCrTextareaElementEventMap>(type: K, listener: (this: HTMLCrTextareaElement, ev: CrTextareaCustomEvent<HTMLCrTextareaElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLCrTextareaElementEventMap>(type: K, listener: (this: HTMLCrTextareaElement, ev: CrTextareaCustomEvent<HTMLCrTextareaElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLCrTextareaElement: {
+        prototype: HTMLCrTextareaElement;
+        new (): HTMLCrTextareaElement;
+    };
     interface HTMLElementTagNameMap {
         "cr-accordion": HTMLCrAccordionElement;
         "cr-accordion-item": HTMLCrAccordionItemElement;
+        "cr-box": HTMLCrBoxElement;
         "cr-button": HTMLCrButtonElement;
         "cr-card": HTMLCrCardElement;
+        "cr-card-input": HTMLCrCardInputElement;
         "cr-checkbox": HTMLCrCheckboxElement;
         "cr-dialog": HTMLCrDialogElement;
         "cr-drawer": HTMLCrDrawerElement;
         "cr-input": HTMLCrInputElement;
         "cr-menu": HTMLCrMenuElement;
+        "cr-otp": HTMLCrOtpElement;
         "cr-select": HTMLCrSelectElement;
         "cr-step": HTMLCrStepElement;
         "cr-stepper": HTMLCrStepperElement;
         "cr-table": HTMLCrTableElement;
+        "cr-tag-input": HTMLCrTagInputElement;
+        "cr-textarea": HTMLCrTextareaElement;
     }
 }
 declare namespace LocalJSX {
@@ -757,6 +1110,69 @@ declare namespace LocalJSX {
         "open"?: boolean;
     }
     /**
+     * Remplaçant de div pour la mise en page : espacements, flex et grille avec les valeurs du thème.
+     * Les enfants restent des enfants directs : flex et grille s'appliquent à eux.
+     * Valeurs d'espacement : xs, sm, lg, xl, 2xl, 3xl, ou toute valeur CSS (« 12px »).
+     */
+    interface CrBox {
+        /**
+          * Alignement sur l'axe secondaire (align-items) : start, center, end, stretch, baseline.
+         */
+        "align"?: string;
+        /**
+          * Fond : surface, subtle, muted, primary, ou toute couleur CSS.
+         */
+        "background"?: string;
+        /**
+          * Ajoute une bordure fine.
+          * @default false
+         */
+        "border"?: boolean;
+        /**
+          * Grille : un nombre de colonnes égales (« 3 ») ou une largeur minimale de colonne (« 220px »).
+         */
+        "columns"?: string;
+        /**
+          * Sens des éléments en flex : row (en ligne) ou column (empilés).
+         */
+        "direction"?: 'row' | 'column' | 'row-reverse' | 'column-reverse';
+        /**
+          * Type d'affichage.
+          * @default 'block'
+         */
+        "display"?: BoxDisplay;
+        /**
+          * Espace entre les enfants (flex et grille).
+         */
+        "gap"?: string;
+        /**
+          * Répartition sur l'axe principal (justify-content) : start, center, end, space-between…
+         */
+        "justify"?: string;
+        /**
+          * Largeur maximale (« 640px », « 60ch »…), centrée.
+         */
+        "maxWidth"?: string;
+        /**
+          * Marge intérieure : une valeur, ou deux (« sm xl » : vertical puis horizontal).
+         */
+        "padding"?: string;
+        /**
+          * Arrondi : m, l, full, ou toute valeur CSS.
+         */
+        "radius"?: string;
+        /**
+          * Ajoute une ombre douce.
+          * @default false
+         */
+        "shadow"?: boolean;
+        /**
+          * Passe à la ligne quand la place manque (flex).
+          * @default false
+         */
+        "wrap"?: boolean;
+    }
+    /**
      * Bouton d'action.
      */
     interface CrButton {
@@ -803,6 +1219,46 @@ declare namespace LocalJSX {
      * Carte de contenu.
      */
     interface CrCard {
+    }
+    /**
+     * Carte bancaire : numéro groupé par 4 pendant la frappe, puis date d'expiration et cryptogramme qui apparaissent.
+     * Envoie name (numéro sans espaces), name-expiry et name-cvc avec le formulaire.
+     */
+    interface CrCardInput {
+        /**
+          * Désactive les champs.
+          * @default false
+         */
+        "disabled"?: boolean;
+        /**
+          * Message d'erreur ; remplace le message automatique.
+         */
+        "error"?: string;
+        /**
+          * The `id` of a `<form>` element to associate this element with.
+         */
+        "form"?: string;
+        /**
+          * Texte d'aide, lu par les lecteurs d'écran.
+         */
+        "hint"?: string;
+        /**
+          * Libellé affiché au-dessus du numéro.
+         */
+        "label": string;
+        /**
+          * Nom envoyé avec le formulaire (name, name-expiry, name-cvc).
+         */
+        "name"?: string;
+        /**
+          * Émis à chaque frappe ; detail : numéro (chiffres), date d'expiration et cryptogramme.
+         */
+        "onCrInput"?: (event: CrCardInputCustomEvent<CardValue>) => void;
+        /**
+          * Rend la saisie obligatoire.
+          * @default false
+         */
+        "required"?: boolean;
     }
     /**
      * Case à cocher.
@@ -918,6 +1374,10 @@ declare namespace LocalJSX {
          */
         "autocomplete"?: string;
         /**
+          * Suggestions : la suite de la première qui prolonge la saisie s'affiche en gris ; flèche droite ou clic pour l'accepter.
+         */
+        "completions"?: string[];
+        /**
           * Désactive le champ.
           * @default false
          */
@@ -960,6 +1420,11 @@ declare namespace LocalJSX {
          */
         "required"?: boolean;
         /**
+          * Affiche une jauge de sécurité sous le champ (pour type="password").
+          * @default false
+         */
+        "strength"?: boolean;
+        /**
           * Type de saisie.
           * @default 'text'
          */
@@ -996,6 +1461,59 @@ declare namespace LocalJSX {
           * Émis quand une action est choisie ; detail : sa valeur.
          */
         "onCrSelect"?: (event: CrMenuCustomEvent<string>) => void;
+    }
+    /**
+     * Code à usage unique (reçu par SMS ou e-mail), une case par chiffre.
+     */
+    interface CrOtp {
+        /**
+          * Désactive le champ.
+          * @default false
+         */
+        "disabled"?: boolean;
+        /**
+          * Message d'erreur ; remplace le message automatique.
+         */
+        "error"?: string;
+        /**
+          * The `id` of a `<form>` element to associate this element with.
+         */
+        "form"?: string;
+        /**
+          * Texte d'aide, lu par les lecteurs d'écran.
+         */
+        "hint"?: string;
+        /**
+          * Libellé affiché au-dessus des cases.
+         */
+        "label": string;
+        /**
+          * Nombre de chiffres.
+          * @default 6
+         */
+        "length"?: number;
+        /**
+          * Nom envoyé avec le formulaire.
+         */
+        "name"?: string;
+        /**
+          * Émis quand toutes les cases sont remplies ; detail : le code.
+         */
+        "onCrComplete"?: (event: CrOtpCustomEvent<string>) => void;
+        /**
+          * Émis à chaque chiffre ; detail : le code.
+         */
+        "onCrInput"?: (event: CrOtpCustomEvent<string>) => void;
+        /**
+          * Rend la saisie obligatoire.
+          * @default false
+         */
+        "required"?: boolean;
+        /**
+          * Code saisi (chiffres).
+          * @default ''
+         */
+        "value"?: string;
     }
     /**
      * Liste déroulante. Les options sont des éléments option enfants.
@@ -1158,6 +1676,112 @@ declare namespace LocalJSX {
          */
         "variant"?: TableVariant;
     }
+    /**
+     * Saisie d'étiquettes : chaque mot validé (Entrée ou virgule) devient une pastille, retirable avec ×.
+     */
+    interface CrTagInput {
+        /**
+          * Désactive le champ.
+          * @default false
+         */
+        "disabled"?: boolean;
+        /**
+          * Message d'erreur ; remplace le message automatique.
+         */
+        "error"?: string;
+        /**
+          * The `id` of a `<form>` element to associate this element with.
+         */
+        "form"?: string;
+        /**
+          * Texte d'aide, lu par les lecteurs d'écran.
+         */
+        "hint"?: string;
+        /**
+          * Libellé affiché au-dessus du champ.
+         */
+        "label": string;
+        /**
+          * Nom envoyé avec le formulaire, une fois par étiquette.
+         */
+        "name"?: string;
+        /**
+          * Émis quand la liste change ; detail : les étiquettes.
+         */
+        "onCrChange"?: (event: CrTagInputCustomEvent<string[]>) => void;
+        /**
+          * Texte indicatif affiché quand le champ est vide.
+         */
+        "placeholder"?: string;
+        /**
+          * Demande au moins une étiquette.
+          * @default false
+         */
+        "required"?: boolean;
+        /**
+          * Étiquettes saisies.
+          * @default []
+         */
+        "values"?: string[];
+    }
+    /**
+     * Zone de texte sur plusieurs lignes qui grandit d'une ligne à la fois, avec un léger rebond.
+     */
+    interface CrTextarea {
+        /**
+          * Désactive le champ.
+          * @default false
+         */
+        "disabled"?: boolean;
+        /**
+          * Message d'erreur ; remplace le message automatique.
+         */
+        "error"?: string;
+        /**
+          * The `id` of a `<form>` element to associate this element with.
+         */
+        "form"?: string;
+        /**
+          * Texte d'aide, lu par les lecteurs d'écran.
+         */
+        "hint"?: string;
+        /**
+          * Libellé affiché au-dessus du champ.
+         */
+        "label": string;
+        /**
+          * Nombre de lignes au-delà duquel le champ défile au lieu de grandir.
+          * @default 8
+         */
+        "maxRows"?: number;
+        /**
+          * Nom envoyé avec le formulaire.
+         */
+        "name"?: string;
+        /**
+          * Émis à chaque frappe ; detail : le texte.
+         */
+        "onCrInput"?: (event: CrTextareaCustomEvent<string>) => void;
+        /**
+          * Texte indicatif affiché quand le champ est vide.
+         */
+        "placeholder"?: string;
+        /**
+          * Rend la saisie obligatoire.
+          * @default false
+         */
+        "required"?: boolean;
+        /**
+          * Nombre de lignes au départ.
+          * @default 1
+         */
+        "rows"?: number;
+        /**
+          * Texte saisi.
+          * @default ''
+         */
+        "value"?: string;
+    }
 
     interface CrAccordionAttributes {
         "multiple": boolean;
@@ -1172,6 +1796,21 @@ declare namespace LocalJSX {
         "open": boolean;
         "disabled": boolean;
     }
+    interface CrBoxAttributes {
+        "display": BoxDisplay;
+        "direction": 'row' | 'column' | 'row-reverse' | 'column-reverse';
+        "gap": string;
+        "padding": string;
+        "align": string;
+        "justify": string;
+        "wrap": boolean;
+        "columns": string;
+        "background": string;
+        "radius": string;
+        "border": boolean;
+        "shadow": boolean;
+        "maxWidth": string;
+    }
     interface CrButtonAttributes {
         "variant": ButtonVariant;
         "size": ButtonSize;
@@ -1179,6 +1818,14 @@ declare namespace LocalJSX {
         "disabled": boolean;
         "loading": boolean;
         "fullWidth": boolean;
+    }
+    interface CrCardInputAttributes {
+        "label": string;
+        "name": string;
+        "hint": string;
+        "error": string;
+        "required": boolean;
+        "disabled": boolean;
     }
     interface CrCheckboxAttributes {
         "label": string;
@@ -1213,11 +1860,22 @@ declare namespace LocalJSX {
         "autocomplete": string;
         "required": boolean;
         "disabled": boolean;
+        "strength": boolean;
     }
     interface CrMenuAttributes {
         "label": string;
         "accessibleLabel": string;
         "animation": PopupAnimation;
+        "disabled": boolean;
+    }
+    interface CrOtpAttributes {
+        "label": string;
+        "name": string;
+        "value": string;
+        "length": number;
+        "hint": string;
+        "error": string;
+        "required": boolean;
         "disabled": boolean;
     }
     interface CrSelectAttributes {
@@ -1250,21 +1908,47 @@ declare namespace LocalJSX {
         "density": TableDensity;
         "storageKey": string;
     }
+    interface CrTagInputAttributes {
+        "label": string;
+        "name": string;
+        "placeholder": string;
+        "hint": string;
+        "error": string;
+        "required": boolean;
+        "disabled": boolean;
+    }
+    interface CrTextareaAttributes {
+        "label": string;
+        "name": string;
+        "value": string;
+        "rows": number;
+        "maxRows": number;
+        "hint": string;
+        "error": string;
+        "placeholder": string;
+        "required": boolean;
+        "disabled": boolean;
+    }
 
     interface IntrinsicElements {
         "cr-accordion": Omit<CrAccordion, keyof CrAccordionAttributes> & { [K in keyof CrAccordion & keyof CrAccordionAttributes]?: CrAccordion[K] } & { [K in keyof CrAccordion & keyof CrAccordionAttributes as `attr:${K}`]?: CrAccordionAttributes[K] } & { [K in keyof CrAccordion & keyof CrAccordionAttributes as `prop:${K}`]?: CrAccordion[K] };
         "cr-accordion-item": Omit<CrAccordionItem, keyof CrAccordionItemAttributes> & { [K in keyof CrAccordionItem & keyof CrAccordionItemAttributes]?: CrAccordionItem[K] } & { [K in keyof CrAccordionItem & keyof CrAccordionItemAttributes as `attr:${K}`]?: CrAccordionItemAttributes[K] } & { [K in keyof CrAccordionItem & keyof CrAccordionItemAttributes as `prop:${K}`]?: CrAccordionItem[K] } & OneOf<"label", CrAccordionItem["label"], CrAccordionItemAttributes["label"]>;
+        "cr-box": Omit<CrBox, keyof CrBoxAttributes> & { [K in keyof CrBox & keyof CrBoxAttributes]?: CrBox[K] } & { [K in keyof CrBox & keyof CrBoxAttributes as `attr:${K}`]?: CrBoxAttributes[K] } & { [K in keyof CrBox & keyof CrBoxAttributes as `prop:${K}`]?: CrBox[K] };
         "cr-button": Omit<CrButton, keyof CrButtonAttributes> & { [K in keyof CrButton & keyof CrButtonAttributes]?: CrButton[K] } & { [K in keyof CrButton & keyof CrButtonAttributes as `attr:${K}`]?: CrButtonAttributes[K] } & { [K in keyof CrButton & keyof CrButtonAttributes as `prop:${K}`]?: CrButton[K] };
         "cr-card": CrCard;
+        "cr-card-input": Omit<CrCardInput, keyof CrCardInputAttributes> & { [K in keyof CrCardInput & keyof CrCardInputAttributes]?: CrCardInput[K] } & { [K in keyof CrCardInput & keyof CrCardInputAttributes as `attr:${K}`]?: CrCardInputAttributes[K] } & { [K in keyof CrCardInput & keyof CrCardInputAttributes as `prop:${K}`]?: CrCardInput[K] } & OneOf<"label", CrCardInput["label"], CrCardInputAttributes["label"]>;
         "cr-checkbox": Omit<CrCheckbox, keyof CrCheckboxAttributes> & { [K in keyof CrCheckbox & keyof CrCheckboxAttributes]?: CrCheckbox[K] } & { [K in keyof CrCheckbox & keyof CrCheckboxAttributes as `attr:${K}`]?: CrCheckboxAttributes[K] } & { [K in keyof CrCheckbox & keyof CrCheckboxAttributes as `prop:${K}`]?: CrCheckbox[K] } & OneOf<"label", CrCheckbox["label"], CrCheckboxAttributes["label"]>;
         "cr-dialog": Omit<CrDialog, keyof CrDialogAttributes> & { [K in keyof CrDialog & keyof CrDialogAttributes]?: CrDialog[K] } & { [K in keyof CrDialog & keyof CrDialogAttributes as `attr:${K}`]?: CrDialogAttributes[K] } & { [K in keyof CrDialog & keyof CrDialogAttributes as `prop:${K}`]?: CrDialog[K] } & OneOf<"label", CrDialog["label"], CrDialogAttributes["label"]>;
         "cr-drawer": Omit<CrDrawer, keyof CrDrawerAttributes> & { [K in keyof CrDrawer & keyof CrDrawerAttributes]?: CrDrawer[K] } & { [K in keyof CrDrawer & keyof CrDrawerAttributes as `attr:${K}`]?: CrDrawerAttributes[K] } & { [K in keyof CrDrawer & keyof CrDrawerAttributes as `prop:${K}`]?: CrDrawer[K] } & OneOf<"label", CrDrawer["label"], CrDrawerAttributes["label"]>;
         "cr-input": Omit<CrInput, keyof CrInputAttributes> & { [K in keyof CrInput & keyof CrInputAttributes]?: CrInput[K] } & { [K in keyof CrInput & keyof CrInputAttributes as `attr:${K}`]?: CrInputAttributes[K] } & { [K in keyof CrInput & keyof CrInputAttributes as `prop:${K}`]?: CrInput[K] } & OneOf<"label", CrInput["label"], CrInputAttributes["label"]>;
         "cr-menu": Omit<CrMenu, keyof CrMenuAttributes> & { [K in keyof CrMenu & keyof CrMenuAttributes]?: CrMenu[K] } & { [K in keyof CrMenu & keyof CrMenuAttributes as `attr:${K}`]?: CrMenuAttributes[K] } & { [K in keyof CrMenu & keyof CrMenuAttributes as `prop:${K}`]?: CrMenu[K] } & OneOf<"label", CrMenu["label"], CrMenuAttributes["label"]>;
+        "cr-otp": Omit<CrOtp, keyof CrOtpAttributes> & { [K in keyof CrOtp & keyof CrOtpAttributes]?: CrOtp[K] } & { [K in keyof CrOtp & keyof CrOtpAttributes as `attr:${K}`]?: CrOtpAttributes[K] } & { [K in keyof CrOtp & keyof CrOtpAttributes as `prop:${K}`]?: CrOtp[K] } & OneOf<"label", CrOtp["label"], CrOtpAttributes["label"]>;
         "cr-select": Omit<CrSelect, keyof CrSelectAttributes> & { [K in keyof CrSelect & keyof CrSelectAttributes]?: CrSelect[K] } & { [K in keyof CrSelect & keyof CrSelectAttributes as `attr:${K}`]?: CrSelectAttributes[K] } & { [K in keyof CrSelect & keyof CrSelectAttributes as `prop:${K}`]?: CrSelect[K] } & OneOf<"label", CrSelect["label"], CrSelectAttributes["label"]>;
         "cr-step": Omit<CrStep, keyof CrStepAttributes> & { [K in keyof CrStep & keyof CrStepAttributes]?: CrStep[K] } & { [K in keyof CrStep & keyof CrStepAttributes as `attr:${K}`]?: CrStepAttributes[K] } & { [K in keyof CrStep & keyof CrStepAttributes as `prop:${K}`]?: CrStep[K] } & OneOf<"label", CrStep["label"], CrStepAttributes["label"]>;
         "cr-stepper": Omit<CrStepper, keyof CrStepperAttributes> & { [K in keyof CrStepper & keyof CrStepperAttributes]?: CrStepper[K] } & { [K in keyof CrStepper & keyof CrStepperAttributes as `attr:${K}`]?: CrStepperAttributes[K] } & { [K in keyof CrStepper & keyof CrStepperAttributes as `prop:${K}`]?: CrStepper[K] };
         "cr-table": Omit<CrTable, keyof CrTableAttributes> & { [K in keyof CrTable & keyof CrTableAttributes]?: CrTable[K] } & { [K in keyof CrTable & keyof CrTableAttributes as `attr:${K}`]?: CrTableAttributes[K] } & { [K in keyof CrTable & keyof CrTableAttributes as `prop:${K}`]?: CrTable[K] } & OneOf<"label", CrTable["label"], CrTableAttributes["label"]>;
+        "cr-tag-input": Omit<CrTagInput, keyof CrTagInputAttributes> & { [K in keyof CrTagInput & keyof CrTagInputAttributes]?: CrTagInput[K] } & { [K in keyof CrTagInput & keyof CrTagInputAttributes as `attr:${K}`]?: CrTagInputAttributes[K] } & { [K in keyof CrTagInput & keyof CrTagInputAttributes as `prop:${K}`]?: CrTagInput[K] } & OneOf<"label", CrTagInput["label"], CrTagInputAttributes["label"]>;
+        "cr-textarea": Omit<CrTextarea, keyof CrTextareaAttributes> & { [K in keyof CrTextarea & keyof CrTextareaAttributes]?: CrTextarea[K] } & { [K in keyof CrTextarea & keyof CrTextareaAttributes as `attr:${K}`]?: CrTextareaAttributes[K] } & { [K in keyof CrTextarea & keyof CrTextareaAttributes as `prop:${K}`]?: CrTextarea[K] } & OneOf<"label", CrTextarea["label"], CrTextareaAttributes["label"]>;
     }
 }
 export { LocalJSX as JSX };
@@ -1280,6 +1964,12 @@ declare module "@stencil/core" {
              */
             "cr-accordion-item": LocalJSX.IntrinsicElements["cr-accordion-item"] & JSXBase.HTMLAttributes<HTMLCrAccordionItemElement>;
             /**
+             * Remplaçant de div pour la mise en page : espacements, flex et grille avec les valeurs du thème.
+             * Les enfants restent des enfants directs : flex et grille s'appliquent à eux.
+             * Valeurs d'espacement : xs, sm, lg, xl, 2xl, 3xl, ou toute valeur CSS (« 12px »).
+             */
+            "cr-box": LocalJSX.IntrinsicElements["cr-box"] & JSXBase.HTMLAttributes<HTMLCrBoxElement>;
+            /**
              * Bouton d'action.
              */
             "cr-button": LocalJSX.IntrinsicElements["cr-button"] & JSXBase.HTMLAttributes<HTMLCrButtonElement>;
@@ -1287,6 +1977,11 @@ declare module "@stencil/core" {
              * Carte de contenu.
              */
             "cr-card": LocalJSX.IntrinsicElements["cr-card"] & JSXBase.HTMLAttributes<HTMLCrCardElement>;
+            /**
+             * Carte bancaire : numéro groupé par 4 pendant la frappe, puis date d'expiration et cryptogramme qui apparaissent.
+             * Envoie name (numéro sans espaces), name-expiry et name-cvc avec le formulaire.
+             */
+            "cr-card-input": LocalJSX.IntrinsicElements["cr-card-input"] & JSXBase.HTMLAttributes<HTMLCrCardInputElement>;
             /**
              * Case à cocher.
              */
@@ -1308,6 +2003,10 @@ declare module "@stencil/core" {
              */
             "cr-menu": LocalJSX.IntrinsicElements["cr-menu"] & JSXBase.HTMLAttributes<HTMLCrMenuElement>;
             /**
+             * Code à usage unique (reçu par SMS ou e-mail), une case par chiffre.
+             */
+            "cr-otp": LocalJSX.IntrinsicElements["cr-otp"] & JSXBase.HTMLAttributes<HTMLCrOtpElement>;
+            /**
              * Liste déroulante. Les options sont des éléments option enfants.
              */
             "cr-select": LocalJSX.IntrinsicElements["cr-select"] & JSXBase.HTMLAttributes<HTMLCrSelectElement>;
@@ -1323,6 +2022,14 @@ declare module "@stencil/core" {
              * Tableau dont chaque utilisateur règle les colonnes : largeur, ordre, colonnes fixées et masquées, densité des lignes.
              */
             "cr-table": LocalJSX.IntrinsicElements["cr-table"] & JSXBase.HTMLAttributes<HTMLCrTableElement>;
+            /**
+             * Saisie d'étiquettes : chaque mot validé (Entrée ou virgule) devient une pastille, retirable avec ×.
+             */
+            "cr-tag-input": LocalJSX.IntrinsicElements["cr-tag-input"] & JSXBase.HTMLAttributes<HTMLCrTagInputElement>;
+            /**
+             * Zone de texte sur plusieurs lignes qui grandit d'une ligne à la fois, avec un léger rebond.
+             */
+            "cr-textarea": LocalJSX.IntrinsicElements["cr-textarea"] & JSXBase.HTMLAttributes<HTMLCrTextareaElement>;
         }
     }
 }

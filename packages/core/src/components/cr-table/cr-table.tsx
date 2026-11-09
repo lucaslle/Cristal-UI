@@ -46,7 +46,7 @@ export class CrTable {
   private menuButton?: HTMLButtonElement;
   private panel?: HTMLElement;
   private popup?: Popup;
-  private before?: Map<string, number>;
+  private lefts?: Map<string, number>;
   private focusKey?: string;
   private initialDensity: TableDensity = 'normal';
   private restored = false;
@@ -73,8 +73,8 @@ export class CrTable {
   componentDidRender() {
     if (!this.popup && this.panel && this.menuButton)
       this.popup = createPopup({ popup: this.panel, anchor: this.menuButton, host: this.el, onOpen: () => (this.menuOpen = true), onClose: () => (this.menuOpen = false) });
-    if (this.before && this.table) flipColumns(this.table, this.before);
-    this.before = undefined;
+    if (this.lefts && this.table) flipColumns(this.table, this.lefts);
+    this.lefts = undefined;
     if (this.focusKey) this.header(this.focusKey)?.focus();
     this.focusKey = undefined;
   }
@@ -83,7 +83,7 @@ export class CrTable {
   private header = (key: string) => this.table?.querySelector<HTMLElement>(`th[data-key="${CSS.escape(key)}"]`);
 
   private commit(next: ColumnState[], message: string, animate = false) {
-    if (animate) this.before = columnLefts(this.table);
+    if (animate) this.lefts = columnLefts(this.table);
     this.state = next;
     this.message = message;
     this.changed();

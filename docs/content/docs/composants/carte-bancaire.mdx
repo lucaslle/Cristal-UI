@@ -1,0 +1,30 @@
+---
+title: Carte bancaire
+description: Numéro de carte groupé pendant la frappe, puis date d'expiration et cryptogramme. Balise cr-card-input, composant React CrCardInput.
+---
+
+import CardInputBasic from '@/demos/card-input-basic';
+
+## Exemple
+
+Les chiffres se groupent par quatre pendant la frappe (4-6-5 pour American Express), sans faire sauter le curseur. Dès que le numéro est complet, les champs « Expiration » (MM/AA) et « CVC » glissent depuis la droite.
+
+<Preview column>
+  <CardInputBasic />
+</Preview>
+
+<include>../../../demos/card-input-basic.tsx</include>
+
+## Formulaire et validation
+
+- Le formulaire reçoit `name` (le numéro sans espaces), `name-expiry` et `name-cvc`. `onCrInput` donne les trois valeurs à chaque frappe.
+- Le numéro est vérifié avec la clé de Luhn, qui repère la plupart des fautes de frappe ; la date ne doit pas être passée ; le cryptogramme a 3 ou 4 chiffres. Le message d'erreur s'affiche sous le libellé, et seul le champ concerné est bordé de rouge.
+
+## Accessibilité
+
+- Chaque champ a son libellé visible et l'indication de remplissage automatique du navigateur (`cc-number`, `cc-exp`, `cc-csc`) ; le clavier numérique s'ouvre sur mobile.
+- Le focus ne saute jamais tout seul d'un champ à l'autre.
+
+## API
+
+<ApiReference tag="cr-card-input" />
