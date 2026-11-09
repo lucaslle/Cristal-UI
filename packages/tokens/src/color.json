@@ -5,20 +5,22 @@
       "$type": "color"
     },
     "primary-hover": {
-      "$value": "#5b21b6",
-      "$type": "color"
+      "$value": "color-mix(in oklab, {color.primary} 82%, oklch(from {color.primary} clamp(0, (l - 0.62) * 1000, 1) 0 0))"
+    },
+    "primary-text": {
+      "$value": "oklch(from {color.primary} min(l, 0.47) c h)"
     },
     "primary-subtle": {
-      "$value": "#ede9fe",
-      "$type": "color"
+      "$value": "color-mix(in oklab, {color.primary} 12%, white)"
     },
     "primary-subtle-hover": {
-      "$value": "#ddd6fe",
-      "$type": "color"
+      "$value": "color-mix(in oklab, {color.primary} 18%, white)"
     },
     "on-primary": {
-      "$value": "#ffffff",
-      "$type": "color"
+      "$value": "oklch(from {color.primary} clamp(0, (0.62 - l) * 1000, 1) 0 0)"
+    },
+    "focus": {
+      "$value": "{color.primary-text}"
     },
     "text": {
       "$value": "#111827",
@@ -42,10 +44,6 @@
     },
     "success": {
       "$value": "#15803d",
-      "$type": "color"
-    },
-    "focus": {
-      "$value": "#6d28d9",
       "$type": "color"
     },
     "border": {
