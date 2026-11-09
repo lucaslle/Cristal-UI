@@ -91,3 +91,14 @@ test('opening a menu never scrolls the page', async ({ page }) => {
   await page.keyboard.press('End');
   expect(await page.evaluate(() => [window.scrollX, window.scrollY])).toEqual(before);
 });
+
+test('tile-build ends on a solid panel, without seams between tiles', async ({ page }) => {
+  await page.evaluate(() => (document.body.style.background = '#111111'));
+  await page.getByRole('button', { name: 'tile-build', exact: true }).click();
+  const panel = page.locator('cr-menu').nth(6);
+  await panel.evaluate((menu) =>
+    Promise.all(menu.shadowRoot!.querySelector('.popup')!.getAnimations({ subtree: true }).map((animation) => animation.finished)),
+  );
+  const background = await panel.evaluate((menu) => getComputedStyle(menu.shadowRoot!.querySelector('.popup')!).backgroundColor);
+  expect(background).not.toBe('rgba(0, 0, 0, 0)');
+});

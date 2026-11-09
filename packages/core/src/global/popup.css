@@ -182,9 +182,6 @@
 }
 
 /* tile-build */
-.popup[data-animation='tile-build'] {
-  background: transparent;
-}
 .popup[data-animation='tile-build'][data-state='open'] {
   animation: cr-frame-in 160ms ease-out 260ms both;
 }
@@ -273,7 +270,9 @@
   }
 }
 @keyframes cr-frame-out {
+  from,
   to {
+    background: transparent;
     border-color: transparent;
     box-shadow: none;
   }
