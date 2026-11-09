@@ -32,60 +32,8 @@
   transition: transform 0.15s;
 }
 
-.listbox {
-  position: fixed;
-  inset: auto;
-  box-sizing: border-box;
-  max-height: 280px;
-  margin: 0;
-  padding: var(--cr-spacing-xs);
-  overflow-y: auto;
-  font-family: var(--cr-font-family);
-  font-size: var(--cr-font-size-m);
-  color: var(--cr-color-text);
-  background: var(--cr-color-surface);
-  border: 1px solid var(--cr-color-border);
-  border-radius: var(--cr-radius-m);
-  box-shadow: var(--cr-shadow-m);
-}
-
-.option {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--cr-spacing-sm);
-  min-height: var(--cr-control-s);
-  padding: 0 var(--cr-spacing-sm);
-  border-radius: var(--cr-radius-m);
-  cursor: pointer;
-}
-
-.option[data-active] {
-  background: var(--cr-color-primary-subtle);
-}
-
-.option[aria-selected='true'] {
-  font-weight: var(--cr-font-weight-bold);
-  color: var(--cr-color-primary);
-}
-
-.option[aria-disabled='true'] {
-  color: var(--cr-color-on-disabled);
-  cursor: not-allowed;
-}
-
-.check {
-  flex-shrink: 0;
-}
-
 @media (prefers-reduced-motion: reduce) {
   .chevron {
     transition: none;
-  }
-}
-
-@media (forced-colors: active) {
-  .option[data-active] {
-    outline: 2px solid Highlight;
   }
 }

@@ -29,10 +29,11 @@ export const matchIndex = (options: ListOption[], query: string, from: number) =
 export const placeBelowOrAbove = (popup: HTMLElement, anchor: HTMLElement) => {
   const rect = anchor.getBoundingClientRect();
   const gap = 4;
+  popup.style.minWidth = `${rect.width}px`;
   const height = popup.offsetHeight;
   const fitsBelow = rect.bottom + gap + height <= window.innerHeight || rect.top < height + gap;
-  popup.style.left = `${rect.left}px`;
-  popup.style.width = `${rect.width}px`;
+  popup.dataset.placement = fitsBelow ? 'below' : 'above';
+  popup.style.left = `${Math.max(gap, Math.min(rect.left, window.innerWidth - popup.offsetWidth - gap))}px`;
   popup.style.top = `${fitsBelow ? rect.bottom + gap : rect.top - gap - height}px`;
 };
 
@@ -69,5 +70,3 @@ export const watchOptions = (host: HTMLElement, onChange: (options: ListOption[]
   observer.observe(host, { childList: true, subtree: true, characterData: true, attributes: true });
   return () => observer.disconnect();
 };
-
-export const isOpen = (popup?: HTMLElement) => !!popup?.matches(':popover-open');

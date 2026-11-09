@@ -14,8 +14,9 @@ export const OptionList = ({ options, selected, active, open, onHover, onPick }:
   options.map((option, index) => (
     <div
       id={`option-${index}`}
-      class="option"
+      class="option item"
       part="option"
+      style={{ '--i': `${index}` }}
       role="option"
       aria-selected={option === selected ? 'true' : 'false'}
       aria-disabled={option.disabled ? 'true' : undefined}
@@ -43,6 +44,7 @@ interface ComboTriggerProps {
   text?: string;
   isPlaceholder: boolean;
   onKeyDown: (event: KeyboardEvent) => void;
+  onClick: () => void;
 }
 
 export const ComboTrigger = (props: ComboTriggerProps) => (
@@ -63,6 +65,7 @@ export const ComboTrigger = (props: ComboTriggerProps) => (
     aria-describedby={props.describedBy}
     disabled={props.disabled}
     onKeyDown={props.onKeyDown}
+    onClick={props.onClick}
     onKeyUp={(event: KeyboardEvent) => event.key === ' ' && event.preventDefault()}
   >
     <span class={{ value: true, placeholder: props.isPlaceholder }}>{props.text}</span>
