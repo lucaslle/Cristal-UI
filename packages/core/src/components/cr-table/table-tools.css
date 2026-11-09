@@ -1,0 +1,136 @@
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--cr-spacing-sm);
+  padding: var(--cr-spacing-lg);
+  border-bottom: 1px solid var(--cr-color-disabled);
+}
+
+.title {
+  font-size: var(--cr-font-size-l);
+  font-weight: var(--cr-font-weight-bold);
+}
+
+.tools {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--cr-spacing-sm);
+}
+
+.tool,
+.segment {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--cr-spacing-xs);
+  min-height: var(--cr-control-s);
+  padding: 0 var(--cr-spacing-sm);
+  font-family: inherit;
+  font-size: var(--cr-font-size-s);
+  font-weight: var(--cr-font-weight-bold);
+  color: var(--cr-color-primary-text);
+  background: var(--cr-color-surface);
+  border: 1px solid var(--cr-color-disabled);
+  border-radius: var(--cr-radius-m);
+  cursor: pointer;
+}
+
+.tool:hover,
+.segment:hover {
+  background: var(--cr-color-primary-subtle);
+}
+
+.tool:focus-visible,
+.segment:focus-within:has(:focus-visible) {
+  outline: 2px solid var(--cr-color-focus);
+  outline-offset: 2px;
+}
+
+.count {
+  padding: 0 6px;
+  font-variant-numeric: tabular-nums;
+  background: var(--cr-color-primary-subtle);
+  border-radius: var(--cr-radius-m);
+}
+
+.density {
+  display: inline-flex;
+  padding: 2px;
+  background: var(--cr-color-primary-subtle);
+  border-radius: var(--cr-radius-m);
+}
+
+.segment {
+  position: relative;
+  border-color: transparent;
+  background: transparent;
+}
+
+.segment.on {
+  color: var(--cr-color-on-primary);
+  background: var(--cr-color-primary);
+}
+
+.segment input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.choices {
+  display: flex;
+  flex-direction: column;
+  padding: var(--cr-spacing-xs);
+}
+
+.choice {
+  display: flex;
+  align-items: center;
+  gap: var(--cr-spacing-sm);
+  min-height: var(--cr-control-s);
+  padding: 0 var(--cr-spacing-sm);
+  border-radius: var(--cr-radius-m);
+  cursor: pointer;
+}
+
+.choice:hover {
+  background: var(--cr-color-primary-subtle);
+}
+
+.choice input {
+  width: 18px;
+  height: 18px;
+  margin: 0;
+  accent-color: var(--cr-color-primary);
+}
+
+.badge {
+  margin-inline-start: auto;
+  font-size: var(--cr-font-size-s);
+  color: var(--cr-color-primary-text);
+}
+
+.footer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--cr-spacing-sm);
+  padding: var(--cr-spacing-sm) var(--cr-spacing-lg);
+  font-size: var(--cr-font-size-s);
+  color: var(--cr-color-text-muted);
+  border-top: 1px solid var(--cr-color-disabled);
+}
+
+.footer p {
+  margin: 0;
+}
+
+kbd {
+  padding: 0 4px;
+  font-family: inherit;
+  font-size: 0.9em;
+  background: var(--cr-color-primary-subtle);
+  border-radius: 4px;
+}

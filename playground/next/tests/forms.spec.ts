@@ -37,7 +37,7 @@ test('submits with Enter from a text field', async ({ page }) => {
 
 test('resets every field to its initial value', async ({ page }) => {
   await fillValidForm(page);
-  await page.getByRole('button', { name: 'Réinitialiser' }).click();
+  await page.locator('form').getByRole('button', { name: 'Réinitialiser' }).click();
   await expect(page.getByLabel('E-mail')).toHaveValue('lucas@example.com');
   await expect(page.getByRole('combobox', { name: 'Pays' })).toHaveText('Choisir un pays');
   await expect(page.getByLabel("J'accepte les conditions")).not.toBeChecked();

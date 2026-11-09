@@ -1,0 +1,115 @@
+/* striped : lignes alternées, sans traits. */
+:host([data-variant='striped']) td {
+  border-bottom: 0;
+}
+
+:host([data-variant='striped']) tbody tr:nth-child(even) td {
+  background: color-mix(in oklab, var(--cr-color-primary-subtle) 35%, var(--cr-color-surface));
+}
+
+:host([data-variant='striped']) tbody tr:hover td {
+  background: var(--cr-table-hover);
+}
+
+/* cards : chaque ligne est une carte posée sur un fond teinté. */
+:host([data-variant='cards']) {
+  --cr-table-head: color-mix(in oklab, var(--cr-color-primary-subtle) 40%, var(--cr-color-surface));
+  background: var(--cr-table-head);
+}
+
+:host([data-variant='cards']) .scroll {
+  padding: 0 var(--cr-spacing-sm);
+}
+
+:host([data-variant='cards']) table {
+  border-spacing: 0 6px;
+}
+
+:host([data-variant='cards']) th {
+  border-bottom: 0;
+}
+
+:host([data-variant='cards']) td {
+  background: var(--cr-color-surface);
+  border-block: 1px solid var(--cr-color-disabled);
+  transition: border-color 0.2s, background 0.2s;
+}
+
+:host([data-variant='cards']) td:first-child {
+  border-inline-start: 1px solid var(--cr-color-disabled);
+  border-radius: var(--cr-radius-m) 0 0 var(--cr-radius-m);
+}
+
+:host([data-variant='cards']) td:last-child {
+  border-inline-end: 1px solid var(--cr-color-disabled);
+  border-radius: 0 var(--cr-radius-m) var(--cr-radius-m) 0;
+}
+
+:host([data-variant='cards']) tr:last-child td {
+  border-bottom: 1px solid var(--cr-color-disabled);
+}
+
+:host([data-variant='cards']) tbody tr:hover td {
+  background: var(--cr-color-surface);
+  border-color: var(--cr-color-primary);
+}
+
+:host([data-variant='cards']) .toolbar,
+:host([data-variant='cards']) .footer {
+  border-color: transparent;
+}
+
+/* minimal : sans cadre ni fond d'en-tête, un trait marqué sous les titres. */
+:host([data-variant='minimal']) {
+  --cr-table-head: var(--cr-color-surface);
+  border-color: transparent;
+  box-shadow: none;
+}
+
+:host([data-variant='minimal']) th {
+  color: var(--cr-color-text);
+  border-bottom: 2px solid var(--cr-color-text);
+}
+
+:host([data-variant='minimal']) td {
+  border-bottom-color: color-mix(in oklab, var(--cr-color-disabled) 60%, var(--cr-color-surface));
+}
+
+:host([data-variant='minimal']) .toolbar,
+:host([data-variant='minimal']) .footer {
+  padding-inline: 0;
+  border-color: transparent;
+}
+
+:host([data-variant='minimal']) .handle::after {
+  opacity: 0;
+}
+
+:host([data-variant='minimal']) th:hover .handle::after,
+:host([data-variant='minimal']) th:focus-visible .handle::after {
+  opacity: 1;
+}
+
+/* grid : toutes les cases bordées, façon tableur ; la case survolée est encadrée. */
+:host([data-variant='grid']) {
+  --cr-table-head: color-mix(in oklab, var(--cr-color-primary-subtle) 70%, var(--cr-color-surface));
+  border-radius: var(--cr-radius-m);
+}
+
+:host([data-variant='grid']) th,
+:host([data-variant='grid']) td {
+  border-inline-end: 1px solid var(--cr-color-disabled);
+}
+
+:host([data-variant='grid']) th {
+  color: var(--cr-color-primary-text);
+}
+
+:host([data-variant='grid']) td:hover {
+  outline: 2px solid var(--cr-color-primary);
+  outline-offset: -2px;
+}
+
+:host([data-variant='grid']) .handle::after {
+  display: none;
+}

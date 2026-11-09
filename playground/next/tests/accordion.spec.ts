@@ -35,22 +35,22 @@ test('arrow keys, Home and End move between headers', async ({ page }) => {
 });
 
 test('expand all opens the sections one after another, then closes them in reverse', async ({ page }) => {
-  await page.getByRole('button', { name: 'Tout ouvrir' }).click();
   const names = ['Présentation', 'Ingrédients', 'Étapes'];
   const handles = await Promise.all(names.map((name) => item(page, name).elementHandle()));
-  const openedAt = await page.evaluate(
-    (items) =>
-      new Promise<number[]>((resolve) => {
-        const times = items.map(() => 0);
-        const start = performance.now();
-        const tick = () => {
-          items.forEach((item, i) => !times[i] && item.hasAttribute('open') && (times[i] = performance.now() - start || 1));
-          times.every(Boolean) ? resolve(times) : requestAnimationFrame(tick);
-        };
-        tick();
-      }),
-    handles,
-  );
+  // Le relevé démarre avant le clic, pour mesurer aussi la première ouverture.
+  await page.evaluate((items) => {
+    (window as any).openedAt = new Promise<number[]>((resolve) => {
+      const times = items.map(() => 0);
+      const start = performance.now();
+      const tick = () => {
+        items.forEach((item, i) => !times[i] && item.hasAttribute('open') && (times[i] = performance.now() - start));
+        times.every(Boolean) ? resolve(times) : requestAnimationFrame(tick);
+      };
+      tick();
+    });
+  }, handles);
+  await page.getByRole('button', { name: 'Tout ouvrir' }).click();
+  const openedAt: number[] = await page.evaluate(() => (window as any).openedAt);
   expect(openedAt[1]).toBeGreaterThanOrEqual(openedAt[0]);
   expect(openedAt[2]).toBeGreaterThanOrEqual(openedAt[1]);
   expect(openedAt[2]).toBeGreaterThan(openedAt[0] + 100);
