@@ -1,0 +1,40 @@
+'use client';
+
+import { createElement, forwardRef } from 'react';
+import * as elements from '@cristal/core/dist/components';
+import * as generated from './generated/components.js';
+
+export type * from './generated/components.js';
+
+const dashed = (name: string) => name.replace(/[A-Z]/g, (letter) => `-${letter.toLowerCase()}`);
+const primitive = (value: unknown) => ['string', 'number', 'boolean'].includes(typeof value);
+
+// @lit/react only sets Stencil props from a client effect, so the server HTML would carry none of them and
+// the element would upgrade with its defaults until hydration. On the server, render the tag with its props as attributes.
+const withAttributes = <T>(Component: T, element: object): T => {
+  if (typeof window !== 'undefined') return Component;
+  const { is: tag, observedAttributes } = element as { is: string; observedAttributes: string[] };
+  const observed = new Set(observedAttributes);
+  return forwardRef<unknown, Record<string, unknown>>(({ className, ...props }, _ref) => {
+    const attributes: Record<string, unknown> = { class: className ?? props.class };
+    for (const [key, value] of Object.entries(props)) {
+      if (!observed.has(dashed(key))) attributes[key] = value;
+      else if (primitive(value)) attributes[dashed(key)] = value;
+    }
+    return createElement(tag, attributes);
+  }) as T;
+};
+
+export const CrAccordion = withAttributes(generated.CrAccordion, elements.CrAccordion);
+export const CrAccordionItem = withAttributes(generated.CrAccordionItem, elements.CrAccordionItem);
+export const CrButton = withAttributes(generated.CrButton, elements.CrButton);
+export const CrCard = withAttributes(generated.CrCard, elements.CrCard);
+export const CrCheckbox = withAttributes(generated.CrCheckbox, elements.CrCheckbox);
+export const CrDialog = withAttributes(generated.CrDialog, elements.CrDialog);
+export const CrDrawer = withAttributes(generated.CrDrawer, elements.CrDrawer);
+export const CrInput = withAttributes(generated.CrInput, elements.CrInput);
+export const CrMenu = withAttributes(generated.CrMenu, elements.CrMenu);
+export const CrSelect = withAttributes(generated.CrSelect, elements.CrSelect);
+export const CrStep = withAttributes(generated.CrStep, elements.CrStep);
+export const CrStepper = withAttributes(generated.CrStepper, elements.CrStepper);
+export const CrTable = withAttributes(generated.CrTable, elements.CrTable);

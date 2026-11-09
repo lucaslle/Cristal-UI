@@ -1,1 +1,1 @@
-export * from './generated/components.js';
+export * from './components.js';
