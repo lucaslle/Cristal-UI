@@ -1,6 +1,6 @@
 import { AttachInternals, Build, Component, Element, Event, EventEmitter, Listen, Prop, State, h } from '@stencil/core';
 import { FieldText, RequiredMark, describedBy } from '../../utils/field';
-import { ListOption, edgeIndex, keyMove, matchIndex, readOptions, watchOptions } from '../../utils/listbox';
+import { ListOption, edgeIndex, keyMove, matchIndex, readOptions, revealInList, watchOptions } from '../../utils/listbox';
 import { Popup, PopupAnimation, createPopup } from '../../utils/popup';
 import { PopupPanel } from '../../utils/popup-view';
 import { ComboTrigger, OptionList } from '../../utils/listbox-view';
@@ -80,7 +80,7 @@ export class CrSelect {
     this.internals.setFormValue(this.selectedValue() || null);
     const missing = this.required && !this.selectedValue();
     this.internals.setValidity(missing ? { valueMissing: true } : {}, missing ? missingMessage('select') : '', this.trigger);
-    if (this.open) this.listbox?.querySelector('[data-active]')?.scrollIntoView({ block: 'nearest' });
+    if (this.open) revealInList(this.listbox?.querySelector<HTMLElement>('[data-active]'));
   }
 
   formResetCallback() {

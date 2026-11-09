@@ -68,16 +68,26 @@ test('falls back to a plain fade when reduced motion is requested', async ({ pag
 
 test('inside a drawer, Escape closes the menu but not the drawer', async ({ page }) => {
   await page.getByRole('button', { name: 'Filtres' }).click();
-  await page.getByRole('button', { name: 'Options des filtres' }).click();
-  await expect(page.getByRole('menu', { name: 'Options des filtres' })).toBeVisible();
+  await page.getByRole('button', { name: "Plus d'options des filtres" }).click();
+  await expect(page.getByRole('menu', { name: "Plus d'options des filtres" })).toBeVisible();
   await page.keyboard.press('Escape');
-  await expect(page.getByRole('menu', { name: 'Options des filtres' })).toBeHidden();
+  await expect(page.getByRole('menu', { name: "Plus d'options des filtres" })).toBeHidden();
   await expect(page.getByRole('dialog', { name: 'Filtres' })).toBeVisible();
 });
 
 test('accessibleLabel gives the button and the menu a precise name', async ({ page }) => {
   await page.getByRole('button', { name: 'Filtres' }).click();
-  const trigger = page.getByRole('button', { name: 'Options des filtres' });
+  const trigger = page.getByRole('button', { name: "Plus d'options des filtres" });
   await trigger.click();
-  await expect(page.getByRole('menu', { name: 'Options des filtres' })).toBeVisible();
+  await expect(page.getByRole('menu', { name: "Plus d'options des filtres" })).toBeVisible();
+});
+
+test('opening a menu never scrolls the page', async ({ page }) => {
+  await page.evaluate(() => (document.body.style.width = '3000px'));
+  const trigger = page.getByRole('button', { name: 'fade', exact: true });
+  await trigger.focus();
+  const before = await page.evaluate(() => [window.scrollX, window.scrollY]);
+  await page.keyboard.press('Enter');
+  await page.keyboard.press('End');
+  expect(await page.evaluate(() => [window.scrollX, window.scrollY])).toEqual(before);
 });

@@ -70,3 +70,10 @@ export const watchOptions = (host: HTMLElement, onChange: (options: ListOption[]
   observer.observe(host, { childList: true, subtree: true, characterData: true, attributes: true });
   return () => observer.disconnect();
 };
+
+export const revealInList = (item?: HTMLElement | null) => {
+  const list = item?.parentElement;
+  if (!item || !list) return;
+  if (item.offsetTop < list.scrollTop) list.scrollTop = item.offsetTop;
+  else if (item.offsetTop + item.offsetHeight > list.scrollTop + list.clientHeight) list.scrollTop = item.offsetTop + item.offsetHeight - list.clientHeight;
+};

@@ -57,7 +57,7 @@ La propriété `animation` choisit l'effet d'ouverture et de fermeture. Elle exi
 - Suit le modèle « menu button » du W3C (ARIA Authoring Practices) : `aria-haspopup="menu"`, `aria-expanded`, rôles `menu` et `menuitem`.
 - Le focus entre dans le menu à l'ouverture et revient au bouton après un choix ou Échap.
 - Les actions indisponibles (`disabled`) sont annoncées et ignorées par la navigation.
-- Quand plusieurs menus ont le même libellé (un menu « Actions » par ligne de tableau), donnez à chacun un nom précis avec `accessibleLabel` : « Actions pour Clavier », « Actions pour Souris »…
+- Quand plusieurs menus ont le même libellé (un menu « Actions » par ligne de tableau), donnez à chacun un nom précis avec `accessibleLabel` : « Actions pour Clavier », « Actions pour Souris »… Ce nom doit **contenir le libellé visible** (WCAG 2.5.3), pour que les personnes qui pilotent leur ordinateur à la voix puissent dire « Actions ».
 - Le menu s'affiche au-dessus de la page : jamais coupé par un conteneur ou une modale, il s'ouvre vers le haut quand la place manque. Dans une modale, Échap ferme le menu sans fermer la modale.
 
 ## API

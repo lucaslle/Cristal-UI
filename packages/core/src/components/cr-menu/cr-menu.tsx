@@ -1,5 +1,5 @@
 import { Build, Component, Element, Event, EventEmitter, Prop, State, h } from '@stencil/core';
-import { ListOption, edgeIndex, keyMove, matchIndex, readOptions, watchOptions } from '../../utils/listbox';
+import { ListOption, edgeIndex, keyMove, matchIndex, readOptions, revealInList, watchOptions } from '../../utils/listbox';
 import { Popup, PopupAnimation, createPopup } from '../../utils/popup';
 import { PopupPanel } from '../../utils/popup-view';
 
@@ -19,7 +19,7 @@ export class CrMenu {
 
   /** Libellé du bouton qui ouvre le menu. */
   @Prop() label!: string;
-  /** Nom complet annoncé par les lecteurs d'écran, quand le libellé seul est ambigu (par exemple « Actions pour Clavier »). */
+  /** Nom complet annoncé par les lecteurs d'écran quand le libellé seul est ambigu ; doit contenir le libellé visible (« Actions pour Clavier »). */
   @Prop() accessibleLabel?: string;
   /** Animation d'ouverture et de fermeture du menu. */
   @Prop() animation: PopupAnimation = 'fade';
@@ -71,7 +71,7 @@ export class CrMenu {
     if (index < 0) return;
     this.active = index;
     this.item(index)?.focus({ preventScroll: true });
-    this.item(index)?.scrollIntoView({ block: 'nearest' });
+    revealInList(this.item(index));
   }
 
   private openAt(edge: 'first' | 'last') {

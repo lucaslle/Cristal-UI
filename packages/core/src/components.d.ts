@@ -195,7 +195,7 @@ export namespace Components {
      */
     interface CrMenu {
         /**
-          * Nom complet annoncé par les lecteurs d'écran, quand le libellé seul est ambigu (par exemple « Actions pour Clavier »).
+          * Nom complet annoncé par les lecteurs d'écran quand le libellé seul est ambigu ; doit contenir le libellé visible (« Actions pour Clavier »).
          */
         "accessibleLabel"?: string;
         /**
@@ -656,7 +656,7 @@ declare namespace LocalJSX {
      */
     interface CrMenu {
         /**
-          * Nom complet annoncé par les lecteurs d'écran, quand le libellé seul est ambigu (par exemple « Actions pour Clavier »).
+          * Nom complet annoncé par les lecteurs d'écran quand le libellé seul est ambigu ; doit contenir le libellé visible (« Actions pour Clavier »).
          */
         "accessibleLabel"?: string;
         /**

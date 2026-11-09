@@ -34,7 +34,7 @@ export function OverlayDemo() {
 
       <CrDrawer label="Filtres" open={drawerOpen} onCrClose={() => setDrawerOpen(false)}>
         <CrInput label="Prix maximum" type="number" />
-        <CrMenu label="Plus d'options" accessibleLabel="Options des filtres" animation="anchor-pop">
+        <CrMenu label="Plus d'options" accessibleLabel="Plus d'options des filtres" animation="anchor-pop">
           <option value="export">Exporter</option>
           <option value="reset">Effacer les filtres</option>
         </CrMenu>
