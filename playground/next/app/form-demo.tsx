@@ -18,7 +18,7 @@ export function FormDemo() {
       }}
     >
       <CrInput label="E-mail" name="email" type="email" value="lucas@example.com" hint="Format : nom@domaine.fr" required />
-      <CrSelect label="Pays" name="country" placeholder="Choisir un pays" required>
+      <CrSelect label="Pays" name="country" placeholder="Choisir un pays" animation="card-deal" required>
         <option value="fr">France</option>
         <option value="be">Belgique</option>
         <option value="ch">Suisse</option>

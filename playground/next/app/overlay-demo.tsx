@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { CrButton, CrDialog, CrDrawer, CrInput, CrSelect } from '@cristal/react';
+import { CrButton, CrDialog, CrDrawer, CrInput, CrMenu, CrSelect } from '@cristal/react';
 
 export function OverlayDemo() {
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -34,7 +34,11 @@ export function OverlayDemo() {
 
       <CrDrawer label="Filtres" open={drawerOpen} onCrClose={() => setDrawerOpen(false)}>
         <CrInput label="Prix maximum" type="number" />
-        <CrSelect label="Tri" placeholder="Choisir un tri">
+        <CrMenu label="Plus d'options" animation="anchor-pop">
+          <option value="export">Exporter</option>
+          <option value="reset">Effacer les filtres</option>
+        </CrMenu>
+        <CrSelect label="Tri" placeholder="Choisir un tri" animation="drum-roll">
           <option value="price">Prix croissant</option>
           <option value="name">Nom</option>
         </CrSelect>

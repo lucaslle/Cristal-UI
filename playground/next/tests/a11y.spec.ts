@@ -17,3 +17,11 @@ for (const [trigger, name] of [['Supprimer le produit', 'Supprimer le produit ?'
     expect((await audit(page)).violations).toEqual([]);
   });
 }
+
+test('open menu has no WCAG 2.1 AA violations detectable by axe', async ({ page }) => {
+  await page.goto('/');
+  await page.getByRole('button', { name: 'outline-trace', exact: true }).click();
+  await expect(page.getByRole('menu', { name: 'outline-trace' })).toBeVisible();
+  await page.waitForTimeout(700);
+  expect((await audit(page)).violations).toEqual([]);
+});
