@@ -195,6 +195,10 @@ export namespace Components {
      */
     interface CrMenu {
         /**
+          * Nom complet annoncé par les lecteurs d'écran, quand le libellé seul est ambigu (par exemple « Actions pour Clavier »).
+         */
+        "accessibleLabel"?: string;
+        /**
           * Animation d'ouverture et de fermeture du menu.
           * @default 'fade'
          */
@@ -652,6 +656,10 @@ declare namespace LocalJSX {
      */
     interface CrMenu {
         /**
+          * Nom complet annoncé par les lecteurs d'écran, quand le libellé seul est ambigu (par exemple « Actions pour Clavier »).
+         */
+        "accessibleLabel"?: string;
+        /**
           * Animation d'ouverture et de fermeture du menu.
           * @default 'fade'
          */
@@ -768,6 +776,7 @@ declare namespace LocalJSX {
     }
     interface CrMenuAttributes {
         "label": string;
+        "accessibleLabel": string;
         "animation": PopupAnimation;
         "disabled": boolean;
     }

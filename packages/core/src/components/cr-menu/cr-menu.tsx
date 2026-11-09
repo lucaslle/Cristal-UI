@@ -19,6 +19,8 @@ export class CrMenu {
 
   /** Libellé du bouton qui ouvre le menu. */
   @Prop() label!: string;
+  /** Nom complet annoncé par les lecteurs d'écran, quand le libellé seul est ambigu (par exemple « Actions pour Clavier »). */
+  @Prop() accessibleLabel?: string;
   /** Animation d'ouverture et de fermeture du menu. */
   @Prop() animation: PopupAnimation = 'fade';
   /** Désactive le bouton. */
@@ -128,6 +130,7 @@ export class CrMenu {
         aria-haspopup="menu"
         aria-expanded={this.open ? 'true' : 'false'}
         aria-controls="menu"
+        aria-label={this.accessibleLabel}
         disabled={this.disabled}
         onClick={() => (this.popup?.isOpen() ? this.close(false) : this.openAt('first'))}
         onKeyDown={this.onTriggerKeyDown}

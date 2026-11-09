@@ -68,9 +68,16 @@ test('falls back to a plain fade when reduced motion is requested', async ({ pag
 
 test('inside a drawer, Escape closes the menu but not the drawer', async ({ page }) => {
   await page.getByRole('button', { name: 'Filtres' }).click();
-  await page.getByRole('button', { name: "Plus d'options" }).click();
-  await expect(page.getByRole('menu', { name: "Plus d'options" })).toBeVisible();
+  await page.getByRole('button', { name: 'Options des filtres' }).click();
+  await expect(page.getByRole('menu', { name: 'Options des filtres' })).toBeVisible();
   await page.keyboard.press('Escape');
-  await expect(page.getByRole('menu', { name: "Plus d'options" })).toBeHidden();
+  await expect(page.getByRole('menu', { name: 'Options des filtres' })).toBeHidden();
   await expect(page.getByRole('dialog', { name: 'Filtres' })).toBeVisible();
+});
+
+test('accessibleLabel gives the button and the menu a precise name', async ({ page }) => {
+  await page.getByRole('button', { name: 'Filtres' }).click();
+  const trigger = page.getByRole('button', { name: 'Options des filtres' });
+  await trigger.click();
+  await expect(page.getByRole('menu', { name: 'Options des filtres' })).toBeVisible();
 });
