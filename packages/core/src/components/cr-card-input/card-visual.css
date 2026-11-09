@@ -4,7 +4,10 @@
   --card-b: oklch(from var(--cr-color-primary) calc(l * 0.5) c h);
   --card-glow: color-mix(in oklab, var(--cr-color-primary) 55%, white);
   position: relative;
-  width: min(340px, 100%);
+  /* Largeur explicite : avec container-type, une largeur « min(…, 100%) » compte pour 0 dans le calcul de taille
+     du parent (flex en colonne), qui ne réservait alors pas la hauteur de la carte. */
+  width: 340px;
+  max-width: 100%;
   aspect-ratio: 85.6 / 54;
   margin-bottom: var(--cr-spacing-sm);
   font-family: 'OCR A Std', 'OCR A Extended', ui-monospace, 'SF Mono', Menlo, Consolas, monospace;

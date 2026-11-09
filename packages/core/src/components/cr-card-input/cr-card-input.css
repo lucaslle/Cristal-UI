@@ -1,3 +1,8 @@
+/* Dans un parent flex, le champ peut rétrécir sous la largeur de la carte dessinée (340px). */
+:host {
+  min-width: 0;
+}
+
 .card {
   display: flex;
   flex-wrap: wrap;

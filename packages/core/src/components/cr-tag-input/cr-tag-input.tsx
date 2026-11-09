@@ -40,6 +40,8 @@ export class CrTagInput {
 
   @State() message = '';
   @State() touched = false;
+  /** Étiquettes ajoutées par l'utilisateur : seules elles jouent l'animation d'apparition, pas celles du départ. */
+  @State() fresh: string[] = [];
 
   private input?: HTMLInputElement;
   private list?: HTMLElement;
@@ -78,6 +80,7 @@ export class CrTagInput {
   private add(text: string) {
     const words = text.split(',').map((word) => word.trim()).filter(Boolean);
     const fresh = words.filter((word, i) => !this.values.some((v) => v.toLowerCase() === word.toLowerCase()) && words.indexOf(word) === i);
+    if (fresh.length) this.fresh = [...this.fresh, ...fresh];
     if (fresh.length) this.update([...this.values, ...fresh], `${fresh.join(', ')} ${fresh.length > 1 ? 'ajoutées' : 'ajoutée'}. ${this.values.length + fresh.length} étiquettes.`);
     else if (words.length) this.message = `${words[0]} est déjà dans la liste.`;
   }
@@ -116,7 +119,7 @@ export class CrTagInput {
         <div class={{ tags: true, invalid: !!error, disabled: this.disabled }} onClick={() => this.input?.focus()}>
           <ul ref={(el) => (this.list = el)} class="list" aria-label={`${this.label} : ${this.values.length} étiquettes`}>
             {this.values.map((value) => (
-              <li key={value} class="tag" part="tag" data-value={value}>
+              <li key={value} class={{ tag: true, pop: this.fresh.includes(value) }} part="tag" data-value={value}>
                 {value}
                 <button type="button" class="remove" aria-label={`Retirer ${value}`} disabled={this.disabled} onClick={(event) => (event.stopPropagation(), this.remove(value, true))}>
                   <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true">

@@ -47,6 +47,9 @@
   background: var(--cr-color-primary-subtle);
   border: 1px solid color-mix(in oklab, var(--cr-color-primary) 30%, transparent);
   border-radius: 999px;
+}
+
+.tag.pop {
   animation: cr-tag-pop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
@@ -102,7 +105,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .tag {
+  .tag.pop {
     animation: none;
   }
 }
