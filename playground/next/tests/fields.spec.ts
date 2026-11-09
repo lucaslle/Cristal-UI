@@ -137,3 +137,21 @@ test('box lays its children out with theme spacing', async ({ page }) => {
   await expect(box).toHaveCSS('padding', '24px');
   expect(await box.evaluate((el) => el.children.length)).toBe(6);
 });
+
+test('card preview: fills while typing, shows the network and flips for the CVC', async ({ page }) => {
+  const visual = page.locator('cr-card-input .visual');
+  await expect(visual).toHaveAttribute('aria-hidden', 'true');
+  const number = form(page).getByRole('textbox', { name: 'Carte bancaire' });
+  await number.pressSequentially('4242', { delay: 20 });
+  await expect(visual.locator('.brand')).toHaveText('Visa');
+  await expect(visual.locator('.digits')).toHaveText('4242 •••• •••• ••••');
+  await number.pressSequentially('424242424242');
+  await form(page).getByRole('textbox', { name: 'Expiration' }).fill('1299');
+  await expect(visual.locator('.expiry')).toHaveText('12/99');
+  await form(page).getByRole('textbox', { name: 'CVC' }).focus();
+  await expect(visual).toHaveClass(/flipped/);
+  await form(page).getByRole('textbox', { name: 'CVC' }).fill('123');
+  await expect(visual.locator('.cvc')).toHaveText('•••');
+  await number.focus();
+  await expect(visual).not.toHaveClass(/flipped/);
+});

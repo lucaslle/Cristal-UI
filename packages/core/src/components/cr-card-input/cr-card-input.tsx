@@ -1,4 +1,5 @@
 import { AttachInternals, Component, Element, Event, EventEmitter, Listen, Prop, State, h } from '@stencil/core';
+import { CardVisual } from '../../utils/card-visual';
 import { cardError, cardLength, caretAfter, digitsOf, expiryError, formatExpiry, groupCard } from '../../utils/card';
 import { FieldHeader, describedBy } from '../../utils/field';
 import { handleInvalid } from '../../utils/validation';
@@ -17,7 +18,7 @@ export interface CardValue {
  */
 @Component({
   tag: 'cr-card-input',
-  styleUrls: ['../../global/field.css', 'cr-card-input.css'],
+  styleUrls: ['../../global/field.css', 'cr-card-input.css', 'card-visual.css'],
   shadow: { delegatesFocus: true },
   formAssociated: true,
 })
@@ -37,6 +38,8 @@ export class CrCardInput {
   @Prop({ reflect: true }) required = false;
   /** Désactive les champs. */
   @Prop({ reflect: true }) disabled = false;
+  /** Affiche une carte dessinée qui se remplit pendant la frappe et se retourne pour le cryptogramme. */
+  @Prop() preview = false;
 
   /** Émis à chaque frappe ; detail : numéro (chiffres), date d'expiration et cryptogramme. */
   @Event() crInput: EventEmitter<CardValue>;
@@ -45,6 +48,7 @@ export class CrCardInput {
   @State() expiry = '';
   @State() cvc = '';
   @State() touched = false;
+  @State() cvcFocused = false;
 
   private input?: HTMLInputElement;
 
@@ -103,6 +107,7 @@ export class CrCardInput {
     const blur = () => (this.touched = this.touched || !!this.digits);
     return (
       <div class="field">
+        {this.preview && <CardVisual digits={this.digits} expiry={this.expiry} cvc={this.cvc} flipped={this.cvcFocused} />}
         <FieldHeader id={id} label={this.label} required={this.required} hint={this.hint} error={error} />
         <div class="card">
           <div class="number">
@@ -137,7 +142,8 @@ export class CrCardInput {
               </label>
               <label class="mini">
                 <span>CVC</span>
-                <input class="control" value={this.cvc} inputMode="numeric" autocomplete="cc-csc" placeholder="123" maxLength={4} disabled={this.disabled} aria-invalid={wrong === 'cvc' ? 'true' : undefined} aria-describedby={described} onBlur={blur}
+                <input class="control" value={this.cvc} inputMode="numeric" autocomplete="cc-csc" placeholder="123" maxLength={4} disabled={this.disabled} aria-invalid={wrong === 'cvc' ? 'true' : undefined} aria-describedby={described}
+                  onFocus={() => (this.cvcFocused = true)} onBlur={() => ((this.cvcFocused = false), blur())}
                   onInput={(event) => ((this.cvc = digitsOf((event.target as HTMLInputElement).value).slice(0, 4)), ((event.target as HTMLInputElement).value = this.cvc), this.emit())} />
               </label>
             </div>

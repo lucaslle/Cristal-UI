@@ -206,6 +206,11 @@ export namespace Components {
          */
         "name"?: string;
         /**
+          * Affiche une carte dessinée qui se remplit pendant la frappe et se retourne pour le cryptogramme.
+          * @default false
+         */
+        "preview": boolean;
+        /**
           * Rend la saisie obligatoire.
           * @default false
          */
@@ -1255,6 +1260,11 @@ declare namespace LocalJSX {
          */
         "onCrInput"?: (event: CrCardInputCustomEvent<CardValue>) => void;
         /**
+          * Affiche une carte dessinée qui se remplit pendant la frappe et se retourne pour le cryptogramme.
+          * @default false
+         */
+        "preview"?: boolean;
+        /**
           * Rend la saisie obligatoire.
           * @default false
          */
@@ -1826,6 +1836,7 @@ declare namespace LocalJSX {
         "error": string;
         "required": boolean;
         "disabled": boolean;
+        "preview": boolean;
     }
     interface CrCheckboxAttributes {
         "label": string;

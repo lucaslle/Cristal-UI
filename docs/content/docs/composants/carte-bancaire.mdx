@@ -9,6 +9,8 @@ import CardInputBasic from '@/demos/card-input-basic';
 
 Les chiffres se groupent par quatre pendant la frappe (4-6-5 pour American Express), sans faire sauter le curseur. Dès que le numéro est complet, les champs « Expiration » (MM/AA) et « CVC » glissent depuis la droite.
 
+Avec `preview`, une carte dessinée se remplit en même temps : les chiffres arrivent un à un, le réseau (Visa, Mastercard, American Express) s'affiche dès les premiers chiffres, la date d'expiration s'inscrit, et la carte se retourne quand le focus passe sur le cryptogramme. Elle prend les couleurs du thème.
+
 <Preview column>
   <CardInputBasic />
 </Preview>
@@ -24,6 +26,7 @@ Les chiffres se groupent par quatre pendant la frappe (4-6-5 pour American Expre
 
 - Chaque champ a son libellé visible et l'indication de remplissage automatique du navigateur (`cc-number`, `cc-exp`, `cc-csc`) ; le clavier numérique s'ouvre sur mobile.
 - Le focus ne saute jamais tout seul d'un champ à l'autre.
+- La carte dessinée reprend ce qui est déjà saisi : elle est masquée aux lecteurs d'écran (`aria-hidden`). Avec le mouvement réduit, elle se retourne sans animation.
 
 ## API
 

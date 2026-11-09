@@ -100,7 +100,7 @@ Ils participent au `<form>` parent comme des champs natifs (valeur envoyée, val
 |---|---|
 | `cr-textarea` | texte sur plusieurs lignes qui grandit d'une ligne à la fois (`rows`, `maxRows`, slot `end`) |
 | `cr-otp` | code à usage unique, une case par chiffre (`length`, `onCrComplete`) |
-| `cr-card-input` | carte bancaire : numéro groupé, puis expiration et CVC (`name`, `name-expiry`, `name-cvc`) |
+| `cr-card-input` | carte bancaire : numéro groupé, puis expiration et CVC (`name`, `name-expiry`, `name-cvc`) ; `preview` ajoute une carte dessinée qui se remplit et se retourne |
 | `cr-tag-input` | étiquettes ajoutées avec Entrée ou virgule, retirées avec × (`values`, `onCrChange`) |
 
 ### Mise en page : `cr-box`
