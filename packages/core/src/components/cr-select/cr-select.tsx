@@ -1,9 +1,10 @@
 import { AttachInternals, Build, Component, Element, Event, EventEmitter, Listen, Prop, State, h } from '@stencil/core';
 import { FieldHeader, describedBy } from '../../utils/field';
 import { ListOption, readOptions, revealInList, watchOptions } from '../../utils/listbox';
-import { formValue, openingIndex, summary, toggle, visibleIndices } from '../../utils/selection';
+import { firstEnabled, formValue, summary, toggle, visibleIndices } from '../../utils/selection';
 import { selectKeyboard } from '../../utils/select-keyboard';
-import { Popup, PopupAnimation, createPopup } from '../../utils/popup';
+import { selectPopup } from '../../utils/select-popup';
+import { PopupAnimation } from '../../utils/popup';
 import { PopupPanel } from '../../utils/popup-view';
 import { ComboTrigger, SelectPanel } from '../../utils/listbox-view';
 import { handleInvalid, missingMessage } from '../../utils/validation';
@@ -40,6 +41,10 @@ export class CrSelect {
   @Prop() multiple = false;
   /** Ajoute un champ de recherche en haut de la liste. */
   @Prop() searchable = false;
+  /** Recherche côté serveur (avec searchable) : pas de filtre local, l'application remplace les options à chaque crSearch. */
+  @Prop() remote = false;
+  /** Affiche « Recherche en cours… » pendant le chargement des options (avec remote). */
+  @Prop() loading = false;
   /** Texte affiché tant qu'aucune option n'est choisie. */
   @Prop() placeholder?: string;
   /** Texte d'aide, lu par les lecteurs d'écran. */
@@ -55,6 +60,8 @@ export class CrSelect {
 
   /** Émis quand la sélection change ; detail : la valeur, ou le tableau des valeurs avec multiple. */
   @Event() crChange: EventEmitter<string | string[]>;
+  /** Émis 300 ms après la dernière frappe dans la recherche (avec remote) ; detail : le texte recherché. */
+  @Event() crSearch: EventEmitter<string>;
 
   @State() options: ListOption[] = [];
   @State() open = false;
@@ -67,17 +74,22 @@ export class CrSelect {
   search?: HTMLInputElement;
   private unwatch?: () => void;
   private initial?: string[];
+  private labels = new Map<string, string>();
   private keys = selectKeyboard(this);
-  private nextActive?: number;
-  private popup?: Popup;
+  private popup = selectPopup(this);
 
   connectedCallback() {
-    if (Build.isBrowser) this.unwatch = watchOptions(this.el, (options) => (this.options = options));
+    if (Build.isBrowser) this.unwatch = watchOptions(this.el, this.onOptions);
   }
+
+  private onOptions = (options: ListOption[]) => {
+    this.options = options;
+    if (this.remote) this.active = firstEnabled(options, this.visible());
+  };
 
   disconnectedCallback() {
     this.unwatch?.();
-    this.popup?.destroy();
+    this.popup.destroy();
   }
 
   componentWillLoad() {
@@ -85,8 +97,9 @@ export class CrSelect {
   }
 
   componentDidRender() {
-    if (!this.popup && this.listbox && this.trigger)
-      this.popup = createPopup({ popup: this.listbox, anchor: this.trigger, host: this.el, onOpen: this.onOpen, onClose: this.onClose });
+    this.popup.attach(this.listbox, this.trigger);
+    const chosen = this.selection();
+    this.options.forEach((option) => chosen.includes(option.value) && this.labels.set(option.value, option.label));
     const missing = this.required && !this.selection().length;
     this.internals.setFormValue(formValue(this.name, this.selection(), this.multiple));
     this.internals.setValidity({ valueMissing: missing }, missing ? missingMessage(this.kind()) : '', this.trigger);
@@ -118,7 +131,7 @@ export class CrSelect {
 
   private setSelection = (next: string[]) => (this.multiple ? (this.values = next) : (this.value = next[0] ?? ''));
 
-  visible = () => (this.searchable ? visibleIndices(this.options, this.query) : [...this.options.keys()]);
+  visible = () => (this.searchable && !this.remote ? visibleIndices(this.options, this.query) : [...this.options.keys()]);
 
   select(index: number) {
     const option = this.options[index];
@@ -134,38 +147,15 @@ export class CrSelect {
     if (!this.multiple) this.close(this.listbox?.querySelector<HTMLElement>(`#option-${index}`) ?? undefined);
   }
 
-  close(picked?: HTMLElement) {
-    const fromSearch = !!this.search && this.el.shadowRoot?.activeElement === this.search;
-    this.popup?.close(picked);
-    if (fromSearch) this.trigger?.focus();
-  }
-
-  private onClose = () => {
-    this.open = false;
-    this.query = '';
-    if (this.search) this.search.value = '';
-  };
-
-  private onOpen = () => {
-    this.open = true;
-    this.active = this.nextActive ?? openingIndex(this.options, this.visible(), this.selection());
-    this.nextActive = undefined;
-    this.search?.focus({ preventScroll: true });
-    this.search?.setSelectionRange(this.search.value.length, this.search.value.length);
-  };
-
-  isOpen = () => !!this.popup?.isOpen();
-
-  show(index?: number) {
-    this.nextActive = index;
-    this.active = index ?? this.active;
-    this.popup?.open();
-  }
+  close = (picked?: HTMLElement) => this.popup.close(picked);
+  isOpen = () => this.popup.isOpen();
+  show = (index?: number) => this.popup.show(index);
+  setQuery = (query: string) => this.keys.setQuery(query);
 
   render() {
     const id = 'control';
     const selection = this.selection();
-    const text = summary(this.options, selection);
+    const text = summary(this.options, selection, this.labels);
     const visible = this.visible();
     const error = this.error || (this.touched && this.required && !selection.length ? missingMessage(this.kind()) : '');
     return (
@@ -186,9 +176,9 @@ export class CrSelect {
         />
         <PopupPanel panelRef={(el) => (this.listbox = el)} part="listbox" animation={this.animation}>
           <SelectPanel
-            {...{ options: this.options, visible, selection, multiple: this.multiple, active: this.active, open: this.open, searchable: this.searchable, query: this.query }}
+            {...{ options: this.options, visible, selection, multiple: this.multiple, active: this.active, open: this.open, searchable: this.searchable, query: this.query, loading: this.loading }}
             searchRef={(el) => (this.search = el)}
-            onQuery={this.keys.onQuery}
+            onQuery={this.setQuery}
             onKeyDown={this.keys.onKeyDown}
             onHover={(index) => (this.active = index)}
             onPick={(index) => this.select(index)}

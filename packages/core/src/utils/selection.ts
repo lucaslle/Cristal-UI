@@ -25,11 +25,11 @@ export const formValue = (name: string | undefined, values: string[], multiple: 
   return data;
 };
 
-export const summary = (options: ListOption[], values: string[]) =>
-  options
-    .filter((option) => values.includes(option.value))
-    .map((option) => option.label)
-    .join(', ');
+export const summary = (options: ListOption[], values: string[], labels: Map<string, string>) => {
+  const shown = options.filter((option) => values.includes(option.value));
+  const missing = values.filter((value) => !shown.some((option) => option.value === value));
+  return [...shown.map((option) => option.label), ...missing.map((value) => labels.get(value)).filter(Boolean)].join(', ');
+};
 
 export type KeyAction = 'move' | 'pick' | 'tab' | 'escape' | 'open' | 'type';
 

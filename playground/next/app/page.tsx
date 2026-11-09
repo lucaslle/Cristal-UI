@@ -3,6 +3,7 @@ import { CrButton, CrCard, CrCheckbox, CrInput, CrSelect } from '@cristal/react/
 import { FormDemo } from './form-demo';
 import { MenuDemo } from './menu-demo';
 import { SelectDemo } from './select-demo';
+import { RemoteSelectDemo } from './remote-select-demo';
 import { OverlayDemo } from './overlay-demo';
 
 const row = { display: 'flex', gap: 'var(--cr-spacing-sm)', alignItems: 'center', marginBottom: 'var(--cr-spacing-lg)' };
@@ -67,6 +68,9 @@ export default function Page() {
 
       <h2>Listes avancées</h2>
       <SelectDemo />
+
+      <h2>Recherche côté serveur</h2>
+      <RemoteSelectDemo />
 
       <h2>Menus</h2>
       <MenuDemo />

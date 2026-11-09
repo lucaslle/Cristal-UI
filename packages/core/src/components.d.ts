@@ -240,6 +240,11 @@ export namespace Components {
          */
         "label": string;
         /**
+          * Affiche « Recherche en cours… » pendant le chargement des options (avec remote).
+          * @default false
+         */
+        "loading": boolean;
+        /**
           * Permet de choisir plusieurs options.
           * @default false
          */
@@ -252,6 +257,11 @@ export namespace Components {
           * Texte affiché tant qu'aucune option n'est choisie.
          */
         "placeholder"?: string;
+        /**
+          * Recherche côté serveur (avec searchable) : pas de filtre local, l'application remplace les options à chaque crSearch.
+          * @default false
+         */
+        "remote": boolean;
         /**
           * Rend le choix obligatoire.
           * @default false
@@ -420,6 +430,7 @@ declare global {
     };
     interface HTMLCrSelectElementEventMap {
         "crChange": string | string[];
+        "crSearch": string;
     }
     /**
      * Liste déroulante. Les options sont des éléments option enfants.
@@ -724,6 +735,11 @@ declare namespace LocalJSX {
          */
         "label": string;
         /**
+          * Affiche « Recherche en cours… » pendant le chargement des options (avec remote).
+          * @default false
+         */
+        "loading"?: boolean;
+        /**
           * Permet de choisir plusieurs options.
           * @default false
          */
@@ -737,9 +753,18 @@ declare namespace LocalJSX {
          */
         "onCrChange"?: (event: CrSelectCustomEvent<string | string[]>) => void;
         /**
+          * Émis 300 ms après la dernière frappe dans la recherche (avec remote) ; detail : le texte recherché.
+         */
+        "onCrSearch"?: (event: CrSelectCustomEvent<string>) => void;
+        /**
           * Texte affiché tant qu'aucune option n'est choisie.
          */
         "placeholder"?: string;
+        /**
+          * Recherche côté serveur (avec searchable) : pas de filtre local, l'application remplace les options à chaque crSearch.
+          * @default false
+         */
+        "remote"?: boolean;
         /**
           * Rend le choix obligatoire.
           * @default false
@@ -816,6 +841,8 @@ declare namespace LocalJSX {
         "value": string;
         "multiple": boolean;
         "searchable": boolean;
+        "remote": boolean;
+        "loading": boolean;
         "placeholder": string;
         "hint": string;
         "error": string;
