@@ -1,0 +1,73 @@
+---
+title: Bouton icône
+description: Bouton réduit à une icône, nommé par son libellé et expliqué par une infobulle. Balise cr-icon-button, composant React CrIconButton.
+---
+
+import IconButtonVariants from '@/demos/icon-button-variants';
+import IconButtonSizes from '@/demos/icon-button-sizes';
+import IconButtonToggle from '@/demos/icon-button-toggle';
+import IconButtonBadge from '@/demos/icon-button-badge';
+import IconButtonTooltip from '@/demos/icon-button-tooltip';
+
+## Variantes
+
+`label` est obligatoire : il donne son nom au bouton pour les lecteurs d'écran et s'affiche dans une infobulle au survol et au focus clavier. Par défaut, `ghost` (sans fond) convient aux barres d'outils ; `secondary`, `outline` et `primary` reprennent la hiérarchie des [boutons](/docs/composants/bouton). `shape="round"` le rend rond.
+
+<Preview>
+  <IconButtonVariants />
+</Preview>
+
+<include>../../../demos/icon-button-variants.tsx</include>
+
+## Tailles
+
+Carré de 30, 36, 40 ou 48px (`xs`, `s`, `m`, `l`), avec une icône de 20px en `xs` et de 24px sinon.
+
+<Preview>
+  <IconButtonSizes />
+</Preview>
+
+<include>../../../demos/icon-button-sizes.tsx</include>
+
+## Bascule
+
+Avec `toggle`, chaque clic inverse `pressed` : le bouton est annoncé « enfoncé » ou non, se remplit quand il est actif et rebondit légèrement. `onCrToggle` donne le nouvel état.
+
+<Preview>
+  <IconButtonToggle />
+</Preview>
+
+<include>../../../demos/icon-button-toggle.tsx</include>
+
+## Pastille et chargement
+
+`badge` affiche un nombre ou un court texte, ajouté au nom lu : « Notifications (3) ». La pastille rebondit quand sa valeur change. `loading` remplace l'icône par l'indicateur et bloque les clics.
+
+<Preview>
+  <IconButtonBadge />
+</Preview>
+
+<include>../../../demos/icon-button-badge.tsx</include>
+
+## Infobulle
+
+`tooltipPlacement` choisit le côté : `top` (par défaut), `bottom`, `start` ou `end`. Échap la masque ; `tooltip={false}` la retire.
+
+<Preview>
+  <IconButtonTooltip />
+</Preview>
+
+<include>../../../demos/icon-button-tooltip.tsx</include>
+
+## Accessibilité
+
+- Bouton natif nommé par `label` : l'infobulle est un doublon visuel, ignoré par les lecteurs d'écran.
+- L'infobulle s'ouvre au focus clavier tout de suite, au survol après 0,3 s ; on peut la survoler sans qu'elle disparaisse, et Échap la ferme (critère 1.4.13).
+- Pas d'infobulle après un simple appui sur écran tactile.
+- Bascule annoncée avec `aria-pressed` ; l'état actif change le remplissage, pas seulement la teinte.
+- Animations désactivées avec `prefers-reduced-motion`, et jamais au chargement.
+- L'icône est décorative : ajoutez-lui `aria-hidden="true"`.
+
+## API
+
+<ApiReference tag="cr-icon-button" />

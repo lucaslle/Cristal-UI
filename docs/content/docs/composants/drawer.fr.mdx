@@ -1,0 +1,24 @@
+---
+title: Drawer
+description: Panneau latéral pour des filtres, des détails ou un formulaire. Balise cr-drawer, composant React CrDrawer.
+---
+
+import DrawerFilters from '@/demos/drawer-filters';
+
+## Exemple
+
+Même fonctionnement que la [modale](/docs/composants/modale), mais le panneau occupe toute la hauteur, sur le bord droit (`placement="end"`, par défaut) ou gauche (`placement="start"`). Sa largeur se règle avec la variable CSS `--cr-drawer-width` (400px par défaut, jamais plus large que l'écran).
+
+<Preview>
+  <DrawerFilters />
+</Preview>
+
+<include>../../../demos/drawer-filters.tsx</include>
+
+## Accessibilité
+
+Mêmes garanties que la modale : focus piégé puis restauré, Échap, page inerte et défilement bloqué, titre comme nom du panneau.
+
+## API
+
+<ApiReference tag="cr-drawer" />

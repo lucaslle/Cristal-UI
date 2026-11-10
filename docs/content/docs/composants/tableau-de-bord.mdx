@@ -1,71 +1,71 @@
 ---
-title: Tableau de bord
-description: Grille de widgets que chaque utilisateur déplace et redimensionne. Balises cr-dashboard et cr-widget, composants React CrDashboard et CrWidget.
+title: Dashboard
+description: A grid of widgets that each user moves and resizes. cr-dashboard and cr-widget tags, CrDashboard and CrWidget React components.
 ---
 
-import DashboardBasic from '@/demos/dashboard-basic';
+import DashboardBasic from '@/demos/en/dashboard-basic';
 
-## Exemple
+## Example
 
-Chaque `CrWidget` a un titre (`label`), une position (`x`, `y`, en cases à partir de 0) et une taille (`w` colonnes, `h` lignes). L'utilisateur le déplace par sa poignée ⠿, ou en maintenant le clic n'importe où sur la carte, et change sa taille en tirant son coin : la grille apparaît, l'emplacement visé est dessiné en pointillés, les autres widgets s'écartent pendant le déplacement puis tout se tasse vers le haut.
+Each `CrWidget` has a title (`label`), a position (`x`, `y`, in cells starting from 0) and a size (`w` columns, `h` rows). The user moves it by its ⠿ handle, or by holding the pointer down anywhere on the card, and resizes it by dragging its corner: the grid appears, the target slot is drawn with a dashed outline, the other widgets move aside during the drag, then everything packs upwards.
 
 <Preview column>
   <DashboardBasic />
 </Preview>
 
-<include>../../../demos/dashboard-basic.tsx</include>
+<include>../../../demos/en/dashboard-basic.tsx</include>
 
-## Attraper une carte
+## Grabbing a card
 
-- Par la poignée ⠿ : le déplacement commence tout de suite.
-- N'importe où sur la carte : maintenez le clic un instant (300 ms) sans bouger, la carte se soulève, puis déplacez-la. Un clic suivi d'un mouvement rapide sélectionne du texte comme d'habitude, et maintenir le clic sur un bouton, une case à cocher, un lien ou un champ ne soulève pas la carte.
-- Au doigt, sur écran tactile, seule la poignée déplace la carte : glisser sur la carte fait défiler la page.
+- By the ⠿ handle: dragging starts immediately.
+- Anywhere on the card: hold the pointer down for a moment (300 ms) without moving, the card lifts, then move it. A click followed by a quick movement selects text as usual, and holding down on a button, a checkbox, a link or a field does not lift the card.
+- With a finger, on a touch screen, only the handle moves the card: swiping on the card scrolls the page.
 
-## Grille
+## Grid
 
-| Propriété de `CrDashboard` | Rôle |
+| `CrDashboard` property | Role |
 |---|---|
-| `columns` | nombre de colonnes (12 par défaut) |
-| `rowHeight` | hauteur d'une ligne en pixels (80 par défaut) |
-| `gap` | espace entre les widgets en pixels (16 par défaut) |
-| `editable` | `false` pour figer la disposition (sans poignées) |
-| `stackBelow` | largeur en pixels sous laquelle les widgets s'empilent (480 par défaut) |
-| `storageKey` | retient la disposition de l'utilisateur d'une visite à l'autre |
+| `columns` | number of columns (12 by default) |
+| `rowHeight` | height of a row in pixels (80 by default) |
+| `gap` | space between widgets in pixels (16 by default) |
+| `editable` | `false` to lock the layout (no handles) |
+| `stackBelow` | width in pixels below which widgets stack (480 by default) |
+| `storageKey` | remembers the user's layout from one visit to the next |
 
-`onCrLayoutChange` donne la disposition (`id`, `x`, `y`, `w`, `h` de chaque widget) après chaque changement, pour l'enregistrer côté serveur par exemple ; la méthode `reset()` revient à la disposition de départ.
+`onCrLayoutChange` gives the layout (`id`, `x`, `y`, `w`, `h` of each widget) after each change, to save it on the server for example; the `reset()` method goes back to the initial layout.
 
 ## Widgets
 
-- Donnez un `id` à chaque widget : c'est lui qui retrouve sa place dans la disposition enregistrée.
-- Sans `x` ni `y`, un widget prend la première place libre : pratique pour ajouter un widget depuis une liste.
-- `minW`, `minH`, `maxW` et `maxH` bornent la taille ; `removable` ajoute un bouton × qui émet `onCrRemove` (retirez alors le widget de votre liste).
-- Le slot `actions` place des boutons dans l'en-tête.
-- Quand le contenu dépasse la carte, il défile ; la zone reçoit alors le focus (Tab), puis se fait défiler avec les flèches, Page suivante et Page précédente.
+- Give each widget an `id`: it is what finds the widget's place in the saved layout.
+- Without `x` or `y`, a widget takes the first free slot: handy for adding a widget from a list.
+- `minW`, `minH`, `maxW` and `maxH` constrain the size; `removable` adds a × button that emits `onCrRemove` (then remove the widget from your list).
+- The `actions` slot places buttons in the header.
+- When the content overflows the card, it scrolls; the area then receives focus (Tab) and can be scrolled with the arrows, Page Down and Page Up.
 
-## Clavier
+## Keyboard
 
-Sur la poignée d'un widget (Tab) :
+On a widget's handle (Tab):
 
-| Touche | Action |
+| Key | Action |
 |---|---|
-| ← → ↑ ↓ | déplace le widget d'une case |
-| Maj + ← → | une colonne de moins ou de plus |
-| Maj + ↑ ↓ | une ligne de moins ou de plus |
+| ← → ↑ ↓ | moves the widget by one cell |
+| Shift + ← → | one column less or more |
+| Shift + ↑ ↓ | one row less or more |
 
-Chaque changement est annoncé : « Ventes : colonne 3, ligne 1. », « Ventes : 4 colonnes sur 3 lignes. ».
+Each change is announced: "Sales: column 3, row 1.", "Sales: 4 columns by 3 rows.".
 
-## Petit écran
+## Small screens
 
-Sous 480 pixels de large (`stackBelow` pour changer ce seuil), les widgets s'empilent sur toute la largeur, dans l'ordre de la grille, et les poignées disparaissent.
+Below 480 pixels wide (`stackBelow` to change this threshold), widgets stack at full width, in grid order, and the handles disappear.
 
 <Callout>
-  Si l'utilisateur a demandé à son système de réduire les animations, les widgets changent de place sans glisser.
+  If the user has asked their system to reduce motion, widgets change position without sliding.
 </Callout>
 
 ## API
 
 <ApiReference tag="cr-dashboard" />
 
-## API de CrWidget
+## CrWidget API
 
 <ApiReference tag="cr-widget" />

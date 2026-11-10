@@ -1,0 +1,99 @@
+---
+title: Liste déroulante
+description: Choix d'une valeur parmi plusieurs. Balise cr-select, composant React CrSelect.
+---
+
+import SelectBasic from '@/demos/select-basic';
+import SelectAnimated from '@/demos/select-animated';
+import SelectMultiple from '@/demos/select-multiple';
+import SelectSearchable from '@/demos/select-searchable';
+import SelectRemote from '@/demos/select-remote';
+
+## Exemple
+
+Les options s'écrivent comme en HTML, avec des éléments `<option>` enfants (`disabled` pour une option indisponible). Elles peuvent être ajoutées ou retirées à tout moment, par exemple depuis un `.map()` en React.
+
+<Preview column>
+  <SelectBasic />
+</Preview>
+
+<include>../../../demos/select-basic.tsx</include>
+
+## Choix multiple
+
+Avec `multiple`, chaque option affiche une case à cocher et la liste reste ouverte pendant la sélection. Les valeurs se lisent et se fixent avec `values` (un tableau), et `onCrChange` donne le tableau dans `event.detail`. Le formulaire envoie chaque valeur sous le même `name`, comme un `<select multiple>` natif : lisez-les avec `formData.getAll('languages')`.
+
+<Preview column>
+  <SelectMultiple />
+</Preview>
+
+<include>../../../demos/select-multiple.tsx</include>
+
+## Recherche
+
+Avec `searchable`, un champ de recherche apparaît en haut de la liste ouverte et filtre les options au fil de la frappe, sans tenir compte des accents ni des majuscules : « ev » trouve « Évry ». Commencer à taper sur la liste fermée l'ouvre directement avec la recherche remplie. `searchable` se combine avec `multiple`.
+
+<Preview column>
+  <SelectSearchable />
+</Preview>
+
+<include>../../../demos/select-searchable.tsx</include>
+
+## Recherche côté serveur
+
+Quand les options viennent d'une API, ajoutez `remote` à `searchable`. La liste ne filtre plus rien elle-même : elle émet `onCrSearch` avec le texte tapé (`event.detail`), 300 ms après la dernière frappe pour ne pas appeler l'API à chaque lettre, et affiche exactement les `<option>` que vous lui donnez. Pendant l'appel, `loading` affiche et annonce « Recherche en cours… ».
+
+- À la fermeture, la recherche est vidée et `onCrSearch` est émis avec un texte vide : remettez alors vos options par défaut.
+- Les options choisies gardent leur libellé dans le bouton même quand elles ne font plus partie des résultats, y compris avec `multiple`.
+- Ignorez les réponses arrivées dans le désordre : seule la dernière recherche compte (voir `latest` dans l'exemple).
+
+L'exemple interroge l'API publique des communes (geo.api.gouv.fr), par nom ou par code postal.
+
+<Preview column>
+  <SelectRemote />
+</Preview>
+
+<include>../../../demos/select-remote.tsx</include>
+
+Par défaut, sans ces propriétés, la liste reste une liste simple sans recherche.
+
+## Animations
+
+Comme le [menu](/docs/composants/menu#animations), la liste accepte une propriété `animation` : `fade` (par défaut), `anchor-pop`, `turn-over`, `card-deal`, `drum-roll`, `outline-trace` ou `tile-build`.
+
+<Preview>
+  <SelectAnimated />
+</Preview>
+
+<include>../../../demos/select-animated.tsx</include>
+
+## Clavier
+
+| Touche | Liste fermée | Liste ouverte |
+|---|---|---|
+| Flèche bas / haut | ouvre la liste | option suivante / précédente |
+| Entrée, Espace | ouvre la liste | choisit l'option et ferme |
+| Début / Fin | — | première / dernière option |
+| Lettres | ouvre et va à l'option qui commence par ces lettres | va à l'option correspondante |
+| Échap | — | ferme sans changer la valeur |
+| Entrée, Espace (avec `multiple`) | — | coche ou décoche l'option, la liste reste ouverte |
+| Tab | passe au champ suivant | choisit l'option et passe au champ suivant |
+
+## Validation
+
+Avec `required`, l'envoi du formulaire est bloqué tant qu'aucune option n'est choisie, et le message « Choisissez une option dans la liste. » s'affiche (« Choisissez au moins une option dans la liste. » avec `multiple`). La propriété `error` remplace ce message.
+
+## Accessibilité
+
+- Suit le modèle « combobox » du W3C (ARIA Authoring Practices) : le focus reste sur le champ, et l'option active est annoncée grâce à `aria-activedescendant`.
+- Le libellé, l'aide et l'erreur sont lus par les lecteurs d'écran, comme pour le champ texte.
+- La liste s'affiche au-dessus de la page : elle n'est jamais coupée par un conteneur qui défile ou par une modale, et s'ouvre vers le haut quand la place manque en bas.
+- Un clic en dehors de la liste la ferme.
+
+- Avec `multiple`, la liste est annoncée comme « à sélection multiple » (`aria-multiselectable`) et chaque option comme cochée ou non.
+- Avec `searchable`, le champ de recherche est étiqueté « Rechercher dans la liste », l'option active reste annoncée pendant la frappe, et « Aucun résultat » est lu quand rien ne correspond. Dans le champ, Espace tape un espace : on choisit avec Entrée.
+- Avec `remote`, la liste est marquée occupée (`aria-busy`) pendant `loading`, et « Recherche en cours… » est lu.
+
+## API
+
+<ApiReference tag="cr-select" />

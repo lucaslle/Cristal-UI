@@ -1,45 +1,45 @@
 ---
-title: Carte bancaire
-description: Numéro de carte groupé pendant la frappe, puis date d'expiration et cryptogramme. Balise cr-card-input, composant React CrCardInput.
+title: Payment card
+description: Card number grouped while typing, then expiry date and security code. Tag cr-card-input, React component CrCardInput.
 ---
 
-import CardInputBasic from '@/demos/card-input-basic';
-import CardInputEditor from '@/demos/card-input-editor';
+import CardInputBasic from '@/demos/en/card-input-basic';
+import CardInputEditor from '@/demos/en/card-input-editor';
 
-## Exemple
+## Example
 
-Les chiffres se groupent par quatre pendant la frappe (4-6-5 pour American Express), sans faire sauter le curseur. Dès que le numéro est complet, les champs « Expiration » (MM/AA) et « CVC » glissent depuis la droite.
+Digits are grouped by four while typing (4-6-5 for American Express), without making the cursor jump. As soon as the number is complete, the "Expiry" (MM/YY) and "CVC" fields slide in from the right.
 
-Avec `preview`, une carte dessinée au format réel se remplit en même temps : chiffres en relief qui arrivent un à un, puce et symbole sans contact, réseau reconnu dès les premiers chiffres (la carte prend alors ses couleurs : bleu nuit pour Visa, graphite pour Mastercard, bleu-vert pour American Express, sinon la couleur du thème), date d'expiration, et la carte se retourne sur la bande magnétique et le cryptogramme quand le focus passe dessus.
+With `preview`, a card drawn at real size fills in at the same time: embossed digits arriving one by one, chip and contactless symbol, network recognized from the first digits (the card then takes its colors: midnight blue for Visa, graphite for Mastercard, teal for American Express, otherwise the theme color), expiry date, and the card flips to the magnetic stripe and security code when focus moves there.
 
-Avec `holder`, un champ « Titulaire » est ajouté (`autocomplete="cc-name"`, envoyé sous `name-holder`) et le nom s'inscrit sur la carte.
+With `holder`, a "Cardholder" field is added (`autocomplete="cc-name"`, submitted as `name-holder`) and the name is written on the card.
 
 <Preview column>
   <CardInputBasic />
 </Preview>
 
-<include>../../../demos/card-input-basic.tsx</include>
+<include>../../../demos/en/card-input-basic.tsx</include>
 
-## Saisie sur la carte
+## Typing on the card
 
-Avec `variant="card"`, tout s'écrit directement sur la carte : le numéro au centre, la date à côté de « Valable jusqu'à », le titulaire en bas (avec `holder`), et la carte se retourne pour saisir le cryptogramme sur le panneau de signature. Ce sont de vrais champs, chacun avec son libellé visible ; le texte blanc reste lisible sur toutes les couleurs de carte.
+With `variant="card"`, everything is typed directly on the card: the number in the center, the date next to "Valid thru", the holder at the bottom (with `holder`), and the card flips over to type the security code on the signature panel. These are real fields, each with its visible label; the white text stays readable on every card color.
 
 <Preview column>
   <CardInputEditor />
 </Preview>
 
-<include>../../../demos/card-input-editor.tsx</include>
+<include>../../../demos/en/card-input-editor.tsx</include>
 
-## Formulaire et validation
+## Form and validation
 
-- Le formulaire reçoit `name` (le numéro sans espaces), `name-expiry` et `name-cvc`, plus `name-holder` avec `holder`. `onCrInput` donne les trois valeurs à chaque frappe.
-- Le numéro est vérifié avec la clé de Luhn, qui repère la plupart des fautes de frappe ; la date ne doit pas être passée ; le cryptogramme a 3 ou 4 chiffres. Le message d'erreur s'affiche sous le libellé, et seul le champ concerné est bordé de rouge.
+- The form receives `name` (the number without spaces), `name-expiry` and `name-cvc`, plus `name-holder` with `holder`. `onCrInput` gives the three values on every keystroke.
+- The number is checked with the Luhn checksum, which catches most typos; the date must not be in the past; the security code has 3 or 4 digits. The error message is shown below the label, and only the affected field gets a red border.
 
-## Accessibilité
+## Accessibility
 
-- Chaque champ a son libellé visible et l'indication de remplissage automatique du navigateur (`cc-number`, `cc-exp`, `cc-csc`, `cc-name`) ; le clavier numérique s'ouvre sur mobile.
-- Le focus ne saute jamais tout seul d'un champ à l'autre.
-- La carte dessinée reprend ce qui est déjà saisi : elle est masquée aux lecteurs d'écran (`aria-hidden`). Avec le mouvement réduit, elle se retourne sans animation.
+- Each field has its visible label and the browser autofill hint (`cc-number`, `cc-exp`, `cc-csc`, `cc-name`); the numeric keyboard opens on mobile.
+- Focus never jumps from one field to another on its own.
+- The drawn card repeats what is already typed: it is hidden from screen readers (`aria-hidden`). With reduced motion, it flips without animation.
 
 ## API
 

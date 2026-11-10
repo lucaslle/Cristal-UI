@@ -1,28 +1,28 @@
 ---
-title: Modale
-description: Fenêtre qui interrompt la page pour une décision ou une saisie courte. Balise cr-dialog, composant React CrDialog.
+title: Dialog
+description: A window that interrupts the page for a decision or a short input. cr-dialog tag, CrDialog React component.
 ---
 
-import DialogConfirm from '@/demos/dialog-confirm';
+import DialogConfirm from '@/demos/en/dialog-confirm';
 
-## Exemple
+## Example
 
-Le contenu va dans le slot par défaut, les boutons d'action dans `slot="footer"`. Pilotez l'ouverture avec `open`, et remettez votre état à `false` dans `onCrClose`.
+The content goes in the default slot, the action buttons in `slot="footer"`. Control opening with `open`, and set your state back to `false` in `onCrClose`.
 
 <Preview>
   <DialogConfirm />
 </Preview>
 
-<include>../../../demos/dialog-confirm.tsx</include>
+<include>../../../demos/en/dialog-confirm.tsx</include>
 
-## Accessibilité
+## Accessibility
 
-Cristal utilise l'élément natif `<dialog>` ouvert en mode modal :
+Cristal uses the native `<dialog>` element opened in modal mode:
 
-- le **focus** entre dans la fenêtre à l'ouverture, **reste piégé** à l'intérieur, et **revient** au bouton d'ouverture à la fermeture ;
-- **Échap** ferme la fenêtre ;
-- le reste de la page devient **inerte** (ni cliquable, ni lisible par les lecteurs d'écran) et ne défile plus ;
-- le titre (`label`) sert de nom à la fenêtre ; le bouton de fermeture est étiqueté « Close », ou « Fermer » sur une page en français (modifiable avec `closeLabel`).
+- **focus** moves into the window when it opens, **stays trapped** inside, and **returns** to the opening button when it closes;
+- **Escape** closes the window;
+- the rest of the page becomes **inert** (neither clickable nor readable by screen readers) and no longer scrolls;
+- the title (`label`) is used as the window's name; the close button is labelled "Close", or "Fermer" on a French page (customizable with `closeLabel`).
 
 ## API
 

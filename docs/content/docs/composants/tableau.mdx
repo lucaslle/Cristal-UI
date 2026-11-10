@@ -1,95 +1,95 @@
 ---
-title: Tableau
-description: Tableau dont chaque utilisateur règle les colonnes. Balise cr-table, composant React CrTable.
+title: Table
+description: A table whose columns each user can arrange. cr-table tag, CrTable React component.
 ---
 
-import TableOrders from '@/demos/table-orders';
+import TableOrders from '@/demos/en/table-orders';
 
-## Exemple
+## Example
 
-Chaque utilisateur règle le tableau à son goût : glissez un en-tête pour déplacer la colonne, tirez le bord droit d'un en-tête pour changer sa largeur (double-clic pour l'ajuster au contenu), choisissez les colonnes affichées dans « Colonnes » et la hauteur des lignes avec « Confortable », « Normale » ou « Compacte ». « Réinitialiser » revient à la présentation de départ.
+Each user arranges the table to their liking: drag a header to move the column, drag the right edge of a header to change its width (double-click to fit it to the content), choose the displayed columns in "Columns" and the row height with "Comfortable", "Normal" or "Compact". "Reset" goes back to the initial layout.
 
 <Preview column>
   <TableOrders />
 </Preview>
 
-<include>../../../demos/table-orders.tsx</include>
+<include>../../../demos/en/table-orders.tsx</include>
 
 ## Styles
 
-La propriété `variant` change l'allure du tableau ; choisissez-en un dans l'exemple ci-dessus :
+The `variant` property changes the look of the table; pick one in the example above:
 
-| Valeur | Allure |
+| Value | Look |
 |---|---|
-| `default` | en-tête teinté, traits fins entre les lignes, légère ombre (par défaut) |
-| `striped` | lignes alternées, sans traits |
-| `cards` | chaque ligne est une carte posée sur un fond teinté, bordée de violet au survol |
-| `minimal` | sans cadre ni fond d'en-tête, un trait marqué sous les titres |
-| `grid` | toutes les cases bordées, façon tableur ; la case survolée est encadrée |
+| `default` | tinted header, thin lines between rows, light shadow (default) |
+| `striped` | alternating rows, no lines |
+| `cards` | each row is a card laid on a tinted background, with a purple border on hover |
+| `minimal` | no frame or header background, a bold line under the titles |
+| `grid` | every cell has a border, spreadsheet-style; the hovered cell is outlined |
 
-Les en-têtes restent collés en haut quand le tableau défile : fixez sa hauteur avec la variable CSS `--cr-table-max-height` (par exemple `400px`).
+Headers stay stuck at the top when the table scrolls: set its height with the `--cr-table-max-height` CSS variable (for example `400px`).
 
-## Pastilles de statut
+## Status badges
 
-Avec `badges`, une colonne affiche certaines valeurs en pastilles colorées : `{ Payée: 'success', 'En attente': 'warning' }`. Tons disponibles : `primary`, `success`, `warning`, `danger`, `neutral`. Le texte reste lisible (contraste d'au moins 4,5:1) et la couleur n'est jamais la seule information : la valeur est toujours écrite.
+With `badges`, a column displays some values as colored badges: `{ Paid: 'success', Pending: 'warning' }`. Available tones: `primary`, `success`, `warning`, `danger`, `neutral`. The text stays readable (contrast of at least 4.5:1) and color is never the only information: the value is always written out.
 
-## Colonnes et lignes
+## Columns and rows
 
-`columns` décrit les colonnes, dans leur ordre de départ :
+`columns` describes the columns, in their initial order:
 
-| Champ | Description |
+| Field | Description |
 |---|---|
-| `key` | clé de la valeur dans chaque ligne (obligatoire) |
-| `label` | titre de la colonne (obligatoire) |
-| `width` | largeur en pixels, 160 par défaut (de 64 à 640) |
-| `align` | `end` pour aligner à droite, par exemple les montants |
-| `pinned` | colonne fixée à gauche, qui reste visible quand le tableau défile |
-| `hidden` | colonne masquée au départ |
-| `badges` | valeurs affichées en pastilles, avec leur ton |
+| `key` | key of the value in each row (required) |
+| `label` | column title (required) |
+| `width` | width in pixels, 160 by default (from 64 to 640) |
+| `align` | `end` to right-align, for example amounts |
+| `pinned` | column pinned to the left, which stays visible when the table scrolls |
+| `hidden` | column hidden initially |
+| `badges` | values displayed as badges, with their tone |
 
-`rows` est un tableau d'objets, avec une valeur par `key`. Les valeurs sont affichées comme du texte : formatez les montants et les dates avant de les passer.
+`rows` is an array of objects, with one value per `key`. Values are displayed as text: format amounts and dates before passing them.
 
-## Grands volumes
+## Large datasets
 
-Le tableau affiche d'abord 100 lignes, puis 100 de plus chaque fois que sa fin approche de l'écran pendant le défilement : des milliers de lignes s'affichent sans figer la page. Le total reste annoncé (`aria-rowcount`) et une ligne sous le tableau indique « 100 lignes sur 3 685 : la suite s'affiche en défilant. ». Quand `rows` change (un filtre, une autre période), l'affichage repart des 100 premières.
+The table first renders 100 rows, then 100 more each time its end gets close to the screen while scrolling: thousands of rows display without freezing the page. The total is still announced (`aria-rowcount`) and a line below the table reads "100 of 3,685 rows: more appear as you scroll.". When `rows` changes (a filter, another period), the display starts again from the first 100.
 
-## Retenir les réglages
+## Remembering settings
 
-Avec `storageKey`, les réglages (ordre, largeurs, colonnes fixées et masquées, densité) sont enregistrés dans le navigateur et retrouvés à la visite suivante. `onCrLayoutChange` les donne aussi dans `event.detail` à chaque changement, pour les enregistrer côté serveur par exemple.
+With `storageKey`, the settings (order, widths, pinned and hidden columns, density) are saved in the browser and restored on the next visit. `onCrLayoutChange` also gives them in `event.detail` on every change, to save them on the server for example.
 
-## Clavier
+## Keyboard
 
-Placez le focus sur un en-tête avec Tab :
+Move focus to a header with Tab:
 
-| Touche | Action |
+| Key | Action |
 |---|---|
-| ← → | en-tête voisin |
-| Début / Fin | premier / dernier en-tête |
-| Alt + ← → | déplace la colonne |
-| Maj + ← → | réduit ou élargit la colonne de 16 pixels |
-| Entrée | ajuste la largeur au contenu |
-| F | fixe la colonne à gauche, ou la libère |
-| M | masque la colonne |
+| ← → | adjacent header |
+| Home / End | first / last header |
+| Alt + ← → | moves the column |
+| Shift + ← → | narrows or widens the column by 16 pixels |
+| Enter | fits the width to the content |
+| F | pins the column to the left, or unpins it |
+| M | hides the column |
 
-Le pied du tableau rappelle ces raccourcis et résume la présentation : « 6 colonnes sur 7 · 1 fixée · lignes normales ».
+The table footer recalls these shortcuts and summarizes the layout: "6 of 7 columns · 1 pinned · normal rows".
 
 ## Animations
 
-- La colonne attrapée vole au-dessus des autres, et un trait violet montre où elle sera posée.
-- Après un déplacement, chaque colonne glisse de son ancienne place à la nouvelle.
-- Une ombre apparaît sous les colonnes fixées dès que le tableau défile.
+- The grabbed column floats above the others, and a purple line shows where it will be dropped.
+- After a move, each column slides from its old position to the new one.
+- A shadow appears under pinned columns as soon as the table scrolls.
 
 <Callout>
-  Si l'utilisateur a demandé à son système de réduire les animations, les colonnes changent de place sans glisser.
+  If the user has asked their system to reduce motion, columns change position without sliding.
 </Callout>
 
-## Accessibilité
+## Accessibility
 
-- C'est un vrai tableau (`table`, `th scope="col"`), nommé par son titre.
-- Chaque réglage à la souris a son équivalent au clavier, décrit sur chaque en-tête.
-- Chaque action est annoncée : « Statut déplacée en position 3 sur 7. », « Produit fixée à gauche. », « Région masquée : 6 colonnes sur 7. ».
-- Une colonne fixée est annoncée « fixée » ; au moins une colonne reste toujours affichée.
-- Avec beaucoup de lignes, le nombre total est annoncé même si seules les premières sont affichées.
+- It is a real table (`table`, `th scope="col"`), named by its title.
+- Every mouse setting has a keyboard equivalent, described on each header.
+- Every action is announced: "Status moved to position 3 of 7.", "Product pinned to the left.", "Region hidden: 6 of 7 columns.".
+- A pinned column is announced as "pinned"; at least one column always stays visible.
+- With many rows, the total number is announced even if only the first ones are displayed.
 
 ## API
 

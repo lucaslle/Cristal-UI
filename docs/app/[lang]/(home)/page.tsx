@@ -3,13 +3,14 @@ import { Pledge } from '@/components/home/promise';
 import { Showcase } from '@/components/home/showcase';
 import { ThemePlay } from '@/components/home/theme-play';
 
-export default function HomePage() {
+export default async function HomePage({ params }: PageProps<'/[lang]'>) {
+  const { lang } = await params;
   return (
     <main className="flex flex-1 flex-col">
-      <Hero />
-      <Showcase />
-      <ThemePlay />
-      <Pledge />
+      <Hero lang={lang} />
+      <Showcase lang={lang} />
+      <ThemePlay lang={lang} />
+      <Pledge lang={lang} />
     </main>
   );
 }

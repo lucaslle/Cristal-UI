@@ -1,25 +1,25 @@
 ---
-title: Code à usage unique
-description: Code reçu par SMS ou e-mail, une case par chiffre. Balise cr-otp, composant React CrOtp.
+title: One-time code
+description: A code received by SMS or email, one box per digit. Tag cr-otp, React component CrOtp.
 ---
 
-import OtpBasic from '@/demos/otp-basic';
+import OtpBasic from '@/demos/en/otp-basic';
 
-## Exemple
+## Example
 
-Les cases se remplissent une à une pendant la frappe ; quand le code est complet, elles passent au vert l'une après l'autre, en vague, et `onCrComplete` donne le code dans `event.detail`. `length` change le nombre de chiffres (6 par défaut).
+The boxes fill one by one while typing; when the code is complete, they turn green one after another, in a wave, and `onCrComplete` gives the code in `event.detail`. `length` changes the number of digits (6 by default).
 
 <Preview column>
   <OtpBasic />
 </Preview>
 
-<include>../../../demos/otp-basic.tsx</include>
+<include>../../../demos/en/otp-basic.tsx</include>
 
-## Accessibilité
+## Accessibility
 
-- Un seul vrai champ, invisible et posé sur les cases : un seul libellé pour les lecteurs d'écran, et le collage (« 123 456 ») comme le remplissage automatique du code reçu par SMS (`autocomplete="one-time-code"`) fonctionnent.
-- Seuls les chiffres sont gardés ; le clavier numérique s'ouvre sur mobile.
-- Un code incomplet bloque l'envoi du formulaire : « Saisissez les 6 chiffres du code. ».
+- A single real field, invisible and laid over the boxes: one label for screen readers, and both pasting ("123 456") and autofill of the code received by SMS (`autocomplete="one-time-code"`) work.
+- Only digits are kept; the numeric keyboard opens on mobile.
+- An incomplete code blocks form submission: "Enter the 6 digits of the code.".
 
 ## API
 

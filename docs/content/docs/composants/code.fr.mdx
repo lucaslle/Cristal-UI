@@ -1,0 +1,26 @@
+---
+title: Code à usage unique
+description: Code reçu par SMS ou e-mail, une case par chiffre. Balise cr-otp, composant React CrOtp.
+---
+
+import OtpBasic from '@/demos/otp-basic';
+
+## Exemple
+
+Les cases se remplissent une à une pendant la frappe ; quand le code est complet, elles passent au vert l'une après l'autre, en vague, et `onCrComplete` donne le code dans `event.detail`. `length` change le nombre de chiffres (6 par défaut).
+
+<Preview column>
+  <OtpBasic />
+</Preview>
+
+<include>../../../demos/otp-basic.tsx</include>
+
+## Accessibilité
+
+- Un seul vrai champ, invisible et posé sur les cases : un seul libellé pour les lecteurs d'écran, et le collage (« 123 456 ») comme le remplissage automatique du code reçu par SMS (`autocomplete="one-time-code"`) fonctionnent.
+- Seuls les chiffres sont gardés ; le clavier numérique s'ouvre sur mobile.
+- Un code incomplet bloque l'envoi du formulaire : « Saisissez les 6 chiffres du code. ».
+
+## API
+
+<ApiReference tag="cr-otp" />

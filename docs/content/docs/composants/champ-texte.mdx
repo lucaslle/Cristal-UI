@@ -1,64 +1,64 @@
 ---
-title: Champ texte
-description: Saisie de texte, e-mail, mot de passe ou nombre. Balise cr-input, composant React CrInput.
+title: Text field
+description: Text, email, password or number input. Tag cr-input, React component CrInput.
 ---
 
-import InputBasic from '@/demos/input-basic';
-import FormComplete from '@/demos/form-complete';
-import InputExtras from '@/demos/input-extras';
+import InputBasic from '@/demos/en/input-basic';
+import FormComplete from '@/demos/en/form-complete';
+import InputExtras from '@/demos/en/input-extras';
 
-## Exemples
+## Examples
 
-Le libellé est **obligatoire** et fait partie du composant. Le texte d'aide (`hint`) et le message d'erreur (`error`) sont affichés entre le libellé et le champ, et lus par les lecteurs d'écran.
+The label is **required** and is part of the component. The hint text (`hint`) and the error message (`error`) are shown between the label and the field, and read by screen readers.
 
 <Preview column>
   <InputBasic />
 </Preview>
 
-<include>../../../demos/input-basic.tsx</include>
+<include>../../../demos/en/input-basic.tsx</include>
 
-## Validation automatique
+## Automatic validation
 
-Les erreurs de saisie s'affichent toutes seules, en français, **quand on quitte le champ** après l'avoir modifié, ou **quand on tente d'envoyer** le formulaire. Elles disparaissent dès que la saisie est corrigée.
+Input errors appear on their own (in English by default, in French with `lang="fr"`) **when the user leaves the field** after changing it, or **when they try to submit** the form. They disappear as soon as the input is fixed.
 
-| Cas | Message |
+| Case | Message |
 |---|---|
-| Champ obligatoire vide | Ce champ est obligatoire. |
-| `type="email"` mal formé | Saisissez une adresse e-mail valide, par exemple nom@domaine.fr. |
-| `type="url"` mal formé | Saisissez une adresse web valide, par exemple https://exemple.fr. |
-| `type="number"` non numérique | Saisissez un nombre. |
+| Empty required field | This field is required. |
+| Malformed `type="email"` | Enter a valid email address, for example name@domain.com. |
+| Malformed `type="url"` | Enter a valid web address, for example https://example.com. |
+| Non-numeric `type="number"` | Enter a number. |
 
-À l'envoi, le focus va sur le **premier champ en erreur**, et son message est lu par les lecteurs d'écran. Pour une erreur venant du serveur (« cette adresse est déjà utilisée »), passez votre propre message avec `error` : il remplace le message automatique.
+On submit, focus moves to the **first invalid field**, and its message is read by screen readers. For an error coming from the server ("this address is already in use"), pass your own message with `error`: it replaces the automatic message.
 
-## Sécurité du mot de passe et complétion
+## Password strength and completion
 
-- Avec `strength` (pour `type="password"`), une jauge en quatre segments se remplit et change de couleur pendant la frappe ; le niveau est écrit et annoncé : « Sécurité : Bon ». La note tient compte de la longueur, des majuscules et minuscules, des chiffres et des symboles.
-- Avec `completions`, la suite de la première suggestion qui prolonge la saisie s'affiche en gris derrière le texte. Flèche droite ou un clic sur la suite l'accepte : elle se remplit, et « Complété pour vous » s'affiche. Le champ est marqué `aria-autocomplete="inline"` et la suggestion est lue avec la description du champ.
+- With `strength` (for `type="password"`), a four-segment meter fills up and changes color while typing; the level is written out and announced: "Strength: Good". The score takes into account length, upper and lower case, digits and symbols.
+- With `completions`, the rest of the first suggestion that extends the input is shown in gray behind the text. Right Arrow or a click on it accepts it: it is filled in, and "Filled in for you" is shown. The field is marked `aria-autocomplete="inline"` and the suggestion is read with the field description.
 
 <Preview column>
   <InputExtras />
 </Preview>
 
-<include>../../../demos/input-extras.tsx</include>
+<include>../../../demos/en/input-extras.tsx</include>
 
-## Dans un formulaire
+## In a form
 
-Les champs Cristal participent au `<form>` parent comme des champs natifs : leur valeur est envoyée sous leur `name`, `required` bloque l'envoi, `type="reset"` les remet à leur valeur de départ, et **Entrée** dans un champ texte envoie le formulaire.
+Cristal fields take part in the parent `<form>` like native fields: their value is submitted under their `name`, `required` blocks submission, `type="reset"` restores their initial value, and **Enter** in a text field submits the form.
 
-Essayez d'envoyer le formulaire vide, de saisir une adresse e-mail incomplète, puis de tout remplir.
+Try submitting the empty form, typing an incomplete email address, then filling everything in.
 
 <Preview column>
   <FormComplete />
 </Preview>
 
-<include>../../../demos/form-complete.tsx</include>
+<include>../../../demos/en/form-complete.tsx</include>
 
-## Accessibilité
+## Accessibility
 
-- Libellé relié au champ : un clic sur le libellé place le curseur dans le champ.
-- `hint` et `error` reliés par `aria-describedby` ; `error` ajoute `aria-invalid="true"` et une bordure rouge (l'erreur ne repose pas que sur la couleur : le message est affiché).
-- L'astérisque des champs obligatoires est masqué aux lecteurs d'écran, qui annoncent déjà « obligatoire ».
-- Utilisez `autocomplete` (`email`, `name`, `tel`…) pour aider le remplissage automatique.
+- Label linked to the field: clicking the label puts the cursor in the field.
+- `hint` and `error` linked with `aria-describedby`; `error` adds `aria-invalid="true"` and a red border (the error does not rely on color alone: the message is displayed).
+- The asterisk on required fields is hidden from screen readers, which already announce "required".
+- Use `autocomplete` (`email`, `name`, `tel`…) to help autofill.
 
 ## API
 

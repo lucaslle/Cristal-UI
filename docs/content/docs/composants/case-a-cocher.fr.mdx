@@ -1,0 +1,28 @@
+---
+title: Case à cocher
+description: Choix oui/non ou sélection multiple. Balise cr-checkbox, composant React CrCheckbox.
+---
+
+import CheckboxBasic from '@/demos/checkbox-basic';
+
+## Exemples
+
+<Preview column>
+  <CheckboxBasic />
+</Preview>
+
+<include>../../../demos/checkbox-basic.tsx</include>
+
+## Dans un formulaire
+
+Une case cochée envoie sa `value` (`on` par défaut) sous son `name` ; une case décochée n'envoie rien, comme une case native. Voir l'exemple complet sur la page [Champ texte](/docs/composants/champ-texte#dans-un-formulaire).
+
+## Accessibilité
+
+- Case native sous le capot : se coche avec Espace, annoncée « case à cocher, cochée / non cochée ».
+- Le libellé est cliquable et agrandit la zone de clic.
+- `indeterminate` est annoncé « partiellement coché ».
+
+## API
+
+<ApiReference tag="cr-checkbox" />

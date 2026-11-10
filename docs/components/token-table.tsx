@@ -4,13 +4,13 @@ import { join } from 'node:path';
 const css = readFileSync(join(process.cwd(), 'node_modules/@cristal/tokens/build/tokens.css'), 'utf8');
 const tokens = [...css.matchAll(/(--cr-[\w-]+):\s*([^;]+);/g)].map(([, name, value]) => ({ name, value }));
 
-export function TokenTable({ prefix }: { prefix: string }) {
+export function TokenTable({ prefix, lang = 'en' }: { prefix: string; lang?: string }) {
   return (
     <table>
       <thead>
         <tr>
           <th>Variable</th>
-          <th>Valeur</th>
+          <th>{lang === 'fr' ? 'Valeur' : 'Value'}</th>
         </tr>
       </thead>
       <tbody>

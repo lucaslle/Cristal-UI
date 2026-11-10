@@ -1,7 +1,9 @@
 'use client';
 import SearchDialog from '@/components/search';
 import { RootProvider } from 'fumadocs-ui/provider/next';
+import { defineI18nUI } from 'fumadocs-ui/i18n';
 import { type ReactNode } from 'react';
+import { i18n } from '@/lib/i18n';
 
 const translations = {
   'Back to Home(404 page)': "Retour à l'accueil",
@@ -38,9 +40,14 @@ const translations = {
   'Toggle Theme(theme switcher)(aria-label)': 'Changer de thème',
 };
 
-export function Provider({ children }: { children: ReactNode }) {
+const i18nUI = defineI18nUI(i18n, {
+  en: { displayName: 'English' },
+  fr: { displayName: 'Français', ...translations },
+});
+
+export function Provider({ lang, children }: { lang: string; children: ReactNode }) {
   return (
-    <RootProvider search={{ SearchDialog }} i18n={{ locale: 'fr', translations }}>
+    <RootProvider search={{ SearchDialog }} i18n={i18nUI.provider(lang)}>
       {children}
     </RootProvider>
   );

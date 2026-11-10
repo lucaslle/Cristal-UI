@@ -1,0 +1,29 @@
+{
+  "title": "Composants",
+  "pages": [
+    "---Actions---",
+    "bouton",
+    "bouton-icone",
+    "menu",
+    "---Formulaires---",
+    "champ-texte",
+    "zone-de-texte",
+    "liste-deroulante",
+    "case-a-cocher",
+    "etiquettes",
+    "code",
+    "carte-bancaire",
+    "---Navigation et progression---",
+    "etapes",
+    "accordeon",
+    "---Données---",
+    "tableau",
+    "tableau-de-bord",
+    "---Fenêtres---",
+    "modale",
+    "drawer",
+    "---Mise en page---",
+    "boite",
+    "carte"
+  ]
+}

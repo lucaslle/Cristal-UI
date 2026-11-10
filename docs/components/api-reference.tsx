@@ -28,19 +28,26 @@ interface ComponentDoc {
 const components = data.components as unknown as ComponentDoc[];
 const reactEvent = (event: string) => `on${event[0].toUpperCase()}${event.slice(1)}`;
 
-export function ApiReference({ tag }: { tag: string }) {
+const labels = {
+  en: { props: 'Properties', prop: 'Property', default: 'Default', events: 'Events', fallback: 'default', parts: 'CSS parts', partsLead: 'To style it from outside:', name: 'name' },
+  fr: { props: 'Propriétés', prop: 'Propriété', default: 'Défaut', events: 'Événements', fallback: 'par défaut', parts: 'Parts CSS', partsLead: "Pour personnaliser le style depuis l'extérieur :", name: 'nom' },
+};
+
+// shortcut: les descriptions viennent des commentaires du code (en français) ; seuls les intitulés sont traduits.
+export function ApiReference({ tag, lang = 'en' }: { tag: string; lang?: string }) {
+  const l = labels[lang === 'fr' ? 'fr' : 'en'];
   const component = components.find((item) => item.tag === tag);
   if (!component) throw new Error(`Composant inconnu : ${tag}`);
 
   return (
     <>
-      <h3>Propriétés</h3>
+      <h3>{l.props}</h3>
       <table>
         <thead>
           <tr>
-            <th>Propriété</th>
+            <th>{l.prop}</th>
             <th>Type</th>
-            <th>Défaut</th>
+            <th>{l.default}</th>
             <th>Description</th>
           </tr>
         </thead>
@@ -63,7 +70,7 @@ export function ApiReference({ tag }: { tag: string }) {
 
       {component.events.length > 0 && (
         <>
-          <h3>Événements</h3>
+          <h3>{l.events}</h3>
           <table>
             <thead>
               <tr>
@@ -104,7 +111,7 @@ export function ApiReference({ tag }: { tag: string }) {
             <tbody>
               {component.slots.map((slot) => (
                 <tr key={slot.name}>
-                  <td>{slot.name ? <code>slot=&quot;{slot.name}&quot;</code> : 'par défaut'}</td>
+                  <td>{slot.name ? <code>slot=&quot;{slot.name}&quot;</code> : l.fallback}</td>
                   <td>{slot.docs}</td>
                 </tr>
               ))}
@@ -113,9 +120,9 @@ export function ApiReference({ tag }: { tag: string }) {
         </>
       )}
 
-      <h3>Parts CSS</h3>
+      <h3>{l.parts}</h3>
       <p>
-        Pour personnaliser le style depuis l&apos;extérieur : <code>{tag}::part(nom) {'{ … }'}</code>
+        {l.partsLead} <code>{`${tag}::part(${l.name}) { … }`}</code>
       </p>
       <table>
         <thead>

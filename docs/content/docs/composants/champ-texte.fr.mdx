@@ -1,0 +1,65 @@
+---
+title: Champ texte
+description: Saisie de texte, e-mail, mot de passe ou nombre. Balise cr-input, composant React CrInput.
+---
+
+import InputBasic from '@/demos/input-basic';
+import FormComplete from '@/demos/form-complete';
+import InputExtras from '@/demos/input-extras';
+
+## Exemples
+
+Le libellé est **obligatoire** et fait partie du composant. Le texte d'aide (`hint`) et le message d'erreur (`error`) sont affichés entre le libellé et le champ, et lus par les lecteurs d'écran.
+
+<Preview column>
+  <InputBasic />
+</Preview>
+
+<include>../../../demos/input-basic.tsx</include>
+
+## Validation automatique
+
+Les erreurs de saisie s'affichent toutes seules, en français sur une page en `lang="fr"`, **quand on quitte le champ** après l'avoir modifié, ou **quand on tente d'envoyer** le formulaire. Elles disparaissent dès que la saisie est corrigée.
+
+| Cas | Message |
+|---|---|
+| Champ obligatoire vide | Ce champ est obligatoire. |
+| `type="email"` mal formé | Saisissez une adresse e-mail valide, par exemple nom@domaine.fr. |
+| `type="url"` mal formé | Saisissez une adresse web valide, par exemple https://exemple.fr. |
+| `type="number"` non numérique | Saisissez un nombre. |
+
+À l'envoi, le focus va sur le **premier champ en erreur**, et son message est lu par les lecteurs d'écran. Pour une erreur venant du serveur (« cette adresse est déjà utilisée »), passez votre propre message avec `error` : il remplace le message automatique.
+
+## Sécurité du mot de passe et complétion
+
+- Avec `strength` (pour `type="password"`), une jauge en quatre segments se remplit et change de couleur pendant la frappe ; le niveau est écrit et annoncé : « Sécurité : Bon ». La note tient compte de la longueur, des majuscules et minuscules, des chiffres et des symboles.
+- Avec `completions`, la suite de la première suggestion qui prolonge la saisie s'affiche en gris derrière le texte. Flèche droite ou un clic sur la suite l'accepte : elle se remplit, et « Complété pour vous » s'affiche. Le champ est marqué `aria-autocomplete="inline"` et la suggestion est lue avec la description du champ.
+
+<Preview column>
+  <InputExtras />
+</Preview>
+
+<include>../../../demos/input-extras.tsx</include>
+
+## Dans un formulaire
+
+Les champs Cristal participent au `<form>` parent comme des champs natifs : leur valeur est envoyée sous leur `name`, `required` bloque l'envoi, `type="reset"` les remet à leur valeur de départ, et **Entrée** dans un champ texte envoie le formulaire.
+
+Essayez d'envoyer le formulaire vide, de saisir une adresse e-mail incomplète, puis de tout remplir.
+
+<Preview column>
+  <FormComplete />
+</Preview>
+
+<include>../../../demos/form-complete.tsx</include>
+
+## Accessibilité
+
+- Libellé relié au champ : un clic sur le libellé place le curseur dans le champ.
+- `hint` et `error` reliés par `aria-describedby` ; `error` ajoute `aria-invalid="true"` et une bordure rouge (l'erreur ne repose pas que sur la couleur : le message est affiché).
+- L'astérisque des champs obligatoires est masqué aux lecteurs d'écran, qui annoncent déjà « obligatoire ».
+- Utilisez `autocomplete` (`email`, `name`, `tel`…) pour aider le remplissage automatique.
+
+## API
+
+<ApiReference tag="cr-input" />

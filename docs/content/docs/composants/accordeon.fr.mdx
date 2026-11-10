@@ -1,0 +1,89 @@
+---
+title: Accordéon
+description: Sections qui s'ouvrent et se ferment. Balises cr-accordion et cr-accordion-item, composants React CrAccordion et CrAccordionItem.
+---
+
+import AccordionBasic from '@/demos/accordion-basic';
+import AccordionExpandAll from '@/demos/accordion-expand-all';
+import AccordionPanels from '@/demos/accordion-panels';
+import AccordionAccent from '@/demos/accordion-accent';
+import AccordionCascade from '@/demos/accordion-cascade';
+
+## Exemple
+
+Chaque section est un `CrAccordionItem` avec un `label`. Pour un parcours en plusieurs étapes, voyez plutôt le composant [Étapes](/docs/composants/etapes). Par défaut, ouvrir une section ferme les autres ; avec `multiple`, plusieurs peuvent rester ouvertes. `open` ouvre une section au départ, et `onCrToggle` signale chaque ouverture ou fermeture (`event.detail` vaut `true` à l'ouverture).
+
+<Preview column>
+  <AccordionBasic />
+</Preview>
+
+<include>../../../demos/accordion-basic.tsx</include>
+
+## Tout ouvrir
+
+Avec `toggleAll`, un bouton « Tout ouvrir » ouvre les sections l'une après l'autre, puis « Tout fermer » les referme dans l'ordre inverse. Plusieurs sections peuvent alors rester ouvertes.
+
+<Preview column>
+  <AccordionExpandAll />
+</Preview>
+
+<include>../../../demos/accordion-expand-all.tsx</include>
+
+## Panneaux côte à côte
+
+Avec `variant="panels"`, les sections sont des panneaux verticaux : celui qu'on choisit s'élargit, les autres se replient en bandes avec leur titre à la verticale. Un panneau est toujours ouvert, le premier par défaut. La hauteur se règle avec la variable CSS `--cr-accordion-height` (280px par défaut), la largeur des bandes avec `--cr-accordion-fold` (56px).
+
+<Preview column>
+  <AccordionPanels />
+</Preview>
+
+<include>../../../demos/accordion-panels.tsx</include>
+
+## Animations
+
+| Valeur de `animation` | Effet |
+|---|---|
+| `slide` | la section se déplie en douceur (par défaut) |
+| `accent-bar` | une barre en dégradé pousse le long de la section ouverte, et son numéro s'allume (avec `numbered`) |
+| `cascade` | le contenu arrive ligne par ligne ; les éléments `data-cr-count` comptent jusqu'à leur valeur et les éléments `data-cr-grow` poussent depuis le bas |
+
+<Preview column>
+  <AccordionAccent />
+</Preview>
+
+<include>../../../demos/accordion-accent.tsx</include>
+
+Avec `cascade`, `data-cr-count` donne la valeur finale (`"19.9"`) d'un élément qui ne contient que du texte : le premier nombre du texte défile de 0 jusqu'à elle, puis le texte d'origine est remis. Le slot `meta` affiche une valeur à droite du titre, ici le total ou la statistique.
+
+<Preview column>
+  <AccordionCascade />
+</Preview>
+
+<include>../../../demos/accordion-cascade.tsx</include>
+
+<Callout>
+  Si l'utilisateur a demandé à son système de réduire les animations, les sections s'ouvrent sans mouvement et le contenu s'affiche directement, nombres compris.
+</Callout>
+
+## Clavier
+
+| Touche | Action |
+|---|---|
+| Entrée, Espace | ouvre ou ferme la section |
+| Flèche bas / haut (droite / gauche) | titre de section suivant / précédent |
+| Début / Fin | premier / dernier titre |
+| Tab | passe au titre ou au contenu suivant |
+
+## Accessibilité
+
+- Suit le modèle « accordion » du W3C (ARIA Authoring Practices) : chaque titre est un bouton dans un titre de niveau 3 (`headingLevel` pour en changer), qui indique s'il est ouvert (`aria-expanded`) et pilote une région nommée par ce titre.
+- Une section fermée est retirée de l'ordre du clavier et des lecteurs d'écran.
+- Le graphique de l'exemple « cascade » porte un `role="img"` et une description : faites de même pour vos propres visuels.
+
+## API
+
+<ApiReference tag="cr-accordion" />
+
+## API de CrAccordionItem
+
+<ApiReference tag="cr-accordion-item" />
