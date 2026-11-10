@@ -4,6 +4,7 @@ import { AccordionDemo } from './accordion-demo';
 import { StepperDemo } from './stepper-demo';
 import { SearchDemo } from './search-demo';
 import { SegmentedDemo } from './segmented-demo';
+import { ToastDemo } from './toast-demo';
 import { LoadingDemo } from './loading-demo';
 import { TableDemo } from './table-demo';
 import { FieldsDemo } from './fields-demo';
@@ -108,6 +109,9 @@ export default function Page() {
 
       <h2>Contrôle segmenté</h2>
       <SegmentedDemo />
+
+      <h2>Notifications</h2>
+      <ToastDemo />
 
       <h2>Chargement</h2>
       <LoadingDemo />

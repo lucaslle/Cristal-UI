@@ -194,6 +194,18 @@ Contenu dans le slot par défaut, boutons d'action dans `slot="footer"`. L'évé
 </CrDialog>
 ```
 
+### Notification : `cr-toast`, `cr-toaster`
+
+Message temporaire : `cr-toaster` est une zone fixée en bas à droite qui empile les `cr-toast`. Un toast a `open`, `variant` (`info` par défaut, `success`, `danger` lu aussitôt) et `duration` (5000 ms par défaut, `0` pour qu'il reste) ; une barre montre le temps restant, qui s'arrête sous la souris ou le focus. Il se ferme avec le bouton Fermer, Échap ou en glissant sur le côté. Événement `onCrClose`.
+
+```tsx
+<CrToaster>
+  {toasts.map((toast) => (
+    <CrToast key={toast.id} open variant="success" onCrClose={() => remove(toast.id)}>Modifications enregistrées.</CrToast>
+  ))}
+</CrToaster>
+```
+
 ### `cr-card`
 
 Conteneur avec `slot="header"`, contenu par défaut et `slot="footer"`. L'en-tête et le pied ne sont affichés que s'ils sont fournis.

@@ -1,0 +1,128 @@
+:host {
+  --cr-toast-accent: var(--cr-color-primary-text);
+  display: block;
+  font-family: var(--cr-font-family);
+  font-size: var(--cr-font-size-m);
+  color: var(--cr-color-text);
+}
+
+:host([variant='success']) {
+  --cr-toast-accent: var(--cr-color-success);
+}
+
+:host([variant='danger']) {
+  --cr-toast-accent: var(--cr-color-danger);
+}
+
+/* Fermé, le toast garde sa zone annoncée vide, masquée mais présente pour les lecteurs d'écran. */
+.toast {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+}
+
+.toast[data-visible] {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: var(--cr-spacing-sm);
+  width: auto;
+  height: auto;
+  padding: var(--cr-spacing-lg);
+  background: var(--cr-color-surface);
+  border: 1px solid var(--cr-color-border);
+  border-left: 4px solid var(--cr-toast-accent);
+  border-radius: var(--cr-radius-l);
+  box-shadow: var(--cr-shadow-m);
+  clip-path: none;
+  touch-action: pan-y;
+  user-select: none;
+  animation: cr-toast-in 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+@keyframes cr-toast-in {
+  from {
+    opacity: 0;
+    transform: translate(var(--cr-spacing-xl), var(--cr-spacing-lg)) scale(0.96);
+  }
+}
+
+.icon {
+  flex: none;
+  color: var(--cr-toast-accent);
+}
+
+.message {
+  flex: 1;
+  min-width: 0;
+  line-height: 20px;
+}
+
+.close {
+  display: inline-grid;
+  flex: none;
+  place-items: center;
+  width: var(--cr-control-xs);
+  height: var(--cr-control-xs);
+  margin: calc(-1 * var(--cr-spacing-xs)) calc(-1 * var(--cr-spacing-xs)) 0 0;
+  padding: 0;
+  color: var(--cr-color-text-muted);
+  background: none;
+  border: 0;
+  border-radius: var(--cr-radius-m);
+  cursor: pointer;
+}
+
+.close:hover {
+  color: var(--cr-color-text);
+  background: var(--cr-color-disabled);
+}
+
+.close:focus-visible {
+  outline: 2px solid var(--cr-color-focus);
+  outline-offset: 2px;
+}
+
+/* Temps restant : la barre se vide, et s'arrête sous la souris ou le focus (WCAG 2.2.1). */
+.bar {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 3px;
+  background: var(--cr-toast-accent);
+  transform-origin: left;
+  animation: cr-toast-time linear forwards;
+}
+
+:host(:hover) .bar,
+:host(:focus-within) .bar {
+  animation-play-state: paused;
+}
+
+@keyframes cr-toast-time {
+  to {
+    transform: scaleX(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .toast[data-visible] {
+    animation-name: cr-toast-fade;
+  }
+}
+
+@keyframes cr-toast-fade {
+  from {
+    opacity: 0;
+  }
+}
+
+@media (forced-colors: active) {
+  .bar {
+    forced-color-adjust: none;
+    background: CanvasText;
+  }
+}

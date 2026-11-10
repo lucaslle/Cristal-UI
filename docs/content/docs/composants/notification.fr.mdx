@@ -1,0 +1,46 @@
+---
+title: Notification
+description: Message temporaire qui glisse en bas à droite puis se ferme seul. Balises cr-toast et cr-toaster, composants React CrToast et CrToaster.
+---
+
+import ToastBasic from '@/demos/toast-basic';
+
+## Exemple
+
+Placez une seule zone `CrToaster` dans la page (fixée en bas à droite) et ajoutez-y un `CrToast` par message : il glisse depuis le coin, une barre se vide pendant `duration` millisecondes (5000 par défaut), puis il se ferme. Retirez-le de votre liste dans `onCrClose`.
+
+| `variant` | Usage |
+|---|---|
+| `info` | information neutre (par défaut) |
+| `success` | une action a réussi |
+| `danger` | une erreur ; lue aussitôt par les lecteurs d'écran |
+
+Avec `duration={0}`, le toast reste jusqu'à ce qu'on le ferme : à préférer pour une erreur, qui doit laisser le temps de lire et d'agir. On le ferme avec le bouton Fermer, Échap, ou en le faisant glisser sur le côté.
+
+<Preview>
+  <ToastBasic />
+</Preview>
+
+<include>../../../demos/toast-basic.tsx</include>
+
+Un toast unique et toujours présent fonctionne aussi : pilotez-le avec `open`, et remettez votre état à `false` dans `onCrClose`.
+
+<Callout>
+  Si l'utilisateur a demandé à son système de réduire les animations, le toast apparaît et disparaît en fondu, sans glisser. La barre du temps restant continue de se vider, lentement et sans à-coup : elle indique combien de temps il reste pour lire.
+</Callout>
+
+## Accessibilité
+
+- Chaque toast est une zone annoncée : `role="status"` (lue quand le lecteur d'écran a fini sa phrase), ou `role="alert"` avec `variant="danger"` (lue aussitôt). La zone existe vide avant le message, pour que l'annonce ne se perde pas.
+- Le toast ne prend pas le focus : on peut continuer à travailler.
+- Le temps s'arrête tant que la souris survole le toast ou que le focus est dedans (WCAG 2.2.1) ; la barre s'arrête avec lui.
+- Le bouton Fermer est nommé « Fermer » (« Close » en anglais) ; Échap ferme le toast quand le focus est dedans. Le glissement a donc toujours une alternative au clavier et en un clic.
+- Le type n'est pas donné que par la couleur : une icône différente (i, ✓, !) l'accompagne, et le message doit le dire.
+
+## API
+
+<ApiReference tag="cr-toast" />
+
+## API CrToaster
+
+<ApiReference tag="cr-toaster" />
