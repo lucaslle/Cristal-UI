@@ -1,0 +1,38 @@
+---
+title: Radio group
+description: Pick a single option from a list, under a visible title. Tag cr-radio-group, React component CrRadioGroup.
+---
+
+import RadioGroupBasic from '@/demos/en/radio-group-basic';
+
+## Example
+
+Options are child `option` elements, as with `CrSelect`, stacked under the `label` title. When the choice changes, the dot flows from the old circle to the new one: it stretches in the direction of the choice, then shrinks back. A `disabled` option cannot be picked.
+
+Prefer radio buttons to a dropdown when there are few options (about 5 or fewer): they all stay visible. For 2 to 4 short options side by side, see the [segmented control](/docs/composants/controle-segmente).
+
+<Preview>
+  <RadioGroupBasic />
+</Preview>
+
+<include>../../../demos/en/radio-group-basic.tsx</include>
+
+## In a form
+
+The chosen value is submitted under `name`. No option is chosen by default; with `required`, submitting is blocked until one is: the message "Choose one of the options." shows under the group and focus moves to it.
+
+<Callout>
+  If the user asked their system to reduce motion, the dot appears straight in the chosen circle, without flowing.
+</Callout>
+
+## Accessibility
+
+- The group follows the W3C radio group pattern: `role="radiogroup"` named by its visible title (`aria-labelledby`), each option `role="radio"` with `aria-checked`.
+- A single Tab stop enters the group: on the chosen option, or on the first available one when none is chosen.
+- Arrow keys (down and right, up and left) move to the next or previous option and pick it, wrapping and skipping disabled options; Space picks the focused option.
+- `required` is announced (`aria-required`); the error is linked to the group with `aria-describedby` and `aria-invalid`.
+- The chosen option does not rely on colour alone: a solid dot appears in its circle.
+
+## API
+
+<ApiReference tag="cr-radio-group" />

@@ -1,0 +1,38 @@
+---
+title: Boutons radio
+description: Choix d'une seule option dans une liste, sous un titre visible. Balise cr-radio-group, composant React CrRadioGroup.
+---
+
+import RadioGroupBasic from '@/demos/radio-group-basic';
+
+## Exemple
+
+Les options sont des éléments `option` enfants, comme pour `CrSelect`, empilées sous le titre `label`. Quand on change d'option, le point coule de l'ancien cercle vers le nouveau : il s'étire dans la direction du choix, puis se resserre. Une option `disabled` ne peut pas être choisie.
+
+Préférez des boutons radio à une liste déroulante quand il y a peu d'options (jusqu'à 5 environ) : toutes restent visibles. Pour 2 à 4 options courtes côte à côte, voyez le [contrôle segmenté](/docs/composants/controle-segmente).
+
+<Preview>
+  <RadioGroupBasic />
+</Preview>
+
+<include>../../../demos/radio-group-basic.tsx</include>
+
+## Dans un formulaire
+
+La valeur choisie est envoyée sous `name`. Aucune option n'est choisie par défaut ; avec `required`, l'envoi est bloqué tant qu'aucune ne l'est : le message « Choisissez une des options. » s'affiche sous le groupe et le focus y est placé.
+
+<Callout>
+  Si l'utilisateur a demandé à son système de réduire les animations, le point apparaît directement dans le cercle choisi, sans couler.
+</Callout>
+
+## Accessibilité
+
+- Le groupe suit le modèle W3C « radio group » : `role="radiogroup"` nommé par son titre visible (`aria-labelledby`), une option `role="radio"` avec `aria-checked`.
+- Une seule tabulation entre dans le groupe : sur l'option choisie, ou sur la première disponible s'il n'y en a pas.
+- Les flèches (bas et droite, haut et gauche) passent à l'option suivante ou précédente et la choisissent, en bouclant et en sautant les options désactivées ; Espace choisit l'option qui a le focus.
+- `required` est annoncé (`aria-required`) ; l'erreur est reliée au groupe par `aria-describedby` et `aria-invalid`.
+- L'option choisie ne se distingue pas que par la couleur : un point plein apparaît dans son cercle.
+
+## API
+
+<ApiReference tag="cr-radio-group" />

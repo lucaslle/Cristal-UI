@@ -6,6 +6,7 @@ export const en = {
   checkbox: 'Check this box to continue.',
   select: 'Choose an option from the list.',
   selectMultiple: 'Choose at least one option from the list.',
+  radio: 'Choose one of the options.',
   email: 'Enter a valid email address, for example name@domain.com.',
   url: 'Enter a valid web address, for example https://example.com.',
   format: 'The format is incorrect.',

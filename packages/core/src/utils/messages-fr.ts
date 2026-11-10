@@ -8,6 +8,7 @@ export const fr: Messages = {
   checkbox: 'Cochez cette case pour continuer.',
   select: 'Choisissez une option dans la liste.',
   selectMultiple: 'Choisissez au moins une option dans la liste.',
+  radio: 'Choisissez une des options.',
   email: 'Saisissez une adresse e-mail valide, par exemple nom@domaine.fr.',
   url: 'Saisissez une adresse web valide, par exemple https://exemple.fr.',
   format: 'Le format saisi est incorrect.',

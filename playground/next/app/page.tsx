@@ -6,6 +6,7 @@ import { SearchDemo } from './search-demo';
 import { SegmentedDemo } from './segmented-demo';
 import { ToastDemo } from './toast-demo';
 import { SwitchDemo } from './switch-demo';
+import { RadioGroupDemo } from './radio-group-demo';
 import { LoadingDemo } from './loading-demo';
 import { TableDemo } from './table-demo';
 import { FieldsDemo } from './fields-demo';
@@ -113,6 +114,9 @@ export default function Page() {
 
       <h2>Interrupteurs</h2>
       <SwitchDemo />
+
+      <h2>Boutons radio</h2>
+      <RadioGroupDemo />
 
       <h2>Notifications</h2>
       <ToastDemo />

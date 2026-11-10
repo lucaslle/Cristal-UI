@@ -1,0 +1,118 @@
+:host {
+  --cr-radio-flow: 0.3s cubic-bezier(0.3, 0.8, 0.4, 1);
+}
+
+.group {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--cr-spacing-xs);
+}
+
+.option {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--cr-spacing-sm);
+  min-height: var(--cr-control-xs);
+  margin: 0;
+  padding: 0 var(--cr-spacing-xs);
+  font: inherit;
+  font-size: var(--cr-font-size-m);
+  color: var(--cr-color-text);
+  text-align: start;
+  background: none;
+  border: 0;
+  border-radius: var(--cr-radius-m);
+  cursor: pointer;
+}
+
+.option:focus-visible {
+  outline: 2px solid var(--cr-color-focus);
+  outline-offset: 2px;
+}
+
+.option:disabled {
+  color: var(--cr-color-on-disabled);
+  cursor: not-allowed;
+}
+
+.circle {
+  flex: none;
+  box-sizing: border-box;
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--cr-color-border);
+  border-radius: 50%;
+  transition: border-color 0.2s;
+}
+
+[aria-checked='true'] .circle {
+  border-color: var(--cr-color-primary);
+}
+
+.option:disabled .circle {
+  background: var(--cr-color-disabled);
+  border-color: var(--cr-color-on-disabled);
+}
+
+/* Le point qui coule d'une option à l'autre : un seul pour tout le groupe, placé par le composant. */
+.dot {
+  position: absolute;
+  width: 10px;
+  border-radius: 5px;
+  background: var(--cr-color-primary);
+  opacity: 0;
+  transform: scale(0);
+  transition:
+    top var(--cr-radio-flow),
+    bottom var(--cr-radio-flow) 0.08s,
+    opacity 0.2s,
+    transform 0.2s;
+}
+
+.dot[data-direction='down'] {
+  transition:
+    bottom var(--cr-radio-flow),
+    top var(--cr-radio-flow) 0.08s,
+    opacity 0.2s,
+    transform 0.2s;
+}
+
+.dot[data-on] {
+  opacity: 1;
+  transform: none;
+}
+
+:host([disabled]) .dot {
+  background: var(--cr-color-on-disabled);
+}
+
+/* Avant l'hydratation (rendu serveur), le point est dessiné dans le cercle choisi. */
+:host(:not([data-ready])) [aria-checked='true'] .circle {
+  background: radial-gradient(var(--cr-color-primary) 0 4px, transparent 5px);
+}
+
+.error {
+  margin-top: var(--cr-spacing-xs);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dot,
+  .dot[data-direction='down'] {
+    transition: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .dot {
+    forced-color-adjust: none;
+    background: Highlight;
+  }
+  [aria-checked='true'] .circle {
+    border-color: Highlight;
+  }
+  .option:disabled .circle {
+    border-color: GrayText;
+  }
+}

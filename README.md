@@ -152,6 +152,17 @@ Active ou désactive un réglage, avec effet immédiat : case native avec `role=
 <CrSwitch label="Notifications" name="notifications" checked={on} onCrChange={(event) => setOn(event.detail)} />
 ```
 
+### Boutons radio : `cr-radio-group`
+
+Choix d'une seule option dans une liste empilée : options en `option` enfants, `label` obligatoire (titre visible du groupe), `name`, `value` (aucune par défaut), `required`, `disabled`. Flèches pour changer d'option (une seule tabulation pour le groupe) ; le point coule de l'ancien cercle au nouveau. Événement `onCrChange`.
+
+```tsx
+<CrRadioGroup label="Mode de livraison" name="delivery" required value={delivery} onCrChange={(event) => setDelivery(event.detail)}>
+  <option value="standard">Standard</option>
+  <option value="express">Express</option>
+</CrRadioGroup>
+```
+
 ### Contrôle segmenté : `cr-segmented`
 
 Choix d'une option parmi quelques-unes, côte à côte : options en `option` enfants (`data-count` ajoute un compteur), `label` obligatoire, `name`, `value`, `variant` (`thumb` par défaut, `clip`, `underline`, `outline`), `fit` (segments à la largeur de leur libellé), `disabled`. Événement `onCrChange`.

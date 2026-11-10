@@ -668,6 +668,35 @@ export namespace Components {
         "steps": string[];
     }
     /**
+     * Choix d'une seule option dans une liste de boutons radio empilés, sous un titre visible.
+     * Les options sont des éléments option enfants. Le point du bouton choisi coule jusqu'au nouveau choix.
+     */
+    interface CrRadioGroup {
+        /**
+          * Désactive le groupe.
+          * @default false
+         */
+        "disabled": boolean;
+        /**
+          * Titre affiché au-dessus des options, et nom du groupe pour les lecteurs d'écran.
+         */
+        "label": string;
+        /**
+          * Nom envoyé avec le formulaire.
+         */
+        "name"?: string;
+        /**
+          * Rend le choix obligatoire.
+          * @default false
+         */
+        "required": boolean;
+        /**
+          * Valeur de l'option choisie ; aucune par défaut.
+          * @default ''
+         */
+        "value": string;
+    }
+    /**
      * Champ de recherche. En entrant dans le champ, la loupe devient une flèche qui efface la recherche.
      * Options : mots qui défilent dans le texte indicatif, recherches récentes en puces, état « aucun résultat ».
      */
@@ -1105,6 +1134,10 @@ export interface CrOtpCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLCrOtpElement;
 }
+export interface CrRadioGroupCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLCrRadioGroupElement;
+}
 export interface CrSearchCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLCrSearchElement;
@@ -1445,6 +1478,27 @@ declare global {
         prototype: HTMLCrProgressStepsElement;
         new (): HTMLCrProgressStepsElement;
     };
+    interface HTMLCrRadioGroupElementEventMap {
+        "crChange": string;
+    }
+    /**
+     * Choix d'une seule option dans une liste de boutons radio empilés, sous un titre visible.
+     * Les options sont des éléments option enfants. Le point du bouton choisi coule jusqu'au nouveau choix.
+     */
+    interface HTMLCrRadioGroupElement extends Components.CrRadioGroup, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLCrRadioGroupElementEventMap>(type: K, listener: (this: HTMLCrRadioGroupElement, ev: CrRadioGroupCustomEvent<HTMLCrRadioGroupElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLCrRadioGroupElementEventMap>(type: K, listener: (this: HTMLCrRadioGroupElement, ev: CrRadioGroupCustomEvent<HTMLCrRadioGroupElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLCrRadioGroupElement: {
+        prototype: HTMLCrRadioGroupElement;
+        new (): HTMLCrRadioGroupElement;
+    };
     interface HTMLCrSearchElementEventMap {
         "crInput": string;
         "crSubmit": string;
@@ -1681,6 +1735,7 @@ declare global {
         "cr-otp": HTMLCrOtpElement;
         "cr-progress": HTMLCrProgressElement;
         "cr-progress-steps": HTMLCrProgressStepsElement;
+        "cr-radio-group": HTMLCrRadioGroupElement;
         "cr-search": HTMLCrSearchElement;
         "cr-segmented": HTMLCrSegmentedElement;
         "cr-select": HTMLCrSelectElement;
@@ -2422,6 +2477,43 @@ declare namespace LocalJSX {
         "steps"?: string[];
     }
     /**
+     * Choix d'une seule option dans une liste de boutons radio empilés, sous un titre visible.
+     * Les options sont des éléments option enfants. Le point du bouton choisi coule jusqu'au nouveau choix.
+     */
+    interface CrRadioGroup {
+        /**
+          * Désactive le groupe.
+          * @default false
+         */
+        "disabled"?: boolean;
+        /**
+          * The `id` of a `<form>` element to associate this element with.
+         */
+        "form"?: string;
+        /**
+          * Titre affiché au-dessus des options, et nom du groupe pour les lecteurs d'écran.
+         */
+        "label": string;
+        /**
+          * Nom envoyé avec le formulaire.
+         */
+        "name"?: string;
+        /**
+          * Émis quand l'option choisie change ; detail : sa valeur.
+         */
+        "onCrChange"?: (event: CrRadioGroupCustomEvent<string>) => void;
+        /**
+          * Rend le choix obligatoire.
+          * @default false
+         */
+        "required"?: boolean;
+        /**
+          * Valeur de l'option choisie ; aucune par défaut.
+          * @default ''
+         */
+        "value"?: string;
+    }
+    /**
      * Champ de recherche. En entrant dans le champ, la loupe devient une flèche qui efface la recherche.
      * Options : mots qui défilent dans le texte indicatif, recherches récentes en puces, état « aucun résultat ».
      */
@@ -3025,6 +3117,13 @@ declare namespace LocalJSX {
         "current": number;
         "label": string;
     }
+    interface CrRadioGroupAttributes {
+        "label": string;
+        "name": string;
+        "value": string;
+        "required": boolean;
+        "disabled": boolean;
+    }
     interface CrSearchAttributes {
         "label": string;
         "name": string;
@@ -3131,6 +3230,7 @@ declare namespace LocalJSX {
         "cr-otp": Omit<CrOtp, keyof CrOtpAttributes> & { [K in keyof CrOtp & keyof CrOtpAttributes]?: CrOtp[K] } & { [K in keyof CrOtp & keyof CrOtpAttributes as `attr:${K}`]?: CrOtpAttributes[K] } & { [K in keyof CrOtp & keyof CrOtpAttributes as `prop:${K}`]?: CrOtp[K] } & OneOf<"label", CrOtp["label"], CrOtpAttributes["label"]>;
         "cr-progress": Omit<CrProgress, keyof CrProgressAttributes> & { [K in keyof CrProgress & keyof CrProgressAttributes]?: CrProgress[K] } & { [K in keyof CrProgress & keyof CrProgressAttributes as `attr:${K}`]?: CrProgressAttributes[K] } & { [K in keyof CrProgress & keyof CrProgressAttributes as `prop:${K}`]?: CrProgress[K] };
         "cr-progress-steps": Omit<CrProgressSteps, keyof CrProgressStepsAttributes> & { [K in keyof CrProgressSteps & keyof CrProgressStepsAttributes]?: CrProgressSteps[K] } & { [K in keyof CrProgressSteps & keyof CrProgressStepsAttributes as `attr:${K}`]?: CrProgressStepsAttributes[K] } & { [K in keyof CrProgressSteps & keyof CrProgressStepsAttributes as `prop:${K}`]?: CrProgressSteps[K] };
+        "cr-radio-group": Omit<CrRadioGroup, keyof CrRadioGroupAttributes> & { [K in keyof CrRadioGroup & keyof CrRadioGroupAttributes]?: CrRadioGroup[K] } & { [K in keyof CrRadioGroup & keyof CrRadioGroupAttributes as `attr:${K}`]?: CrRadioGroupAttributes[K] } & { [K in keyof CrRadioGroup & keyof CrRadioGroupAttributes as `prop:${K}`]?: CrRadioGroup[K] } & OneOf<"label", CrRadioGroup["label"], CrRadioGroupAttributes["label"]>;
         "cr-search": Omit<CrSearch, keyof CrSearchAttributes> & { [K in keyof CrSearch & keyof CrSearchAttributes]?: CrSearch[K] } & { [K in keyof CrSearch & keyof CrSearchAttributes as `attr:${K}`]?: CrSearchAttributes[K] } & { [K in keyof CrSearch & keyof CrSearchAttributes as `prop:${K}`]?: CrSearch[K] } & OneOf<"label", CrSearch["label"], CrSearchAttributes["label"]>;
         "cr-segmented": Omit<CrSegmented, keyof CrSegmentedAttributes> & { [K in keyof CrSegmented & keyof CrSegmentedAttributes]?: CrSegmented[K] } & { [K in keyof CrSegmented & keyof CrSegmentedAttributes as `attr:${K}`]?: CrSegmentedAttributes[K] } & { [K in keyof CrSegmented & keyof CrSegmentedAttributes as `prop:${K}`]?: CrSegmented[K] } & OneOf<"label", CrSegmented["label"], CrSegmentedAttributes["label"]>;
         "cr-select": Omit<CrSelect, keyof CrSelectAttributes> & { [K in keyof CrSelect & keyof CrSelectAttributes]?: CrSelect[K] } & { [K in keyof CrSelect & keyof CrSelectAttributes as `attr:${K}`]?: CrSelectAttributes[K] } & { [K in keyof CrSelect & keyof CrSelectAttributes as `prop:${K}`]?: CrSelect[K] } & OneOf<"label", CrSelect["label"], CrSelectAttributes["label"]>;
@@ -3233,6 +3333,11 @@ declare module "@stencil/core" {
              * Chaque nouvelle étape est annoncée aux lecteurs d'écran.
              */
             "cr-progress-steps": LocalJSX.IntrinsicElements["cr-progress-steps"] & JSXBase.HTMLAttributes<HTMLCrProgressStepsElement>;
+            /**
+             * Choix d'une seule option dans une liste de boutons radio empilés, sous un titre visible.
+             * Les options sont des éléments option enfants. Le point du bouton choisi coule jusqu'au nouveau choix.
+             */
+            "cr-radio-group": LocalJSX.IntrinsicElements["cr-radio-group"] & JSXBase.HTMLAttributes<HTMLCrRadioGroupElement>;
             /**
              * Champ de recherche. En entrant dans le champ, la loupe devient une flèche qui efface la recherche.
              * Options : mots qui défilent dans le texte indicatif, recherches récentes en puces, état « aucun résultat ».
