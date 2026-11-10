@@ -15,6 +15,26 @@ export const syncDialog = (dialog: HTMLDialogElement | undefined, open: boolean)
   if (!open && dialog.open) dialog.close();
 };
 
+const outside = (event: MouseEvent) => {
+  const box = (event.currentTarget as HTMLElement).getBoundingClientRect();
+  return event.clientX < box.left || event.clientX > box.right || event.clientY < box.top || event.clientY > box.bottom;
+};
+
+/**
+ * Clic sur le fond assombri d'un dialog modal. L'appui doit aussi commencer dehors : une sélection de texte qui déborde
+ * de la boîte ne ferme rien, et un clic clavier (sans pointeur) non plus.
+ */
+export const backdropClick = (onBackdrop: () => void) => {
+  let pressedOutside = false;
+  return {
+    onPointerDown: (event: PointerEvent) => (pressedOutside = outside(event)),
+    onClick: (event: MouseEvent) => {
+      if (pressedOutside && outside(event)) onBackdrop();
+      pressedOutside = false;
+    },
+  };
+};
+
 export const releaseScroll = () => {
   if (openOverlays > 0 && --openOverlays === 0) document.documentElement.style.overflow = previousOverflow;
 };

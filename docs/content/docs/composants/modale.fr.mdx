@@ -20,7 +20,7 @@ Le contenu va dans le slot par défaut, les boutons d'action dans `slot="footer"
 Cristal utilise l'élément natif `<dialog>` ouvert en mode modal :
 
 - le **focus** entre dans la fenêtre à l'ouverture, **reste piégé** à l'intérieur, et **revient** au bouton d'ouverture à la fermeture ;
-- **Échap** ferme la fenêtre ;
+- **Échap** ferme la fenêtre ; avec `closeOnBackdrop`, un clic sur le fond assombri, à côté, la ferme aussi (désactivé par défaut, pour ne pas perdre une saisie par un clic malheureux) ;
 - le reste de la page devient **inerte** (ni cliquable, ni lisible par les lecteurs d'écran) et ne défile plus ;
 - le titre (`label`) sert de nom à la fenêtre ; le bouton de fermeture est étiqueté « Close », ou « Fermer » sur une page en français (modifiable avec `closeLabel`).
 
