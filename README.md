@@ -295,6 +295,14 @@ Court statut ou compteur : texte en contenu, `variant` (`neutral` par défaut, `
 <CrBadge variant="primary" count={nonLus} live>Non lus</CrBadge>
 ```
 
+### Bandeau : `cr-alert`
+
+Message posé dans la page : `variant` (`info` par défaut, `success`, `warning`, `danger` lu aussitôt), `heading` (titre facultatif), le message en contenu, `dismissible` (bouton « Fermer » qui replie le bandeau). Une icône propre à chaque type et un préfixe lu par les lecteurs d'écran (« Erreur : ») ; inséré après le chargement, le bandeau se déplie, et son icône se trace. Événement `onCrClose`.
+
+```tsx
+<CrAlert variant="danger" heading="Envoi impossible" dismissible onCrClose={() => setErreur(false)}>Vérifiez votre connexion.</CrAlert>
+```
+
 ### Notification : `cr-toast`, `cr-toaster`
 
 Message temporaire : `cr-toaster` est une zone fixée en bas à droite qui empile les `cr-toast`. Un toast a `open`, `variant` (`info` par défaut, `success`, `danger` lu aussitôt) et `duration` (5000 ms par défaut, `0` pour qu'il reste) ; une barre montre le temps restant, qui s'arrête sous la souris ou le focus. Il se ferme avec le bouton Fermer, Échap ou en glissant sur le côté. Événement `onCrClose`.

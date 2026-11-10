@@ -1,0 +1,40 @@
+---
+title: Bandeau
+description: Message posé dans la page, d'information, de réussite, d'avertissement ou d'erreur. Balise cr-alert, composant React CrAlert.
+---
+
+import AlertBasic from '@/demos/alert-basic';
+
+## Exemple
+
+`cr-alert` affiche un message dans le flux de la page, avec une icône et un titre facultatif `heading`. Son icône se trace ; inséré après le chargement de la page (une erreur à l'envoi, par exemple), le bandeau se déplie en hauteur. Déjà présent au chargement, il ne bouge pas, pour ne pas décaler la page. Avec `dismissible`, un bouton Fermer le replie puis le masque, et `onCrClose` le signale.
+
+| `variant` | Usage |
+|---|---|
+| `info` | information neutre (par défaut) |
+| `success` | une action a réussi |
+| `warning` | un point à surveiller |
+| `danger` | une erreur ; lue aussitôt par les lecteurs d'écran |
+
+Pour un message qui disparaît seul, préférez une [notification](/docs/composants/notification).
+
+<Preview>
+  <AlertBasic />
+</Preview>
+
+<include>../../../demos/alert-basic.tsx</include>
+
+<Callout>
+  Si l'utilisateur a demandé à son système de réduire les animations, le bandeau apparaît et disparaît d'un coup et son icône est déjà tracée.
+</Callout>
+
+## Accessibilité
+
+- Le message est une zone annoncée : `role="status"` (lue poliment) pour `info`, `success` et `warning`, `role="alert"` (lue aussitôt) pour `danger`. Insérez le bandeau au moment de l'erreur pour qu'il soit annoncé ; présent dès le chargement, il est lu avec la page, sans interrompre.
+- Le type n'est pas donné que par la couleur : chaque type a son icône (i, ✓, ! dans un triangle, ! dans un cercle), et un préfixe lu par les lecteurs d'écran (« Erreur : », « Attention : »…) précède le message.
+- Le bouton Fermer est nommé « Fermer » (« Close » en anglais).
+- Le texte garde sa couleur pleine pendant l'arrivée : le bandeau se déplie, il ne s'éclaircit pas.
+
+## API
+
+<ApiReference tag="cr-alert" />

@@ -79,6 +79,8 @@ export const fr: Messages = {
   avatarStatus: { online: 'en ligne', away: 'absent', busy: 'occupé', offline: 'hors ligne' },
   avatarMore: (count) => `${count} ${count > 1 ? 'autres personnes' : 'autre personne'}`,
 
+  alertPrefix: { info: 'Information : ', success: 'Succès : ', warning: 'Attention : ', danger: 'Erreur : ' },
+
   openAll: 'Tout ouvrir',
   closeAll: 'Tout fermer',
 

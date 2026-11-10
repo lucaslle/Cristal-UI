@@ -77,6 +77,8 @@ export const en = {
   avatarStatus: { online: 'online', away: 'away', busy: 'busy', offline: 'offline' },
   avatarMore: (count: number) => `${count} more ${count === 1 ? 'person' : 'people'}`,
 
+  alertPrefix: { info: 'Information: ', success: 'Success: ', warning: 'Warning: ', danger: 'Error: ' },
+
   openAll: 'Open all',
   closeAll: 'Close all',
 

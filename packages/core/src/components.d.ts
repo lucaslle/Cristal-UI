@@ -89,6 +89,26 @@ export namespace Components {
         "open": boolean;
     }
     /**
+     * Bandeau de message dans la page : information, réussite, avertissement ou erreur, avec un titre facultatif.
+     * Inséré après le chargement de la page, il se déplie ; son icône se trace ; avec dismissible, un bouton Fermer le replie.
+     */
+    interface CrAlert {
+        /**
+          * Ajoute un bouton Fermer qui replie et masque le bandeau.
+          * @default false
+         */
+        "dismissible": boolean;
+        /**
+          * Titre affiché en gras au-dessus du message.
+         */
+        "heading"?: string;
+        /**
+          * Type de message : info, success (réussite), warning (avertissement) ou danger (erreur, lue aussitôt par les lecteurs d'écran).
+          * @default 'info'
+         */
+        "variant": 'info' | 'success' | 'warning' | 'danger';
+    }
+    /**
      * Avatar d'une personne : sa photo, ou à défaut ses initiales sur une couleur tirée de son nom.
      * Le nom (et le statut éventuel) est lu par les lecteurs d'écran ; la pastille de statut change de forme selon le statut.
      */
@@ -1363,6 +1383,10 @@ export interface CrAccordionItemCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLCrAccordionItemElement;
 }
+export interface CrAlertCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLCrAlertElement;
+}
 export interface CrCardInputCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLCrCardInputElement;
@@ -1492,6 +1516,27 @@ declare global {
     var HTMLCrAccordionItemElement: {
         prototype: HTMLCrAccordionItemElement;
         new (): HTMLCrAccordionItemElement;
+    };
+    interface HTMLCrAlertElementEventMap {
+        "crClose": void;
+    }
+    /**
+     * Bandeau de message dans la page : information, réussite, avertissement ou erreur, avec un titre facultatif.
+     * Inséré après le chargement de la page, il se déplie ; son icône se trace ; avec dismissible, un bouton Fermer le replie.
+     */
+    interface HTMLCrAlertElement extends Components.CrAlert, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLCrAlertElementEventMap>(type: K, listener: (this: HTMLCrAlertElement, ev: CrAlertCustomEvent<HTMLCrAlertElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLCrAlertElementEventMap>(type: K, listener: (this: HTMLCrAlertElement, ev: CrAlertCustomEvent<HTMLCrAlertElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLCrAlertElement: {
+        prototype: HTMLCrAlertElement;
+        new (): HTMLCrAlertElement;
     };
     /**
      * Avatar d'une personne : sa photo, ou à défaut ses initiales sur une couleur tirée de son nom.
@@ -2166,6 +2211,7 @@ declare global {
     interface HTMLElementTagNameMap {
         "cr-accordion": HTMLCrAccordionElement;
         "cr-accordion-item": HTMLCrAccordionItemElement;
+        "cr-alert": HTMLCrAlertElement;
         "cr-avatar": HTMLCrAvatarElement;
         "cr-avatar-group": HTMLCrAvatarGroupElement;
         "cr-badge": HTMLCrBadgeElement;
@@ -2268,6 +2314,30 @@ declare namespace LocalJSX {
           * @default false
          */
         "open"?: boolean;
+    }
+    /**
+     * Bandeau de message dans la page : information, réussite, avertissement ou erreur, avec un titre facultatif.
+     * Inséré après le chargement de la page, il se déplie ; son icône se trace ; avec dismissible, un bouton Fermer le replie.
+     */
+    interface CrAlert {
+        /**
+          * Ajoute un bouton Fermer qui replie et masque le bandeau.
+          * @default false
+         */
+        "dismissible"?: boolean;
+        /**
+          * Titre affiché en gras au-dessus du message.
+         */
+        "heading"?: string;
+        /**
+          * Émis quand le bouton Fermer a masqué le bandeau.
+         */
+        "onCrClose"?: (event: CrAlertCustomEvent<void>) => void;
+        /**
+          * Type de message : info, success (réussite), warning (avertissement) ou danger (erreur, lue aussitôt par les lecteurs d'écran).
+          * @default 'info'
+         */
+        "variant"?: 'info' | 'success' | 'warning' | 'danger';
     }
     /**
      * Avatar d'une personne : sa photo, ou à défaut ses initiales sur une couleur tirée de son nom.
@@ -3741,6 +3811,11 @@ declare namespace LocalJSX {
         "open": boolean;
         "disabled": boolean;
     }
+    interface CrAlertAttributes {
+        "variant": 'info' | 'success' | 'warning' | 'danger';
+        "heading": string;
+        "dismissible": boolean;
+    }
     interface CrAvatarAttributes {
         "name": string;
         "src": string;
@@ -4039,6 +4114,7 @@ declare namespace LocalJSX {
     interface IntrinsicElements {
         "cr-accordion": Omit<CrAccordion, keyof CrAccordionAttributes> & { [K in keyof CrAccordion & keyof CrAccordionAttributes]?: CrAccordion[K] } & { [K in keyof CrAccordion & keyof CrAccordionAttributes as `attr:${K}`]?: CrAccordionAttributes[K] } & { [K in keyof CrAccordion & keyof CrAccordionAttributes as `prop:${K}`]?: CrAccordion[K] };
         "cr-accordion-item": Omit<CrAccordionItem, keyof CrAccordionItemAttributes> & { [K in keyof CrAccordionItem & keyof CrAccordionItemAttributes]?: CrAccordionItem[K] } & { [K in keyof CrAccordionItem & keyof CrAccordionItemAttributes as `attr:${K}`]?: CrAccordionItemAttributes[K] } & { [K in keyof CrAccordionItem & keyof CrAccordionItemAttributes as `prop:${K}`]?: CrAccordionItem[K] } & OneOf<"label", CrAccordionItem["label"], CrAccordionItemAttributes["label"]>;
+        "cr-alert": Omit<CrAlert, keyof CrAlertAttributes> & { [K in keyof CrAlert & keyof CrAlertAttributes]?: CrAlert[K] } & { [K in keyof CrAlert & keyof CrAlertAttributes as `attr:${K}`]?: CrAlertAttributes[K] } & { [K in keyof CrAlert & keyof CrAlertAttributes as `prop:${K}`]?: CrAlert[K] };
         "cr-avatar": Omit<CrAvatar, keyof CrAvatarAttributes> & { [K in keyof CrAvatar & keyof CrAvatarAttributes]?: CrAvatar[K] } & { [K in keyof CrAvatar & keyof CrAvatarAttributes as `attr:${K}`]?: CrAvatarAttributes[K] } & { [K in keyof CrAvatar & keyof CrAvatarAttributes as `prop:${K}`]?: CrAvatar[K] } & OneOf<"name", CrAvatar["name"], CrAvatarAttributes["name"]>;
         "cr-avatar-group": Omit<CrAvatarGroup, keyof CrAvatarGroupAttributes> & { [K in keyof CrAvatarGroup & keyof CrAvatarGroupAttributes]?: CrAvatarGroup[K] } & { [K in keyof CrAvatarGroup & keyof CrAvatarGroupAttributes as `attr:${K}`]?: CrAvatarGroupAttributes[K] } & { [K in keyof CrAvatarGroup & keyof CrAvatarGroupAttributes as `prop:${K}`]?: CrAvatarGroup[K] };
         "cr-badge": Omit<CrBadge, keyof CrBadgeAttributes> & { [K in keyof CrBadge & keyof CrBadgeAttributes]?: CrBadge[K] } & { [K in keyof CrBadge & keyof CrBadgeAttributes as `attr:${K}`]?: CrBadgeAttributes[K] } & { [K in keyof CrBadge & keyof CrBadgeAttributes as `prop:${K}`]?: CrBadge[K] };
@@ -4093,6 +4169,11 @@ declare module "@stencil/core" {
              * Section d'un accordéon, à placer dans cr-accordion.
              */
             "cr-accordion-item": LocalJSX.IntrinsicElements["cr-accordion-item"] & JSXBase.HTMLAttributes<HTMLCrAccordionItemElement>;
+            /**
+             * Bandeau de message dans la page : information, réussite, avertissement ou erreur, avec un titre facultatif.
+             * Inséré après le chargement de la page, il se déplie ; son icône se trace ; avec dismissible, un bouton Fermer le replie.
+             */
+            "cr-alert": LocalJSX.IntrinsicElements["cr-alert"] & JSXBase.HTMLAttributes<HTMLCrAlertElement>;
             /**
              * Avatar d'une personne : sa photo, ou à défaut ses initiales sur une couleur tirée de son nom.
              * Le nom (et le statut éventuel) est lu par les lecteurs d'écran ; la pastille de statut change de forme selon le statut.

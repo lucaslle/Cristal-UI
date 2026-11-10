@@ -1,0 +1,134 @@
+:host {
+  --cr-alert-accent: var(--cr-color-primary-text);
+  display: grid;
+  grid-template-rows: 1fr;
+  font-family: var(--cr-font-family);
+  font-size: var(--cr-font-size-m);
+  color: var(--cr-color-text);
+}
+
+/* Arrivée : le bandeau se déplie en hauteur, sans fondu (un texte à demi transparent ferait échouer le contraste). */
+:host([data-enter]) {
+  animation: cr-alert-unfold 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+:host([hidden]) {
+  display: none;
+}
+
+:host([variant='success']) {
+  --cr-alert-accent: var(--cr-color-success);
+}
+
+/* Pas de jeton warning dans le thème : ambre par défaut, assombri pour garder 3:1 sur le fond teinté. */
+:host([variant='warning']) {
+  --cr-alert-accent: oklch(from var(--cr-color-warning, #d97706) min(l, 0.55) c h);
+}
+
+:host([variant='danger']) {
+  --cr-alert-accent: var(--cr-color-danger);
+}
+
+@keyframes cr-alert-unfold {
+  from {
+    grid-template-rows: 0fr;
+  }
+}
+
+.clip {
+  min-height: 0;
+  overflow: hidden;
+}
+
+.alert {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--cr-spacing-sm);
+  padding: var(--cr-spacing-lg);
+  background: color-mix(in oklab, var(--cr-alert-accent) 7%, var(--cr-color-surface));
+  border: 1px solid var(--cr-alert-accent);
+  border-left-width: 4px;
+  border-radius: var(--cr-radius-l);
+}
+
+.icon {
+  flex: none;
+  color: var(--cr-alert-accent);
+}
+
+/* L'icône se trace : contour d'abord, puis le signe. */
+.icon * {
+  stroke-dasharray: 1 1;
+  animation: cr-alert-draw 0.5s 0.15s ease-out backwards;
+}
+
+.icon :last-child {
+  animation-delay: 0.45s;
+}
+
+@keyframes cr-alert-draw {
+  from {
+    stroke-dashoffset: 1;
+  }
+}
+
+.content {
+  flex: 1;
+  min-width: 0;
+  line-height: 20px;
+}
+
+.heading {
+  display: block;
+  font-weight: var(--cr-font-weight-bold);
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.close {
+  display: inline-grid;
+  flex: none;
+  place-items: center;
+  width: var(--cr-control-xs);
+  height: var(--cr-control-xs);
+  margin: calc(-1 * var(--cr-spacing-xs)) calc(-1 * var(--cr-spacing-xs)) 0 0;
+  padding: 0;
+  color: var(--cr-color-text-muted);
+  background: none;
+  border: 0;
+  border-radius: var(--cr-radius-m);
+  cursor: pointer;
+}
+
+.close:hover {
+  color: var(--cr-color-text);
+  background: color-mix(in oklab, var(--cr-alert-accent) 12%, var(--cr-color-surface));
+}
+
+.close:focus-visible {
+  outline: 2px solid var(--cr-color-focus);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :host([data-enter]),
+  .icon * {
+    animation: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .alert {
+    border-color: CanvasText;
+  }
+  .icon {
+    color: CanvasText;
+  }
+}

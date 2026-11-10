@@ -1,0 +1,40 @@
+---
+title: Alert
+description: Message placed in the page, for information, success, warning or error. Tag cr-alert, React component CrAlert.
+---
+
+import AlertBasic from '@/demos/en/alert-basic';
+
+## Example
+
+`cr-alert` shows a message in the page flow, with an icon and an optional `heading`. Its icon draws itself; when inserted after the page has loaded (an error on submit, for instance), the alert unfolds in height. When already there at page load, it does not move, so the page does not shift. With `dismissible`, a Close button folds it back then hides it, and `onCrClose` reports it.
+
+| `variant` | Use |
+|---|---|
+| `info` | neutral information (default) |
+| `success` | an action succeeded |
+| `warning` | something to watch |
+| `danger` | an error; read immediately by screen readers |
+
+For a message that goes away on its own, prefer a [toast](/docs/composants/notification).
+
+<Preview>
+  <AlertBasic />
+</Preview>
+
+<include>../../../demos/en/alert-basic.tsx</include>
+
+<Callout>
+  If the user asked their system to reduce motion, the alert appears and disappears at once and its icon is already drawn.
+</Callout>
+
+## Accessibility
+
+- The message is a live region: `role="status"` (read politely) for `info`, `success` and `warning`, `role="alert"` (read immediately) for `danger`. Insert the alert when the error happens so that it is announced; when present at page load, it is read with the page, without interrupting.
+- The type does not rely on colour alone: each type has its own icon (i, ✓, ! in a triangle, ! in a circle), and a prefix read by screen readers ("Error: ", "Warning: "…) comes before the message.
+- The Close button is named "Close" ("Fermer" in French).
+- The text keeps its full colour while arriving: the alert unfolds, it does not fade in.
+
+## API
+
+<ApiReference tag="cr-alert" />
