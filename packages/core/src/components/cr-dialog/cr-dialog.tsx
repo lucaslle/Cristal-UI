@@ -27,8 +27,8 @@ export class CrDialog {
   /** Libellé du bouton de fermeture (« Close », ou « Fermer » en français, par défaut). */
   @Prop() closeLabel?: string;
 
-  /** Un clic sur le fond assombri, à côté, ferme la fenêtre. */
-  @Prop() closeOnBackdrop = false;
+  /** Un clic sur le fond assombri, à côté, ferme la fenêtre ; false pour l'empêcher (formulaire long, confirmation). */
+  @Prop() closeOnBackdrop = true;
 
   /** Émis à chaque fermeture : Échap, bouton Fermer, clic à côté (avec closeOnBackdrop) ou open à false. */
   @Event() crClose: EventEmitter<void>;

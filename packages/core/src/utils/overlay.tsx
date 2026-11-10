@@ -15,7 +15,10 @@ export const syncDialog = (dialog: HTMLDialogElement | undefined, open: boolean)
   if (!open && dialog.open) dialog.close();
 };
 
+// Le fond (::backdrop) appartient au dialog : la cible est le dialog lui-même. Un menu ou un calendrier ouvert
+// depuis le contenu peut déborder de la boîte, mais sa cible est un descendant, donc il ne ferme rien.
 const outside = (event: MouseEvent) => {
+  if (event.target !== event.currentTarget) return false;
   const box = (event.currentTarget as HTMLElement).getBoundingClientRect();
   return event.clientX < box.left || event.clientX > box.right || event.clientY < box.top || event.clientY > box.bottom;
 };

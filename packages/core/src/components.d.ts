@@ -463,8 +463,8 @@ export namespace Components {
          */
         "closeLabel"?: string;
         /**
-          * Un clic sur le fond assombri, à côté, ferme la fenêtre.
-          * @default false
+          * Un clic sur le fond assombri, à côté, ferme la fenêtre ; false pour l'empêcher (formulaire long, confirmation).
+          * @default true
          */
         "closeOnBackdrop": boolean;
         /**
@@ -486,8 +486,8 @@ export namespace Components {
          */
         "closeLabel"?: string;
         /**
-          * Un clic sur le fond assombri, à côté, ferme le panneau.
-          * @default false
+          * Un clic sur le fond assombri, à côté, ferme le panneau ; false pour l'empêcher (formulaire long, confirmation).
+          * @default true
          */
         "closeOnBackdrop": boolean;
         /**
@@ -2897,8 +2897,8 @@ declare namespace LocalJSX {
          */
         "closeLabel"?: string;
         /**
-          * Un clic sur le fond assombri, à côté, ferme la fenêtre.
-          * @default false
+          * Un clic sur le fond assombri, à côté, ferme la fenêtre ; false pour l'empêcher (formulaire long, confirmation).
+          * @default true
          */
         "closeOnBackdrop"?: boolean;
         /**
@@ -2924,8 +2924,8 @@ declare namespace LocalJSX {
          */
         "closeLabel"?: string;
         /**
-          * Un clic sur le fond assombri, à côté, ferme le panneau.
-          * @default false
+          * Un clic sur le fond assombri, à côté, ferme le panneau ; false pour l'empêcher (formulaire long, confirmation).
+          * @default true
          */
         "closeOnBackdrop"?: boolean;
         /**

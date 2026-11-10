@@ -16,7 +16,7 @@ export function OverlayDemo() {
       </CrButton>
       <span data-testid="overlay-result">{result}</span>
 
-      <CrDialog label="Supprimer le produit ?" open={dialogOpen} onCrClose={() => setDialogOpen(false)}>
+      <CrDialog label="Supprimer le produit ?" closeOnBackdrop={false} open={dialogOpen} onCrClose={() => setDialogOpen(false)}>
         <p>Cette action est définitive.</p>
         <CrButton slot="footer" variant="secondary" onClick={() => setDialogOpen(false)}>
           Annuler
@@ -32,7 +32,7 @@ export function OverlayDemo() {
         </CrButton>
       </CrDialog>
 
-      <CrDrawer label="Filtres" closeOnBackdrop open={drawerOpen} onCrClose={() => setDrawerOpen(false)}>
+      <CrDrawer label="Filtres" open={drawerOpen} onCrClose={() => setDrawerOpen(false)}>
         <CrInput label="Prix maximum" type="number" />
         <CrMenu label="Plus d'options" accessibleLabel="Plus d'options des filtres" animation="anchor-pop">
           <option value="export">Exporter</option>

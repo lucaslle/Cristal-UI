@@ -29,8 +29,8 @@ export class CrDrawer {
   /** Bord d'apparition : end (droite) ou start (gauche). */
   @Prop({ reflect: true }) placement: 'start' | 'end' = 'end';
 
-  /** Un clic sur le fond assombri, à côté, ferme le panneau. */
-  @Prop() closeOnBackdrop = false;
+  /** Un clic sur le fond assombri, à côté, ferme le panneau ; false pour l'empêcher (formulaire long, confirmation). */
+  @Prop() closeOnBackdrop = true;
 
   /** Émis à chaque fermeture : Échap, bouton Fermer, clic à côté (avec closeOnBackdrop) ou open à false. */
   @Event() crClose: EventEmitter<void>;

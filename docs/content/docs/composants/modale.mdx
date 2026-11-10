@@ -20,7 +20,7 @@ The content goes in the default slot, the action buttons in `slot="footer"`. Con
 Cristal uses the native `<dialog>` element opened in modal mode:
 
 - **focus** moves into the window when it opens, **stays trapped** inside, and **returns** to the opening button when it closes;
-- **Escape** closes the window; with `closeOnBackdrop`, a click on the dimmed background next to it closes it too (off by default, so a stray click does not lose what was typed);
+- **Escape** closes the window; a click on the dimmed background next to it closes it too; `closeOnBackdrop={false}` prevents it, for example for a long form that a stray click would lose;
 - the rest of the page becomes **inert** (neither clickable nor readable by screen readers) and no longer scrolls;
 - the title (`label`) is used as the window's name; the close button is labelled "Close", or "Fermer" on a French page (customizable with `closeLabel`).
 

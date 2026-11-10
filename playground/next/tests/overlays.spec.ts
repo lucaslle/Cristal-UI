@@ -49,7 +49,7 @@ test('drawer slides from the end edge and locks page scroll while open', async (
   await expect.poll(() => page.evaluate(() => document.documentElement.style.overflow)).toBe('');
 });
 
-test('clicking next to it closes only with closeOnBackdrop, and not after a selection that ends outside', async ({ page }) => {
+test('clicking next to it closes by default, not with closeOnBackdrop false, nor after a selection that ends outside', async ({ page }) => {
   await page.getByRole('button', { name: 'Supprimer le produit' }).click();
   const dialog = page.getByRole('dialog', { name: 'Supprimer le produit ?' });
   await expect(dialog).toBeVisible();
