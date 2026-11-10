@@ -7,7 +7,7 @@ import DrawerFilters from '@/demos/drawer-filters';
 
 ## Exemple
 
-Même fonctionnement que la [modale](/docs/composants/modale), mais le panneau occupe toute la hauteur, sur le bord droit (`placement="end"`, par défaut) ou gauche (`placement="start"`). Sa largeur se règle avec la variable CSS `--cr-drawer-width` (400px par défaut, jamais plus large que l'écran).
+Même fonctionnement que la [modale](/docs/composants/modale), mais le panneau occupe toute la hauteur, sur le bord droit (`placement="end"`, par défaut) ou gauche (`placement="start"`). Sa largeur se règle avec la variable CSS `--cr-drawer-width` (400px par défaut, jamais plus large que l'écran). Il glisse depuis son bord à l'ouverture et y repart à la fermeture, pendant que le fond s'assombrit ; sans mouvement si l'utilisateur a demandé à réduire les animations.
 
 <Preview>
   <DrawerFilters />
@@ -17,7 +17,7 @@ Même fonctionnement que la [modale](/docs/composants/modale), mais le panneau o
 
 ## Accessibilité
 
-Mêmes garanties que la modale : focus piégé puis restauré, Échap, page inerte et défilement bloqué, titre comme nom du panneau.
+Mêmes garanties que la modale : focus piégé puis restauré, Échap, page inerte et défilement bloqué, titre comme nom du panneau. Un clic sur le fond assombri, à côté du panneau, le ferme aussi ; `closeOnBackdrop={false}` l'empêche.
 
 ## API
 

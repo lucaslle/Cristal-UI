@@ -13,3 +13,55 @@
 .drawer.start {
   margin-inline-end: auto;
 }
+
+/* Le panneau glisse depuis son bord. @starting-style donne la position de départ à l'ouverture ;
+   allow-discrete garde le dialog affiché, dans la couche supérieure, le temps qu'il ressorte à la fermeture. */
+.drawer {
+  --cr-drawer-from: 100%;
+  translate: var(--cr-drawer-from) 0;
+  transition:
+    translate 0.32s cubic-bezier(0.2, 0.8, 0.2, 1),
+    display 0.32s allow-discrete,
+    overlay 0.32s allow-discrete;
+}
+
+.drawer.start,
+.drawer.end:dir(rtl) {
+  --cr-drawer-from: -100%;
+}
+
+.drawer.start:dir(rtl) {
+  --cr-drawer-from: 100%;
+}
+
+.drawer[open] {
+  translate: 0 0;
+}
+
+.drawer::backdrop {
+  opacity: 0;
+  transition:
+    opacity 0.32s,
+    display 0.32s allow-discrete,
+    overlay 0.32s allow-discrete;
+}
+
+.drawer[open]::backdrop {
+  opacity: 1;
+}
+
+@starting-style {
+  .drawer[open] {
+    translate: var(--cr-drawer-from) 0;
+  }
+  .drawer[open]::backdrop {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .drawer,
+  .drawer::backdrop {
+    transition: none;
+  }
+}

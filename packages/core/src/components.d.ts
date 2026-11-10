@@ -463,6 +463,11 @@ export namespace Components {
          */
         "closeLabel"?: string;
         /**
+          * Un clic sur le fond assombri, à côté, ferme la fenêtre ; false pour l'empêcher (formulaire long, confirmation).
+          * @default true
+         */
+        "closeOnBackdrop": boolean;
+        /**
           * Titre affiché, et nom de la fenêtre pour les lecteurs d'écran.
          */
         "label": string;
@@ -480,6 +485,11 @@ export namespace Components {
           * Libellé du bouton de fermeture (« Close », ou « Fermer » en français, par défaut).
          */
         "closeLabel"?: string;
+        /**
+          * Un clic sur le fond assombri, à côté, ferme le panneau ; false pour l'empêcher (formulaire long, confirmation).
+          * @default true
+         */
+        "closeOnBackdrop": boolean;
         /**
           * Titre affiché, et nom du panneau pour les lecteurs d'écran.
          */
@@ -2887,11 +2897,16 @@ declare namespace LocalJSX {
          */
         "closeLabel"?: string;
         /**
+          * Un clic sur le fond assombri, à côté, ferme la fenêtre ; false pour l'empêcher (formulaire long, confirmation).
+          * @default true
+         */
+        "closeOnBackdrop"?: boolean;
+        /**
           * Titre affiché, et nom de la fenêtre pour les lecteurs d'écran.
          */
         "label": string;
         /**
-          * Émis à chaque fermeture : Échap, bouton Fermer ou open à false.
+          * Émis à chaque fermeture : Échap, bouton Fermer, clic à côté (avec closeOnBackdrop) ou open à false.
          */
         "onCrClose"?: (event: CrDialogCustomEvent<void>) => void;
         /**
@@ -2909,11 +2924,16 @@ declare namespace LocalJSX {
          */
         "closeLabel"?: string;
         /**
+          * Un clic sur le fond assombri, à côté, ferme le panneau ; false pour l'empêcher (formulaire long, confirmation).
+          * @default true
+         */
+        "closeOnBackdrop"?: boolean;
+        /**
           * Titre affiché, et nom du panneau pour les lecteurs d'écran.
          */
         "label": string;
         /**
-          * Émis à chaque fermeture : Échap, bouton Fermer ou open à false.
+          * Émis à chaque fermeture : Échap, bouton Fermer, clic à côté (avec closeOnBackdrop) ou open à false.
          */
         "onCrClose"?: (event: CrDrawerCustomEvent<void>) => void;
         /**
@@ -4148,12 +4168,14 @@ declare namespace LocalJSX {
         "open": boolean;
         "label": string;
         "closeLabel": string;
+        "closeOnBackdrop": boolean;
     }
     interface CrDrawerAttributes {
         "open": boolean;
         "label": string;
         "closeLabel": string;
         "placement": 'start' | 'end';
+        "closeOnBackdrop": boolean;
     }
     interface CrEmptyStateAttributes {
         "heading": string;

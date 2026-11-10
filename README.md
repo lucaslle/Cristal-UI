@@ -254,8 +254,9 @@ Basés sur l'élément natif `<dialog>` : focus piégé dans la fenêtre, fermet
 | `label` | titre affiché, et nom de la fenêtre pour les lecteurs d'écran (obligatoire) |
 | `closeLabel` | libellé du bouton de fermeture, « Close » par défaut (« Fermer » en français) |
 | `placement` | `cr-drawer` seulement : `end` (droite, par défaut) ou `start` (gauche) |
+| `closeOnBackdrop` | un clic sur le fond assombri, à côté, ferme la fenêtre (`true` par défaut ; `false` pour l'empêcher) |
 
-Contenu dans le slot par défaut, boutons d'action dans `slot="footer"`. L'événement `onCrClose` est émis à chaque fermeture (Échap, bouton Fermer, `open` à `false`). Largeur du drawer : variable CSS `--cr-drawer-width` (400px par défaut).
+Contenu dans le slot par défaut, boutons d'action dans `slot="footer"`. L'événement `onCrClose` est émis à chaque fermeture (Échap, bouton Fermer, clic à côté, `open` à `false`). Largeur du drawer : variable CSS `--cr-drawer-width` (400px par défaut).
 
 ```tsx
 <CrDialog label="Supprimer le produit ?" open={open} onCrClose={() => setOpen(false)}>

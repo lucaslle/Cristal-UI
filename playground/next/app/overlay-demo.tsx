@@ -16,7 +16,7 @@ export function OverlayDemo() {
       </CrButton>
       <span data-testid="overlay-result">{result}</span>
 
-      <CrDialog label="Supprimer le produit ?" open={dialogOpen} onCrClose={() => setDialogOpen(false)}>
+      <CrDialog label="Supprimer le produit ?" closeOnBackdrop={false} open={dialogOpen} onCrClose={() => setDialogOpen(false)}>
         <p>Cette action est définitive.</p>
         <CrButton slot="footer" variant="secondary" onClick={() => setDialogOpen(false)}>
           Annuler
