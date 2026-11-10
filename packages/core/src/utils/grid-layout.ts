@@ -20,7 +20,7 @@ const sorted = (items: GridItem[]) => [...items].sort((a, b) => a.y - b.y || a.x
 
 const replace = (items: GridItem[], item: GridItem) => items.map((other) => (other.id === item.id ? item : other));
 
-/** Chaque widget remonte tant que la place au-dessus est libre : pas de trou dans le tableau de bord. */
+/** Chaque élément remonte tant que la place au-dessus est libre : pas de trou dans le grille. */
 export const compact = (items: GridItem[]) => {
   const placed: GridItem[] = [];
   for (const item of sorted(items)) {
@@ -33,7 +33,7 @@ export const compact = (items: GridItem[]) => {
 
 type Direction = 'down' | 'left' | 'right' | 'none';
 
-/** Écarte les widgets que `item` recouvre : ils prennent la place libérée du côté d'où il vient (échange), sinon passent dessous, en cascade. */
+/** Écarte les éléments que `item` recouvre : ils prennent la place libérée du côté d'où il vient (échange), sinon passent dessous, en cascade. */
 const resolve = (items: GridItem[], item: GridItem, direction: Direction, columns: number): GridItem[] => {
   let layout = items;
   for (const other of sorted(collisions(layout, item))) {
@@ -71,7 +71,7 @@ export const resizeItem = (items: GridItem[], id: string, w: number, h: number, 
   return compact(resolve(replace(items, resized), resized, 'none', columns));
 };
 
-/** Première place libre, ligne par ligne, pour un widget sans position. */
+/** Première place libre, ligne par ligne, pour un élément sans position. */
 export const firstFree = (items: GridItem[], item: GridItem, columns: number) => {
   const w = Math.min(item.w, columns);
   for (let y = 0; ; y++) {
@@ -87,6 +87,6 @@ export const rowsOf = (items: GridItem[]) => Math.max(0, ...items.map((item) => 
 export const sameLayout = (a: GridItem[], b: GridItem[]) =>
   a.length === b.length && a.every((item) => b.some((o) => o.id === item.id && o.x === item.x && o.y === item.y && o.w === item.w && o.h === item.h));
 
-/** Place les widgets sans position (x ou y négatif) à la première place libre, puis tasse. */
+/** Place les éléments sans position (x ou y négatif) à la première place libre, puis tasse. */
 export const placeAll = (items: GridItem[], columns: number) =>
   compact(items.reduce<GridItem[]>((all, item) => [...all, item.x < 0 || item.y < 0 ? firstFree(all, item, columns) : item], []));

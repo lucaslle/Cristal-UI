@@ -1,0 +1,71 @@
+---
+title: Grid layout
+description: A grid of items that each user moves and resizes, to build a dashboard for example. cr-grid-layout and cr-grid-item tags, CrGridLayout and CrGridItem React components.
+---
+
+import GridLayoutBasic from '@/demos/en/grid-layout-basic';
+
+## Example
+
+Each `CrGridItem` has a title (`label`), a position (`x`, `y`, in cells starting from 0) and a size (`w` columns, `h` rows). The user moves it by its ⠿ handle, or by holding the pointer down anywhere on the card, and resizes it by dragging its corner: the grid appears, the target slot is drawn with a dashed outline, the other items move aside during the drag, then everything packs upwards.
+
+<Preview column>
+  <GridLayoutBasic />
+</Preview>
+
+<include>../../../demos/en/grid-layout-basic.tsx</include>
+
+## Grabbing a card
+
+- By the ⠿ handle: dragging starts immediately.
+- Anywhere on the card: hold the pointer down for a moment (300 ms) without moving, the card lifts, then move it. A click followed by a quick movement selects text as usual, and holding down on a button, a checkbox, a link or a field does not lift the card.
+- With a finger, on a touch screen, only the handle moves the card: swiping on the card scrolls the page.
+
+## Grid
+
+| `CrGridLayout` property | Role |
+|---|---|
+| `columns` | number of columns (12 by default) |
+| `rowHeight` | height of a row in pixels (80 by default) |
+| `gap` | space between items in pixels (16 by default) |
+| `editable` | `false` to lock the layout (no handles) |
+| `stackBelow` | width in pixels below which items stack (480 by default) |
+| `storageKey` | remembers the user's layout from one visit to the next |
+
+`onCrLayoutChange` gives the layout (`id`, `x`, `y`, `w`, `h` of each item) after each change, to save it on the server for example; the `reset()` method goes back to the initial layout.
+
+## Items
+
+- Give each item an `id`: it is what finds the item's place in the saved layout.
+- Without `x` or `y`, an item takes the first free slot: handy for adding an item from a list.
+- `minW`, `minH`, `maxW` and `maxH` constrain the size; `removable` adds a × button that emits `onCrRemove` (then remove the item from your list).
+- The `actions` slot places buttons in the header.
+- When the content overflows the card, it scrolls; the area then receives focus (Tab) and can be scrolled with the arrows, Page Down and Page Up.
+
+## Keyboard
+
+On an item's handle (Tab):
+
+| Key | Action |
+|---|---|
+| ← → ↑ ↓ | moves the item by one cell |
+| Shift + ← → | one column less or more |
+| Shift + ↑ ↓ | one row less or more |
+
+Each change is announced: "Sales: column 3, row 1.", "Sales: 4 columns by 3 rows.".
+
+## Small screens
+
+Below 480 pixels wide (`stackBelow` to change this threshold), items stack at full width, in grid order, and the handles disappear.
+
+<Callout>
+  If the user has asked their system to reduce motion, items change position without sliding.
+</Callout>
+
+## API
+
+<ApiReference tag="cr-grid-layout" />
+
+## CrGridItem API
+
+<ApiReference tag="cr-grid-item" />

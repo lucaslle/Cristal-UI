@@ -1,9 +1,9 @@
 import Link from 'next/link';
 import type { ComponentType } from 'react';
 import AccordionPanels from '@/demos/accordion-panels';
-import DashboardBasic from '@/demos/dashboard-basic';
+import GridLayoutBasic from '@/demos/grid-layout-basic';
 import AccordionPanelsEn from '@/demos/en/accordion-panels';
-import DashboardBasicEn from '@/demos/en/dashboard-basic';
+import GridLayoutBasicEn from '@/demos/en/grid-layout-basic';
 import IconButtonBadgeEn from '@/demos/en/icon-button-badge';
 import MenuActionsEn from '@/demos/en/menu-actions';
 import OtpBasicEn from '@/demos/en/otp-basic';
@@ -21,7 +21,7 @@ import { copyOf, type Copy } from './copy';
 type Tile = { key: keyof Copy['tiles']; href: string; demo: Record<'en' | 'fr', ComponentType>; wide?: 2 | 3 };
 
 const tiles: Tile[] = [
-  { key: 'dashboard', href: 'tableau-de-bord', demo: { en: DashboardBasicEn, fr: DashboardBasic }, wide: 2 },
+  { key: 'gridLayout', href: 'grille-deplacable', demo: { en: GridLayoutBasicEn, fr: GridLayoutBasic }, wide: 2 },
   { key: 'otp', href: 'code', demo: { en: OtpBasicEn, fr: OtpBasic } },
   { key: 'panels', href: 'accordeon', demo: { en: AccordionPanelsEn, fr: AccordionPanels }, wide: 2 },
   { key: 'menu', href: 'menu', demo: { en: MenuActionsEn, fr: MenuActions } },

@@ -21,7 +21,7 @@ export const copy = {
     componentsLead: 'No screenshots: every card is the real component, the one you install.',
     docs: 'Documentation',
     tiles: {
-      dashboard: ['Dashboard', 'Drag the cards, pull their corner, everything rearranges. With the keyboard too.'],
+      gridLayout: ['Grid layout', 'Drag the cards, pull their corner, everything rearranges: build a dashboard in minutes. With the keyboard too.'],
       otp: ['One-time code', 'One box per digit, paste a whole code, automatic advance.'],
       panels: ['Accordion panels', 'The chosen panel widens, the others fold away smoothly.'],
       menu: ['Animated menus', 'Six opening animations, full keyboard navigation.'],
@@ -93,7 +93,7 @@ export const copy = {
     componentsLead: "Pas de captures d'écran : chaque carte est le vrai composant, celui que vous installez.",
     docs: 'Documentation',
     tiles: {
-      dashboard: ['Tableau de bord', 'Glissez les cartes, tirez leur coin, tout se réarrange. Au clavier aussi.'],
+      gridLayout: ['Grille déplaçable', 'Glissez les cartes, tirez leur coin, tout se réarrange : un tableau de bord en quelques minutes. Au clavier aussi.'],
       otp: ['Code à usage unique', 'Une case par chiffre, collage d’un code entier, passage automatique.'],
       panels: ['Accordéon en panneaux', 'Le panneau choisi s’élargit, les autres se replient en douceur.'],
       menu: ['Menus animés', 'Six animations d’ouverture, navigation complète au clavier.'],

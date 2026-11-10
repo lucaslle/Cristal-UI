@@ -27,7 +27,7 @@
   transition: all 0.2s;
 }
 
-::slotted(cr-widget) {
+::slotted(cr-grid-item) {
   z-index: 2;
 }
 

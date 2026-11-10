@@ -125,14 +125,14 @@ Ils participent au `<form>` parent comme des champs natifs (valeur envoyée, val
 </CrSelect>
 ```
 
-### Tableau de bord : `cr-dashboard`, `cr-widget`
+### Grille déplaçable : `cr-grid-layout`, `cr-grid-item`
 
-Grille de widgets déplacés par leur poignée (ou en maintenant le clic sur la carte) et redimensionnés par leur coin ; les autres s'écartent puis tout se tasse vers le haut. Au clavier : flèches pour déplacer, Maj + flèches pour la taille.
+Grille d'éléments (pour composer un tableau de bord, par exemple) déplacés par leur poignée (ou en maintenant le clic sur la carte) et redimensionnés par leur coin ; les autres s'écartent puis tout se tasse vers le haut. Au clavier : flèches pour déplacer, Maj + flèches pour la taille.
 
 ```tsx
-<CrDashboard columns={12} rowHeight={80} storageKey="mon-tableau" onCrLayoutChange={(e) => save(e.detail)}>
-  <CrWidget id="ventes" label="Ventes" x={0} y={0} w={4} h={2}>…</CrWidget>
-</CrDashboard>
+<CrGridLayout columns={12} rowHeight={80} storageKey="mon-tableau" onCrLayoutChange={(e) => save(e.detail)}>
+  <CrGridItem id="ventes" label="Ventes" x={0} y={0} w={4} h={2}>…</CrGridItem>
+</CrGridLayout>
 ```
 
 ### Champs spécialisés

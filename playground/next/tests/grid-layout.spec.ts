@@ -1,7 +1,7 @@
 import { expect, test, type Page } from '@playwright/test';
 
-const dash = (page: Page) => page.locator('cr-dashboard');
-const widget = (page: Page, id: string) => page.locator(`cr-widget#${id}`);
+const dash = (page: Page) => page.locator('cr-grid-layout');
+const widget = (page: Page, id: string) => page.locator(`cr-grid-item#${id}`);
 const area = (page: Page, id: string) => widget(page, id).evaluate((el) => `${(el as HTMLElement).style.gridColumn} | ${(el as HTMLElement).style.gridRow}`);
 const status = (page: Page) => dash(page).locator('[role="status"]');
 
@@ -77,7 +77,7 @@ test('the layout is kept on reload and Restaurer brings back the original', asyn
 test('on a narrow screen widgets stack full width, without handles', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 900 });
   await expect(widget(page, 'revenus')).not.toHaveAttribute('data-editable', '');
-  const widths = await page.locator('cr-widget').evaluateAll((els) => els.map((el) => Math.round(el.getBoundingClientRect().width)));
+  const widths = await page.locator('cr-grid-item').evaluateAll((els) => els.map((el) => Math.round(el.getBoundingClientRect().width)));
   expect(new Set(widths).size).toBe(1);
 });
 

@@ -23,7 +23,7 @@ export const track = (event: PointerEvent, target: HTMLElement, onMove: (dx: num
 
 export const rectsOf = (elements: HTMLElement[]) => new Map(elements.map((el) => [el, el.getBoundingClientRect()]));
 
-/** Chaque widget glisse de son ancienne place à la nouvelle (FLIP). */
+/** Chaque élément glisse de son ancienne place à la nouvelle (FLIP). */
 export const slide = (before: Map<HTMLElement, DOMRect>, skip?: HTMLElement) => {
   if (reducedMotion()) return;
   before.forEach((old, el) => {
@@ -41,7 +41,7 @@ export const slide = (before: Map<HTMLElement, DOMRect>, skip?: HTMLElement) => 
   });
 };
 
-/** Le widget lâché revient en douceur se poser dans sa case. */
+/** L’élément lâché revient en douceur se poser dans sa case. */
 export const settle = (el: HTMLElement) => {
   const from = el.style.translate;
   el.style.translate = '';
@@ -50,7 +50,7 @@ export const settle = (el: HTMLElement) => {
 
 const CONTROLS = 'a[href], button, input, select, textarea, label, summary, [contenteditable="true"], [contenteditable=""], [role="button"], [role="checkbox"], [role="slider"], [role="textbox"]';
 
-/** Vrai si le pointeur est sur un contrôle du widget : maintenir le clic dessus ne doit pas soulever la carte. */
+/** Vrai si le pointeur est sur un contrôle de l’élément : maintenir le clic dessus ne doit pas soulever la carte. */
 export const onControl = (path: EventTarget[], widget: HTMLElement) => {
   for (const el of path) {
     if (el === widget) return false;
