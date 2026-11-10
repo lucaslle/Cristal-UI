@@ -799,6 +799,8 @@ export namespace Components {
     /**
      * Choix d'une option parmi quelques-unes, côte à côte (Jour, Semaine, Mois…). Les options sont des éléments option enfants ;
      * data-count sur une option ajoute un compteur, qui compte et rebondit quand on choisit l'option.
+     * Avec des enfants cr-tab-panel à la place, le contrôle devient des onglets : chaque panneau donne un onglet,
+     * seul le panneau choisi est affiché et il arrive du côté du changement.
      */
     interface CrSegmented {
         /**
@@ -812,15 +814,15 @@ export namespace Components {
          */
         "fit": boolean;
         /**
-          * Nom lu par les lecteurs d'écran (le contrôle n'a pas de libellé visible).
+          * Nom lu par les lecteurs d'écran (le contrôle, ou la barre d'onglets, n'a pas de libellé visible).
          */
         "label": string;
         /**
-          * Nom envoyé avec le formulaire.
+          * Nom envoyé avec le formulaire ; sans effet en mode onglets.
          */
         "name"?: string;
         /**
-          * Valeur de l'option choisie ; la première option disponible par défaut.
+          * Valeur de l'option choisie ; la première option disponible par défaut. En mode onglets : value du cr-tab-panel choisi, ou à défaut sa position en texte ("0", "1"…).
           * @default ''
          */
         "value": string;
@@ -1033,13 +1035,17 @@ export namespace Components {
         "value": string;
     }
     /**
-     * Contenu d'un onglet, enfant de cr-tabs. Seul le panneau de l'onglet choisi est affiché.
+     * Contenu d'un onglet, enfant de cr-segmented (mode onglets). Seul le panneau de l'onglet choisi est affiché.
      */
     interface CrTabPanel {
         /**
           * Libellé de l'onglet.
          */
         "label": string;
+        /**
+          * Valeur de l'onglet, reprise par value et crChange de cr-segmented ; sa position en texte ("0", "1"…) par défaut.
+         */
+        "value"?: string;
     }
     /**
      * Tableau dont chaque utilisateur règle les colonnes : largeur, ordre, colonnes fixées et masquées, densité des lignes.
@@ -1073,17 +1079,6 @@ export namespace Components {
           * @default 'default'
          */
         "variant": TableVariant;
-    }
-    /**
-     * Onglets : une barre d'onglets et le panneau de l'onglet choisi. Chaque onglet est un enfant cr-tab-panel.
-     * Un trait glisse sous l'onglet choisi, et le contenu arrive du côté de l'onglet choisi.
-     */
-    interface CrTabs {
-        /**
-          * Index de l'onglet choisi, à partir de 0.
-          * @default 0
-         */
-        "selected": number;
     }
     /**
      * Saisie d'étiquettes : chaque mot validé (Entrée ou virgule) devient une pastille, retirable avec ×.
@@ -1301,10 +1296,6 @@ export interface CrSwitchCustomEvent<T> extends CustomEvent<T> {
 export interface CrTableCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLCrTableElement;
-}
-export interface CrTabsCustomEvent<T> extends CustomEvent<T> {
-    detail: T;
-    target: HTMLCrTabsElement;
 }
 export interface CrTagInputCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -1713,6 +1704,8 @@ declare global {
     /**
      * Choix d'une option parmi quelques-unes, côte à côte (Jour, Semaine, Mois…). Les options sont des éléments option enfants ;
      * data-count sur une option ajoute un compteur, qui compte et rebondit quand on choisit l'option.
+     * Avec des enfants cr-tab-panel à la place, le contrôle devient des onglets : chaque panneau donne un onglet,
+     * seul le panneau choisi est affiché et il arrive du côté du changement.
      */
     interface HTMLCrSegmentedElement extends Components.CrSegmented, HTMLStencilElement {
         addEventListener<K extends keyof HTMLCrSegmentedElementEventMap>(type: K, listener: (this: HTMLCrSegmentedElement, ev: CrSegmentedCustomEvent<HTMLCrSegmentedElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -1833,7 +1826,7 @@ declare global {
         new (): HTMLCrSwitchElement;
     };
     /**
-     * Contenu d'un onglet, enfant de cr-tabs. Seul le panneau de l'onglet choisi est affiché.
+     * Contenu d'un onglet, enfant de cr-segmented (mode onglets). Seul le panneau de l'onglet choisi est affiché.
      */
     interface HTMLCrTabPanelElement extends Components.CrTabPanel, HTMLStencilElement {
     }
@@ -1860,27 +1853,6 @@ declare global {
     var HTMLCrTableElement: {
         prototype: HTMLCrTableElement;
         new (): HTMLCrTableElement;
-    };
-    interface HTMLCrTabsElementEventMap {
-        "crChange": number;
-    }
-    /**
-     * Onglets : une barre d'onglets et le panneau de l'onglet choisi. Chaque onglet est un enfant cr-tab-panel.
-     * Un trait glisse sous l'onglet choisi, et le contenu arrive du côté de l'onglet choisi.
-     */
-    interface HTMLCrTabsElement extends Components.CrTabs, HTMLStencilElement {
-        addEventListener<K extends keyof HTMLCrTabsElementEventMap>(type: K, listener: (this: HTMLCrTabsElement, ev: CrTabsCustomEvent<HTMLCrTabsElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
-        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
-        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
-        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
-        removeEventListener<K extends keyof HTMLCrTabsElementEventMap>(type: K, listener: (this: HTMLCrTabsElement, ev: CrTabsCustomEvent<HTMLCrTabsElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
-        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
-        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
-        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
-    }
-    var HTMLCrTabsElement: {
-        prototype: HTMLCrTabsElement;
-        new (): HTMLCrTabsElement;
     };
     interface HTMLCrTagInputElementEventMap {
         "crChange": string[];
@@ -1996,7 +1968,6 @@ declare global {
         "cr-switch": HTMLCrSwitchElement;
         "cr-tab-panel": HTMLCrTabPanelElement;
         "cr-table": HTMLCrTableElement;
-        "cr-tabs": HTMLCrTabsElement;
         "cr-tag-input": HTMLCrTagInputElement;
         "cr-textarea": HTMLCrTextareaElement;
         "cr-toast": HTMLCrToastElement;
@@ -2892,6 +2863,8 @@ declare namespace LocalJSX {
     /**
      * Choix d'une option parmi quelques-unes, côte à côte (Jour, Semaine, Mois…). Les options sont des éléments option enfants ;
      * data-count sur une option ajoute un compteur, qui compte et rebondit quand on choisit l'option.
+     * Avec des enfants cr-tab-panel à la place, le contrôle devient des onglets : chaque panneau donne un onglet,
+     * seul le panneau choisi est affiché et il arrive du côté du changement.
      */
     interface CrSegmented {
         /**
@@ -2909,19 +2882,19 @@ declare namespace LocalJSX {
          */
         "form"?: string;
         /**
-          * Nom lu par les lecteurs d'écran (le contrôle n'a pas de libellé visible).
+          * Nom lu par les lecteurs d'écran (le contrôle, ou la barre d'onglets, n'a pas de libellé visible).
          */
         "label": string;
         /**
-          * Nom envoyé avec le formulaire.
+          * Nom envoyé avec le formulaire ; sans effet en mode onglets.
          */
         "name"?: string;
         /**
-          * Émis quand l'option choisie change ; detail : sa valeur.
+          * Émis quand l'option (ou l'onglet) choisie change ; detail : sa valeur.
          */
         "onCrChange"?: (event: CrSegmentedCustomEvent<string>) => void;
         /**
-          * Valeur de l'option choisie ; la première option disponible par défaut.
+          * Valeur de l'option choisie ; la première option disponible par défaut. En mode onglets : value du cr-tab-panel choisi, ou à défaut sa position en texte ("0", "1"…).
           * @default ''
          */
         "value"?: string;
@@ -3162,13 +3135,17 @@ declare namespace LocalJSX {
         "value"?: string;
     }
     /**
-     * Contenu d'un onglet, enfant de cr-tabs. Seul le panneau de l'onglet choisi est affiché.
+     * Contenu d'un onglet, enfant de cr-segmented (mode onglets). Seul le panneau de l'onglet choisi est affiché.
      */
     interface CrTabPanel {
         /**
           * Libellé de l'onglet.
          */
         "label": string;
+        /**
+          * Valeur de l'onglet, reprise par value et crChange de cr-segmented ; sa position en texte ("0", "1"…) par défaut.
+         */
+        "value"?: string;
     }
     /**
      * Tableau dont chaque utilisateur règle les colonnes : largeur, ordre, colonnes fixées et masquées, densité des lignes.
@@ -3206,21 +3183,6 @@ declare namespace LocalJSX {
           * @default 'default'
          */
         "variant"?: TableVariant;
-    }
-    /**
-     * Onglets : une barre d'onglets et le panneau de l'onglet choisi. Chaque onglet est un enfant cr-tab-panel.
-     * Un trait glisse sous l'onglet choisi, et le contenu arrive du côté de l'onglet choisi.
-     */
-    interface CrTabs {
-        /**
-          * Émis quand l'onglet choisi change ; detail : son index.
-         */
-        "onCrChange"?: (event: CrTabsCustomEvent<number>) => void;
-        /**
-          * Index de l'onglet choisi, à partir de 0.
-          * @default 0
-         */
-        "selected"?: number;
     }
     /**
      * Saisie d'étiquettes : chaque mot validé (Entrée ou virgule) devient une pastille, retirable avec ×.
@@ -3609,15 +3571,13 @@ declare namespace LocalJSX {
     }
     interface CrTabPanelAttributes {
         "label": string;
+        "value": string;
     }
     interface CrTableAttributes {
         "label": string;
         "variant": TableVariant;
         "density": TableDensity;
         "storageKey": string;
-    }
-    interface CrTabsAttributes {
-        "selected": number;
     }
     interface CrTagInputAttributes {
         "label": string;
@@ -3683,7 +3643,6 @@ declare namespace LocalJSX {
         "cr-switch": Omit<CrSwitch, keyof CrSwitchAttributes> & { [K in keyof CrSwitch & keyof CrSwitchAttributes]?: CrSwitch[K] } & { [K in keyof CrSwitch & keyof CrSwitchAttributes as `attr:${K}`]?: CrSwitchAttributes[K] } & { [K in keyof CrSwitch & keyof CrSwitchAttributes as `prop:${K}`]?: CrSwitch[K] } & OneOf<"label", CrSwitch["label"], CrSwitchAttributes["label"]>;
         "cr-tab-panel": Omit<CrTabPanel, keyof CrTabPanelAttributes> & { [K in keyof CrTabPanel & keyof CrTabPanelAttributes]?: CrTabPanel[K] } & { [K in keyof CrTabPanel & keyof CrTabPanelAttributes as `attr:${K}`]?: CrTabPanelAttributes[K] } & { [K in keyof CrTabPanel & keyof CrTabPanelAttributes as `prop:${K}`]?: CrTabPanel[K] } & OneOf<"label", CrTabPanel["label"], CrTabPanelAttributes["label"]>;
         "cr-table": Omit<CrTable, keyof CrTableAttributes> & { [K in keyof CrTable & keyof CrTableAttributes]?: CrTable[K] } & { [K in keyof CrTable & keyof CrTableAttributes as `attr:${K}`]?: CrTableAttributes[K] } & { [K in keyof CrTable & keyof CrTableAttributes as `prop:${K}`]?: CrTable[K] } & OneOf<"label", CrTable["label"], CrTableAttributes["label"]>;
-        "cr-tabs": Omit<CrTabs, keyof CrTabsAttributes> & { [K in keyof CrTabs & keyof CrTabsAttributes]?: CrTabs[K] } & { [K in keyof CrTabs & keyof CrTabsAttributes as `attr:${K}`]?: CrTabsAttributes[K] } & { [K in keyof CrTabs & keyof CrTabsAttributes as `prop:${K}`]?: CrTabs[K] };
         "cr-tag-input": Omit<CrTagInput, keyof CrTagInputAttributes> & { [K in keyof CrTagInput & keyof CrTagInputAttributes]?: CrTagInput[K] } & { [K in keyof CrTagInput & keyof CrTagInputAttributes as `attr:${K}`]?: CrTagInputAttributes[K] } & { [K in keyof CrTagInput & keyof CrTagInputAttributes as `prop:${K}`]?: CrTagInput[K] } & OneOf<"label", CrTagInput["label"], CrTagInputAttributes["label"]>;
         "cr-textarea": Omit<CrTextarea, keyof CrTextareaAttributes> & { [K in keyof CrTextarea & keyof CrTextareaAttributes]?: CrTextarea[K] } & { [K in keyof CrTextarea & keyof CrTextareaAttributes as `attr:${K}`]?: CrTextareaAttributes[K] } & { [K in keyof CrTextarea & keyof CrTextareaAttributes as `prop:${K}`]?: CrTextarea[K] } & OneOf<"label", CrTextarea["label"], CrTextareaAttributes["label"]>;
         "cr-toast": Omit<CrToast, keyof CrToastAttributes> & { [K in keyof CrToast & keyof CrToastAttributes]?: CrToast[K] } & { [K in keyof CrToast & keyof CrToastAttributes as `attr:${K}`]?: CrToastAttributes[K] } & { [K in keyof CrToast & keyof CrToastAttributes as `prop:${K}`]?: CrToast[K] };
@@ -3802,6 +3761,8 @@ declare module "@stencil/core" {
             /**
              * Choix d'une option parmi quelques-unes, côte à côte (Jour, Semaine, Mois…). Les options sont des éléments option enfants ;
              * data-count sur une option ajoute un compteur, qui compte et rebondit quand on choisit l'option.
+             * Avec des enfants cr-tab-panel à la place, le contrôle devient des onglets : chaque panneau donne un onglet,
+             * seul le panneau choisi est affiché et il arrive du côté du changement.
              */
             "cr-segmented": LocalJSX.IntrinsicElements["cr-segmented"] & JSXBase.HTMLAttributes<HTMLCrSegmentedElement>;
             /**
@@ -3832,18 +3793,13 @@ declare module "@stencil/core" {
              */
             "cr-switch": LocalJSX.IntrinsicElements["cr-switch"] & JSXBase.HTMLAttributes<HTMLCrSwitchElement>;
             /**
-             * Contenu d'un onglet, enfant de cr-tabs. Seul le panneau de l'onglet choisi est affiché.
+             * Contenu d'un onglet, enfant de cr-segmented (mode onglets). Seul le panneau de l'onglet choisi est affiché.
              */
             "cr-tab-panel": LocalJSX.IntrinsicElements["cr-tab-panel"] & JSXBase.HTMLAttributes<HTMLCrTabPanelElement>;
             /**
              * Tableau dont chaque utilisateur règle les colonnes : largeur, ordre, colonnes fixées et masquées, densité des lignes.
              */
             "cr-table": LocalJSX.IntrinsicElements["cr-table"] & JSXBase.HTMLAttributes<HTMLCrTableElement>;
-            /**
-             * Onglets : une barre d'onglets et le panneau de l'onglet choisi. Chaque onglet est un enfant cr-tab-panel.
-             * Un trait glisse sous l'onglet choisi, et le contenu arrive du côté de l'onglet choisi.
-             */
-            "cr-tabs": LocalJSX.IntrinsicElements["cr-tabs"] & JSXBase.HTMLAttributes<HTMLCrTabsElement>;
             /**
              * Saisie d'étiquettes : chaque mot validé (Entrée ou virgule) devient une pastille, retirable avec ×.
              */

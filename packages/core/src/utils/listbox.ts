@@ -66,9 +66,9 @@ export const readOptions = (host: HTMLElement): ListOption[] =>
     count: option.dataset.count,
   }));
 
-export const watchOptions = (host: HTMLElement, onChange: (options: ListOption[]) => void) => {
+export const watchOptions = (host: HTMLElement, onChange: (options: ListOption[]) => void, read = readOptions) => {
   const observer = new MutationObserver((mutations) => {
-    if (mutations.some((mutation) => mutation.target !== host || mutation.type === 'childList')) onChange(readOptions(host));
+    if (mutations.some((mutation) => mutation.target !== host || mutation.type === 'childList')) onChange(read(host));
   });
   observer.observe(host, { childList: true, subtree: true, characterData: true, attributes: true });
   return () => observer.disconnect();

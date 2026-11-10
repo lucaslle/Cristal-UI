@@ -189,14 +189,23 @@ Zone de dépôt posée sur un vrai `input type="file"` (clic, Entrée, Espace, T
 <CrFileUpload label="Justificatifs" hint="PDF ou image." name="justificatifs" accept=".pdf,image/*" multiple onCrChange={(event) => setFiles(event.detail)} />
 ```
 
-### Contrôle segmenté : `cr-segmented`
+### Contrôle segmenté et onglets : `cr-segmented`, `cr-tab-panel`
 
-Choix d'une option parmi quelques-unes, côte à côte : options en `option` enfants (`data-count` ajoute un compteur), `label` obligatoire, `name`, `value`, `variant` (`thumb` par défaut, `clip`, `underline`, `outline`), `fit` (segments à la largeur de leur libellé), `disabled`. Événement `onCrChange`.
+Choix d'une option parmi quelques-unes, côte à côte : options en `option` enfants (`data-count` ajoute un compteur), `label` obligatoire, `name`, `value`, `variant` (`thumb` par défaut, `clip`, `underline`, `outline`), `fit` (segments à la largeur de leur libellé), `disabled`. Événement `onCrChange` (valeur choisie).
 
 ```tsx
 <CrSegmented label="Période" value="month" onCrChange={(event) => setPeriod(event.detail)}>
   <option value="day">Jour</option>
   <option value="month" data-count="38">Mois</option>
+</CrSegmented>
+```
+
+Avec des enfants `cr-tab-panel` à la place des `option`, le contrôle devient des onglets (modèle W3C à activation automatique : flèches, Début, Fin) : le `label` du panneau devient l'onglet, `value` désigne l'onglet choisi par la `value` du panneau, ou à défaut sa position (`"0"`, `"1"`…). Le contenu arrive du côté du changement, les autres panneaux sont masqués dès le rendu serveur, rien n'est envoyé avec un formulaire. `variant="underline"` donne l'allure classique des onglets.
+
+```tsx
+<CrSegmented label="Fiche produit" variant="underline" fit value={tab} onCrChange={(event) => setTab(event.detail)}>
+  <CrTabPanel label="Description" value="description">…</CrTabPanel>
+  <CrTabPanel label="Avis" value="reviews">…</CrTabPanel>
 </CrSegmented>
 ```
 
@@ -283,17 +292,6 @@ Contenu de la section dans le slot par défaut, valeur à droite du titre dans `
   <CrAccordionItem label="Conception" open>Maquettes validées.</CrAccordionItem>
   <CrAccordionItem label="Lancement">Mise en ligne.</CrAccordionItem>
 </CrAccordion>
-```
-
-### Onglets : `cr-tabs`, `cr-tab-panel`
-
-Un onglet par enfant `cr-tab-panel` (son `label` devient l'onglet) ; `selected` donne l'index de l'onglet choisi. Modèle W3C à activation automatique (flèches, Début, Fin). Un trait glisse sous l'onglet choisi et le contenu arrive du côté du changement. Les autres panneaux sont masqués dès le rendu serveur. Événement `onCrChange` (index).
-
-```tsx
-<CrTabs selected={tab} onCrChange={(event) => setTab(event.detail)}>
-  <CrTabPanel label="Description">…</CrTabPanel>
-  <CrTabPanel label="Avis">…</CrTabPanel>
-</CrTabs>
 ```
 
 ### Étapes : `cr-stepper`, `cr-step`

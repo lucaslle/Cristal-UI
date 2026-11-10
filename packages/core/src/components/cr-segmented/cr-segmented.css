@@ -100,14 +100,14 @@
     width var(--cr-segmented-spring);
 }
 
-:host([variant='thumb']) .segment[aria-checked='true'] {
+:host([variant='thumb']) .segment.checked {
   font-weight: var(--cr-font-weight-bold);
   color: var(--cr-color-text);
 }
 
-:host([variant='thumb']) .segment[aria-checked='true'] .count,
-:host([variant='underline']) .segment[aria-checked='true'] .count,
-:host([variant='outline']) .segment[aria-checked='true'] .count {
+:host([variant='thumb']) .segment.checked .count,
+:host([variant='underline']) .segment.checked .count,
+:host([variant='outline']) .segment.checked .count {
   color: var(--cr-color-on-primary);
   background: var(--cr-color-primary);
 }
@@ -144,8 +144,8 @@
   box-shadow: inset 0 0 0 1.5px var(--cr-color-primary-text);
 }
 
-:host([variant='underline']) .segment[aria-checked='true'],
-:host([variant='outline']) .segment[aria-checked='true'] {
+:host([variant='underline']) .segment.checked,
+:host([variant='outline']) .segment.checked {
   font-weight: var(--cr-font-weight-bold);
   color: var(--cr-color-primary-text);
 }
@@ -174,25 +174,25 @@
 }
 
 /* Avant l'hydratation (rendu serveur), la pastille n'est pas encore placée : le segment choisi porte le fond. */
-:host(:not([data-ready])) .segment[aria-checked='true'] {
+:host(:not([data-ready])) .segment.checked {
   background: var(--cr-color-surface);
 }
 
-:host([variant='underline']:not([data-ready])) .segment[aria-checked='true'] {
+:host([variant='underline']:not([data-ready])) .segment.checked {
   background: none;
   box-shadow: inset 0 -3px var(--cr-color-primary);
 }
 
-:host([variant='outline']:not([data-ready])) .segment[aria-checked='true'] {
+:host([variant='outline']:not([data-ready])) .segment.checked {
   background: var(--cr-color-primary-subtle);
 }
 
-:host([variant='clip']:not([data-ready])) .segment[aria-checked='true'] {
+:host([variant='clip']:not([data-ready])) .segment.checked {
   color: var(--cr-color-on-primary);
   background: var(--cr-color-primary);
 }
 
-:host([variant='thumb']) .segment[aria-checked='true'] .count,
+:host([variant='thumb']) .segment.checked .count,
 .overlay [data-checked] .count {
   animation: cr-segmented-pop 0.4s cubic-bezier(0.3, 1.6, 0.5, 1);
 }
@@ -203,12 +203,56 @@
   }
 }
 
+/* Mode onglets : la barre au-dessus du panneau choisi. */
+:host([data-tabs]) {
+  display: block;
+}
+
+:host([data-tabs]) .group {
+  width: fit-content;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+/* Variant underline : le trait de base court sur toute la largeur, comme des onglets classiques. */
+:host([data-tabs][variant='underline']) .group {
+  width: auto;
+  justify-content: start;
+}
+
+.panel {
+  padding: var(--cr-spacing-lg) 0;
+  font-size: var(--cr-font-size-m);
+  border-radius: var(--cr-radius-m);
+}
+
+.panel:focus-visible {
+  outline: 2px solid var(--cr-color-focus);
+  outline-offset: -2px;
+}
+
+/* Le contenu glisse depuis le côté de l'onglet choisi, sans fondu : un texte à demi transparent ferait échouer le contraste. */
+.panel[data-direction] {
+  animation: cr-segmented-in 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.panel[data-direction='prev'] {
+  --cr-segmented-from: calc(-1 * var(--cr-spacing-xl));
+}
+
+@keyframes cr-segmented-in {
+  from {
+    transform: translateX(var(--cr-segmented-from, var(--cr-spacing-xl)));
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   :host([data-ready]) .thumb,
   :host([data-ready]) .overlay {
     transition: none;
   }
-  .count {
+  .count,
+  .panel[data-direction] {
     animation: none !important;
   }
 }

@@ -1,5 +1,5 @@
 import type React from 'react';
-import { CrAccordion, CrAccordionItem, CrButton, CrIconButton, CrCard, CrCheckbox, CrInput, CrSelect, CrTabPanel, CrTabs } from '@cristal/react/ssr';
+import { CrAccordion, CrAccordionItem, CrButton, CrIconButton, CrCard, CrCheckbox, CrInput, CrSegmented, CrSelect, CrTabPanel } from '@cristal/react/ssr';
 import { AccordionDemo } from './accordion-demo';
 import { StepperDemo } from './stepper-demo';
 import { SearchDemo } from './search-demo';
@@ -9,7 +9,6 @@ import { SwitchDemo } from './switch-demo';
 import { RadioGroupDemo } from './radio-group-demo';
 import { SliderDemo } from './slider-demo';
 import { FileUploadDemo } from './file-upload-demo';
-import { TabsDemo } from './tabs-demo';
 import { LoadingDemo } from './loading-demo';
 import { TableDemo } from './table-demo';
 import { FieldsDemo } from './fields-demo';
@@ -122,6 +121,10 @@ export default function Page() {
 
       <h2>Contrôle segmenté</h2>
       <SegmentedDemo />
+      <CrSegmented data-testid="ssr-tabs" label="Conditions" variant="outline" value="1">
+        <CrTabPanel label="Livraison">Livraison offerte dès 50 €.</CrTabPanel>
+        <CrTabPanel label="Retours">Retour gratuit sous 30 jours.</CrTabPanel>
+      </CrSegmented>
 
       <h2>Interrupteurs</h2>
       <SwitchDemo />
@@ -134,13 +137,6 @@ export default function Page() {
 
       <h2>Dépôt de fichiers</h2>
       <FileUploadDemo />
-
-      <h2>Onglets</h2>
-      <TabsDemo />
-      <CrTabs data-testid="ssr-tabs" selected={1}>
-        <CrTabPanel label="Livraison">Livraison offerte dès 50 €.</CrTabPanel>
-        <CrTabPanel label="Retours">Retour gratuit sous 30 jours.</CrTabPanel>
-      </CrTabs>
 
       <h2>Notifications</h2>
       <ToastDemo />

@@ -1,11 +1,19 @@
 ---
 title: Segmented control
-description: Pick one of a few options shown side by side, with a sliding thumb. Tag cr-segmented, React component CrSegmented.
+description: Pick one of a few options shown side by side, with a sliding thumb; or tabs, one panel visible at a time. Tags cr-segmented and cr-tab-panel, React components CrSegmented and CrTabPanel.
 ---
 
 import SegmentedBasic from '@/demos/en/segmented-basic';
 import SegmentedCounts from '@/demos/en/segmented-counts';
 import SegmentedFit from '@/demos/en/segmented-fit';
+import SegmentedTabs from '@/demos/en/segmented-tabs';
+
+The control has two modes, picked by its children:
+
+- `option` elements: a radio group, whose value can be sent with a form;
+- `CrTabPanel` elements: tabs, each with its content panel, one visible at a time.
+
+The four `variant` values and `fit` apply to both modes.
 
 ## Example
 
@@ -15,7 +23,7 @@ Options are child `option` elements, as with `CrSelect`. A thumb slides under th
 |---|---|
 | `thumb` | Sliding Thumb: a raised thumb, the chosen label goes bold (default) |
 | `clip` | Clip Text: a coloured thumb; while it slides, text turns white only where it covers it |
-| `underline` | no track: a bar slides under the chosen label, for light tabs |
+| `underline` | no track: a bar slides under the chosen label, the classic tabs look |
 | `outline` | bordered track, tinted thumb ringed with the primary colour |
 
 <Preview column>
@@ -44,17 +52,44 @@ By default, segments all have the same width. With `fit`, each one hugs its labe
 
 <include>../../../demos/en/segmented-fit.tsx</include>
 
+## Tabs
+
+With `CrTabPanel` children instead of `option` elements, the control becomes tabs: each panel's `label` becomes a tab, its content the panel. `value` names the chosen tab by its panel's `value`, or else by its position as a string (`"0"`, `"1"`…); the first tab by default. `onCrChange` returns that value. In tabs mode, the control sends nothing with a form.
+
+The content comes in from the side of the chosen tab: from the right when moving forward, from the left when moving back. With `underline`, the base line runs the full width; add `fit` for tabs that hug their labels.
+
+<Preview column>
+  <SegmentedTabs />
+</Preview>
+
+<include>../../../demos/en/segmented-tabs.tsx</include>
+
+Panels that are not chosen are hidden by the component itself: imported from `@cristal/react/ssr`, tabs arrive in the right state, with no flash of the other panels.
+
 <Callout>
-  If the user asked their system to reduce motion, the thumb jumps straight to the chosen option and counts do not move.
+  If the user asked their system to reduce motion, the thumb jumps straight to the chosen option or tab, counts do not move and the panel appears without sliding.
 </Callout>
 
 ## Accessibility
+
+### With options
 
 - The control is a radio group (`role="radiogroup"`) named by `label`, which is required since there is no visible label.
 - A single Tab stop enters the group, on the chosen option; arrow keys pick the previous or next option (wrapping), Home and End the first or last one.
 - The count is read with the label ("Month (38)"); the counting number is not read.
 - With `name`, the chosen value is sent with the form.
 
+### With tabs
+
+- The component follows the W3C tabs pattern: `role="tablist"` named by `label`, one `role="tab"` per tab with `aria-selected` and `aria-controls`, and a `role="tabpanel"` named by its tab (`aria-labelledby`).
+- A single Tab stop enters the tab bar, on the chosen tab; one more Tab goes into the panel.
+- Automatic activation: Right Arrow and Left Arrow pick the next or previous tab (wrapping), Home and End the first or last one.
+- The chosen tab does not rely on colour alone: the thumb or the thick bar is under it.
+
 ## API
 
 <ApiReference tag="cr-segmented" />
+
+## CrTabPanel API
+
+<ApiReference tag="cr-tab-panel" />
