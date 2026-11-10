@@ -82,6 +82,11 @@ export const en = {
   sparkline: (label: string, min: string, max: string, last: string, trend: -1 | 0 | 1) =>
     `${label}: last value ${last}, minimum ${min}, maximum ${max}, ${{ 1: 'trending up', 0: 'stable', [-1]: 'trending down' }[trend]}`,
 
+  pagination: 'Pagination',
+  previousPage: 'Previous page',
+  nextPage: 'Next page',
+  pageNumber: (page: number) => `Page ${page}`,
+
   openAll: 'Open all',
   closeAll: 'Close all',
 

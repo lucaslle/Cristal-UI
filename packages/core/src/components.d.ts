@@ -809,6 +809,27 @@ export namespace Components {
         "value": string;
     }
     /**
+     * Pagination : page précédente, numéros de pages (avec « … » quand il y en a beaucoup) et page suivante.
+     * Avec href, chaque numéro est un vrai lien : Ctrl/Cmd+clic, clic molette et « Ouvrir dans un nouvel onglet » restent natifs.
+     * Sans href, ce sont des boutons et crChange donne la page choisie. La pastille de la page courante glisse jusqu'au nouveau numéro.
+     */
+    interface CrPagination {
+        /**
+          * Adresse des pages, où {page} est remplacé par le numéro (« /produits?page={page} ») : les pages deviennent des liens.
+         */
+        "href"?: string;
+        /**
+          * Page courante, à partir de 1.
+          * @default 1
+         */
+        "page": number;
+        /**
+          * Nombre de pages.
+          * @default 1
+         */
+        "total": number;
+    }
+    /**
      * Fenêtre contextuelle : petit panneau non modal ouvert par un bouton, pour du contenu interactif (formulaire court, réglages…).
      * Le focus entre dans le panneau à l'ouverture et revient au bouton à la fermeture (Échap, clic à l'extérieur, bouton).
      */
@@ -1471,6 +1492,10 @@ export interface CrOtpCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLCrOtpElement;
 }
+export interface CrPaginationCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLCrPaginationElement;
+}
 export interface CrPopoverCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLCrPopoverElement;
@@ -1911,6 +1936,28 @@ declare global {
         prototype: HTMLCrOtpElement;
         new (): HTMLCrOtpElement;
     };
+    interface HTMLCrPaginationElementEventMap {
+        "crChange": number;
+    }
+    /**
+     * Pagination : page précédente, numéros de pages (avec « … » quand il y en a beaucoup) et page suivante.
+     * Avec href, chaque numéro est un vrai lien : Ctrl/Cmd+clic, clic molette et « Ouvrir dans un nouvel onglet » restent natifs.
+     * Sans href, ce sont des boutons et crChange donne la page choisie. La pastille de la page courante glisse jusqu'au nouveau numéro.
+     */
+    interface HTMLCrPaginationElement extends Components.CrPagination, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLCrPaginationElementEventMap>(type: K, listener: (this: HTMLCrPaginationElement, ev: CrPaginationCustomEvent<HTMLCrPaginationElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLCrPaginationElementEventMap>(type: K, listener: (this: HTMLCrPaginationElement, ev: CrPaginationCustomEvent<HTMLCrPaginationElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLCrPaginationElement: {
+        prototype: HTMLCrPaginationElement;
+        new (): HTMLCrPaginationElement;
+    };
     interface HTMLCrPopoverElementEventMap {
         "crToggle": boolean;
     }
@@ -2290,6 +2337,7 @@ declare global {
         "cr-loader": HTMLCrLoaderElement;
         "cr-menu": HTMLCrMenuElement;
         "cr-otp": HTMLCrOtpElement;
+        "cr-pagination": HTMLCrPaginationElement;
         "cr-popover": HTMLCrPopoverElement;
         "cr-progress": HTMLCrProgressElement;
         "cr-progress-steps": HTMLCrProgressStepsElement;
@@ -3195,6 +3243,31 @@ declare namespace LocalJSX {
         "value"?: string;
     }
     /**
+     * Pagination : page précédente, numéros de pages (avec « … » quand il y en a beaucoup) et page suivante.
+     * Avec href, chaque numéro est un vrai lien : Ctrl/Cmd+clic, clic molette et « Ouvrir dans un nouvel onglet » restent natifs.
+     * Sans href, ce sont des boutons et crChange donne la page choisie. La pastille de la page courante glisse jusqu'au nouveau numéro.
+     */
+    interface CrPagination {
+        /**
+          * Adresse des pages, où {page} est remplacé par le numéro (« /produits?page={page} ») : les pages deviennent des liens.
+         */
+        "href"?: string;
+        /**
+          * Émis au choix d'une page, sans href ; detail : le numéro de la page.
+         */
+        "onCrChange"?: (event: CrPaginationCustomEvent<number>) => void;
+        /**
+          * Page courante, à partir de 1.
+          * @default 1
+         */
+        "page"?: number;
+        /**
+          * Nombre de pages.
+          * @default 1
+         */
+        "total"?: number;
+    }
+    /**
      * Fenêtre contextuelle : petit panneau non modal ouvert par un bouton, pour du contenu interactif (formulaire court, réglages…).
      * Le focus entre dans le panneau à l'ouverture et revient au bouton à la fermeture (Échap, clic à l'extérieur, bouton).
      */
@@ -4078,6 +4151,11 @@ declare namespace LocalJSX {
         "required": boolean;
         "disabled": boolean;
     }
+    interface CrPaginationAttributes {
+        "page": number;
+        "total": number;
+        "href": string;
+    }
     interface CrPopoverAttributes {
         "label": string;
         "open": boolean;
@@ -4239,6 +4317,7 @@ declare namespace LocalJSX {
         "cr-loader": Omit<CrLoader, keyof CrLoaderAttributes> & { [K in keyof CrLoader & keyof CrLoaderAttributes]?: CrLoader[K] } & { [K in keyof CrLoader & keyof CrLoaderAttributes as `attr:${K}`]?: CrLoaderAttributes[K] } & { [K in keyof CrLoader & keyof CrLoaderAttributes as `prop:${K}`]?: CrLoader[K] };
         "cr-menu": Omit<CrMenu, keyof CrMenuAttributes> & { [K in keyof CrMenu & keyof CrMenuAttributes]?: CrMenu[K] } & { [K in keyof CrMenu & keyof CrMenuAttributes as `attr:${K}`]?: CrMenuAttributes[K] } & { [K in keyof CrMenu & keyof CrMenuAttributes as `prop:${K}`]?: CrMenu[K] } & OneOf<"label", CrMenu["label"], CrMenuAttributes["label"]>;
         "cr-otp": Omit<CrOtp, keyof CrOtpAttributes> & { [K in keyof CrOtp & keyof CrOtpAttributes]?: CrOtp[K] } & { [K in keyof CrOtp & keyof CrOtpAttributes as `attr:${K}`]?: CrOtpAttributes[K] } & { [K in keyof CrOtp & keyof CrOtpAttributes as `prop:${K}`]?: CrOtp[K] } & OneOf<"label", CrOtp["label"], CrOtpAttributes["label"]>;
+        "cr-pagination": Omit<CrPagination, keyof CrPaginationAttributes> & { [K in keyof CrPagination & keyof CrPaginationAttributes]?: CrPagination[K] } & { [K in keyof CrPagination & keyof CrPaginationAttributes as `attr:${K}`]?: CrPaginationAttributes[K] } & { [K in keyof CrPagination & keyof CrPaginationAttributes as `prop:${K}`]?: CrPagination[K] };
         "cr-popover": Omit<CrPopover, keyof CrPopoverAttributes> & { [K in keyof CrPopover & keyof CrPopoverAttributes]?: CrPopover[K] } & { [K in keyof CrPopover & keyof CrPopoverAttributes as `attr:${K}`]?: CrPopoverAttributes[K] } & { [K in keyof CrPopover & keyof CrPopoverAttributes as `prop:${K}`]?: CrPopover[K] } & OneOf<"label", CrPopover["label"], CrPopoverAttributes["label"]>;
         "cr-progress": Omit<CrProgress, keyof CrProgressAttributes> & { [K in keyof CrProgress & keyof CrProgressAttributes]?: CrProgress[K] } & { [K in keyof CrProgress & keyof CrProgressAttributes as `attr:${K}`]?: CrProgressAttributes[K] } & { [K in keyof CrProgress & keyof CrProgressAttributes as `prop:${K}`]?: CrProgress[K] };
         "cr-progress-steps": Omit<CrProgressSteps, keyof CrProgressStepsAttributes> & { [K in keyof CrProgressSteps & keyof CrProgressStepsAttributes]?: CrProgressSteps[K] } & { [K in keyof CrProgressSteps & keyof CrProgressStepsAttributes as `attr:${K}`]?: CrProgressStepsAttributes[K] } & { [K in keyof CrProgressSteps & keyof CrProgressStepsAttributes as `prop:${K}`]?: CrProgressSteps[K] };
@@ -4376,6 +4455,12 @@ declare module "@stencil/core" {
              * Code à usage unique (reçu par SMS ou e-mail), une case par chiffre.
              */
             "cr-otp": LocalJSX.IntrinsicElements["cr-otp"] & JSXBase.HTMLAttributes<HTMLCrOtpElement>;
+            /**
+             * Pagination : page précédente, numéros de pages (avec « … » quand il y en a beaucoup) et page suivante.
+             * Avec href, chaque numéro est un vrai lien : Ctrl/Cmd+clic, clic molette et « Ouvrir dans un nouvel onglet » restent natifs.
+             * Sans href, ce sont des boutons et crChange donne la page choisie. La pastille de la page courante glisse jusqu'au nouveau numéro.
+             */
+            "cr-pagination": LocalJSX.IntrinsicElements["cr-pagination"] & JSXBase.HTMLAttributes<HTMLCrPaginationElement>;
             /**
              * Fenêtre contextuelle : petit panneau non modal ouvert par un bouton, pour du contenu interactif (formulaire court, réglages…).
              * Le focus entre dans le panneau à l'ouverture et revient au bouton à la fermeture (Échap, clic à l'extérieur, bouton).

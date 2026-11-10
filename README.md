@@ -357,6 +357,14 @@ Contenu de la section dans le slot par défaut, valeur à droite du titre dans `
 </CrAccordion>
 ```
 
+### Pagination : `cr-pagination`
+
+Navigation entre pages : `page` (courante, à partir de 1), `total`, `href` (adresse où `{page}` est remplacé par le numéro : chaque page devient un vrai lien, Ctrl/Cmd+clic et clic molette compris). Sans `href`, des boutons et l'événement `onCrChange` avec le numéro. « … » pour les longues séries (1 … 4 5 6 … 20), page courante marquée `aria-current="page"` par une pastille qui glisse jusqu'au nouveau numéro.
+
+```tsx
+<CrPagination page={page} total={20} href="/produits?page={page}" />
+```
+
 ### Étapes : `cr-stepper`, `cr-step`
 
 | Propriété | Composant | Description |

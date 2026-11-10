@@ -70,3 +70,4 @@ export const CrBadge = withAttributes(generated.CrBadge, elements.CrBadge);
 export const CrAlert = withAttributes(generated.CrAlert, elements.CrAlert);
 export const CrEmptyState = withAttributes(generated.CrEmptyState, elements.CrEmptyState);
 export const CrSparkline = withAttributes(generated.CrSparkline, elements.CrSparkline);
+export const CrPagination = withAttributes(generated.CrPagination, elements.CrPagination);

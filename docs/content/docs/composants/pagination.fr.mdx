@@ -1,0 +1,34 @@
+---
+title: Pagination
+description: Numéros de pages, page précédente et page suivante, en vrais liens. Balise cr-pagination, composant React CrPagination.
+---
+
+import PaginationBasic from '@/demos/pagination-basic';
+
+## Exemple
+
+`cr-pagination` affiche la page courante `page` (à partir de 1) parmi `total` pages : la première et la dernière, la page courante et ses voisines, et « … » à la place des autres (1 … 4 5 6 … 20). Une pastille cerclée marque la page courante ; elle glisse jusqu'au nouveau numéro quand la page change.
+
+Avec `href`, chaque page est un vrai lien : `{page}` y est remplacé par le numéro (`/produits?page={page}`). Ctrl/Cmd+clic, clic molette et « Ouvrir dans un nouvel onglet » fonctionnent comme sur n'importe quel lien. Sans `href`, ce sont des boutons : `onCrChange` donne la page choisie, à vous de mettre à jour `page`.
+
+<Preview>
+  <PaginationBasic />
+</Preview>
+
+<include>../../../demos/pagination-basic.tsx</include>
+
+<Callout>
+  Si l'utilisateur a demandé à son système de réduire les animations, la pastille passe directement sur la nouvelle page, sans glisser.
+</Callout>
+
+## Accessibilité
+
+- La pagination est une zone de navigation (`nav`) nommée « Pagination », avec une liste de liens ou de boutons.
+- Chaque numéro est nommé « Page 4 » ; la page courante porte `aria-current="page"`. Elle se distingue aussi sans couleur : en gras, dans une pastille cerclée.
+- Les flèches sont nommées « Page précédente » et « Page suivante » ; sur la première ou la dernière page, elles restent à leur place mais sont inactives (un lien sans adresse, ou un bouton désactivé). Si le focus était sur une flèche qui devient inactive, il passe sur la page courante.
+- Les « … » sont décoratifs, cachés aux lecteurs d'écran.
+- Tout se fait au clavier avec Tab, Entrée (et Espace pour les boutons).
+
+## API
+
+<ApiReference tag="cr-pagination" />
