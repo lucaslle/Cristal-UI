@@ -2,7 +2,8 @@ import { Build, Component, Element, Event, EventEmitter, Host, Prop, State, Watc
 import { Popup, createPopup } from '../../utils/popup';
 import { headerAction } from '../../utils/table-keys';
 import { applyAction } from '../../utils/table-actions';
-import { CellValue, cellProps } from '../../utils/table-cells';
+import { cellProps } from '../../utils/table-cells';
+import { CHUNK, More, Rows, watchMore } from '../../utils/table-rows';
 import { ColumnState, DENSITIES, TableColumn, TableDensity, TableLayout, TableVariant, loadLayout, mergeState, moveTo, neighbour, pinOffsets, resize, saveLayout, setHidden } from '../../utils/table-layout';
 import { columnLefts, dragColumn, dragResize, fitWidth, flipColumns } from '../../utils/table-pointer';
 import { Footer, Pin, Toolbar } from '../../utils/table-view';
@@ -40,6 +41,7 @@ export class CrTable {
   @State() message = '';
   @State() scrolled = false;
   @State() active?: string;
+  @State() limit = CHUNK; // lignes affichées, augmente pendant le défilement
 
   private table?: HTMLTableElement;
   private indicator?: HTMLElement;
@@ -50,6 +52,8 @@ export class CrTable {
   private focusKey?: string;
   private initialDensity: TableDensity = 'normal';
   private restored = false;
+  private more?: HTMLElement;
+  private observer?: IntersectionObserver;
 
   componentWillLoad() {
     this.initialDensity = this.density;
@@ -66,13 +70,18 @@ export class CrTable {
     this.state = mergeState(this.columns, saved?.columns ?? this.state);
   }
 
+  @Watch('rows')
+  rowsChanged() { this.limit = CHUNK; }
+
   disconnectedCallback() {
     this.popup?.destroy();
+    this.observer?.disconnect();
   }
 
   componentDidRender() {
     if (!this.popup && this.panel && this.menuButton)
       this.popup = createPopup({ popup: this.panel, anchor: this.menuButton, host: this.el, onOpen: () => (this.menuOpen = true), onClose: () => (this.menuOpen = false) });
+    this.observer = watchMore(this.observer, this.more, () => (this.limit += CHUNK));
     if (this.lefts && this.table) flipColumns(this.table, this.lefts);
     this.lefts = undefined;
     if (this.focusKey) this.header(this.focusKey)?.focus();
@@ -156,14 +165,14 @@ export class CrTable {
           onReset={this.reset}
         />
         <div class={{ scroll: true, scrolled: this.scrolled }} onScroll={(event) => (this.scrolled = (event.target as HTMLElement).scrollLeft > 0)}>
-          <table ref={(el) => (this.table = el)} aria-labelledby="title" style={{ width: `${visible.reduce((sum, c) => sum + c.width, 0)}px` }}>
+          <table ref={(el) => (this.table = el)} aria-labelledby="title" aria-rowcount={this.rows.length + 1} style={{ width: `${visible.reduce((sum, c) => sum + c.width, 0)}px` }}>
             <colgroup>
               {visible.map((c) => (
                 <col style={{ width: `${c.width}px` }} />
               ))}
             </colgroup>
             <thead>
-              <tr>
+              <tr aria-rowindex={1}>
                 {visible.map((c) => (
                   <th scope="col" {...cell(c)} tabIndex={c.key === active ? 0 : -1} aria-describedby="help" onFocus={() => (this.active = c.key)} onKeyDown={(e) => this.onHeaderKey(e, c)} onPointerDown={(e) => this.startDrag(e, c)}>
                     <span class="text">{this.labelOf(c.key)}</span>
@@ -174,18 +183,11 @@ export class CrTable {
               </tr>
             </thead>
             <tbody>
-              {this.rows.map((row) => (
-                <tr>
-                  {visible.map((c) => (
-                    <td {...cell(c)}>
-                      <CellValue value={row[c.key]} meta={meta.get(c.key)} />
-                    </td>
-                  ))}
-                </tr>
-              ))}
+              <Rows rows={this.rows} limit={this.limit} visible={visible} cell={cell} meta={meta} />
             </tbody>
           </table>
           <span ref={(el) => (this.indicator = el)} class="drop" hidden aria-hidden="true" />
+          <More shown={Math.min(this.limit, this.rows.length)} total={this.rows.length} moreRef={(el) => (this.more = el)} />
         </div>
         <Footer state={this.state} density={this.density} />
         <p class="sr-only" role="status">

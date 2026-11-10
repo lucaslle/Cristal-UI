@@ -143,3 +143,8 @@
     border-color: CanvasText;
   }
 }
+
+.body:focus-visible {
+  outline: 2px solid var(--cr-color-focus);
+  outline-offset: -2px;
+}

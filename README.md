@@ -217,7 +217,7 @@ Chaque utilisateur règle les colonnes : ordre (glisser un en-tête ou Alt + fl�
 | `density` | `comfortable`, `normal` (par défaut), `compact` |
 | `storageKey` | clé localStorage pour retenir les réglages |
 
-Événement `onCrLayoutChange` avec la présentation dans `event.detail`.
+Événement `onCrLayoutChange` avec la présentation dans `event.detail`. Les grandes listes s'affichent par paquets de 100 lignes pendant le défilement.
 
 ```tsx
 <CrTable label="Commandes" columns={columns} rows={rows} storageKey="commandes" />

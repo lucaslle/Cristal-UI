@@ -40,6 +40,7 @@ Chaque `CrWidget` a un titre (`label`), une position (`x`, `y`, en cases à part
 - Sans `x` ni `y`, un widget prend la première place libre : pratique pour ajouter un widget depuis une liste.
 - `minW`, `minH`, `maxW` et `maxH` bornent la taille ; `removable` ajoute un bouton × qui émet `onCrRemove` (retirez alors le widget de votre liste).
 - Le slot `actions` place des boutons dans l'en-tête.
+- Quand le contenu dépasse la carte, il défile ; la zone reçoit alors le focus (Tab), puis se fait défiler avec les flèches, Page suivante et Page précédente.
 
 ## Clavier
 

@@ -38,7 +38,7 @@ test('open accordions have no WCAG 2.1 AA violations detectable by axe', async (
 
 test('table with its columns menu open has no WCAG 2.1 AA violations detectable by axe', async ({ page }) => {
   await page.goto('/');
-  await page.locator('cr-table').getByRole('button', { name: /Colonnes/ }).click();
+  await page.locator('cr-table[label="Commandes de la semaine"]').getByRole('button', { name: /Colonnes/ }).click();
   await page.waitForTimeout(400);
   expect((await audit(page)).violations).toEqual([]);
 });

@@ -49,6 +49,10 @@ Avec `badges`, une colonne affiche certaines valeurs en pastilles colorées : `{
 
 `rows` est un tableau d'objets, avec une valeur par `key`. Les valeurs sont affichées comme du texte : formatez les montants et les dates avant de les passer.
 
+## Grands volumes
+
+Le tableau affiche d'abord 100 lignes, puis 100 de plus chaque fois que sa fin approche de l'écran pendant le défilement : des milliers de lignes s'affichent sans figer la page. Le total reste annoncé (`aria-rowcount`) et une ligne sous le tableau indique « 100 lignes sur 3 685 : la suite s'affiche en défilant. ». Quand `rows` change (un filtre, une autre période), l'affichage repart des 100 premières.
+
 ## Retenir les réglages
 
 Avec `storageKey`, les réglages (ordre, largeurs, colonnes fixées et masquées, densité) sont enregistrés dans le navigateur et retrouvés à la visite suivante. `onCrLayoutChange` les donne aussi dans `event.detail` à chaque changement, pour les enregistrer côté serveur par exemple.
@@ -85,6 +89,7 @@ Le pied du tableau rappelle ces raccourcis et résume la présentation : « 6 co
 - Chaque réglage à la souris a son équivalent au clavier, décrit sur chaque en-tête.
 - Chaque action est annoncée : « Statut déplacée en position 3 sur 7. », « Produit fixée à gauche. », « Région masquée : 6 colonnes sur 7. ».
 - Une colonne fixée est annoncée « fixée » ; au moins une colonne reste toujours affichée.
+- Avec beaucoup de lignes, le nombre total est annoncé même si seules les premières sont affichées.
 
 ## API
 
