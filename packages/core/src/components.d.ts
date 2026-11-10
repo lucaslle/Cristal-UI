@@ -1142,6 +1142,27 @@ export namespace Components {
         "value": number;
     }
     /**
+     * Mini-graphique en ligne : l'allure d'une série de nombres, à glisser dans un texte, une carte ou un tableau.
+     * C'est une image nommée par son libellé et un résumé (dernière valeur, minimum, maximum, tendance).
+     * La ligne se trace au premier affichage ; quand les valeurs changent, elle glisse point par point vers les nouvelles.
+     */
+    interface CrSparkline {
+        /**
+          * Ce que mesurent les valeurs (« Ventes de la semaine ») ; début du nom lu par les lecteurs d'écran (obligatoire).
+         */
+        "label": string;
+        /**
+          * Les valeurs, dans l'ordre (en JavaScript ou en React : un tableau de nombres).
+          * @default []
+         */
+        "values": number[];
+        /**
+          * Style : line (ligne seule) ou area (ligne et surface teintée dessous).
+          * @default 'line'
+         */
+        "variant": 'line' | 'area';
+    }
+    /**
      * Étape d'un cr-stepper. Son contenu n'est affiché que pendant l'étape.
      */
     interface CrStep {
@@ -2073,6 +2094,17 @@ declare global {
         new (): HTMLCrSliderElement;
     };
     /**
+     * Mini-graphique en ligne : l'allure d'une série de nombres, à glisser dans un texte, une carte ou un tableau.
+     * C'est une image nommée par son libellé et un résumé (dernière valeur, minimum, maximum, tendance).
+     * La ligne se trace au premier affichage ; quand les valeurs changent, elle glisse point par point vers les nouvelles.
+     */
+    interface HTMLCrSparklineElement extends Components.CrSparkline, HTMLStencilElement {
+    }
+    var HTMLCrSparklineElement: {
+        prototype: HTMLCrSparklineElement;
+        new (): HTMLCrSparklineElement;
+    };
+    /**
      * Étape d'un cr-stepper. Son contenu n'est affiché que pendant l'étape.
      */
     interface HTMLCrStepElement extends Components.CrStep, HTMLStencilElement {
@@ -2268,6 +2300,7 @@ declare global {
         "cr-select": HTMLCrSelectElement;
         "cr-skeleton": HTMLCrSkeletonElement;
         "cr-slider": HTMLCrSliderElement;
+        "cr-sparkline": HTMLCrSparklineElement;
         "cr-step": HTMLCrStepElement;
         "cr-stepper": HTMLCrStepperElement;
         "cr-switch": HTMLCrSwitchElement;
@@ -3559,6 +3592,27 @@ declare namespace LocalJSX {
         "value"?: number;
     }
     /**
+     * Mini-graphique en ligne : l'allure d'une série de nombres, à glisser dans un texte, une carte ou un tableau.
+     * C'est une image nommée par son libellé et un résumé (dernière valeur, minimum, maximum, tendance).
+     * La ligne se trace au premier affichage ; quand les valeurs changent, elle glisse point par point vers les nouvelles.
+     */
+    interface CrSparkline {
+        /**
+          * Ce que mesurent les valeurs (« Ventes de la semaine ») ; début du nom lu par les lecteurs d'écran (obligatoire).
+         */
+        "label": string;
+        /**
+          * Les valeurs, dans l'ordre (en JavaScript ou en React : un tableau de nombres).
+          * @default []
+         */
+        "values"?: number[];
+        /**
+          * Style : line (ligne seule) ou area (ligne et surface teintée dessous).
+          * @default 'line'
+         */
+        "variant"?: 'line' | 'area';
+    }
+    /**
      * Étape d'un cr-stepper. Son contenu n'est affiché que pendant l'étape.
      */
     interface CrStep {
@@ -4099,6 +4153,10 @@ declare namespace LocalJSX {
         "value": number;
         "disabled": boolean;
     }
+    interface CrSparklineAttributes {
+        "label": string;
+        "variant": 'line' | 'area';
+    }
     interface CrStepAttributes {
         "label": string;
     }
@@ -4191,6 +4249,7 @@ declare namespace LocalJSX {
         "cr-select": Omit<CrSelect, keyof CrSelectAttributes> & { [K in keyof CrSelect & keyof CrSelectAttributes]?: CrSelect[K] } & { [K in keyof CrSelect & keyof CrSelectAttributes as `attr:${K}`]?: CrSelectAttributes[K] } & { [K in keyof CrSelect & keyof CrSelectAttributes as `prop:${K}`]?: CrSelect[K] } & OneOf<"label", CrSelect["label"], CrSelectAttributes["label"]>;
         "cr-skeleton": Omit<CrSkeleton, keyof CrSkeletonAttributes> & { [K in keyof CrSkeleton & keyof CrSkeletonAttributes]?: CrSkeleton[K] } & { [K in keyof CrSkeleton & keyof CrSkeletonAttributes as `attr:${K}`]?: CrSkeletonAttributes[K] } & { [K in keyof CrSkeleton & keyof CrSkeletonAttributes as `prop:${K}`]?: CrSkeleton[K] };
         "cr-slider": Omit<CrSlider, keyof CrSliderAttributes> & { [K in keyof CrSlider & keyof CrSliderAttributes]?: CrSlider[K] } & { [K in keyof CrSlider & keyof CrSliderAttributes as `attr:${K}`]?: CrSliderAttributes[K] } & { [K in keyof CrSlider & keyof CrSliderAttributes as `prop:${K}`]?: CrSlider[K] } & OneOf<"label", CrSlider["label"], CrSliderAttributes["label"]>;
+        "cr-sparkline": Omit<CrSparkline, keyof CrSparklineAttributes> & { [K in keyof CrSparkline & keyof CrSparklineAttributes]?: CrSparkline[K] } & { [K in keyof CrSparkline & keyof CrSparklineAttributes as `attr:${K}`]?: CrSparklineAttributes[K] } & { [K in keyof CrSparkline & keyof CrSparklineAttributes as `prop:${K}`]?: CrSparkline[K] } & OneOf<"label", CrSparkline["label"], CrSparklineAttributes["label"]>;
         "cr-step": Omit<CrStep, keyof CrStepAttributes> & { [K in keyof CrStep & keyof CrStepAttributes]?: CrStep[K] } & { [K in keyof CrStep & keyof CrStepAttributes as `attr:${K}`]?: CrStepAttributes[K] } & { [K in keyof CrStep & keyof CrStepAttributes as `prop:${K}`]?: CrStep[K] } & OneOf<"label", CrStep["label"], CrStepAttributes["label"]>;
         "cr-stepper": Omit<CrStepper, keyof CrStepperAttributes> & { [K in keyof CrStepper & keyof CrStepperAttributes]?: CrStepper[K] } & { [K in keyof CrStepper & keyof CrStepperAttributes as `attr:${K}`]?: CrStepperAttributes[K] } & { [K in keyof CrStepper & keyof CrStepperAttributes as `prop:${K}`]?: CrStepper[K] };
         "cr-switch": Omit<CrSwitch, keyof CrSwitchAttributes> & { [K in keyof CrSwitch & keyof CrSwitchAttributes]?: CrSwitch[K] } & { [K in keyof CrSwitch & keyof CrSwitchAttributes as `attr:${K}`]?: CrSwitchAttributes[K] } & { [K in keyof CrSwitch & keyof CrSwitchAttributes as `prop:${K}`]?: CrSwitch[K] } & OneOf<"label", CrSwitch["label"], CrSwitchAttributes["label"]>;
@@ -4369,6 +4428,12 @@ declare module "@stencil/core" {
              * Une bulle suit la pastille en affichant la valeur et grossit pendant le glissement ou au focus ; la partie remplie du rail suit la valeur.
              */
             "cr-slider": LocalJSX.IntrinsicElements["cr-slider"] & JSXBase.HTMLAttributes<HTMLCrSliderElement>;
+            /**
+             * Mini-graphique en ligne : l'allure d'une série de nombres, à glisser dans un texte, une carte ou un tableau.
+             * C'est une image nommée par son libellé et un résumé (dernière valeur, minimum, maximum, tendance).
+             * La ligne se trace au premier affichage ; quand les valeurs changent, elle glisse point par point vers les nouvelles.
+             */
+            "cr-sparkline": LocalJSX.IntrinsicElements["cr-sparkline"] & JSXBase.HTMLAttributes<HTMLCrSparklineElement>;
             /**
              * Étape d'un cr-stepper. Son contenu n'est affiché que pendant l'étape.
              */

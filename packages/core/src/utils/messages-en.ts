@@ -79,6 +79,9 @@ export const en = {
 
   alertPrefix: { info: 'Information: ', success: 'Success: ', warning: 'Warning: ', danger: 'Error: ' },
 
+  sparkline: (label: string, min: string, max: string, last: string, trend: -1 | 0 | 1) =>
+    `${label}: last value ${last}, minimum ${min}, maximum ${max}, ${{ 1: 'trending up', 0: 'stable', [-1]: 'trending down' }[trend]}`,
+
   openAll: 'Open all',
   closeAll: 'Close all',
 

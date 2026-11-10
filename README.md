@@ -295,6 +295,14 @@ Court statut ou compteur : texte en contenu, `variant` (`neutral` par défaut, `
 <CrBadge variant="primary" count={nonLus} live>Non lus</CrBadge>
 ```
 
+### Mini-graphique : `cr-sparkline`
+
+Petite courbe sans axes : `values` (tableau de nombres, en propriété), `label` obligatoire, `variant` (`line` par défaut, `area`). C'est une image nommée par le libellé et un résumé (« Ventes : dernière valeur 190, minimum 120, maximum 190, en hausse »). La ligne se trace au premier affichage, puis glisse point par point vers les nouvelles valeurs. Taille par défaut 120 × 32 pixels, à changer en CSS.
+
+```tsx
+<CrSparkline label="Ventes du mois" values={ventes} variant="area" />
+```
+
 ### Bandeau : `cr-alert`
 
 Message posé dans la page : `variant` (`info` par défaut, `success`, `warning`, `danger` lu aussitôt), `heading` (titre facultatif), le message en contenu, `dismissible` (bouton « Fermer » qui replie le bandeau). Une icône propre à chaque type et un préfixe lu par les lecteurs d'écran (« Erreur : ») ; inséré après le chargement, le bandeau se déplie, et son icône se trace. Événement `onCrClose`.

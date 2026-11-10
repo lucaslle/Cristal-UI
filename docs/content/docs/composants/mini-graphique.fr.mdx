@@ -1,0 +1,34 @@
+---
+title: Mini-graphique
+description: Petite courbe sans axes qui montre l'allure d'une série de nombres. Balise cr-sparkline, composant React CrSparkline.
+---
+
+import SparklineBasic from '@/demos/sparkline-basic';
+
+## Exemple
+
+`cr-sparkline` dessine `values` (un tableau de nombres) en une courbe de 120 × 32 pixels par défaut, à glisser dans une phrase, une carte ou une cellule de tableau ; changez sa taille en CSS (`width`, `height`). `variant="area"` teinte la surface sous la ligne. Un point marque la dernière valeur.
+
+La ligne se trace de gauche à droite au premier affichage. Quand `values` change, la courbe glisse point par point vers les nouvelles valeurs, même si leur nombre change.
+
+<Preview>
+  <SparklineBasic />
+</Preview>
+
+<include>../../../demos/sparkline-basic.tsx</include>
+
+`values` est une propriété : en HTML, donnez-la en JavaScript (`element.values = [1, 2, 3]`), pas en attribut.
+
+<Callout>
+  Si l'utilisateur a demandé à son système de réduire les animations, la courbe s'affiche directement, et passe d'un coup aux nouvelles valeurs.
+</Callout>
+
+## Accessibilité
+
+- Le mini-graphique est une image (`role="img"`) nommée par `label` et un résumé des valeurs, dans la langue de la page : « Ventes du mois : dernière valeur 190, minimum 120, maximum 190, en hausse ». La tendance compare la dernière valeur à la première.
+- Le nom change avec les valeurs, mais il n'est pas annoncé de lui-même : si la mise à jour compte, dites-la dans un texte ou une zone `role="status"`.
+- La courbe a un contraste d'au moins 3:1 avec le fond. Elle ne montre qu'une allure : si les valeurs exactes comptent, affichez-les aussi en texte ou dans un tableau.
+
+## API
+
+<ApiReference tag="cr-sparkline" />

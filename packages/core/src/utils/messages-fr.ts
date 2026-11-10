@@ -81,6 +81,9 @@ export const fr: Messages = {
 
   alertPrefix: { info: 'Information : ', success: 'Succès : ', warning: 'Attention : ', danger: 'Erreur : ' },
 
+  sparkline: (label, min, max, last, trend) =>
+    `${label} : dernière valeur ${last}, minimum ${min}, maximum ${max}, ${{ 1: 'en hausse', 0: 'stable', [-1]: 'en baisse' }[trend]}`,
+
   openAll: 'Tout ouvrir',
   closeAll: 'Tout fermer',
 
