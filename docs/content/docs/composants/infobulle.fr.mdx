@@ -1,0 +1,33 @@
+---
+title: Infobulle
+description: Court texte d'aide affiché au survol et au focus d'un bouton ou d'un lien. Balise cr-tooltip, composant React CrTooltip.
+---
+
+import TooltipBasic from '@/demos/tooltip-basic';
+
+## Exemple
+
+`cr-tooltip` entoure un seul élément focalisable (bouton ou lien natif, `cr-button`) et lui ajoute un court texte d'aide, `text`. L'infobulle sort du côté choisi par `placement` (`top` par défaut, `bottom`, `start` ou `end`) en grandissant, avec un léger rebond.
+
+<Preview>
+  <TooltipBasic />
+</Preview>
+
+<include>../../../demos/tooltip-basic.tsx</include>
+
+Pour un bouton réduit à une icône, utilisez plutôt le [bouton icône](/docs/composants/bouton-icone), qui affiche déjà son libellé en infobulle. Une infobulle ne contient que du texte, sans lien ni bouton.
+
+<Callout>
+  Si l'utilisateur a demandé à son système de réduire les animations, l'infobulle apparaît directement à sa taille, sans grandir.
+</Callout>
+
+## Accessibilité
+
+- Modèle W3C de l'infobulle : `role="tooltip"`, et le texte décrit le déclencheur (annoncé après son nom). Comme un identifiant ne traverse pas le shadow DOM, la description passe par `aria-description` sur le déclencheur.
+- L'infobulle s'ouvre au focus clavier tout de suite, au survol après 0,3 s ; on peut la survoler sans qu'elle disparaisse, et Échap la ferme même quand le focus est ailleurs (critère 1.4.13).
+- Pas d'infobulle après un simple appui sur écran tactile ni après un clic : l'information ne doit pas dépendre de l'infobulle seule.
+- Texte clair sur fond foncé, contraste supérieur à 4.5:1 ; contour visible en mode de contraste élevé.
+
+## API
+
+<ApiReference tag="cr-tooltip" />

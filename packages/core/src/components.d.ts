@@ -16,6 +16,7 @@ import { InputType } from "./components/cr-input/cr-input";
 import { PopupAnimation } from "./utils/popup";
 import { StepperVariant } from "./utils/stepper";
 import { TableColumn, TableDensity, TableLayout, TableVariant } from "./utils/table-layout";
+import { TooltipPlacement as TooltipPlacement1 } from "./components/cr-icon-button/cr-icon-button";
 export { AccordionAnimation, AccordionVariant } from "./utils/accordion";
 export { BoxDisplay } from "./components/cr-box/cr-box";
 export { ButtonSize, ButtonType, ButtonVariant } from "./components/cr-button/cr-button";
@@ -27,6 +28,7 @@ export { InputType } from "./components/cr-input/cr-input";
 export { PopupAnimation } from "./utils/popup";
 export { StepperVariant } from "./utils/stepper";
 export { TableColumn, TableDensity, TableLayout, TableVariant } from "./utils/table-layout";
+export { TooltipPlacement as TooltipPlacement1 } from "./components/cr-icon-button/cr-icon-button";
 export namespace Components {
     /**
      * Accordéon : sections cr-accordion-item qui s'ouvrent et se ferment.
@@ -1109,6 +1111,21 @@ export namespace Components {
      */
     interface CrToaster {
     }
+    /**
+     * Infobulle : court texte d'aide affiché au survol et au focus clavier de l'élément qu'elle entoure.
+     * Le texte décrit aussi cet élément pour les lecteurs d'écran. Échap la masque ; on peut la survoler sans qu'elle disparaisse.
+     */
+    interface CrTooltip {
+        /**
+          * Côté où s'ouvre l'infobulle.
+          * @default 'top'
+         */
+        "placement": TooltipPlacement1;
+        /**
+          * Texte de l'infobulle, court et sans lien ni bouton (obligatoire).
+         */
+        "text": string;
+    }
 }
 export interface CrAccordionItemCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -1769,6 +1786,16 @@ declare global {
         prototype: HTMLCrToasterElement;
         new (): HTMLCrToasterElement;
     };
+    /**
+     * Infobulle : court texte d'aide affiché au survol et au focus clavier de l'élément qu'elle entoure.
+     * Le texte décrit aussi cet élément pour les lecteurs d'écran. Échap la masque ; on peut la survoler sans qu'elle disparaisse.
+     */
+    interface HTMLCrTooltipElement extends Components.CrTooltip, HTMLStencilElement {
+    }
+    var HTMLCrTooltipElement: {
+        prototype: HTMLCrTooltipElement;
+        new (): HTMLCrTooltipElement;
+    };
     interface HTMLElementTagNameMap {
         "cr-accordion": HTMLCrAccordionElement;
         "cr-accordion-item": HTMLCrAccordionItemElement;
@@ -1804,6 +1831,7 @@ declare global {
         "cr-textarea": HTMLCrTextareaElement;
         "cr-toast": HTMLCrToastElement;
         "cr-toaster": HTMLCrToasterElement;
+        "cr-tooltip": HTMLCrTooltipElement;
     }
 }
 declare namespace LocalJSX {
@@ -3046,6 +3074,21 @@ declare namespace LocalJSX {
      */
     interface CrToaster {
     }
+    /**
+     * Infobulle : court texte d'aide affiché au survol et au focus clavier de l'élément qu'elle entoure.
+     * Le texte décrit aussi cet élément pour les lecteurs d'écran. Échap la masque ; on peut la survoler sans qu'elle disparaisse.
+     */
+    interface CrTooltip {
+        /**
+          * Côté où s'ouvre l'infobulle.
+          * @default 'top'
+         */
+        "placement"?: TooltipPlacement1;
+        /**
+          * Texte de l'infobulle, court et sans lien ni bouton (obligatoire).
+         */
+        "text": string;
+    }
 
     interface CrAccordionAttributes {
         "multiple": boolean;
@@ -3295,6 +3338,10 @@ declare namespace LocalJSX {
         "variant": 'info' | 'success' | 'danger';
         "duration": number;
     }
+    interface CrTooltipAttributes {
+        "text": string;
+        "placement": TooltipPlacement;
+    }
 
     interface IntrinsicElements {
         "cr-accordion": Omit<CrAccordion, keyof CrAccordionAttributes> & { [K in keyof CrAccordion & keyof CrAccordionAttributes]?: CrAccordion[K] } & { [K in keyof CrAccordion & keyof CrAccordionAttributes as `attr:${K}`]?: CrAccordionAttributes[K] } & { [K in keyof CrAccordion & keyof CrAccordionAttributes as `prop:${K}`]?: CrAccordion[K] };
@@ -3331,6 +3378,7 @@ declare namespace LocalJSX {
         "cr-textarea": Omit<CrTextarea, keyof CrTextareaAttributes> & { [K in keyof CrTextarea & keyof CrTextareaAttributes]?: CrTextarea[K] } & { [K in keyof CrTextarea & keyof CrTextareaAttributes as `attr:${K}`]?: CrTextareaAttributes[K] } & { [K in keyof CrTextarea & keyof CrTextareaAttributes as `prop:${K}`]?: CrTextarea[K] } & OneOf<"label", CrTextarea["label"], CrTextareaAttributes["label"]>;
         "cr-toast": Omit<CrToast, keyof CrToastAttributes> & { [K in keyof CrToast & keyof CrToastAttributes]?: CrToast[K] } & { [K in keyof CrToast & keyof CrToastAttributes as `attr:${K}`]?: CrToastAttributes[K] } & { [K in keyof CrToast & keyof CrToastAttributes as `prop:${K}`]?: CrToast[K] };
         "cr-toaster": CrToaster;
+        "cr-tooltip": Omit<CrTooltip, keyof CrTooltipAttributes> & { [K in keyof CrTooltip & keyof CrTooltipAttributes]?: CrTooltip[K] } & { [K in keyof CrTooltip & keyof CrTooltipAttributes as `attr:${K}`]?: CrTooltipAttributes[K] } & { [K in keyof CrTooltip & keyof CrTooltipAttributes as `prop:${K}`]?: CrTooltip[K] } & OneOf<"text", CrTooltip["text"], CrTooltipAttributes["text"]>;
     }
 }
 export { LocalJSX as JSX };
@@ -3489,6 +3537,11 @@ declare module "@stencil/core" {
              * Zone fixe en bas à droite de l'écran qui empile les cr-toast, le plus récent en bas.
              */
             "cr-toaster": LocalJSX.IntrinsicElements["cr-toaster"] & JSXBase.HTMLAttributes<HTMLCrToasterElement>;
+            /**
+             * Infobulle : court texte d'aide affiché au survol et au focus clavier de l'élément qu'elle entoure.
+             * Le texte décrit aussi cet élément pour les lecteurs d'écran. Échap la masque ; on peut la survoler sans qu'elle disparaisse.
+             */
+            "cr-tooltip": LocalJSX.IntrinsicElements["cr-tooltip"] & JSXBase.HTMLAttributes<HTMLCrTooltipElement>;
         }
     }
 }

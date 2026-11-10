@@ -1,0 +1,33 @@
+---
+title: Tooltip
+description: Short help text shown when a button or a link is hovered or focused. Tag cr-tooltip, React component CrTooltip.
+---
+
+import TooltipBasic from '@/demos/en/tooltip-basic';
+
+## Example
+
+`cr-tooltip` wraps a single focusable element (native button or link, `cr-button`) and adds a short help text to it, `text`. The tooltip grows out of the side set by `placement` (`top` by default, `bottom`, `start` or `end`) with a slight bounce.
+
+<Preview>
+  <TooltipBasic />
+</Preview>
+
+<include>../../../demos/en/tooltip-basic.tsx</include>
+
+For an icon-only button, use the [icon button](/docs/composants/bouton-icone) instead: it already shows its label as a tooltip. A tooltip only holds text, with no link or button.
+
+<Callout>
+  If the user asked their system to reduce motion, the tooltip appears at full size straight away, without growing.
+</Callout>
+
+## Accessibility
+
+- W3C tooltip pattern: `role="tooltip"`, and the text describes the trigger (read after its name). Since an id cannot cross the shadow DOM, the description goes through `aria-description` on the trigger.
+- The tooltip opens immediately on keyboard focus and after 0.3 s on hover; it can be hovered without disappearing, and Escape closes it even when focus is elsewhere (WCAG criterion 1.4.13).
+- No tooltip after a simple tap on a touch screen or after a click: the information must not rely on the tooltip alone.
+- Light text on a dark background, contrast above 4.5:1; visible border in high contrast mode.
+
+## API
+
+<ApiReference tag="cr-tooltip" />

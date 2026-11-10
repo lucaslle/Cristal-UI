@@ -18,7 +18,7 @@ const pop = (el: Element | null | undefined, scale: number) => {
  */
 @Component({
   tag: 'cr-icon-button',
-  styleUrls: ['../cr-button/cr-button.css', 'cr-icon-button.css'],
+  styleUrls: ['../cr-button/cr-button.css', '../../global/tooltip.css', 'cr-icon-button.css'],
   shadow: { delegatesFocus: true },
   formAssociated: true,
 })

@@ -59,3 +59,4 @@ export const CrSwitch = withAttributes(generated.CrSwitch, elements.CrSwitch);
 export const CrRadioGroup = withAttributes(generated.CrRadioGroup, elements.CrRadioGroup);
 export const CrTabs = withAttributes(generated.CrTabs, elements.CrTabs);
 export const CrTabPanel = withAttributes(generated.CrTabPanel, elements.CrTabPanel);
+export const CrTooltip = withAttributes(generated.CrTooltip, elements.CrTooltip);

@@ -94,6 +94,16 @@ Bouton réduit à une icône (slot par défaut, avec `aria-hidden="true"`). `lab
 </CrIconButton>
 ```
 
+### Infobulle : `cr-tooltip`
+
+Court texte d'aide (`text`, obligatoire) autour d'un seul élément focalisable : bouton ou lien natif, `cr-button`. Elle s'affiche au focus clavier et au survol, reste survolable et se ferme avec Échap ; le texte décrit aussi le déclencheur pour les lecteurs d'écran. `placement` : `top` (défaut), `bottom`, `start`, `end`. Elle grandit depuis le déclencheur avec un léger rebond.
+
+```tsx
+<CrTooltip text="Copie l'adresse de la page">
+  <CrButton variant="outline">Copier le lien</CrButton>
+</CrTooltip>
+```
+
 ### Champs de formulaire : `cr-input`, `cr-select`, `cr-checkbox`
 
 Ils participent au `<form>` parent comme des champs natifs (valeur envoyée, validation, réinitialisation). Le libellé est obligatoire et rendu par le composant. Les erreurs de saisie (champ obligatoire vide, e-mail mal formé…) s'affichent automatiquement en français ; `error` remplace le message automatique.
