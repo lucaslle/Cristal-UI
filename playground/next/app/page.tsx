@@ -8,6 +8,7 @@ import { ToastDemo } from './toast-demo';
 import { SwitchDemo } from './switch-demo';
 import { RadioGroupDemo } from './radio-group-demo';
 import { SliderDemo } from './slider-demo';
+import { FileUploadDemo } from './file-upload-demo';
 import { TabsDemo } from './tabs-demo';
 import { LoadingDemo } from './loading-demo';
 import { TableDemo } from './table-demo';
@@ -130,6 +131,9 @@ export default function Page() {
 
       <h2>Curseurs</h2>
       <SliderDemo />
+
+      <h2>Dépôt de fichiers</h2>
+      <FileUploadDemo />
 
       <h2>Onglets</h2>
       <TabsDemo />

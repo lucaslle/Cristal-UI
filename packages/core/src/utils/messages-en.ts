@@ -51,6 +51,16 @@ export const en = {
   tagRemove: (tag: string) => `Remove ${tag}`,
   tagsHelp: 'Enter or comma to add, Backspace to remove the last one.',
 
+  fileDrop: 'Drop files here or',
+  fileBrowse: 'browse',
+  remove: 'Remove',
+  sizeUnits: ['B', 'KB', 'MB', 'GB'],
+  fileRemove: (name: string) => `Remove ${name}`,
+  fileCount: (count: number) => (count === 1 ? '1 file' : `${count} files`),
+  filesAdded: (names: string[], count: string) => `${names.join(', ')} added. ${count}.`,
+  fileRemoved: (name: string, count: string) => `${name} removed. ${count}.`,
+  filesRejected: (names: string[]) => `${names.join(', ')}: file type not accepted.`,
+
   openAll: 'Open all',
   closeAll: 'Close all',
 

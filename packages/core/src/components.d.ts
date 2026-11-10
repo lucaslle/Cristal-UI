@@ -322,6 +322,38 @@ export namespace Components {
         "placement": 'start' | 'end';
     }
     /**
+     * Dépôt de fichiers : une zone où glisser des fichiers, qui est aussi un vrai sélecteur de fichiers natif, atteignable au clavier.
+     * Les fichiers choisis s'affichent en liste, avec leur taille et un bouton Retirer. La zone respire quand on y glisse des fichiers.
+     */
+    interface CrFileUpload {
+        /**
+          * Types acceptés, comme l'attribut accept natif (« .pdf,image/* ») ; appliqué aussi aux fichiers déposés.
+         */
+        "accept"?: string;
+        /**
+          * Désactive le champ.
+          * @default false
+         */
+        "disabled": boolean;
+        /**
+          * Texte d'aide (formats, taille), lu par les lecteurs d'écran.
+         */
+        "hint"?: string;
+        /**
+          * Libellé affiché au-dessus de la zone (obligatoire).
+         */
+        "label": string;
+        /**
+          * Plusieurs fichiers ; sinon un nouveau fichier remplace le précédent.
+          * @default false
+         */
+        "multiple": boolean;
+        /**
+          * Nom envoyé avec le formulaire, une fois par fichier.
+         */
+        "name"?: string;
+    }
+    /**
      * Élément d'un cr-grid-layout. Se déplace par sa poignée et se redimensionne par son coin.
      * Donnez-lui un id pour retrouver sa place dans les réglages enregistrés.
      */
@@ -1206,6 +1238,10 @@ export interface CrDrawerCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLCrDrawerElement;
 }
+export interface CrFileUploadCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLCrFileUploadElement;
+}
 export interface CrGridItemCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLCrGridItemElement;
@@ -1421,6 +1457,27 @@ declare global {
     var HTMLCrDrawerElement: {
         prototype: HTMLCrDrawerElement;
         new (): HTMLCrDrawerElement;
+    };
+    interface HTMLCrFileUploadElementEventMap {
+        "crChange": File[];
+    }
+    /**
+     * Dépôt de fichiers : une zone où glisser des fichiers, qui est aussi un vrai sélecteur de fichiers natif, atteignable au clavier.
+     * Les fichiers choisis s'affichent en liste, avec leur taille et un bouton Retirer. La zone respire quand on y glisse des fichiers.
+     */
+    interface HTMLCrFileUploadElement extends Components.CrFileUpload, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLCrFileUploadElementEventMap>(type: K, listener: (this: HTMLCrFileUploadElement, ev: CrFileUploadCustomEvent<HTMLCrFileUploadElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLCrFileUploadElementEventMap>(type: K, listener: (this: HTMLCrFileUploadElement, ev: CrFileUploadCustomEvent<HTMLCrFileUploadElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLCrFileUploadElement: {
+        prototype: HTMLCrFileUploadElement;
+        new (): HTMLCrFileUploadElement;
     };
     interface HTMLCrGridItemElementEventMap {
         "crRemove": void;
@@ -1916,6 +1973,7 @@ declare global {
         "cr-checkbox": HTMLCrCheckboxElement;
         "cr-dialog": HTMLCrDialogElement;
         "cr-drawer": HTMLCrDrawerElement;
+        "cr-file-upload": HTMLCrFileUploadElement;
         "cr-grid-item": HTMLCrGridItemElement;
         "cr-grid-layout": HTMLCrGridLayoutElement;
         "cr-icon-button": HTMLCrIconButtonElement;
@@ -2275,6 +2333,46 @@ declare namespace LocalJSX {
           * @default 'end'
          */
         "placement"?: 'start' | 'end';
+    }
+    /**
+     * Dépôt de fichiers : une zone où glisser des fichiers, qui est aussi un vrai sélecteur de fichiers natif, atteignable au clavier.
+     * Les fichiers choisis s'affichent en liste, avec leur taille et un bouton Retirer. La zone respire quand on y glisse des fichiers.
+     */
+    interface CrFileUpload {
+        /**
+          * Types acceptés, comme l'attribut accept natif (« .pdf,image/* ») ; appliqué aussi aux fichiers déposés.
+         */
+        "accept"?: string;
+        /**
+          * Désactive le champ.
+          * @default false
+         */
+        "disabled"?: boolean;
+        /**
+          * The `id` of a `<form>` element to associate this element with.
+         */
+        "form"?: string;
+        /**
+          * Texte d'aide (formats, taille), lu par les lecteurs d'écran.
+         */
+        "hint"?: string;
+        /**
+          * Libellé affiché au-dessus de la zone (obligatoire).
+         */
+        "label": string;
+        /**
+          * Plusieurs fichiers ; sinon un nouveau fichier remplace le précédent.
+          * @default false
+         */
+        "multiple"?: boolean;
+        /**
+          * Nom envoyé avec le formulaire, une fois par fichier.
+         */
+        "name"?: string;
+        /**
+          * Émis quand la liste des fichiers change ; detail : les fichiers.
+         */
+        "onCrChange"?: (event: CrFileUploadCustomEvent<File[]>) => void;
     }
     /**
      * Élément d'un cr-grid-layout. Se déplace par sa poignée et se redimensionne par son coin.
@@ -3346,6 +3444,14 @@ declare namespace LocalJSX {
         "closeLabel": string;
         "placement": 'start' | 'end';
     }
+    interface CrFileUploadAttributes {
+        "label": string;
+        "hint": string;
+        "name": string;
+        "accept": string;
+        "multiple": boolean;
+        "disabled": boolean;
+    }
     interface CrGridItemAttributes {
         "label": string;
         "x": number;
@@ -3554,6 +3660,7 @@ declare namespace LocalJSX {
         "cr-checkbox": Omit<CrCheckbox, keyof CrCheckboxAttributes> & { [K in keyof CrCheckbox & keyof CrCheckboxAttributes]?: CrCheckbox[K] } & { [K in keyof CrCheckbox & keyof CrCheckboxAttributes as `attr:${K}`]?: CrCheckboxAttributes[K] } & { [K in keyof CrCheckbox & keyof CrCheckboxAttributes as `prop:${K}`]?: CrCheckbox[K] } & OneOf<"label", CrCheckbox["label"], CrCheckboxAttributes["label"]>;
         "cr-dialog": Omit<CrDialog, keyof CrDialogAttributes> & { [K in keyof CrDialog & keyof CrDialogAttributes]?: CrDialog[K] } & { [K in keyof CrDialog & keyof CrDialogAttributes as `attr:${K}`]?: CrDialogAttributes[K] } & { [K in keyof CrDialog & keyof CrDialogAttributes as `prop:${K}`]?: CrDialog[K] } & OneOf<"label", CrDialog["label"], CrDialogAttributes["label"]>;
         "cr-drawer": Omit<CrDrawer, keyof CrDrawerAttributes> & { [K in keyof CrDrawer & keyof CrDrawerAttributes]?: CrDrawer[K] } & { [K in keyof CrDrawer & keyof CrDrawerAttributes as `attr:${K}`]?: CrDrawerAttributes[K] } & { [K in keyof CrDrawer & keyof CrDrawerAttributes as `prop:${K}`]?: CrDrawer[K] } & OneOf<"label", CrDrawer["label"], CrDrawerAttributes["label"]>;
+        "cr-file-upload": Omit<CrFileUpload, keyof CrFileUploadAttributes> & { [K in keyof CrFileUpload & keyof CrFileUploadAttributes]?: CrFileUpload[K] } & { [K in keyof CrFileUpload & keyof CrFileUploadAttributes as `attr:${K}`]?: CrFileUploadAttributes[K] } & { [K in keyof CrFileUpload & keyof CrFileUploadAttributes as `prop:${K}`]?: CrFileUpload[K] } & OneOf<"label", CrFileUpload["label"], CrFileUploadAttributes["label"]>;
         "cr-grid-item": Omit<CrGridItem, keyof CrGridItemAttributes> & { [K in keyof CrGridItem & keyof CrGridItemAttributes]?: CrGridItem[K] } & { [K in keyof CrGridItem & keyof CrGridItemAttributes as `attr:${K}`]?: CrGridItemAttributes[K] } & { [K in keyof CrGridItem & keyof CrGridItemAttributes as `prop:${K}`]?: CrGridItem[K] } & OneOf<"label", CrGridItem["label"], CrGridItemAttributes["label"]>;
         "cr-grid-layout": Omit<CrGridLayout, keyof CrGridLayoutAttributes> & { [K in keyof CrGridLayout & keyof CrGridLayoutAttributes]?: CrGridLayout[K] } & { [K in keyof CrGridLayout & keyof CrGridLayoutAttributes as `attr:${K}`]?: CrGridLayoutAttributes[K] } & { [K in keyof CrGridLayout & keyof CrGridLayoutAttributes as `prop:${K}`]?: CrGridLayout[K] };
         "cr-icon-button": Omit<CrIconButton, keyof CrIconButtonAttributes> & { [K in keyof CrIconButton & keyof CrIconButtonAttributes]?: CrIconButton[K] } & { [K in keyof CrIconButton & keyof CrIconButtonAttributes as `attr:${K}`]?: CrIconButtonAttributes[K] } & { [K in keyof CrIconButton & keyof CrIconButtonAttributes as `prop:${K}`]?: CrIconButton[K] } & OneOf<"label", CrIconButton["label"], CrIconButtonAttributes["label"]>;
@@ -3627,6 +3734,11 @@ declare module "@stencil/core" {
              * Panneau latéral, basé sur l'élément dialog natif.
              */
             "cr-drawer": LocalJSX.IntrinsicElements["cr-drawer"] & JSXBase.HTMLAttributes<HTMLCrDrawerElement>;
+            /**
+             * Dépôt de fichiers : une zone où glisser des fichiers, qui est aussi un vrai sélecteur de fichiers natif, atteignable au clavier.
+             * Les fichiers choisis s'affichent en liste, avec leur taille et un bouton Retirer. La zone respire quand on y glisse des fichiers.
+             */
+            "cr-file-upload": LocalJSX.IntrinsicElements["cr-file-upload"] & JSXBase.HTMLAttributes<HTMLCrFileUploadElement>;
             /**
              * Élément d'un cr-grid-layout. Se déplace par sa poignée et se redimensionne par son coin.
              * Donnez-lui un id pour retrouver sa place dans les réglages enregistrés.

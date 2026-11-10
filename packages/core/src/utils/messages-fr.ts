@@ -53,6 +53,16 @@ export const fr: Messages = {
   tagRemove: (tag) => `Retirer ${tag}`,
   tagsHelp: 'Entrée ou virgule pour ajouter, retour arrière pour retirer la dernière.',
 
+  fileDrop: 'Déposez des fichiers ici ou',
+  fileBrowse: 'parcourez',
+  remove: 'Retirer',
+  sizeUnits: ['o', 'ko', 'Mo', 'Go'],
+  fileRemove: (name) => `Retirer ${name}`,
+  fileCount: (count) => (count > 1 ? `${count} fichiers` : `${count} fichier`),
+  filesAdded: (names, count) => `${names.join(', ')} ${names.length > 1 ? 'ajoutés' : 'ajouté'}. ${count}.`,
+  fileRemoved: (name, count) => `${name} retiré. ${count}.`,
+  filesRejected: (names) => `${names.join(', ')} : format de fichier non accepté.`,
+
   openAll: 'Tout ouvrir',
   closeAll: 'Tout fermer',
 

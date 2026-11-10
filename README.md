@@ -181,6 +181,14 @@ Choix d'une valeur numérique dans un intervalle : `input type="range"` natif (f
 <CrSlider label="Volume" name="volume" step={5} value={volume} onCrInput={(event) => setVolume(event.detail)} />
 ```
 
+### Dépôt de fichiers : `cr-file-upload`
+
+Zone de dépôt posée sur un vrai `input type="file"` (clic, Entrée, Espace, Tab) : `label` obligatoire, `hint`, `name` (un envoi par fichier), `accept` (appliqué aussi aux fichiers déposés), `multiple` (les fichiers s'ajoutent ; sinon le nouveau remplace l'ancien), `disabled`. Liste des fichiers avec leur taille et un bouton « Retirer » ; ajouts, retraits et refus annoncés. La zone respire pendant le glissement et chaque fichier glisse en place. Événement `onCrChange` avec les `File[]`.
+
+```tsx
+<CrFileUpload label="Justificatifs" hint="PDF ou image." name="justificatifs" accept=".pdf,image/*" multiple onCrChange={(event) => setFiles(event.detail)} />
+```
+
 ### Contrôle segmenté : `cr-segmented`
 
 Choix d'une option parmi quelques-unes, côte à côte : options en `option` enfants (`data-count` ajoute un compteur), `label` obligatoire, `name`, `value`, `variant` (`thumb` par défaut, `clip`, `underline`, `outline`), `fit` (segments à la largeur de leur libellé), `disabled`. Événement `onCrChange`.
