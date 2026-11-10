@@ -20,6 +20,7 @@ import { OverlayDemo } from './overlay-demo';
 import { EnglishDemo } from './english-demo';
 import { IconButtonDemo } from './icon-button-demo';
 import { TooltipDemo } from './tooltip-demo';
+import { PopoverDemo } from './popover-demo';
 
 const row = { display: 'flex', gap: 'var(--cr-spacing-sm)', alignItems: 'center', marginBottom: 'var(--cr-spacing-lg)' };
 const grid = { display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))', gap: 'var(--cr-spacing-lg)' };
@@ -58,6 +59,9 @@ export default function Page() {
 
       <h2>Infobulles</h2>
       <TooltipDemo />
+
+      <h2>Fenêtre contextuelle</h2>
+      <PopoverDemo />
 
       <h2>Thème local</h2>
       <div className="cr-theme" data-testid="local-theme" style={{ ...row, '--cr-color-primary': '#e11d48' } as React.CSSProperties}>

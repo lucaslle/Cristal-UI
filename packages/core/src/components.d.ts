@@ -631,6 +631,26 @@ export namespace Components {
         "value": string;
     }
     /**
+     * Fenêtre contextuelle : petit panneau non modal ouvert par un bouton, pour du contenu interactif (formulaire court, réglages…).
+     * Le focus entre dans le panneau à l'ouverture et revient au bouton à la fermeture (Échap, clic à l'extérieur, bouton).
+     */
+    interface CrPopover {
+        /**
+          * Désactive le bouton.
+          * @default false
+         */
+        "disabled": boolean;
+        /**
+          * Libellé du bouton, qui nomme aussi le panneau pour les lecteurs d'écran (obligatoire).
+         */
+        "label": string;
+        /**
+          * Panneau ouvert ; à remettre à false pour le fermer après une action (« Appliquer »).
+          * @default false
+         */
+        "open": boolean;
+    }
+    /**
      * Barre de progression. Avec value, elle se remplit jusqu'à la valeur ; sans, un segment glisse en boucle (durée inconnue).
      */
     interface CrProgress {
@@ -1171,6 +1191,10 @@ export interface CrOtpCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLCrOtpElement;
 }
+export interface CrPopoverCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLCrPopoverElement;
+}
 export interface CrRadioGroupCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLCrRadioGroupElement;
@@ -1499,6 +1523,27 @@ declare global {
         prototype: HTMLCrOtpElement;
         new (): HTMLCrOtpElement;
     };
+    interface HTMLCrPopoverElementEventMap {
+        "crToggle": boolean;
+    }
+    /**
+     * Fenêtre contextuelle : petit panneau non modal ouvert par un bouton, pour du contenu interactif (formulaire court, réglages…).
+     * Le focus entre dans le panneau à l'ouverture et revient au bouton à la fermeture (Échap, clic à l'extérieur, bouton).
+     */
+    interface HTMLCrPopoverElement extends Components.CrPopover, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLCrPopoverElementEventMap>(type: K, listener: (this: HTMLCrPopoverElement, ev: CrPopoverCustomEvent<HTMLCrPopoverElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLCrPopoverElementEventMap>(type: K, listener: (this: HTMLCrPopoverElement, ev: CrPopoverCustomEvent<HTMLCrPopoverElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLCrPopoverElement: {
+        prototype: HTMLCrPopoverElement;
+        new (): HTMLCrPopoverElement;
+    };
     /**
      * Barre de progression. Avec value, elle se remplit jusqu'à la valeur ; sans, un segment glisse en boucle (durée inconnue).
      */
@@ -1814,6 +1859,7 @@ declare global {
         "cr-loader": HTMLCrLoaderElement;
         "cr-menu": HTMLCrMenuElement;
         "cr-otp": HTMLCrOtpElement;
+        "cr-popover": HTMLCrPopoverElement;
         "cr-progress": HTMLCrProgressElement;
         "cr-progress-steps": HTMLCrProgressStepsElement;
         "cr-radio-group": HTMLCrRadioGroupElement;
@@ -2520,6 +2566,30 @@ declare namespace LocalJSX {
           * @default ''
          */
         "value"?: string;
+    }
+    /**
+     * Fenêtre contextuelle : petit panneau non modal ouvert par un bouton, pour du contenu interactif (formulaire court, réglages…).
+     * Le focus entre dans le panneau à l'ouverture et revient au bouton à la fermeture (Échap, clic à l'extérieur, bouton).
+     */
+    interface CrPopover {
+        /**
+          * Désactive le bouton.
+          * @default false
+         */
+        "disabled"?: boolean;
+        /**
+          * Libellé du bouton, qui nomme aussi le panneau pour les lecteurs d'écran (obligatoire).
+         */
+        "label": string;
+        /**
+          * Émis quand l'utilisateur ouvre ou ferme le panneau ; detail : l'état ouvert.
+         */
+        "onCrToggle"?: (event: CrPopoverCustomEvent<boolean>) => void;
+        /**
+          * Panneau ouvert ; à remettre à false pour le fermer après une action (« Appliquer »).
+          * @default false
+         */
+        "open"?: boolean;
     }
     /**
      * Barre de progression. Avec value, elle se remplit jusqu'à la valeur ; sans, un segment glisse en boucle (durée inconnue).
@@ -3231,6 +3301,11 @@ declare namespace LocalJSX {
         "required": boolean;
         "disabled": boolean;
     }
+    interface CrPopoverAttributes {
+        "label": string;
+        "open": boolean;
+        "disabled": boolean;
+    }
     interface CrProgressAttributes {
         "value": number;
         "label": string;
@@ -3361,6 +3436,7 @@ declare namespace LocalJSX {
         "cr-loader": Omit<CrLoader, keyof CrLoaderAttributes> & { [K in keyof CrLoader & keyof CrLoaderAttributes]?: CrLoader[K] } & { [K in keyof CrLoader & keyof CrLoaderAttributes as `attr:${K}`]?: CrLoaderAttributes[K] } & { [K in keyof CrLoader & keyof CrLoaderAttributes as `prop:${K}`]?: CrLoader[K] };
         "cr-menu": Omit<CrMenu, keyof CrMenuAttributes> & { [K in keyof CrMenu & keyof CrMenuAttributes]?: CrMenu[K] } & { [K in keyof CrMenu & keyof CrMenuAttributes as `attr:${K}`]?: CrMenuAttributes[K] } & { [K in keyof CrMenu & keyof CrMenuAttributes as `prop:${K}`]?: CrMenu[K] } & OneOf<"label", CrMenu["label"], CrMenuAttributes["label"]>;
         "cr-otp": Omit<CrOtp, keyof CrOtpAttributes> & { [K in keyof CrOtp & keyof CrOtpAttributes]?: CrOtp[K] } & { [K in keyof CrOtp & keyof CrOtpAttributes as `attr:${K}`]?: CrOtpAttributes[K] } & { [K in keyof CrOtp & keyof CrOtpAttributes as `prop:${K}`]?: CrOtp[K] } & OneOf<"label", CrOtp["label"], CrOtpAttributes["label"]>;
+        "cr-popover": Omit<CrPopover, keyof CrPopoverAttributes> & { [K in keyof CrPopover & keyof CrPopoverAttributes]?: CrPopover[K] } & { [K in keyof CrPopover & keyof CrPopoverAttributes as `attr:${K}`]?: CrPopoverAttributes[K] } & { [K in keyof CrPopover & keyof CrPopoverAttributes as `prop:${K}`]?: CrPopover[K] } & OneOf<"label", CrPopover["label"], CrPopoverAttributes["label"]>;
         "cr-progress": Omit<CrProgress, keyof CrProgressAttributes> & { [K in keyof CrProgress & keyof CrProgressAttributes]?: CrProgress[K] } & { [K in keyof CrProgress & keyof CrProgressAttributes as `attr:${K}`]?: CrProgressAttributes[K] } & { [K in keyof CrProgress & keyof CrProgressAttributes as `prop:${K}`]?: CrProgress[K] };
         "cr-progress-steps": Omit<CrProgressSteps, keyof CrProgressStepsAttributes> & { [K in keyof CrProgressSteps & keyof CrProgressStepsAttributes]?: CrProgressSteps[K] } & { [K in keyof CrProgressSteps & keyof CrProgressStepsAttributes as `attr:${K}`]?: CrProgressStepsAttributes[K] } & { [K in keyof CrProgressSteps & keyof CrProgressStepsAttributes as `prop:${K}`]?: CrProgressSteps[K] };
         "cr-radio-group": Omit<CrRadioGroup, keyof CrRadioGroupAttributes> & { [K in keyof CrRadioGroup & keyof CrRadioGroupAttributes]?: CrRadioGroup[K] } & { [K in keyof CrRadioGroup & keyof CrRadioGroupAttributes as `attr:${K}`]?: CrRadioGroupAttributes[K] } & { [K in keyof CrRadioGroup & keyof CrRadioGroupAttributes as `prop:${K}`]?: CrRadioGroup[K] } & OneOf<"label", CrRadioGroup["label"], CrRadioGroupAttributes["label"]>;
@@ -3459,6 +3535,11 @@ declare module "@stencil/core" {
              * Code à usage unique (reçu par SMS ou e-mail), une case par chiffre.
              */
             "cr-otp": LocalJSX.IntrinsicElements["cr-otp"] & JSXBase.HTMLAttributes<HTMLCrOtpElement>;
+            /**
+             * Fenêtre contextuelle : petit panneau non modal ouvert par un bouton, pour du contenu interactif (formulaire court, réglages…).
+             * Le focus entre dans le panneau à l'ouverture et revient au bouton à la fermeture (Échap, clic à l'extérieur, bouton).
+             */
+            "cr-popover": LocalJSX.IntrinsicElements["cr-popover"] & JSXBase.HTMLAttributes<HTMLCrPopoverElement>;
             /**
              * Barre de progression. Avec value, elle se remplit jusqu'à la valeur ; sans, un segment glisse en boucle (durée inconnue).
              */

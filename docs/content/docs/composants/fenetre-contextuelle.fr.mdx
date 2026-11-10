@@ -1,0 +1,37 @@
+---
+title: Fenêtre contextuelle
+description: Petit panneau non modal ouvert par un bouton, pour du contenu interactif. Balise cr-popover, composant React CrPopover.
+---
+
+import PopoverBasic from '@/demos/popover-basic';
+
+## Exemple
+
+`cr-popover` affiche un bouton, nommé par `label`, qui ouvre un panneau ancré sous lui (ou au-dessus s'il manque de place). Le contenu du panneau est libre : formulaire court, réglages, liens. Le panneau grandit depuis le bouton avec un ressort.
+
+<Preview>
+  <PopoverBasic />
+</Preview>
+
+<include>../../../demos/popover-basic.tsx</include>
+
+## Ouvrir et fermer
+
+L'utilisateur ferme le panneau avec Échap, un clic à l'extérieur, le bouton, ou en quittant le panneau avec Tab. Pour le fermer après une action (« Inviter », « Appliquer »), remettez `open` à `false` ; `onCrToggle` signale chaque ouverture et fermeture faite par l'utilisateur.
+
+Pour un simple texte d'aide, préférez une [infobulle](/docs/composants/infobulle) ; pour une liste d'actions, un [menu](/docs/composants/menu) ; pour une tâche qui doit bloquer la page, une [modale](/docs/composants/modale).
+
+<Callout>
+  Si l'utilisateur a demandé à son système de réduire les animations, le panneau apparaît et disparaît directement, sans grandir.
+</Callout>
+
+## Accessibilité
+
+- Le bouton porte `aria-haspopup="dialog"`, `aria-expanded` et `aria-controls` ; le panneau est un dialogue non modal (`role="dialog"`) nommé par le bouton.
+- À l'ouverture, le focus va sur le premier élément interactif du panneau, ou sur le panneau lui-même s'il n'en contient pas.
+- Échap ferme le panneau et rend le focus au bouton, comme une action qui le ferme alors que le focus est dedans.
+- Le panneau n'enferme pas le focus : Tab en sort et le ferme, le reste de la page reste utilisable.
+
+## API
+
+<ApiReference tag="cr-popover" />

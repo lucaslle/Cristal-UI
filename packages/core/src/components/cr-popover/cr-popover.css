@@ -1,0 +1,41 @@
+.panel {
+  padding: var(--cr-spacing-lg);
+}
+
+.panel:focus-visible {
+  outline: 2px solid var(--cr-color-focus);
+  outline-offset: 2px;
+}
+
+/* Grandit depuis le bouton avec un ressort, sans fondu : le contenu garde tout son contraste pendant l'animation. */
+.panel[data-state='open'] {
+  animation: cr-popover-in 0.4s cubic-bezier(0.3, 1.35, 0.5, 1);
+}
+
+.panel[data-state='closing'] {
+  animation: cr-popover-out 0.15s ease-in forwards;
+}
+
+@keyframes cr-popover-in {
+  from {
+    transform: scale(0.2);
+  }
+}
+
+@keyframes cr-popover-out {
+  to {
+    transform: scale(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .panel[data-state] {
+    animation: none !important;
+  }
+}
+
+@media (forced-colors: active) {
+  .panel {
+    border-color: CanvasText;
+  }
+}

@@ -223,6 +223,17 @@ Contenu dans le slot par défaut, boutons d'action dans `slot="footer"`. L'évé
 </CrDialog>
 ```
 
+### Fenêtre contextuelle : `cr-popover`
+
+Petit panneau non modal (`role="dialog"`) ancré sous un bouton, pour du contenu interactif. `label` obligatoire (le bouton, qui nomme aussi le panneau), `open`, `disabled`. Le focus entre dans le panneau à l'ouverture ; Échap le ferme et rend le focus au bouton, un clic à l'extérieur ou Tab le ferment aussi. Il grandit depuis le bouton avec un ressort. Événement `onCrToggle`.
+
+```tsx
+<CrPopover label="Partager" open={open} onCrToggle={(event) => setOpen(event.detail)}>
+  <CrInput label="Adresse du destinataire" type="email" />
+  <CrButton onClick={() => setOpen(false)}>Inviter</CrButton>
+</CrPopover>
+```
+
 ### Notification : `cr-toast`, `cr-toaster`
 
 Message temporaire : `cr-toaster` est une zone fixée en bas à droite qui empile les `cr-toast`. Un toast a `open`, `variant` (`info` par défaut, `success`, `danger` lu aussitôt) et `duration` (5000 ms par défaut, `0` pour qu'il reste) ; une barre montre le temps restant, qui s'arrête sous la souris ou le focus. Il se ferme avec le bouton Fermer, Échap ou en glissant sur le côté. Événement `onCrClose`.

@@ -1,0 +1,37 @@
+---
+title: Popover
+description: Small non-modal panel opened by a button, for interactive content. Tag cr-popover, React component CrPopover.
+---
+
+import PopoverBasic from '@/demos/en/popover-basic';
+
+## Example
+
+`cr-popover` shows a button, named by `label`, that opens a panel anchored below it (or above when space runs out). The panel content is free: a short form, settings, links. The panel grows out of the button with a spring.
+
+<Preview>
+  <PopoverBasic />
+</Preview>
+
+<include>../../../demos/en/popover-basic.tsx</include>
+
+## Opening and closing
+
+The user closes the panel with Escape, a click outside, the button, or by tabbing out of the panel. To close it after an action ("Invite", "Apply"), set `open` back to `false`; `onCrToggle` reports every opening and closing done by the user.
+
+For plain help text, prefer a [tooltip](/docs/composants/infobulle); for a list of actions, a [menu](/docs/composants/menu); for a task that must block the page, a [dialog](/docs/composants/modale).
+
+<Callout>
+  If the user asked their system to reduce motion, the panel appears and disappears straight away, without growing.
+</Callout>
+
+## Accessibility
+
+- The button carries `aria-haspopup="dialog"`, `aria-expanded` and `aria-controls`; the panel is a non-modal dialog (`role="dialog"`) named by the button.
+- On opening, focus goes to the first interactive element of the panel, or to the panel itself when it has none.
+- Escape closes the panel and returns focus to the button, as does an action that closes it while focus is inside.
+- The panel does not trap focus: Tab leaves it and closes it, the rest of the page stays usable.
+
+## API
+
+<ApiReference tag="cr-popover" />
