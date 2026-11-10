@@ -6,6 +6,7 @@
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 import { AccordionAnimation, AccordionVariant } from "./utils/accordion";
+import { AvatarStatus } from "./components/cr-avatar/cr-avatar";
 import { BoxDisplay } from "./components/cr-box/cr-box";
 import { ButtonSize, ButtonType, ButtonVariant } from "./components/cr-button/cr-button";
 import { CardValue } from "./components/cr-card-input/cr-card-input";
@@ -18,6 +19,7 @@ import { StepperVariant } from "./utils/stepper";
 import { TableColumn, TableDensity, TableLayout, TableVariant } from "./utils/table-layout";
 import { TooltipPlacement as TooltipPlacement1 } from "./components/cr-icon-button/cr-icon-button";
 export { AccordionAnimation, AccordionVariant } from "./utils/accordion";
+export { AvatarStatus } from "./components/cr-avatar/cr-avatar";
 export { BoxDisplay } from "./components/cr-box/cr-box";
 export { ButtonSize, ButtonType, ButtonVariant } from "./components/cr-button/cr-button";
 export { CardValue } from "./components/cr-card-input/cr-card-input";
@@ -83,6 +85,39 @@ export namespace Components {
           * @default false
          */
         "open": boolean;
+    }
+    /**
+     * Avatar d'une personne : sa photo, ou à défaut ses initiales sur une couleur tirée de son nom.
+     * Le nom (et le statut éventuel) est lu par les lecteurs d'écran ; la pastille de statut change de forme selon le statut.
+     */
+    interface CrAvatar {
+        /**
+          * Nom de la personne (obligatoire) : nom lu par les lecteurs d'écran, et initiales quand il n'y a pas de photo.
+         */
+        "name": string;
+        /**
+          * Taille : s 30px, m 40px, l 48px.
+          * @default 'm'
+         */
+        "size": 's' | 'm' | 'l';
+        /**
+          * Adresse de la photo ; les initiales la remplacent si elle ne se charge pas.
+         */
+        "src"?: string;
+        /**
+          * Disponibilité, ajoutée au nom lu (« Marie Dupont, en ligne ») et montrée par une pastille de forme différente pour chaque statut.
+         */
+        "status"?: AvatarStatus;
+    }
+    /**
+     * Groupe d'avatars qui se chevauchent, et s'écartent au survol ou quand le focus est dedans.
+     * Au-delà de max, les avatars restants sont résumés par une pastille « +N », nommée « N autres personnes ».
+     */
+    interface CrAvatarGroup {
+        /**
+          * Nombre maximal d'avatars affichés ; les autres sont résumés par « +N ». Tous par défaut.
+         */
+        "max"?: number;
     }
     /**
      * Remplaçant de div pour la mise en page : espacements, flex et grille avec les valeurs du thème.
@@ -1437,6 +1472,26 @@ declare global {
         new (): HTMLCrAccordionItemElement;
     };
     /**
+     * Avatar d'une personne : sa photo, ou à défaut ses initiales sur une couleur tirée de son nom.
+     * Le nom (et le statut éventuel) est lu par les lecteurs d'écran ; la pastille de statut change de forme selon le statut.
+     */
+    interface HTMLCrAvatarElement extends Components.CrAvatar, HTMLStencilElement {
+    }
+    var HTMLCrAvatarElement: {
+        prototype: HTMLCrAvatarElement;
+        new (): HTMLCrAvatarElement;
+    };
+    /**
+     * Groupe d'avatars qui se chevauchent, et s'écartent au survol ou quand le focus est dedans.
+     * Au-delà de max, les avatars restants sont résumés par une pastille « +N », nommée « N autres personnes ».
+     */
+    interface HTMLCrAvatarGroupElement extends Components.CrAvatarGroup, HTMLStencilElement {
+    }
+    var HTMLCrAvatarGroupElement: {
+        prototype: HTMLCrAvatarGroupElement;
+        new (): HTMLCrAvatarGroupElement;
+    };
+    /**
      * Remplaçant de div pour la mise en page : espacements, flex et grille avec les valeurs du thème.
      * Les enfants restent des enfants directs : flex et grille s'appliquent à eux.
      * Valeurs d'espacement : xs, sm, lg, xl, 2xl, 3xl, ou toute valeur CSS (« 12px »).
@@ -2079,6 +2134,8 @@ declare global {
     interface HTMLElementTagNameMap {
         "cr-accordion": HTMLCrAccordionElement;
         "cr-accordion-item": HTMLCrAccordionItemElement;
+        "cr-avatar": HTMLCrAvatarElement;
+        "cr-avatar-group": HTMLCrAvatarGroupElement;
         "cr-box": HTMLCrBoxElement;
         "cr-button": HTMLCrButtonElement;
         "cr-card": HTMLCrCardElement;
@@ -2178,6 +2235,39 @@ declare namespace LocalJSX {
           * @default false
          */
         "open"?: boolean;
+    }
+    /**
+     * Avatar d'une personne : sa photo, ou à défaut ses initiales sur une couleur tirée de son nom.
+     * Le nom (et le statut éventuel) est lu par les lecteurs d'écran ; la pastille de statut change de forme selon le statut.
+     */
+    interface CrAvatar {
+        /**
+          * Nom de la personne (obligatoire) : nom lu par les lecteurs d'écran, et initiales quand il n'y a pas de photo.
+         */
+        "name": string;
+        /**
+          * Taille : s 30px, m 40px, l 48px.
+          * @default 'm'
+         */
+        "size"?: 's' | 'm' | 'l';
+        /**
+          * Adresse de la photo ; les initiales la remplacent si elle ne se charge pas.
+         */
+        "src"?: string;
+        /**
+          * Disponibilité, ajoutée au nom lu (« Marie Dupont, en ligne ») et montrée par une pastille de forme différente pour chaque statut.
+         */
+        "status"?: AvatarStatus;
+    }
+    /**
+     * Groupe d'avatars qui se chevauchent, et s'écartent au survol ou quand le focus est dedans.
+     * Au-delà de max, les avatars restants sont résumés par une pastille « +N », nommée « N autres personnes ».
+     */
+    interface CrAvatarGroup {
+        /**
+          * Nombre maximal d'avatars affichés ; les autres sont résumés par « +N ». Tous par défaut.
+         */
+        "max"?: number;
     }
     /**
      * Remplaçant de div pour la mise en page : espacements, flex et grille avec les valeurs du thème.
@@ -3598,6 +3688,15 @@ declare namespace LocalJSX {
         "open": boolean;
         "disabled": boolean;
     }
+    interface CrAvatarAttributes {
+        "name": string;
+        "src": string;
+        "size": 's' | 'm' | 'l';
+        "status": AvatarStatus;
+    }
+    interface CrAvatarGroupAttributes {
+        "max": number;
+    }
     interface CrBoxAttributes {
         "display": BoxDisplay;
         "direction": 'row' | 'column' | 'row-reverse' | 'column-reverse';
@@ -3882,6 +3981,8 @@ declare namespace LocalJSX {
     interface IntrinsicElements {
         "cr-accordion": Omit<CrAccordion, keyof CrAccordionAttributes> & { [K in keyof CrAccordion & keyof CrAccordionAttributes]?: CrAccordion[K] } & { [K in keyof CrAccordion & keyof CrAccordionAttributes as `attr:${K}`]?: CrAccordionAttributes[K] } & { [K in keyof CrAccordion & keyof CrAccordionAttributes as `prop:${K}`]?: CrAccordion[K] };
         "cr-accordion-item": Omit<CrAccordionItem, keyof CrAccordionItemAttributes> & { [K in keyof CrAccordionItem & keyof CrAccordionItemAttributes]?: CrAccordionItem[K] } & { [K in keyof CrAccordionItem & keyof CrAccordionItemAttributes as `attr:${K}`]?: CrAccordionItemAttributes[K] } & { [K in keyof CrAccordionItem & keyof CrAccordionItemAttributes as `prop:${K}`]?: CrAccordionItem[K] } & OneOf<"label", CrAccordionItem["label"], CrAccordionItemAttributes["label"]>;
+        "cr-avatar": Omit<CrAvatar, keyof CrAvatarAttributes> & { [K in keyof CrAvatar & keyof CrAvatarAttributes]?: CrAvatar[K] } & { [K in keyof CrAvatar & keyof CrAvatarAttributes as `attr:${K}`]?: CrAvatarAttributes[K] } & { [K in keyof CrAvatar & keyof CrAvatarAttributes as `prop:${K}`]?: CrAvatar[K] } & OneOf<"name", CrAvatar["name"], CrAvatarAttributes["name"]>;
+        "cr-avatar-group": Omit<CrAvatarGroup, keyof CrAvatarGroupAttributes> & { [K in keyof CrAvatarGroup & keyof CrAvatarGroupAttributes]?: CrAvatarGroup[K] } & { [K in keyof CrAvatarGroup & keyof CrAvatarGroupAttributes as `attr:${K}`]?: CrAvatarGroupAttributes[K] } & { [K in keyof CrAvatarGroup & keyof CrAvatarGroupAttributes as `prop:${K}`]?: CrAvatarGroup[K] };
         "cr-box": Omit<CrBox, keyof CrBoxAttributes> & { [K in keyof CrBox & keyof CrBoxAttributes]?: CrBox[K] } & { [K in keyof CrBox & keyof CrBoxAttributes as `attr:${K}`]?: CrBoxAttributes[K] } & { [K in keyof CrBox & keyof CrBoxAttributes as `prop:${K}`]?: CrBox[K] };
         "cr-button": Omit<CrButton, keyof CrButtonAttributes> & { [K in keyof CrButton & keyof CrButtonAttributes]?: CrButton[K] } & { [K in keyof CrButton & keyof CrButtonAttributes as `attr:${K}`]?: CrButtonAttributes[K] } & { [K in keyof CrButton & keyof CrButtonAttributes as `prop:${K}`]?: CrButton[K] };
         "cr-card": CrCard;
@@ -3933,6 +4034,16 @@ declare module "@stencil/core" {
              * Section d'un accordéon, à placer dans cr-accordion.
              */
             "cr-accordion-item": LocalJSX.IntrinsicElements["cr-accordion-item"] & JSXBase.HTMLAttributes<HTMLCrAccordionItemElement>;
+            /**
+             * Avatar d'une personne : sa photo, ou à défaut ses initiales sur une couleur tirée de son nom.
+             * Le nom (et le statut éventuel) est lu par les lecteurs d'écran ; la pastille de statut change de forme selon le statut.
+             */
+            "cr-avatar": LocalJSX.IntrinsicElements["cr-avatar"] & JSXBase.HTMLAttributes<HTMLCrAvatarElement>;
+            /**
+             * Groupe d'avatars qui se chevauchent, et s'écartent au survol ou quand le focus est dedans.
+             * Au-delà de max, les avatars restants sont résumés par une pastille « +N », nommée « N autres personnes ».
+             */
+            "cr-avatar-group": LocalJSX.IntrinsicElements["cr-avatar-group"] & JSXBase.HTMLAttributes<HTMLCrAvatarGroupElement>;
             /**
              * Remplaçant de div pour la mise en page : espacements, flex et grille avec les valeurs du thème.
              * Les enfants restent des enfants directs : flex et grille s'appliquent à eux.

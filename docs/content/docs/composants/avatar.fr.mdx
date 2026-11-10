@@ -1,0 +1,48 @@
+---
+title: Avatar
+description: Photo ou initiales d'une personne, avec son statut, seule ou en groupe. Balises cr-avatar et cr-avatar-group, composants React CrAvatar et CrAvatarGroup.
+---
+
+import AvatarBasic from '@/demos/avatar-basic';
+import AvatarGroup from '@/demos/avatar-group';
+
+## Exemple
+
+`cr-avatar` montre la photo d'une personne (`src`) ou, sans photo, ses initiales : la première lettre du premier et du dernier mot de `name`. Si la photo ne se charge pas, les initiales la remplacent. La couleur de fond vient du nom : une même personne garde la même couleur partout. Elle est tirée de la couleur principale du thème, en décalant sa teinte, et assez sombre pour que les initiales blanches gardent un contraste d'au moins 4,5:1.
+
+`size` règle la taille (`s` 30px, `m` 40px, `l` 48px). `status` ajoute une pastille de disponibilité : `online` (pleine, avec une coche), `away` (une horloge), `busy` (une barre), `offline` (un anneau vide). La pastille « en ligne » pulse trois fois à l'apparition, puis s'arrête.
+
+<Preview>
+  <AvatarBasic />
+</Preview>
+
+<include>../../../demos/avatar-basic.tsx</include>
+
+## Groupe
+
+`cr-avatar-group` fait se chevaucher les `cr-avatar` qu'il contient ; ils s'écartent en éventail au survol, ou quand le focus est dans le groupe. Avec `max`, seuls les premiers avatars s'affichent, et une pastille « +N » résume les autres.
+
+<Preview>
+  <AvatarGroup />
+</Preview>
+
+<include>../../../demos/avatar-group.tsx</include>
+
+<Callout>
+  Si l'utilisateur a demandé à son système de réduire les animations, la pastille « en ligne » ne pulse pas et les avatars d'un groupe s'écartent sans glisser.
+</Callout>
+
+## Accessibilité
+
+- Chaque avatar est une image nommée par la personne, statut compris : « Marie Dupont, en ligne ». Les initiales et la photo ne sont pas lues en plus.
+- Le statut n'est pas donné que par la couleur : chaque statut a sa forme (coche, horloge, barre, anneau vide), et il est dans le nom lu.
+- La pulsation de la pastille « en ligne » dure moins de 5 secondes, puis s'arrête : rien ne bouge en continu.
+- La pastille « +N » d'un groupe est une image nommée « 2 autres personnes » ; les avatars masqués ne sont pas lus.
+
+## API
+
+<ApiReference tag="cr-avatar" />
+
+## API CrAvatarGroup
+
+<ApiReference tag="cr-avatar-group" />

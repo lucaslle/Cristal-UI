@@ -276,6 +276,17 @@ Petit panneau non modal (`role="dialog"`) ancré sous un bouton, pour du contenu
 </CrPopover>
 ```
 
+### Avatar : `cr-avatar`, `cr-avatar-group`
+
+`cr-avatar` montre la photo d'une personne (`src`), ou ses initiales sur une couleur tirée de son nom si la photo manque ou ne se charge pas. `name` obligatoire (nom lu par les lecteurs d'écran), `size` (`s`, `m`, `l`), `status` (`online`, `away`, `busy`, `offline`) ajouté au nom lu et montré par une pastille dont la forme change avec le statut ; la pastille « en ligne » pulse trois fois puis s'arrête. `cr-avatar-group` fait se chevaucher ses avatars, qui s'écartent au survol, et résume ceux au-delà de `max` par « +N ».
+
+```tsx
+<CrAvatarGroup max={3}>
+  <CrAvatar name="Marie Dupont" status="online" />
+  <CrAvatar name="Karim Benali" src="/photos/karim.jpg" />
+</CrAvatarGroup>
+```
+
 ### Notification : `cr-toast`, `cr-toaster`
 
 Message temporaire : `cr-toaster` est une zone fixée en bas à droite qui empile les `cr-toast`. Un toast a `open`, `variant` (`info` par défaut, `success`, `danger` lu aussitôt) et `duration` (5000 ms par défaut, `0` pour qu'il reste) ; une barre montre le temps restant, qui s'arrête sous la souris ou le focus. Il se ferme avec le bouton Fermer, Échap ou en glissant sur le côté. Événement `onCrClose`.

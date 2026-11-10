@@ -76,6 +76,9 @@ export const fr: Messages = {
   ratingStar: (count, max) => `${count} ${count > 1 ? 'étoiles' : 'étoile'} sur ${max}`,
   ratingImage: (label, value, max) => `${label} : ${value} sur ${max}`,
 
+  avatarStatus: { online: 'en ligne', away: 'absent', busy: 'occupé', offline: 'hors ligne' },
+  avatarMore: (count) => `${count} ${count > 1 ? 'autres personnes' : 'autre personne'}`,
+
   openAll: 'Tout ouvrir',
   closeAll: 'Tout fermer',
 

@@ -74,6 +74,9 @@ export const en = {
   ratingStar: (count: number, max: number) => `${count} ${count === 1 ? 'star' : 'stars'} out of ${max}`,
   ratingImage: (label: string, value: number, max: number) => `${label}: ${value} out of ${max}`,
 
+  avatarStatus: { online: 'online', away: 'away', busy: 'busy', offline: 'offline' },
+  avatarMore: (count: number) => `${count} more ${count === 1 ? 'person' : 'people'}`,
+
   openAll: 'Open all',
   closeAll: 'Close all',
 

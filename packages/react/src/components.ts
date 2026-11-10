@@ -64,3 +64,5 @@ export const CrSlider = withAttributes(generated.CrSlider, elements.CrSlider);
 export const CrFileUpload = withAttributes(generated.CrFileUpload, elements.CrFileUpload);
 export const CrDatePicker = withAttributes(generated.CrDatePicker, elements.CrDatePicker);
 export const CrRating = withAttributes(generated.CrRating, elements.CrRating);
+export const CrAvatar = withAttributes(generated.CrAvatar, elements.CrAvatar);
+export const CrAvatarGroup = withAttributes(generated.CrAvatarGroup, elements.CrAvatarGroup);
