@@ -16,6 +16,10 @@ export const en = {
   searchLabel: 'Search the list',
   searching: 'Searching…',
   noResults: 'No results',
+  searchClear: 'Clear the search',
+  recentSearches: 'Recent',
+  noResultsFor: (query: string) => `No results for “${query}”`,
+  noResultsHint: 'Check the spelling or try another word.',
 
   suggestion: (text: string) => `Suggestion: ${text}. Press Right Arrow to accept it.`,
   filled: 'Filled in for you',

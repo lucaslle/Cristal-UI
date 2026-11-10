@@ -155,6 +155,16 @@ Choix d'une option parmi quelques-unes, côte à côte : options en `option` enf
 </CrSegmented>
 ```
 
+### Recherche : `cr-search`
+
+Champ de recherche dont la loupe devient une flèche « Effacer » au focus : `label` obligatoire, `name`, `value`, `placeholder`, `placeholderWords` (mots qui défilent dans le texte indicatif, au plus quatre fois), `recent` (recherches récentes en puces qui volent dans le champ), `noResults` (loupe qui secoue la tête et « ? »). Résultats dans le slot. Événements `onCrInput` et `onCrSubmit` (Entrée).
+
+```tsx
+<CrSearch label="Rechercher un produit" placeholder="Rechercher" placeholderWords={['une lampe', 'une chaise']} recent={['lampe']} value={query} noResults={!found.length} onCrInput={(event) => setQuery(event.detail)}>
+  {results}
+</CrSearch>
+```
+
 ### Mise en page : `cr-box`
 
 Remplaçant de `div` : `display`, `direction`, `gap`, `padding`, `align`, `justify`, `wrap`, `columns`, `background`, `radius`, `border`, `shadow`, `maxWidth`. Les espacements acceptent les valeurs du thème (`xs`, `sm`, `lg`, `xl`, `2xl`, `3xl`) ou toute valeur CSS.
@@ -232,7 +242,7 @@ Méthodes `next()`, `previous()`, `goTo(index)` ; événements `onCrStepChange` 
 | `cr-skeleton` | forme qui pulse à la place du contenu (`shape` : `line`, `block`, `circle` ; `width`, `height`) |
 | `cr-progress` | barre de progression : indéterminée sans `value`, remplie jusqu'à `value` (0 à 100) sinon ; `showValue` affiche le pourcentage qui compte |
 | `cr-progress-steps` | étapes d'un traitement (`steps`, `current`) : passées cochées, en cours avec un indicateur qui tourne |
-| `cr-loader` | indicateur d'attente : `spinner` (par défaut) ou `bounce` ; taille selon `font-size` |
+| `cr-loader` | indicateur d'attente : `spinner` (par défaut), `bounce` ou `search` (loupe qui glisse) ; taille selon `font-size` |
 | `cr-image` | image floue puis nette une fois chargée (`src`, `alt`) |
 
 ```tsx

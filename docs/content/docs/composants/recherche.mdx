@@ -1,0 +1,44 @@
+---
+title: Search
+description: Animated search field, with recent searches, a rolling placeholder and a "no results" state. Tag cr-search, React component CrSearch.
+---
+
+import SearchBasic from '@/demos/en/search-basic';
+
+## Example
+
+Type in the field, pick a recent search, or look for a word that is not in the list ("xyzzy") to see the "no results" state. Results are children of `CrSearch`: they are shown under the field.
+
+<Preview>
+  <SearchBasic />
+</Preview>
+
+<include>../../../demos/en/search-basic.tsx</include>
+
+## What moves
+
+| Moment | Animation |
+|---|---|
+| Entering the field | Icon to Arrow: the magnifier becomes an arrow (the circle fades, the handle swings into a shaft, the head is drawn); clicking the arrow clears the search |
+| Empty field, with `placeholderWords` | Placeholder Roll: the last word of the placeholder rolls up every second ("Search lamps", then "chairs"…) |
+| Empty field, with `recent` | Recent Chips: recent searches show as chips; clicking one flies it into the field and runs the search |
+| `noResults` | No Results: the magnifier shakes its head, a "?" pops up inside, with "No results for "…"" and a tip |
+
+`CrLoader variant="search"` (see [Loading](/docs/composants/chargement)) shows a gliding magnifier while searching.
+
+<Callout>
+  If the user asked their system to reduce motion, the magnifier switches icon without transition, the placeholder does not roll, chips do not fly and the "no results" magnifier stays still.
+</Callout>
+
+## Accessibility
+
+- The field is a search field (`type="search"`) named by `label`, which is required since there is no visible label.
+- The arrow is a "Clear the search" button; while the magnifier is shown, it is decorative and out of the Tab order. Escape also clears the search.
+- Recent searches are a list of buttons, titled "Recent".
+- The "no results" state is announced by a status region.
+- The placeholder word changes at most four times and then stops: nothing moves for more than 5 seconds unless the user asked for it.
+- Enter emits `onCrSubmit` and submits the parent form; with `name`, the text is sent with the form.
+
+## API
+
+<ApiReference tag="cr-search" />

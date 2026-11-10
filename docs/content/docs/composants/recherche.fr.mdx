@@ -1,0 +1,44 @@
+---
+title: Recherche
+description: Champ de recherche animé, avec recherches récentes, texte indicatif qui défile et état « aucun résultat ». Balise cr-search, composant React CrSearch.
+---
+
+import SearchBasic from '@/demos/search-basic';
+
+## Exemple
+
+Tapez dans le champ, choisissez une recherche récente, ou cherchez un mot absent de la liste (« xyzzy ») pour voir l'état « aucun résultat ». Les résultats sont des enfants de `CrSearch` : ils s'affichent sous le champ.
+
+<Preview>
+  <SearchBasic />
+</Preview>
+
+<include>../../../demos/search-basic.tsx</include>
+
+## Ce qui bouge
+
+| Moment | Animation |
+|---|---|
+| Entrée dans le champ | Icon to Arrow : la loupe devient une flèche (cercle qui s'efface, manche qui pivote en tige, pointe qui se trace) ; un clic sur la flèche efface la recherche |
+| Champ vide, avec `placeholderWords` | Placeholder Roll : le dernier mot du texte indicatif défile vers le haut chaque seconde (« Rechercher une lampe », puis « une chaise »…) |
+| Champ vide, avec `recent` | Recent Chips : les recherches récentes s'affichent en puces ; un clic fait voler la puce dans le champ et lance la recherche |
+| `noResults` | No Results : la loupe secoue la tête, un « ? » apparaît dedans, avec « Aucun résultat pour « … » » et un conseil |
+
+`CrLoader variant="search"` (voir [Chargement](/docs/composants/chargement)) affiche une loupe qui glisse pendant la recherche.
+
+<Callout>
+  Si l'utilisateur a demandé à son système de réduire les animations, la loupe change d'icône sans transition, le texte indicatif ne défile pas, les puces ne volent pas et la loupe « aucun résultat » reste immobile.
+</Callout>
+
+## Accessibilité
+
+- Le champ est un champ de recherche (`type="search"`) nommé par `label`, obligatoire puisqu'il n'a pas de libellé visible.
+- La flèche est un bouton « Effacer la recherche » ; tant que la loupe est affichée, elle est décorative et hors de la tabulation. Échap efface aussi la recherche.
+- Les recherches récentes sont une liste de boutons, titrée « Récentes ».
+- L'état « aucun résultat » est annoncé par une zone de statut.
+- Le mot du texte indicatif change au plus quatre fois puis s'arrête : rien ne bouge plus de 5 secondes sans que l'utilisateur l'ait demandé.
+- Entrée émet `onCrSubmit` et envoie le formulaire parent ; avec `name`, le texte est envoyé avec le formulaire.
+
+## API
+
+<ApiReference tag="cr-search" />

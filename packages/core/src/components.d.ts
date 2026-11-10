@@ -559,10 +559,10 @@ export namespace Components {
          */
         "label"?: string;
         /**
-          * Style : spinner (cercle qui tourne) ou bounce (balle qui rebondit et s'écrase en touchant le sol).
+          * Style : spinner (cercle qui tourne), bounce (balle qui rebondit et s'écrase en touchant le sol) ou search (loupe qui glisse, pour une recherche).
           * @default 'spinner'
          */
-        "variant": 'spinner' | 'bounce';
+        "variant": 'spinner' | 'bounce' | 'search';
     }
     /**
      * Menu d'actions. Les actions sont des éléments option enfants.
@@ -666,6 +666,47 @@ export namespace Components {
           * @default []
          */
         "steps": string[];
+    }
+    /**
+     * Champ de recherche. En entrant dans le champ, la loupe devient une flèche qui efface la recherche.
+     * Options : mots qui défilent dans le texte indicatif, recherches récentes en puces, état « aucun résultat ».
+     */
+    interface CrSearch {
+        /**
+          * Désactive le champ.
+          * @default false
+         */
+        "disabled": boolean;
+        /**
+          * Nom du champ lu par les lecteurs d'écran (le champ n'a pas de libellé visible).
+         */
+        "label": string;
+        /**
+          * Nom envoyé avec le formulaire.
+         */
+        "name"?: string;
+        /**
+          * Affiche l'état « aucun résultat » pour le texte recherché.
+          * @default false
+         */
+        "noResults": boolean;
+        /**
+          * Texte indicatif affiché quand le champ est vide (« Rechercher »).
+         */
+        "placeholder"?: string;
+        /**
+          * Mots qui défilent après le texte indicatif, un par seconde (« Rechercher chaussures », puis « sacs »…), au plus quatre fois.
+         */
+        "placeholderWords"?: string[];
+        /**
+          * Recherches récentes, en puces sous le champ vide ; un clic fait voler la puce dans le champ.
+         */
+        "recent"?: string[];
+        /**
+          * Texte recherché.
+          * @default ''
+         */
+        "value": string;
     }
     /**
      * Choix d'une option parmi quelques-unes, côte à côte (Jour, Semaine, Mois…). Les options sont des éléments option enfants ;
@@ -1003,6 +1044,10 @@ export interface CrOtpCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLCrOtpElement;
 }
+export interface CrSearchCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLCrSearchElement;
+}
 export interface CrSegmentedCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLCrSegmentedElement;
@@ -1331,6 +1376,28 @@ declare global {
         prototype: HTMLCrProgressStepsElement;
         new (): HTMLCrProgressStepsElement;
     };
+    interface HTMLCrSearchElementEventMap {
+        "crInput": string;
+        "crSubmit": string;
+    }
+    /**
+     * Champ de recherche. En entrant dans le champ, la loupe devient une flèche qui efface la recherche.
+     * Options : mots qui défilent dans le texte indicatif, recherches récentes en puces, état « aucun résultat ».
+     */
+    interface HTMLCrSearchElement extends Components.CrSearch, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLCrSearchElementEventMap>(type: K, listener: (this: HTMLCrSearchElement, ev: CrSearchCustomEvent<HTMLCrSearchElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLCrSearchElementEventMap>(type: K, listener: (this: HTMLCrSearchElement, ev: CrSearchCustomEvent<HTMLCrSearchElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLCrSearchElement: {
+        prototype: HTMLCrSearchElement;
+        new (): HTMLCrSearchElement;
+    };
     interface HTMLCrSegmentedElementEventMap {
         "crChange": string;
     }
@@ -1493,6 +1560,7 @@ declare global {
         "cr-otp": HTMLCrOtpElement;
         "cr-progress": HTMLCrProgressElement;
         "cr-progress-steps": HTMLCrProgressStepsElement;
+        "cr-search": HTMLCrSearchElement;
         "cr-segmented": HTMLCrSegmentedElement;
         "cr-select": HTMLCrSelectElement;
         "cr-skeleton": HTMLCrSkeletonElement;
@@ -2105,10 +2173,10 @@ declare namespace LocalJSX {
          */
         "label"?: string;
         /**
-          * Style : spinner (cercle qui tourne) ou bounce (balle qui rebondit et s'écrase en touchant le sol).
+          * Style : spinner (cercle qui tourne), bounce (balle qui rebondit et s'écrase en touchant le sol) ou search (loupe qui glisse, pour une recherche).
           * @default 'spinner'
          */
-        "variant"?: 'spinner' | 'bounce';
+        "variant"?: 'spinner' | 'bounce' | 'search';
     }
     /**
      * Menu d'actions. Les actions sont des éléments option enfants.
@@ -2228,6 +2296,59 @@ declare namespace LocalJSX {
           * @default []
          */
         "steps"?: string[];
+    }
+    /**
+     * Champ de recherche. En entrant dans le champ, la loupe devient une flèche qui efface la recherche.
+     * Options : mots qui défilent dans le texte indicatif, recherches récentes en puces, état « aucun résultat ».
+     */
+    interface CrSearch {
+        /**
+          * Désactive le champ.
+          * @default false
+         */
+        "disabled"?: boolean;
+        /**
+          * The `id` of a `<form>` element to associate this element with.
+         */
+        "form"?: string;
+        /**
+          * Nom du champ lu par les lecteurs d'écran (le champ n'a pas de libellé visible).
+         */
+        "label": string;
+        /**
+          * Nom envoyé avec le formulaire.
+         */
+        "name"?: string;
+        /**
+          * Affiche l'état « aucun résultat » pour le texte recherché.
+          * @default false
+         */
+        "noResults"?: boolean;
+        /**
+          * Émis à chaque frappe, au choix d'une recherche récente et à l'effacement ; detail : le texte.
+         */
+        "onCrInput"?: (event: CrSearchCustomEvent<string>) => void;
+        /**
+          * Émis sur Entrée ; detail : le texte. Le formulaire parent est aussi envoyé.
+         */
+        "onCrSubmit"?: (event: CrSearchCustomEvent<string>) => void;
+        /**
+          * Texte indicatif affiché quand le champ est vide (« Rechercher »).
+         */
+        "placeholder"?: string;
+        /**
+          * Mots qui défilent après le texte indicatif, un par seconde (« Rechercher chaussures », puis « sacs »…), au plus quatre fois.
+         */
+        "placeholderWords"?: string[];
+        /**
+          * Recherches récentes, en puces sous le champ vide ; un clic fait voler la puce dans le champ.
+         */
+        "recent"?: string[];
+        /**
+          * Texte recherché.
+          * @default ''
+         */
+        "value"?: string;
     }
     /**
      * Choix d'une option parmi quelques-unes, côte à côte (Jour, Semaine, Mois…). Les options sont des éléments option enfants ;
@@ -2679,7 +2800,7 @@ declare namespace LocalJSX {
         "strength": boolean;
     }
     interface CrLoaderAttributes {
-        "variant": 'spinner' | 'bounce';
+        "variant": 'spinner' | 'bounce' | 'search';
         "label": string;
     }
     interface CrMenuAttributes {
@@ -2706,6 +2827,14 @@ declare namespace LocalJSX {
     interface CrProgressStepsAttributes {
         "current": number;
         "label": string;
+    }
+    interface CrSearchAttributes {
+        "label": string;
+        "name": string;
+        "value": string;
+        "placeholder": string;
+        "noResults": boolean;
+        "disabled": boolean;
     }
     interface CrSegmentedAttributes {
         "label": string;
@@ -2792,6 +2921,7 @@ declare namespace LocalJSX {
         "cr-otp": Omit<CrOtp, keyof CrOtpAttributes> & { [K in keyof CrOtp & keyof CrOtpAttributes]?: CrOtp[K] } & { [K in keyof CrOtp & keyof CrOtpAttributes as `attr:${K}`]?: CrOtpAttributes[K] } & { [K in keyof CrOtp & keyof CrOtpAttributes as `prop:${K}`]?: CrOtp[K] } & OneOf<"label", CrOtp["label"], CrOtpAttributes["label"]>;
         "cr-progress": Omit<CrProgress, keyof CrProgressAttributes> & { [K in keyof CrProgress & keyof CrProgressAttributes]?: CrProgress[K] } & { [K in keyof CrProgress & keyof CrProgressAttributes as `attr:${K}`]?: CrProgressAttributes[K] } & { [K in keyof CrProgress & keyof CrProgressAttributes as `prop:${K}`]?: CrProgress[K] };
         "cr-progress-steps": Omit<CrProgressSteps, keyof CrProgressStepsAttributes> & { [K in keyof CrProgressSteps & keyof CrProgressStepsAttributes]?: CrProgressSteps[K] } & { [K in keyof CrProgressSteps & keyof CrProgressStepsAttributes as `attr:${K}`]?: CrProgressStepsAttributes[K] } & { [K in keyof CrProgressSteps & keyof CrProgressStepsAttributes as `prop:${K}`]?: CrProgressSteps[K] };
+        "cr-search": Omit<CrSearch, keyof CrSearchAttributes> & { [K in keyof CrSearch & keyof CrSearchAttributes]?: CrSearch[K] } & { [K in keyof CrSearch & keyof CrSearchAttributes as `attr:${K}`]?: CrSearchAttributes[K] } & { [K in keyof CrSearch & keyof CrSearchAttributes as `prop:${K}`]?: CrSearch[K] } & OneOf<"label", CrSearch["label"], CrSearchAttributes["label"]>;
         "cr-segmented": Omit<CrSegmented, keyof CrSegmentedAttributes> & { [K in keyof CrSegmented & keyof CrSegmentedAttributes]?: CrSegmented[K] } & { [K in keyof CrSegmented & keyof CrSegmentedAttributes as `attr:${K}`]?: CrSegmentedAttributes[K] } & { [K in keyof CrSegmented & keyof CrSegmentedAttributes as `prop:${K}`]?: CrSegmented[K] } & OneOf<"label", CrSegmented["label"], CrSegmentedAttributes["label"]>;
         "cr-select": Omit<CrSelect, keyof CrSelectAttributes> & { [K in keyof CrSelect & keyof CrSelectAttributes]?: CrSelect[K] } & { [K in keyof CrSelect & keyof CrSelectAttributes as `attr:${K}`]?: CrSelectAttributes[K] } & { [K in keyof CrSelect & keyof CrSelectAttributes as `prop:${K}`]?: CrSelect[K] } & OneOf<"label", CrSelect["label"], CrSelectAttributes["label"]>;
         "cr-skeleton": Omit<CrSkeleton, keyof CrSkeletonAttributes> & { [K in keyof CrSkeleton & keyof CrSkeletonAttributes]?: CrSkeleton[K] } & { [K in keyof CrSkeleton & keyof CrSkeletonAttributes as `attr:${K}`]?: CrSkeletonAttributes[K] } & { [K in keyof CrSkeleton & keyof CrSkeletonAttributes as `prop:${K}`]?: CrSkeleton[K] };
@@ -2890,6 +3020,11 @@ declare module "@stencil/core" {
              * Chaque nouvelle étape est annoncée aux lecteurs d'écran.
              */
             "cr-progress-steps": LocalJSX.IntrinsicElements["cr-progress-steps"] & JSXBase.HTMLAttributes<HTMLCrProgressStepsElement>;
+            /**
+             * Champ de recherche. En entrant dans le champ, la loupe devient une flèche qui efface la recherche.
+             * Options : mots qui défilent dans le texte indicatif, recherches récentes en puces, état « aucun résultat ».
+             */
+            "cr-search": LocalJSX.IntrinsicElements["cr-search"] & JSXBase.HTMLAttributes<HTMLCrSearchElement>;
             /**
              * Choix d'une option parmi quelques-unes, côte à côte (Jour, Semaine, Mois…). Les options sont des éléments option enfants ;
              * data-count sur une option ajoute un compteur, qui compte et rebondit quand on choisit l'option.

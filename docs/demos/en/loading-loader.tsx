@@ -5,6 +5,7 @@ export default function LoadingLoader() {
     <CrBox display="flex" gap="2xl" align="end">
       <CrLoader />
       <CrLoader variant="bounce" label="Loading messages…" style={{ fontSize: 24 }} />
+      <CrLoader variant="search" label="Searching…" style={{ fontSize: 24 }} />
     </CrBox>
   );
 }

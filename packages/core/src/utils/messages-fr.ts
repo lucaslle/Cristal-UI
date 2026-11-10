@@ -18,6 +18,10 @@ export const fr: Messages = {
   searchLabel: 'Rechercher dans la liste',
   searching: 'Recherche en cours…',
   noResults: 'Aucun résultat',
+  searchClear: 'Effacer la recherche',
+  recentSearches: 'Récentes',
+  noResultsFor: (query) => `Aucun résultat pour « ${query} »`,
+  noResultsHint: 'Vérifiez l’orthographe ou essayez un autre mot.',
 
   suggestion: (text) => `Suggestion : ${text}. Flèche droite pour l'accepter.`,
   filled: 'Complété pour vous',

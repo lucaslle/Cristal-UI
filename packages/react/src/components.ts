@@ -40,6 +40,7 @@ export const CrInput = withAttributes(generated.CrInput, elements.CrInput);
 export const CrMenu = withAttributes(generated.CrMenu, elements.CrMenu);
 export const CrOtp = withAttributes(generated.CrOtp, elements.CrOtp);
 export const CrSelect = withAttributes(generated.CrSelect, elements.CrSelect);
+export const CrSearch = withAttributes(generated.CrSearch, elements.CrSearch);
 export const CrSegmented = withAttributes(generated.CrSegmented, elements.CrSegmented);
 export const CrStep = withAttributes(generated.CrStep, elements.CrStep);
 export const CrStepper = withAttributes(generated.CrStepper, elements.CrStepper);
