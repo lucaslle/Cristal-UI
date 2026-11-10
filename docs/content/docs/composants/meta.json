@@ -3,6 +3,7 @@
   "pages": [
     "boite",
     "bouton",
+    "bouton-icone",
     "champ-texte",
     "zone-de-texte",
     "code",

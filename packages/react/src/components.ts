@@ -29,6 +29,7 @@ export const CrAccordion = withAttributes(generated.CrAccordion, elements.CrAcco
 export const CrAccordionItem = withAttributes(generated.CrAccordionItem, elements.CrAccordionItem);
 export const CrBox = withAttributes(generated.CrBox, elements.CrBox);
 export const CrButton = withAttributes(generated.CrButton, elements.CrButton);
+export const CrIconButton = withAttributes(generated.CrIconButton, elements.CrIconButton);
 export const CrCard = withAttributes(generated.CrCard, elements.CrCard);
 export const CrCardInput = withAttributes(generated.CrCardInput, elements.CrCardInput);
 export const CrCheckbox = withAttributes(generated.CrCheckbox, elements.CrCheckbox);

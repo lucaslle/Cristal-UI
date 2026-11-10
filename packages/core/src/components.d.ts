@@ -10,6 +10,8 @@ import { BoxDisplay } from "./components/cr-box/cr-box";
 import { ButtonSize, ButtonType, ButtonVariant } from "./components/cr-button/cr-button";
 import { CardValue } from "./components/cr-card-input/cr-card-input";
 import { DashboardItem } from "./utils/dashboard-keys";
+import { IconButtonVariant, TooltipPlacement } from "./components/cr-icon-button/cr-icon-button";
+import { ButtonSize as ButtonSize1, ButtonType as ButtonType1 } from "./components/cr-button/cr-button";
 import { InputType } from "./components/cr-input/cr-input";
 import { PopupAnimation } from "./utils/popup";
 import { StepperVariant } from "./utils/stepper";
@@ -19,6 +21,8 @@ export { BoxDisplay } from "./components/cr-box/cr-box";
 export { ButtonSize, ButtonType, ButtonVariant } from "./components/cr-button/cr-button";
 export { CardValue } from "./components/cr-card-input/cr-card-input";
 export { DashboardItem } from "./utils/dashboard-keys";
+export { IconButtonVariant, TooltipPlacement } from "./components/cr-icon-button/cr-icon-button";
+export { ButtonSize as ButtonSize1, ButtonType as ButtonType1 } from "./components/cr-button/cr-button";
 export { InputType } from "./components/cr-input/cr-input";
 export { PopupAnimation } from "./utils/popup";
 export { StepperVariant } from "./utils/stepper";
@@ -360,6 +364,69 @@ export namespace Components {
           * @default 'end'
          */
         "placement": 'start' | 'end';
+    }
+    /**
+     * Bouton réduit à une icône. Le libellé lui donne son nom et s'affiche en infobulle au survol et au focus.
+     */
+    interface CrIconButton {
+        /**
+          * Pastille (nombre de notifications…), ajoutée au nom lu : « Notifications (3) ».
+         */
+        "badge"?: string | number;
+        /**
+          * Désactive le bouton.
+          * @default false
+         */
+        "disabled": boolean;
+        /**
+          * Nom du bouton, lu par les lecteurs d'écran et affiché dans l'infobulle (obligatoire).
+         */
+        "label": string;
+        /**
+          * Remplace l'icône par l'indicateur de chargement et bloque les clics.
+          * @default false
+         */
+        "loading": boolean;
+        /**
+          * État de la bascule (avec toggle).
+          * @default false
+         */
+        "pressed": boolean;
+        /**
+          * Coins arrondis (square) ou bouton rond (round).
+          * @default 'square'
+         */
+        "shape": 'square' | 'round';
+        /**
+          * Côté : xs 30px, s 36px, m 40px, l 48px.
+          * @default 'm'
+         */
+        "size": ButtonSize1;
+        /**
+          * Bouton bascule (favori, muet…) : chaque clic inverse pressed, annoncé enfoncé ou non.
+          * @default false
+         */
+        "toggle": boolean;
+        /**
+          * Affiche le libellé en infobulle au survol et au focus.
+          * @default true
+         */
+        "tooltip": boolean;
+        /**
+          * Côté où s'ouvre l'infobulle.
+          * @default 'top'
+         */
+        "tooltipPlacement": TooltipPlacement;
+        /**
+          * Comportement dans un formulaire.
+          * @default 'button'
+         */
+        "type": ButtonType1;
+        /**
+          * Niveau de hiérarchie visuelle ; ghost : sans fond, pour les barres d'outils.
+          * @default 'ghost'
+         */
+        "variant": IconButtonVariant;
     }
     /**
      * Champ de saisie de texte.
@@ -800,6 +867,10 @@ export interface CrDrawerCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLCrDrawerElement;
 }
+export interface CrIconButtonCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLCrIconButtonElement;
+}
 export interface CrInputCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLCrInputElement;
@@ -996,6 +1067,26 @@ declare global {
     var HTMLCrDrawerElement: {
         prototype: HTMLCrDrawerElement;
         new (): HTMLCrDrawerElement;
+    };
+    interface HTMLCrIconButtonElementEventMap {
+        "crToggle": boolean;
+    }
+    /**
+     * Bouton réduit à une icône. Le libellé lui donne son nom et s'affiche en infobulle au survol et au focus.
+     */
+    interface HTMLCrIconButtonElement extends Components.CrIconButton, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLCrIconButtonElementEventMap>(type: K, listener: (this: HTMLCrIconButtonElement, ev: CrIconButtonCustomEvent<HTMLCrIconButtonElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLCrIconButtonElementEventMap>(type: K, listener: (this: HTMLCrIconButtonElement, ev: CrIconButtonCustomEvent<HTMLCrIconButtonElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLCrIconButtonElement: {
+        prototype: HTMLCrIconButtonElement;
+        new (): HTMLCrIconButtonElement;
     };
     interface HTMLCrInputElementEventMap {
         "crInput": string;
@@ -1203,6 +1294,7 @@ declare global {
         "cr-dashboard": HTMLCrDashboardElement;
         "cr-dialog": HTMLCrDialogElement;
         "cr-drawer": HTMLCrDrawerElement;
+        "cr-icon-button": HTMLCrIconButtonElement;
         "cr-input": HTMLCrInputElement;
         "cr-menu": HTMLCrMenuElement;
         "cr-otp": HTMLCrOtpElement;
@@ -1590,6 +1682,81 @@ declare namespace LocalJSX {
           * @default 'end'
          */
         "placement"?: 'start' | 'end';
+    }
+    /**
+     * Bouton réduit à une icône. Le libellé lui donne son nom et s'affiche en infobulle au survol et au focus.
+     */
+    interface CrIconButton {
+        /**
+          * Pastille (nombre de notifications…), ajoutée au nom lu : « Notifications (3) ».
+         */
+        "badge"?: string | number;
+        /**
+          * Désactive le bouton.
+          * @default false
+         */
+        "disabled"?: boolean;
+        /**
+          * The `id` of a `<form>` element to associate this element with.
+         */
+        "form"?: string;
+        /**
+          * Nom du bouton, lu par les lecteurs d'écran et affiché dans l'infobulle (obligatoire).
+         */
+        "label": string;
+        /**
+          * Remplace l'icône par l'indicateur de chargement et bloque les clics.
+          * @default false
+         */
+        "loading"?: boolean;
+        /**
+          * The name of the element, used when submitting an HTML form.
+         */
+        "name"?: string;
+        /**
+          * Émis quand l'utilisateur inverse la bascule ; detail : le nouvel état pressed.
+         */
+        "onCrToggle"?: (event: CrIconButtonCustomEvent<boolean>) => void;
+        /**
+          * État de la bascule (avec toggle).
+          * @default false
+         */
+        "pressed"?: boolean;
+        /**
+          * Coins arrondis (square) ou bouton rond (round).
+          * @default 'square'
+         */
+        "shape"?: 'square' | 'round';
+        /**
+          * Côté : xs 30px, s 36px, m 40px, l 48px.
+          * @default 'm'
+         */
+        "size"?: ButtonSize1;
+        /**
+          * Bouton bascule (favori, muet…) : chaque clic inverse pressed, annoncé enfoncé ou non.
+          * @default false
+         */
+        "toggle"?: boolean;
+        /**
+          * Affiche le libellé en infobulle au survol et au focus.
+          * @default true
+         */
+        "tooltip"?: boolean;
+        /**
+          * Côté où s'ouvre l'infobulle.
+          * @default 'top'
+         */
+        "tooltipPlacement"?: TooltipPlacement;
+        /**
+          * Comportement dans un formulaire.
+          * @default 'button'
+         */
+        "type"?: ButtonType1;
+        /**
+          * Niveau de hiérarchie visuelle ; ghost : sans fond, pour les barres d'outils.
+          * @default 'ghost'
+         */
+        "variant"?: IconButtonVariant;
     }
     /**
      * Champ de saisie de texte.
@@ -2148,6 +2315,20 @@ declare namespace LocalJSX {
         "closeLabel": string;
         "placement": 'start' | 'end';
     }
+    interface CrIconButtonAttributes {
+        "label": string;
+        "variant": IconButtonVariant;
+        "size": ButtonSize;
+        "shape": 'square' | 'round';
+        "type": ButtonType;
+        "disabled": boolean;
+        "loading": boolean;
+        "toggle": boolean;
+        "pressed": boolean;
+        "badge": string;
+        "tooltip": boolean;
+        "tooltipPlacement": TooltipPlacement;
+    }
     interface CrInputAttributes {
         "label": string;
         "name": string;
@@ -2252,6 +2433,7 @@ declare namespace LocalJSX {
         "cr-dashboard": Omit<CrDashboard, keyof CrDashboardAttributes> & { [K in keyof CrDashboard & keyof CrDashboardAttributes]?: CrDashboard[K] } & { [K in keyof CrDashboard & keyof CrDashboardAttributes as `attr:${K}`]?: CrDashboardAttributes[K] } & { [K in keyof CrDashboard & keyof CrDashboardAttributes as `prop:${K}`]?: CrDashboard[K] };
         "cr-dialog": Omit<CrDialog, keyof CrDialogAttributes> & { [K in keyof CrDialog & keyof CrDialogAttributes]?: CrDialog[K] } & { [K in keyof CrDialog & keyof CrDialogAttributes as `attr:${K}`]?: CrDialogAttributes[K] } & { [K in keyof CrDialog & keyof CrDialogAttributes as `prop:${K}`]?: CrDialog[K] } & OneOf<"label", CrDialog["label"], CrDialogAttributes["label"]>;
         "cr-drawer": Omit<CrDrawer, keyof CrDrawerAttributes> & { [K in keyof CrDrawer & keyof CrDrawerAttributes]?: CrDrawer[K] } & { [K in keyof CrDrawer & keyof CrDrawerAttributes as `attr:${K}`]?: CrDrawerAttributes[K] } & { [K in keyof CrDrawer & keyof CrDrawerAttributes as `prop:${K}`]?: CrDrawer[K] } & OneOf<"label", CrDrawer["label"], CrDrawerAttributes["label"]>;
+        "cr-icon-button": Omit<CrIconButton, keyof CrIconButtonAttributes> & { [K in keyof CrIconButton & keyof CrIconButtonAttributes]?: CrIconButton[K] } & { [K in keyof CrIconButton & keyof CrIconButtonAttributes as `attr:${K}`]?: CrIconButtonAttributes[K] } & { [K in keyof CrIconButton & keyof CrIconButtonAttributes as `prop:${K}`]?: CrIconButton[K] } & OneOf<"label", CrIconButton["label"], CrIconButtonAttributes["label"]>;
         "cr-input": Omit<CrInput, keyof CrInputAttributes> & { [K in keyof CrInput & keyof CrInputAttributes]?: CrInput[K] } & { [K in keyof CrInput & keyof CrInputAttributes as `attr:${K}`]?: CrInputAttributes[K] } & { [K in keyof CrInput & keyof CrInputAttributes as `prop:${K}`]?: CrInput[K] } & OneOf<"label", CrInput["label"], CrInputAttributes["label"]>;
         "cr-menu": Omit<CrMenu, keyof CrMenuAttributes> & { [K in keyof CrMenu & keyof CrMenuAttributes]?: CrMenu[K] } & { [K in keyof CrMenu & keyof CrMenuAttributes as `attr:${K}`]?: CrMenuAttributes[K] } & { [K in keyof CrMenu & keyof CrMenuAttributes as `prop:${K}`]?: CrMenu[K] } & OneOf<"label", CrMenu["label"], CrMenuAttributes["label"]>;
         "cr-otp": Omit<CrOtp, keyof CrOtpAttributes> & { [K in keyof CrOtp & keyof CrOtpAttributes]?: CrOtp[K] } & { [K in keyof CrOtp & keyof CrOtpAttributes as `attr:${K}`]?: CrOtpAttributes[K] } & { [K in keyof CrOtp & keyof CrOtpAttributes as `prop:${K}`]?: CrOtp[K] } & OneOf<"label", CrOtp["label"], CrOtpAttributes["label"]>;
@@ -2312,6 +2494,10 @@ declare module "@stencil/core" {
              * Panneau latéral, basé sur l'élément dialog natif.
              */
             "cr-drawer": LocalJSX.IntrinsicElements["cr-drawer"] & JSXBase.HTMLAttributes<HTMLCrDrawerElement>;
+            /**
+             * Bouton réduit à une icône. Le libellé lui donne son nom et s'affiche en infobulle au survol et au focus.
+             */
+            "cr-icon-button": LocalJSX.IntrinsicElements["cr-icon-button"] & JSXBase.HTMLAttributes<HTMLCrIconButtonElement>;
             /**
              * Champ de saisie de texte.
              */
