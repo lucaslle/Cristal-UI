@@ -52,9 +52,17 @@ Put the icon in `slot="start"` (before the label) or `slot="end"` (after). It is
 
 `type="submit"` submits the parent form and `type="reset"` resets it, like a native button. See the full example on the [Text field](/docs/composants/champ-texte#in-a-form) page.
 
+## Link
+
+With `href`, the button becomes a real link: Ctrl/Cmd+click, middle click, Shift+click and "Open in new tab" stay the browser's own, which an `onClick` that changes page cannot offer. `target="_blank"` opens a new tab (`rel="noopener noreferrer"` is added). When disabled or loading, the link loses its address and cannot be opened. Also works on `CrIconButton`.
+
+```tsx
+<CrButton href="/docs" variant="secondary">Read the documentation</CrButton>
+```
+
 ## Accessibility
 
-- Native button under the hood: activated with Enter and Space, announced as "button".
+- Native button under the hood: activated with Enter and Space, announced as "button". With `href`, a native link: activated with Enter, announced as "link".
 - Visible focus, label contrast above 4.5:1 in every variant.
 - The label must describe the action: "Add a product" rather than "OK".
 

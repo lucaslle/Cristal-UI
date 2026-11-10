@@ -37,3 +37,19 @@ test('exposes disabled and loading states', async ({ page }) => {
   await expect(page.getByRole('button', { name: 'Désactivé' })).toBeDisabled();
   await expect(page.getByRole('button', { name: 'Chargement' })).toHaveAttribute('aria-busy', 'true');
 });
+
+test('with href it is a real link: Ctrl+click opens a new tab, disabled loses its address', async ({ page, context }) => {
+  await page.goto('/');
+  const link = page.getByRole('link', { name: "Lien vers l'accueil" });
+  await expect(link).toHaveAttribute('href', '/?lien');
+  const [tab] = await Promise.all([context.waitForEvent('page'), link.click({ modifiers: ['ControlOrMeta'] })]);
+  await tab.waitForLoadState();
+  expect(tab.url()).toContain('/?lien');
+  expect(page.url()).not.toContain('lien');
+  await tab.close();
+  const disabled = page.getByRole('link', { name: 'Lien désactivé' });
+  await expect(disabled).toHaveAttribute('aria-disabled', 'true');
+  await expect(disabled).not.toHaveAttribute('href');
+  await link.click();
+  await expect(page).toHaveURL(/\?lien/);
+});

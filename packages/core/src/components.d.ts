@@ -162,6 +162,10 @@ export namespace Components {
          */
         "fullWidth": boolean;
         /**
+          * Adresse : le bouton devient un vrai lien (Ctrl+clic, clic molette et « Ouvrir dans un nouvel onglet » natifs).
+         */
+        "href"?: string;
+        /**
           * Affiche l'indicateur de chargement et bloque les clics.
           * @default false
          */
@@ -172,7 +176,11 @@ export namespace Components {
          */
         "size": ButtonSize;
         /**
-          * Comportement dans un formulaire.
+          * Où ouvrir le lien (avec href), par exemple _blank ; rel="noopener noreferrer" est ajouté pour _blank.
+         */
+        "target"?: string;
+        /**
+          * Comportement dans un formulaire (sans effet avec href).
           * @default 'button'
          */
         "type": ButtonType;
@@ -463,6 +471,10 @@ export namespace Components {
          */
         "disabled": boolean;
         /**
+          * Adresse : le bouton devient un vrai lien (Ctrl+clic, clic molette et « Ouvrir dans un nouvel onglet » natifs).
+         */
+        "href"?: string;
+        /**
           * Nom du bouton, lu par les lecteurs d'écran et affiché dans l'infobulle (obligatoire).
          */
         "label": string;
@@ -487,6 +499,10 @@ export namespace Components {
          */
         "size": ButtonSize1;
         /**
+          * Où ouvrir le lien (avec href), par exemple _blank ; rel="noopener noreferrer" est ajouté pour _blank.
+         */
+        "target"?: string;
+        /**
           * Bouton bascule (favori, muet…) : chaque clic inverse pressed, annoncé enfoncé ou non.
           * @default false
          */
@@ -502,7 +518,7 @@ export namespace Components {
          */
         "tooltipPlacement": TooltipPlacement;
         /**
-          * Comportement dans un formulaire.
+          * Comportement dans un formulaire (sans effet avec href).
           * @default 'button'
          */
         "type": ButtonType1;
@@ -2118,6 +2134,10 @@ declare namespace LocalJSX {
          */
         "fullWidth"?: boolean;
         /**
+          * Adresse : le bouton devient un vrai lien (Ctrl+clic, clic molette et « Ouvrir dans un nouvel onglet » natifs).
+         */
+        "href"?: string;
+        /**
           * Affiche l'indicateur de chargement et bloque les clics.
           * @default false
          */
@@ -2132,7 +2152,11 @@ declare namespace LocalJSX {
          */
         "size"?: ButtonSize;
         /**
-          * Comportement dans un formulaire.
+          * Où ouvrir le lien (avec href), par exemple _blank ; rel="noopener noreferrer" est ajouté pour _blank.
+         */
+        "target"?: string;
+        /**
+          * Comportement dans un formulaire (sans effet avec href).
           * @default 'button'
          */
         "type"?: ButtonType;
@@ -2467,6 +2491,10 @@ declare namespace LocalJSX {
          */
         "form"?: string;
         /**
+          * Adresse : le bouton devient un vrai lien (Ctrl+clic, clic molette et « Ouvrir dans un nouvel onglet » natifs).
+         */
+        "href"?: string;
+        /**
           * Nom du bouton, lu par les lecteurs d'écran et affiché dans l'infobulle (obligatoire).
          */
         "label": string;
@@ -2499,6 +2527,10 @@ declare namespace LocalJSX {
          */
         "size"?: ButtonSize1;
         /**
+          * Où ouvrir le lien (avec href), par exemple _blank ; rel="noopener noreferrer" est ajouté pour _blank.
+         */
+        "target"?: string;
+        /**
           * Bouton bascule (favori, muet…) : chaque clic inverse pressed, annoncé enfoncé ou non.
           * @default false
          */
@@ -2514,7 +2546,7 @@ declare namespace LocalJSX {
          */
         "tooltipPlacement"?: TooltipPlacement;
         /**
-          * Comportement dans un formulaire.
+          * Comportement dans un formulaire (sans effet avec href).
           * @default 'button'
          */
         "type"?: ButtonType1;
@@ -3369,6 +3401,8 @@ declare namespace LocalJSX {
         "variant": ButtonVariant;
         "size": ButtonSize;
         "type": ButtonType;
+        "href": string;
+        "target": string;
         "disabled": boolean;
         "loading": boolean;
         "fullWidth": boolean;
@@ -3441,6 +3475,8 @@ declare namespace LocalJSX {
         "size": ButtonSize;
         "shape": 'square' | 'round';
         "type": ButtonType;
+        "href": string;
+        "target": string;
         "disabled": boolean;
         "loading": boolean;
         "toggle": boolean;

@@ -53,6 +53,8 @@ export default function Page() {
       <div style={row}>
         <CrButton disabled>Désactivé</CrButton>
         <CrButton loading>Chargement</CrButton>
+        <CrButton href="/?lien" variant="outline">Lien vers l'accueil</CrButton>
+        <CrButton href="/?lien" disabled>Lien désactivé</CrButton>
       </div>
 
       <h2>Boutons icône</h2>

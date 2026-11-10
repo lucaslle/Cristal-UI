@@ -70,6 +70,7 @@ Dans un composant client (`'use client'`), importer depuis `@cristal/react`.
 | `disabled` | booléen | `false` |
 | `loading` | booléen | `false` |
 | `fullWidth` | booléen | `false` |
+| `href`, `target` | adresse : le bouton devient un vrai lien (Ctrl+clic, clic molette, nouvel onglet natifs) ; `rel="noopener noreferrer"` ajouté avec `_blank` | |
 
 Icônes : `slot="start"` (avant le texte) et `slot="end"` (après le texte).
 
@@ -86,7 +87,7 @@ Bouton réduit à une icône (slot par défaut, avec `aria-hidden="true"`). `lab
 | `toggle`, `pressed` | bascule annoncée enfoncée ou non, `onCrToggle` | `false` |
 | `badge` | pastille ajoutée au nom lu : « Notifications (3) » | |
 | `tooltip`, `tooltipPlacement` | infobulle ; `top`, `bottom`, `start`, `end` | `true`, `top` |
-| `type`, `disabled`, `loading` | comme `cr-button` | |
+| `type`, `disabled`, `loading`, `href`, `target` | comme `cr-button` | |
 
 ```tsx
 <CrIconButton label="Ajouter aux favoris" toggle pressed={liked} onCrToggle={(e) => setLiked(e.detail)}>

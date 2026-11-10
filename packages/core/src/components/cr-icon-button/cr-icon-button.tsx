@@ -1,4 +1,5 @@
 import { AttachInternals, Component, Event, EventEmitter, Host, Prop, State, Watch, h } from '@stencil/core';
+import { Control } from '../../utils/button-control';
 import type { ButtonSize, ButtonType } from '../cr-button/cr-button';
 
 export type IconButtonVariant = 'primary' | 'secondary' | 'outline' | 'ghost';
@@ -33,8 +34,12 @@ export class CrIconButton {
   @Prop({ reflect: true }) size: ButtonSize = 'm';
   /** Coins arrondis (square) ou bouton rond (round). */
   @Prop({ reflect: true }) shape: 'square' | 'round' = 'square';
-  /** Comportement dans un formulaire. */
+  /** Comportement dans un formulaire (sans effet avec href). */
   @Prop() type: ButtonType = 'button';
+  /** Adresse : le bouton devient un vrai lien (Ctrl+clic, clic molette et « Ouvrir dans un nouvel onglet » natifs). */
+  @Prop() href?: string;
+  /** Où ouvrir le lien (avec href), par exemple _blank ; rel="noopener noreferrer" est ajouté pour _blank. */
+  @Prop() target?: string;
   /** Désactive le bouton. */
   @Prop({ reflect: true }) disabled = false;
   /** Remplace l'icône par l'indicateur de chargement et bloque les clics. */
@@ -56,7 +61,7 @@ export class CrIconButton {
   /** Infobulle masquée avec Échap, jusqu'à ce que le pointeur ou le focus quitte le bouton. */
   @State() dismissed = false;
 
-  private button?: HTMLButtonElement;
+  private button?: HTMLElement;
   private icon?: HTMLElement;
   private pill?: HTMLElement;
 
@@ -78,6 +83,7 @@ export class CrIconButton {
       pop(this.icon, 1.25);
       this.crToggle.emit(this.pressed);
     }
+    if (this.href !== undefined) return;
     const form = this.internals.form;
     if (this.type === 'submit') form?.requestSubmit();
     if (this.type === 'reset') form?.reset();
@@ -94,21 +100,21 @@ export class CrIconButton {
         onPointerLeave={this.reset}
         onFocusout={this.reset}
       >
-        <button
-          ref={(el) => (this.button = el)}
+        <Control
+          ref={(el: HTMLElement) => (this.button = el)}
           part="button"
-          type="button"
+          href={this.href}
+          target={this.target}
           disabled={this.disabled}
+          loading={this.loading}
           aria-label={counted ? `${this.label} (${this.badge})` : this.label}
-          aria-pressed={this.toggle ? String(this.pressed) : undefined}
-          aria-disabled={this.loading ? 'true' : undefined}
-          aria-busy={this.loading ? 'true' : undefined}
+          aria-pressed={this.toggle && this.href === undefined ? String(this.pressed) : undefined}
         >
           {this.loading && <span class="spinner" part="spinner" aria-hidden="true" />}
           <span class="icon" ref={(el) => (this.icon = el)} hidden={this.loading}>
             <slot />
           </span>
-        </button>
+        </Control>
         {counted && (
           <span class="badge" part="badge" aria-hidden="true" ref={(el) => (this.pill = el)}>
             {this.badge}

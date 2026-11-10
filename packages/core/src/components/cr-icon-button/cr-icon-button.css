@@ -16,17 +16,18 @@
   --cr-button-border: transparent;
 }
 
-button {
+.control {
   flex: none;
   width: var(--cr-button-height);
   padding: 0;
 }
 
-:host([shape='round']) button {
+:host([shape='round']) .control {
   border-radius: 50%;
 }
 
-:host([variant='ghost']:not([pressed])) button:disabled {
+:host([variant='ghost']:not([pressed])) .control:disabled,
+:host([variant='ghost']:not([pressed])) .control[data-disabled] {
   background: transparent;
 }
 
@@ -70,7 +71,7 @@ button {
 }
 
 /* Au focus clavier tout de suite, au survol après un court délai ; jamais après un simple appui tactile. */
-button:focus-visible ~ .tooltip:not([data-dismissed]) {
+.control:focus-visible ~ .tooltip:not([data-dismissed]) {
   display: block;
   scale: 1;
   transition-duration: 0.35s;
@@ -88,7 +89,7 @@ button:focus-visible ~ .tooltip:not([data-dismissed]) {
 }
 
 @starting-style {
-  button:focus-visible ~ .tooltip:not([data-dismissed]),
+  .control:focus-visible ~ .tooltip:not([data-dismissed]),
   :host(:hover) .tooltip:not([data-dismissed]) {
     scale: 0.4;
   }
