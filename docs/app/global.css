@@ -48,3 +48,227 @@ html > body[data-scroll-locked] {
   margin-right: 0px !important;
   --removed-body-scroll-bar-size: 0px !important;
 }
+
+/* ---------- Vitrine : accueil, cadres d'exemple, titres ---------- */
+
+:root {
+  --ink: #0b0718;
+  --ink-2: #140c2b;
+  --glow-violet: #7c3aed;
+  --glow-pink: #d946ef;
+  --glow-cyan: #22d3ee;
+  --font-display: var(--font-sora), ui-sans-serif, system-ui, sans-serif;
+}
+
+.font-display {
+  font-family: var(--font-display);
+  letter-spacing: -0.03em;
+}
+
+/* Bande sombre de l'accueil, la même en clair et en sombre. */
+.stage {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  color: #f5f3ff;
+  background: var(--ink);
+}
+
+.stage::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    radial-gradient(60% 50% at 15% 10%, color-mix(in oklab, var(--glow-violet) 55%, transparent), transparent 70%),
+    radial-gradient(45% 45% at 85% 20%, color-mix(in oklab, var(--glow-pink) 35%, transparent), transparent 70%),
+    radial-gradient(50% 40% at 60% 100%, color-mix(in oklab, var(--glow-cyan) 25%, transparent), transparent 70%);
+}
+
+.stage::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-image:
+    linear-gradient(to right, rgb(255 255 255 / 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(255 255 255 / 0.05) 1px, transparent 1px);
+  background-size: 56px 56px;
+  mask-image: radial-gradient(ellipse 80% 70% at 50% 30%, black, transparent);
+}
+
+.stage-muted {
+  color: #c4b5fd;
+}
+
+/* Texte en dégradé : couleurs claires, contrastées sur le fond sombre. */
+.prism-text {
+  background: linear-gradient(100deg, #e9d5ff 0%, #f0abfc 45%, #a5f3fc 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  font-size: 14px;
+  color: #ede9fe;
+  background: rgb(255 255 255 / 0.06);
+  border: 1px solid rgb(255 255 255 / 0.14);
+  border-radius: 999px;
+  backdrop-filter: blur(8px);
+}
+
+.btn-glow,
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 22px;
+  font-weight: 600;
+  border-radius: 12px;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.btn-glow {
+  color: #fff;
+  background: linear-gradient(135deg, #7c3aed, #c026d3);
+  box-shadow: 0 10px 40px -10px rgb(192 38 211 / 0.7), inset 0 1px 0 rgb(255 255 255 / 0.25);
+}
+
+.btn-ghost {
+  color: #f5f3ff;
+  background: rgb(255 255 255 / 0.06);
+  border: 1px solid rgb(255 255 255 / 0.18);
+}
+
+.btn-glow:hover,
+.btn-ghost:hover {
+  transform: translateY(-2px);
+}
+
+.btn-glow:focus-visible,
+.btn-ghost:focus-visible,
+.stage a:focus-visible,
+.stage button:focus-visible {
+  outline: 2px solid #f0abfc;
+  outline-offset: 3px;
+}
+
+/* Panneau de verre qui porte de vrais composants (fond clair : les composants restent lisibles). */
+.glass {
+  color: #111827;
+  color-scheme: light;
+  background: rgb(255 255 255 / 0.92);
+  border: 1px solid rgb(255 255 255 / 0.6);
+  border-radius: 20px;
+  box-shadow:
+    0 30px 80px -20px rgb(124 58 237 / 0.55),
+    0 0 0 1px rgb(255 255 255 / 0.1);
+}
+
+.glass-dark {
+  background: rgb(255 255 255 / 0.05);
+  border: 1px solid rgb(255 255 255 / 0.12);
+  border-radius: 20px;
+  backdrop-filter: blur(12px);
+}
+
+.tilt {
+  transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+@media (hover: hover) and (min-width: 1024px) {
+  .tilt-left {
+    transform: perspective(1400px) rotateY(8deg) rotateX(2deg);
+  }
+  .tilt-right {
+    transform: perspective(1400px) rotateY(-8deg) rotateX(2deg);
+  }
+  .tilt:hover,
+  .tilt:focus-within {
+    transform: none;
+  }
+}
+
+/* Tuiles de la grille de composants. */
+.tile {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 24px;
+  background: var(--color-fd-card);
+  border: 1px solid var(--color-fd-border);
+  border-radius: 24px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.tile:hover {
+  border-color: color-mix(in oklab, var(--color-fd-primary) 50%, transparent);
+  box-shadow: 0 20px 60px -30px color-mix(in oklab, var(--color-fd-primary) 70%, transparent);
+}
+
+.tile-demo {
+  min-width: 0;
+  flex: 1;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  padding: 20px;
+  color: #111827;
+  color-scheme: light;
+  background: #f6f4fb radial-gradient(rgb(109 40 217 / 0.12) 1px, transparent 1px) 0 0 / 16px 16px;
+  border-radius: 16px;
+}
+
+/* Cadres d'exemple des pages de doc. */
+.preview-frame {
+  color: #111827;
+  color-scheme: light;
+  /* Fond pointillé à l'intérieur, liseré en dégradé sur la bordure. */
+  background:
+    radial-gradient(rgb(109 40 217 / 0.12) 1px, transparent 1px) padding-box 0 0 / 18px 18px,
+    linear-gradient(#f6f4fb, #f6f4fb) padding-box,
+    linear-gradient(135deg, #c4b5fd, #f0abfc 50%, #a5f3fc) border-box;
+  border: 1px solid transparent;
+  border-radius: 20px;
+  box-shadow: 0 24px 60px -36px rgb(109 40 217 / 0.6);
+}
+
+.docs-title {
+  font-family: var(--font-display);
+  letter-spacing: -0.03em;
+  background: linear-gradient(100deg, #4c1d95, #86198f);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.dark .docs-title {
+  background-image: linear-gradient(100deg, #e9d5ff, #f0abfc 55%, #a5f3fc);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tilt,
+  .btn-glow,
+  .btn-ghost {
+    transition: none;
+  }
+  .tilt-left,
+  .tilt-right {
+    transform: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .prism-text,
+  .docs-title {
+    color: CanvasText;
+    background: none;
+  }
+}
