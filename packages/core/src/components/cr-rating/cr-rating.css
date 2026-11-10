@@ -1,0 +1,109 @@
+.group {
+  display: flex;
+  width: fit-content;
+}
+
+.star {
+  display: inline-grid;
+  place-items: center;
+  box-sizing: border-box;
+  width: var(--cr-control-s);
+  height: var(--cr-control-s);
+  margin: 0;
+  padding: 0;
+  background: none;
+  border: 0;
+  border-radius: var(--cr-radius-m);
+}
+
+button.star {
+  cursor: pointer;
+}
+
+button.star:focus-visible {
+  outline: 2px solid var(--cr-color-focus);
+  outline-offset: -2px;
+}
+
+button.star:disabled {
+  cursor: not-allowed;
+}
+
+/* Étoile vide : contour seul ; pleine : remplie. La forme change, pas seulement la couleur. */
+.icon {
+  --fill: transparent;
+  --stroke: var(--cr-color-border);
+  width: 26px;
+  height: 26px;
+}
+
+.icon path {
+  fill: var(--fill);
+  stroke: var(--stroke);
+  stroke-width: 1.5;
+  /* Vague : chaque étoile se remplit un peu après la précédente. */
+  transition:
+    fill 0.2s calc(var(--i) * 60ms),
+    stroke 0.2s calc(var(--i) * 60ms);
+}
+
+.on .icon {
+  --fill: var(--cr-color-primary);
+  --stroke: var(--cr-color-primary);
+}
+
+/* Survol : prévisualise la note jusqu'à l'étoile pointée, sans attendre la vague. */
+@media (hover: hover) {
+  .group:hover button.star:not(:disabled) .icon {
+    --fill: var(--cr-color-primary);
+    --stroke: var(--cr-color-primary);
+  }
+  .group:hover button.star:not(:disabled):hover ~ .star .icon {
+    --fill: transparent;
+    --stroke: var(--cr-color-border);
+  }
+  .group:hover .icon path {
+    transition-delay: 0s;
+  }
+}
+
+button.star:disabled .icon {
+  --stroke: var(--cr-color-on-disabled);
+}
+
+button.star:disabled.on .icon {
+  --fill: var(--cr-color-on-disabled);
+}
+
+:host([disabled]) .label {
+  color: var(--cr-color-on-disabled);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .icon path {
+    transition: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .icon {
+    forced-color-adjust: none;
+    --stroke: CanvasText;
+  }
+  .on .icon,
+  .group:hover button.star:not(:disabled) .icon {
+    --fill: Highlight;
+    --stroke: Highlight;
+  }
+  .group:hover button.star:not(:disabled):hover ~ .star .icon {
+    --fill: transparent;
+    --stroke: CanvasText;
+  }
+  button.star:disabled .icon,
+  button.star:disabled.on .icon {
+    --stroke: GrayText;
+  }
+  button.star:disabled.on .icon {
+    --fill: GrayText;
+  }
+}

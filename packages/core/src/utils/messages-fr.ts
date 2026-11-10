@@ -73,6 +73,9 @@ export const fr: Messages = {
   nextMonth: 'Mois suivant',
   firstDay: 1,
 
+  ratingStar: (count, max) => `${count} ${count > 1 ? 'étoiles' : 'étoile'} sur ${max}`,
+  ratingImage: (label, value, max) => `${label} : ${value} sur ${max}`,
+
   openAll: 'Tout ouvrir',
   closeAll: 'Tout fermer',
 

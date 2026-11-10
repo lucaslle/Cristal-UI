@@ -190,6 +190,14 @@ Champ de date associé aux formulaires : saisie au format de la langue (`JJ/MM/A
 <CrDatePicker label="Date de livraison" name="livraison" min="2025-03-03" value={date} onCrChange={(event) => setDate(event.detail)} />
 ```
 
+### Notation : `cr-rating`
+
+Note par étoiles associée aux formulaires : un groupe de boutons radio, une étoile par note, chacune nommée « 3 étoiles sur 5 ». `label` obligatoire et visible, `name`, `value` (0 : aucune note), `max` (5), `disabled`, `readonly` (les étoiles deviennent une image nommée « Note : 4 sur 5 »). Les étoiles se remplissent en vague jusqu'à la note choisie, qui rebondit ; le survol prévisualise la note. Événement `onCrChange`.
+
+```tsx
+<CrRating label="Votre avis" name="avis" value={note} onCrChange={(event) => setNote(event.detail)} />
+```
+
 ### Dépôt de fichiers : `cr-file-upload`
 
 Zone de dépôt posée sur un vrai `input type="file"` (clic, Entrée, Espace, Tab) : `label` obligatoire, `hint`, `name` (un envoi par fichier), `accept` (appliqué aussi aux fichiers déposés), `multiple` (les fichiers s'ajoutent ; sinon le nouveau remplace l'ancien), `disabled`. Liste des fichiers avec leur taille et un bouton « Retirer » ; ajouts, retraits et refus annoncés. La zone respire pendant le glissement et chaque fichier glisse en place. Événement `onCrChange` avec les `File[]`.

@@ -805,6 +805,41 @@ export namespace Components {
         "value": string;
     }
     /**
+     * Notation par étoiles : un groupe de boutons radio, une étoile par note possible, sous un titre visible.
+     * Les étoiles se remplissent en vague jusqu'à la note choisie, qui rebondit ; le survol prévisualise la note.
+     * En lecture seule, les étoiles forment une image nommée par la note (« Note : 4 sur 5 »).
+     */
+    interface CrRating {
+        /**
+          * Désactive la notation.
+          * @default false
+         */
+        "disabled": boolean;
+        /**
+          * Titre affiché au-dessus des étoiles, et nom du groupe pour les lecteurs d'écran (obligatoire).
+         */
+        "label": string;
+        /**
+          * Nombre d'étoiles, donc note maximale.
+          * @default 5
+         */
+        "max": number;
+        /**
+          * Nom envoyé avec le formulaire.
+         */
+        "name"?: string;
+        /**
+          * Affiche la note sans permettre de la changer.
+          * @default false
+         */
+        "readonly": boolean;
+        /**
+          * Note choisie, de 0 (aucune) à max ; arrondie à l'entier.
+          * @default 0
+         */
+        "value": number;
+    }
+    /**
      * Champ de recherche. En entrant dans le champ, la loupe devient une flèche qui efface la recherche.
      * Options : mots qui défilent dans le texte indicatif, recherches récentes en puces, état « aucun résultat ».
      */
@@ -1327,6 +1362,10 @@ export interface CrRadioGroupCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLCrRadioGroupElement;
 }
+export interface CrRatingCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLCrRatingElement;
+}
 export interface CrSearchCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLCrSearchElement;
@@ -1756,6 +1795,28 @@ declare global {
         prototype: HTMLCrRadioGroupElement;
         new (): HTMLCrRadioGroupElement;
     };
+    interface HTMLCrRatingElementEventMap {
+        "crChange": number;
+    }
+    /**
+     * Notation par étoiles : un groupe de boutons radio, une étoile par note possible, sous un titre visible.
+     * Les étoiles se remplissent en vague jusqu'à la note choisie, qui rebondit ; le survol prévisualise la note.
+     * En lecture seule, les étoiles forment une image nommée par la note (« Note : 4 sur 5 »).
+     */
+    interface HTMLCrRatingElement extends Components.CrRating, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLCrRatingElementEventMap>(type: K, listener: (this: HTMLCrRatingElement, ev: CrRatingCustomEvent<HTMLCrRatingElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLCrRatingElementEventMap>(type: K, listener: (this: HTMLCrRatingElement, ev: CrRatingCustomEvent<HTMLCrRatingElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLCrRatingElement: {
+        prototype: HTMLCrRatingElement;
+        new (): HTMLCrRatingElement;
+    };
     interface HTMLCrSearchElementEventMap {
         "crInput": string;
         "crSubmit": string;
@@ -2039,6 +2100,7 @@ declare global {
         "cr-progress": HTMLCrProgressElement;
         "cr-progress-steps": HTMLCrProgressStepsElement;
         "cr-radio-group": HTMLCrRadioGroupElement;
+        "cr-rating": HTMLCrRatingElement;
         "cr-search": HTMLCrSearchElement;
         "cr-segmented": HTMLCrSegmentedElement;
         "cr-select": HTMLCrSelectElement;
@@ -2946,6 +3008,49 @@ declare namespace LocalJSX {
         "value"?: string;
     }
     /**
+     * Notation par étoiles : un groupe de boutons radio, une étoile par note possible, sous un titre visible.
+     * Les étoiles se remplissent en vague jusqu'à la note choisie, qui rebondit ; le survol prévisualise la note.
+     * En lecture seule, les étoiles forment une image nommée par la note (« Note : 4 sur 5 »).
+     */
+    interface CrRating {
+        /**
+          * Désactive la notation.
+          * @default false
+         */
+        "disabled"?: boolean;
+        /**
+          * The `id` of a `<form>` element to associate this element with.
+         */
+        "form"?: string;
+        /**
+          * Titre affiché au-dessus des étoiles, et nom du groupe pour les lecteurs d'écran (obligatoire).
+         */
+        "label": string;
+        /**
+          * Nombre d'étoiles, donc note maximale.
+          * @default 5
+         */
+        "max"?: number;
+        /**
+          * Nom envoyé avec le formulaire.
+         */
+        "name"?: string;
+        /**
+          * Émis quand l'utilisateur change la note ; detail : la nouvelle note.
+         */
+        "onCrChange"?: (event: CrRatingCustomEvent<number>) => void;
+        /**
+          * Affiche la note sans permettre de la changer.
+          * @default false
+         */
+        "readonly"?: boolean;
+        /**
+          * Note choisie, de 0 (aucune) à max ; arrondie à l'entier.
+          * @default 0
+         */
+        "value"?: number;
+    }
+    /**
      * Champ de recherche. En entrant dans le champ, la loupe devient une flèche qui efface la recherche.
      * Options : mots qui défilent dans le texte indicatif, recherches récentes en puces, état « aucun résultat ».
      */
@@ -3663,6 +3768,14 @@ declare namespace LocalJSX {
         "required": boolean;
         "disabled": boolean;
     }
+    interface CrRatingAttributes {
+        "label": string;
+        "name": string;
+        "value": number;
+        "max": number;
+        "disabled": boolean;
+        "readonly": boolean;
+    }
     interface CrSearchAttributes {
         "label": string;
         "name": string;
@@ -3790,6 +3903,7 @@ declare namespace LocalJSX {
         "cr-progress": Omit<CrProgress, keyof CrProgressAttributes> & { [K in keyof CrProgress & keyof CrProgressAttributes]?: CrProgress[K] } & { [K in keyof CrProgress & keyof CrProgressAttributes as `attr:${K}`]?: CrProgressAttributes[K] } & { [K in keyof CrProgress & keyof CrProgressAttributes as `prop:${K}`]?: CrProgress[K] };
         "cr-progress-steps": Omit<CrProgressSteps, keyof CrProgressStepsAttributes> & { [K in keyof CrProgressSteps & keyof CrProgressStepsAttributes]?: CrProgressSteps[K] } & { [K in keyof CrProgressSteps & keyof CrProgressStepsAttributes as `attr:${K}`]?: CrProgressStepsAttributes[K] } & { [K in keyof CrProgressSteps & keyof CrProgressStepsAttributes as `prop:${K}`]?: CrProgressSteps[K] };
         "cr-radio-group": Omit<CrRadioGroup, keyof CrRadioGroupAttributes> & { [K in keyof CrRadioGroup & keyof CrRadioGroupAttributes]?: CrRadioGroup[K] } & { [K in keyof CrRadioGroup & keyof CrRadioGroupAttributes as `attr:${K}`]?: CrRadioGroupAttributes[K] } & { [K in keyof CrRadioGroup & keyof CrRadioGroupAttributes as `prop:${K}`]?: CrRadioGroup[K] } & OneOf<"label", CrRadioGroup["label"], CrRadioGroupAttributes["label"]>;
+        "cr-rating": Omit<CrRating, keyof CrRatingAttributes> & { [K in keyof CrRating & keyof CrRatingAttributes]?: CrRating[K] } & { [K in keyof CrRating & keyof CrRatingAttributes as `attr:${K}`]?: CrRatingAttributes[K] } & { [K in keyof CrRating & keyof CrRatingAttributes as `prop:${K}`]?: CrRating[K] } & OneOf<"label", CrRating["label"], CrRatingAttributes["label"]>;
         "cr-search": Omit<CrSearch, keyof CrSearchAttributes> & { [K in keyof CrSearch & keyof CrSearchAttributes]?: CrSearch[K] } & { [K in keyof CrSearch & keyof CrSearchAttributes as `attr:${K}`]?: CrSearchAttributes[K] } & { [K in keyof CrSearch & keyof CrSearchAttributes as `prop:${K}`]?: CrSearch[K] } & OneOf<"label", CrSearch["label"], CrSearchAttributes["label"]>;
         "cr-segmented": Omit<CrSegmented, keyof CrSegmentedAttributes> & { [K in keyof CrSegmented & keyof CrSegmentedAttributes]?: CrSegmented[K] } & { [K in keyof CrSegmented & keyof CrSegmentedAttributes as `attr:${K}`]?: CrSegmentedAttributes[K] } & { [K in keyof CrSegmented & keyof CrSegmentedAttributes as `prop:${K}`]?: CrSegmented[K] } & OneOf<"label", CrSegmented["label"], CrSegmentedAttributes["label"]>;
         "cr-select": Omit<CrSelect, keyof CrSelectAttributes> & { [K in keyof CrSelect & keyof CrSelectAttributes]?: CrSelect[K] } & { [K in keyof CrSelect & keyof CrSelectAttributes as `attr:${K}`]?: CrSelectAttributes[K] } & { [K in keyof CrSelect & keyof CrSelectAttributes as `prop:${K}`]?: CrSelect[K] } & OneOf<"label", CrSelect["label"], CrSelectAttributes["label"]>;
@@ -3916,6 +4030,12 @@ declare module "@stencil/core" {
              * Les options sont des éléments option enfants. Le point du bouton choisi coule jusqu'au nouveau choix.
              */
             "cr-radio-group": LocalJSX.IntrinsicElements["cr-radio-group"] & JSXBase.HTMLAttributes<HTMLCrRadioGroupElement>;
+            /**
+             * Notation par étoiles : un groupe de boutons radio, une étoile par note possible, sous un titre visible.
+             * Les étoiles se remplissent en vague jusqu'à la note choisie, qui rebondit ; le survol prévisualise la note.
+             * En lecture seule, les étoiles forment une image nommée par la note (« Note : 4 sur 5 »).
+             */
+            "cr-rating": LocalJSX.IntrinsicElements["cr-rating"] & JSXBase.HTMLAttributes<HTMLCrRatingElement>;
             /**
              * Champ de recherche. En entrant dans le champ, la loupe devient une flèche qui efface la recherche.
              * Options : mots qui défilent dans le texte indicatif, recherches récentes en puces, état « aucun résultat ».

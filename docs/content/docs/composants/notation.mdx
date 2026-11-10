@@ -1,0 +1,37 @@
+---
+title: Rating
+description: Star rating, to pick or to display. Tag cr-rating, React component CrRating.
+---
+
+import RatingBasic from '@/demos/en/rating-basic';
+
+## Example
+
+`cr-rating` shows one star per possible rating, from 1 to `max` (5 by default), under a visible `label`. A click or the arrow keys pick the rating: stars fill in a wave up to it, and the chosen star bounces. On hover, the stars show the rating a click would give.
+
+<Preview>
+  <RatingBasic />
+</Preview>
+
+<include>../../../demos/en/rating-basic.tsx</include>
+
+## In a form
+
+The rating is submitted under the component `name`; nothing is submitted while no star is chosen (`value` at 0). `onCrChange` reports every new rating.
+
+With `readonly`, the rating is displayed and cannot change, for an average for instance. Half stars are not supported: a decimal value is rounded.
+
+<Callout>
+  If the user asked their system to reduce motion, the stars fill all at once and the chosen star does not bounce.
+</Callout>
+
+## Accessibility
+
+- The component follows the radio group pattern: a group named by the visible label, one radio button per star, named "3 stars out of 5", and a single Tab stop, on the chosen rating (or the first star).
+- Right and Up Arrow raise the rating, Left and Down Arrow lower it, wrapping around after the last one; Home and End pick the lowest and the highest.
+- When read-only, the stars form an image named by the rating ("Customer rating: 4 out of 5"), with nothing focusable.
+- A full star is filled, an empty star only has its outline: the rating does not rely on colour alone. The outline stands out from the background with a contrast of at least 3:1.
+
+## API
+
+<ApiReference tag="cr-rating" />

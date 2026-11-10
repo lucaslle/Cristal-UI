@@ -71,6 +71,9 @@ export const en = {
   nextMonth: 'Next month',
   firstDay: 0,
 
+  ratingStar: (count: number, max: number) => `${count} ${count === 1 ? 'star' : 'stars'} out of ${max}`,
+  ratingImage: (label: string, value: number, max: number) => `${label}: ${value} out of ${max}`,
+
   openAll: 'Open all',
   closeAll: 'Close all',
 
