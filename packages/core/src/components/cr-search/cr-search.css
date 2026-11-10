@@ -1,0 +1,335 @@
+:host {
+  --cr-search-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+  display: block;
+  font-family: var(--cr-font-family);
+  font-size: var(--cr-font-size-m);
+  color: var(--cr-color-text);
+}
+
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: var(--cr-spacing-sm);
+}
+
+.bar {
+  display: flex;
+  align-items: center;
+  gap: var(--cr-spacing-xs);
+  min-height: var(--cr-control-l);
+  padding: 0 var(--cr-spacing-sm);
+  background: var(--cr-color-surface);
+  border: 1px solid var(--cr-color-border);
+  border-radius: 999px;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
+}
+
+[data-open] .bar {
+  border-color: var(--cr-color-primary-text);
+  box-shadow: 0 0 0 3px var(--cr-color-primary-subtle);
+}
+
+.icon {
+  display: inline-grid;
+  flex: none;
+  place-items: center;
+  width: var(--cr-control-s);
+  height: var(--cr-control-s);
+  margin: 0;
+  padding: 0;
+  color: var(--cr-color-text-muted);
+  background: none;
+  border: 0;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+[data-open] .icon {
+  color: var(--cr-color-primary-text);
+}
+
+.icon:focus-visible,
+.chip:focus-visible {
+  outline: 2px solid var(--cr-color-focus);
+  outline-offset: 2px;
+}
+
+/* Variant filled : fond teinté, trait en bas qui garde un contraste suffisant pour repérer le champ. */
+:host([variant='filled']) .bar {
+  background: color-mix(in oklab, var(--cr-color-primary-subtle) 50%, var(--cr-color-surface));
+  border-color: transparent transparent var(--cr-color-border);
+  border-radius: var(--cr-radius-l) var(--cr-radius-l) 0 0;
+}
+
+:host([variant='filled']) [data-open] .bar,
+:host([variant='underline']) [data-open] .bar {
+  border-color: transparent transparent var(--cr-color-primary-text);
+  box-shadow: inset 0 -2px 0 var(--cr-color-primary-text);
+}
+
+/* Variant underline : seulement un trait en bas. */
+:host([variant='underline']) .bar {
+  padding-left: 0;
+  background: none;
+  border-color: transparent transparent var(--cr-color-border);
+  border-radius: 0;
+}
+
+/* Variant expand : bouton loupe rond qui s'allonge en champ à l'entrée. */
+:host([variant='expand']) .bar {
+  box-sizing: border-box;
+  width: 100%;
+  transition:
+    width 0.4s var(--cr-search-ease),
+    border-color 0.2s,
+    box-shadow 0.2s;
+}
+
+:host([variant='expand']) .root:not([data-open]) .bar {
+  width: var(--cr-control-l);
+  padding: 0;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+:host([variant='expand']) .root:not([data-open]) .icon {
+  width: calc(var(--cr-control-l) - 2px);
+  color: var(--cr-color-text);
+}
+
+/* Le champ reste dans la tabulation (y entrer ouvre la recherche) ; les puces attendent l'ouverture. */
+:host([variant='expand']) .root:not([data-open]) .field {
+  opacity: 0;
+}
+
+:host([variant='expand']) .root:not([data-open]) .recent {
+  display: none;
+}
+
+/* Loupe → flèche : le cercle s'efface, le manche pivote en tige, la pointe se trace. */
+.icon svg * {
+  transform-box: view-box;
+  transition:
+    transform 0.35s var(--cr-search-ease),
+    opacity 0.25s,
+    stroke-dashoffset 0.35s var(--cr-search-ease);
+}
+
+.lens {
+  transform-origin: 10px 10px;
+}
+
+.shaft {
+  transform-origin: 12px 12px;
+  transform: translate(5.25px, 5.25px) rotate(45deg) scaleX(0.56);
+}
+
+.head {
+  opacity: 0;
+  stroke-dasharray: 1 2;
+  stroke-dashoffset: 1;
+}
+
+[data-open] .lens {
+  opacity: 0;
+  transform: scale(0);
+}
+
+[data-open] .shaft {
+  transform: none;
+}
+
+[data-open] .head {
+  opacity: 1;
+  stroke-dashoffset: 0;
+}
+
+.field {
+  position: relative;
+  display: flex;
+  flex: 1;
+  min-width: 0;
+}
+
+input {
+  flex: 1;
+  min-width: 0;
+  min-height: var(--cr-control-m);
+  padding: 0 var(--cr-spacing-sm) 0 0;
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  outline: none;
+}
+
+input::placeholder,
+.placeholder {
+  color: var(--cr-color-text-muted);
+  opacity: 1;
+}
+
+input::-webkit-search-cancel-button {
+  appearance: none;
+}
+
+/* Texte indicatif dont le dernier mot défile vers le haut. */
+.placeholder {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.3em;
+  overflow: hidden;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.window,
+.word {
+  display: block;
+  line-height: 1.5;
+}
+
+.window {
+  overflow: hidden;
+}
+
+.word {
+  animation: cr-search-roll 0.4s var(--cr-search-ease);
+}
+
+@keyframes cr-search-roll {
+  from {
+    opacity: 0;
+    transform: translateY(100%);
+  }
+}
+
+.recent {
+  display: flex;
+  flex-direction: column;
+  gap: var(--cr-spacing-xs);
+  padding: 0 var(--cr-spacing-sm);
+}
+
+.recent-title {
+  font-size: var(--cr-font-size-s);
+  font-weight: var(--cr-font-weight-medium);
+  color: var(--cr-color-text-muted);
+}
+
+ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--cr-spacing-sm);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--cr-spacing-xs);
+  min-height: 32px;
+  padding: 0 var(--cr-spacing-sm);
+  font: inherit;
+  font-size: var(--cr-font-size-s);
+  color: var(--cr-color-text);
+  background: var(--cr-color-disabled);
+  border: 0;
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.chip svg {
+  color: var(--cr-color-text-muted);
+}
+
+.ghost {
+  position: fixed;
+  z-index: 1;
+  font-size: var(--cr-font-size-s);
+  color: var(--cr-color-text);
+  white-space: nowrap;
+  transform-origin: 0 50%;
+  pointer-events: none;
+}
+
+/* Aucun résultat : la loupe secoue la tête, puis le « ? » apparaît. */
+.empty {
+  display: flex;
+  align-items: center;
+  gap: var(--cr-spacing-lg);
+  padding: var(--cr-spacing-lg);
+}
+
+.empty-icon {
+  flex: none;
+  color: var(--cr-color-primary-text);
+}
+
+.shake {
+  transform-box: view-box;
+  transform-origin: 20px 20px;
+  animation: cr-search-shake 0.6s ease-in-out;
+}
+
+.question {
+  font-size: 16px;
+  font-weight: var(--cr-font-weight-bold);
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: cr-search-pop 0.4s 0.5s cubic-bezier(0.3, 1.6, 0.5, 1) backwards;
+}
+
+.empty strong {
+  display: block;
+}
+
+.hint {
+  font-size: var(--cr-font-size-s);
+  color: var(--cr-color-text-muted);
+}
+
+@keyframes cr-search-shake {
+  20%,
+  60% {
+    transform: rotate(-12deg);
+  }
+  40%,
+  80% {
+    transform: rotate(12deg);
+  }
+}
+
+@keyframes cr-search-pop {
+  from {
+    transform: scale(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :host([variant='expand']) .bar,
+  .bar,
+  .icon svg * {
+    transition: none;
+  }
+  .word,
+  .shake,
+  .question {
+    animation: none;
+  }
+}
+
+@media (forced-colors: active) {
+  [data-open] .bar {
+    outline: 2px solid Highlight;
+  }
+  .chip {
+    border: 1px solid ButtonText;
+  }
+}

@@ -86,7 +86,44 @@
   }
 }
 
+/* Loupe qui glisse en boucle, comme si elle parcourait une liste. */
+.search {
+  position: relative;
+  display: inline-block;
+  width: 3em;
+  height: 2em;
+}
+
+.lens {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1.5em;
+  height: 1.5em;
+  color: var(--cr-color-primary);
+  animation: cr-loader-glide 2.4s ease-in-out infinite;
+}
+
+.lens circle {
+  fill: var(--cr-color-primary-subtle);
+}
+
+@keyframes cr-loader-glide {
+  25% {
+    transform: translate(1.5em, 0.5em);
+  }
+  50% {
+    transform: translate(0.75em, 0);
+  }
+  75% {
+    transform: translate(0, 0.5em);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
+  .lens {
+    animation: cr-loader-fade 2.4s ease-in-out infinite;
+  }
   .spinner {
     animation-duration: 2.4s;
   }
@@ -110,5 +147,8 @@
   .ball,
   .shadow {
     background: CanvasText;
+  }
+  .lens {
+    color: CanvasText;
   }
 }
