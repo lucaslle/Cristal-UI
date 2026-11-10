@@ -173,6 +173,14 @@ Choix d'une seule option dans une liste empilée : options en `option` enfants, 
 </CrRadioGroup>
 ```
 
+### Curseur : `cr-slider`
+
+Choix d'une valeur numérique dans un intervalle : `input type="range"` natif (flèches, Page précédente/suivante, Début, Fin), `label` obligatoire et visible, `name`, `min` (0), `max` (100), `step` (1), `value`, `disabled`. Une bulle suit la pastille avec la valeur et grossit pendant le glissement ou au focus ; le rail se remplit jusqu'à la pastille. Événements `onCrInput` (pendant le glissement) et `onCrChange` (au relâchement).
+
+```tsx
+<CrSlider label="Volume" name="volume" step={5} value={volume} onCrInput={(event) => setVolume(event.detail)} />
+```
+
 ### Contrôle segmenté : `cr-segmented`
 
 Choix d'une option parmi quelques-unes, côte à côte : options en `option` enfants (`data-count` ajoute un compteur), `label` obligatoire, `name`, `value`, `variant` (`thumb` par défaut, `clip`, `underline`, `outline`), `fit` (segments à la largeur de leur libellé), `disabled`. Événement `onCrChange`.

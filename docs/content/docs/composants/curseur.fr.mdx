@@ -1,0 +1,37 @@
+---
+title: Curseur
+description: Choix d'une valeur numérique dans un intervalle, en faisant glisser une pastille. Balise cr-slider, composant React CrSlider.
+---
+
+import SliderBasic from '@/demos/slider-basic';
+
+## Exemple
+
+Un curseur convient quand la valeur exacte compte moins que sa position dans l'intervalle (volume, budget approximatif). Pour une valeur précise, préférez un [champ texte](/docs/composants/champ-texte) de type `number`.
+
+`min` (0 par défaut), `max` (100) et `step` (1) bornent la valeur. Une bulle suit la pastille en affichant la valeur, dans le format de la langue de la page, et grossit pendant le glissement ou au focus clavier ; la partie remplie du rail suit la valeur.
+
+<Preview>
+  <SliderBasic />
+</Preview>
+
+<include>../../../demos/slider-basic.tsx</include>
+
+## Dans un formulaire
+
+Le curseur envoie sa valeur sous son `name`. `onCrInput` signale chaque nouvelle valeur pendant le glissement, `onCrChange` la valeur finale, quand l'utilisateur relâche la pastille.
+
+<Callout>
+  Si l'utilisateur a demandé à son système de réduire les animations, la bulle change de taille sans transition.
+</Callout>
+
+## Accessibilité
+
+- Sous le capot, un `input type="range"` natif : annoncé « curseur » avec sa valeur, réglé avec les flèches, Page précédente et Page suivante, Début et Fin.
+- Le libellé `label` est obligatoire et visible, relié au curseur.
+- La bulle reprend la valeur pour les yeux seulement ; les lecteurs d'écran lisent celle du curseur natif.
+- Le rail se détache du fond avec un contraste d'au moins 3:1 ; le focus clavier entoure la pastille d'un contour.
+
+## API
+
+<ApiReference tag="cr-slider" />

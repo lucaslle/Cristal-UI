@@ -1,0 +1,37 @@
+---
+title: Slider
+description: Picks a number in a range by dragging a thumb. Tag cr-slider, React component CrSlider.
+---
+
+import SliderBasic from '@/demos/en/slider-basic';
+
+## Example
+
+A slider suits values where the position in the range matters more than the exact number (volume, rough budget). For a precise value, prefer a [text field](/docs/composants/champ-texte) of type `number`.
+
+`min` (0 by default), `max` (100) and `step` (1) bound the value. A bubble follows the thumb showing the value, formatted for the page language, and grows while dragging or on keyboard focus; the filled part of the track follows the value.
+
+<Preview>
+  <SliderBasic />
+</Preview>
+
+<include>../../../demos/en/slider-basic.tsx</include>
+
+## In a form
+
+The slider submits its value under its `name`. `onCrInput` reports every new value while dragging, `onCrChange` the final value, when the user releases the thumb.
+
+<Callout>
+  If the user asked their system to reduce motion, the bubble changes size without transition.
+</Callout>
+
+## Accessibility
+
+- Under the hood, a native `input type="range"`: announced as "slider" with its value, set with the arrow keys, Page Up and Page Down, Home and End.
+- `label` is required and visible, linked to the slider.
+- The bubble repeats the value for the eyes only; screen readers read the native slider's value.
+- The track stands out from the background with a contrast of at least 3:1; keyboard focus draws an outline around the thumb.
+
+## API
+
+<ApiReference tag="cr-slider" />
