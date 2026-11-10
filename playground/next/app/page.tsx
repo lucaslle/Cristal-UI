@@ -11,6 +11,7 @@ import { SliderDemo } from './slider-demo';
 import { DatePickerDemo } from './date-picker-demo';
 import { RatingDemo } from './rating-demo';
 import { AvatarDemo } from './avatar-demo';
+import { BadgeDemo } from './badge-demo';
 import { FileUploadDemo } from './file-upload-demo';
 import { LoadingDemo } from './loading-demo';
 import { TableDemo } from './table-demo';
@@ -151,6 +152,9 @@ export default function Page() {
 
       <h2>Avatars</h2>
       <AvatarDemo />
+
+      <h2>Pastilles</h2>
+      <BadgeDemo />
 
       <h2>Notifications</h2>
       <ToastDemo />

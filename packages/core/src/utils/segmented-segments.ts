@@ -17,13 +17,13 @@ export const readSegments = (host: HTMLElement): ListOption[] => {
   }));
 };
 
-/** Fait compter un nombre de 0 à count (ralenti à la fin) ; renvoie de quoi l'arrêter. */
-export const countUp = (count: number, onFrame: (value?: number) => void) => {
+/** Fait compter un nombre de from (0 par défaut) à count (ralenti à la fin) ; renvoie de quoi l'arrêter. */
+export const countUp = (count: number, onFrame: (value?: number) => void, from = 0) => {
   const start = performance.now();
   let frame = 0;
   const tick = (now: number) => {
     const progress = Math.min(1, (now - start) / COUNT_MS);
-    onFrame(progress < 1 ? count * (1 - (1 - progress) ** 3) : undefined);
+    onFrame(progress < 1 ? from + (count - from) * (1 - (1 - progress) ** 3) : undefined);
     if (progress < 1) frame = requestAnimationFrame(tick);
   };
   frame = requestAnimationFrame(tick);

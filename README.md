@@ -287,6 +287,14 @@ Petit panneau non modal (`role="dialog"`) ancré sous un bouton, pour du contenu
 </CrAvatarGroup>
 ```
 
+### Pastille : `cr-badge`
+
+Court statut ou compteur : texte en contenu, `variant` (`neutral` par défaut, `primary`, `success`, `danger`), `count` (nombre affiché après le texte, qui défile jusqu'à chaque nouvelle valeur comme un compteur kilométrique), `live` (annonce polie de chaque changement, désactivée par défaut). Le texte porte le sens, la couleur ne fait que l'appuyer.
+
+```tsx
+<CrBadge variant="primary" count={nonLus} live>Non lus</CrBadge>
+```
+
 ### Notification : `cr-toast`, `cr-toaster`
 
 Message temporaire : `cr-toaster` est une zone fixée en bas à droite qui empile les `cr-toast`. Un toast a `open`, `variant` (`info` par défaut, `success`, `danger` lu aussitôt) et `duration` (5000 ms par défaut, `0` pour qu'il reste) ; une barre montre le temps restant, qui s'arrête sous la souris ou le focus. Il se ferme avec le bouton Fermer, Échap ou en glissant sur le côté. Événement `onCrClose`.

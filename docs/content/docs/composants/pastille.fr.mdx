@@ -1,0 +1,37 @@
+---
+title: Pastille
+description: Court statut ou compteur, dans une pastille colorée. Balise cr-badge, composant React CrBadge.
+---
+
+import BadgeBasic from '@/demos/badge-basic';
+
+## Exemple
+
+`cr-badge` affiche un texte court dans une pastille : un statut (« Payée », « En retard ») ou un compteur. `variant` choisit la couleur : `neutral` (par défaut), `primary`, `success` ou `danger`. Le texte doit porter le sens : la couleur ne fait que l'appuyer.
+
+Avec `count`, un nombre s'ajoute après le texte. Quand il change, il défile jusqu'à sa nouvelle valeur en passant par les nombres intermédiaires, comme un compteur kilométrique : les chiffres montent quand le nombre augmente, descendent quand il baisse.
+
+<Preview>
+  <BadgeBasic />
+</Preview>
+
+<include>../../../demos/badge-basic.tsx</include>
+
+## Annoncer les changements
+
+Par défaut, un changement de `count` n'est pas annoncé : la pastille se lit avec le reste de la page. Avec `live`, elle devient une zone `role="status"` : chaque changement est annoncé poliment (« Non lus 7 »), quand le lecteur d'écran a fini sa phrase. Réservez `live` aux compteurs dont le changement compte pour l'utilisateur, pas à chaque pastille d'une liste.
+
+<Callout>
+  Si l'utilisateur a demandé à son système de réduire les animations, le nombre passe directement à sa nouvelle valeur, sans défiler.
+</Callout>
+
+## Accessibilité
+
+- La pastille est du texte : elle se lit avec son contenu et son nombre (« Non lus 3 »).
+- Les chiffres qui défilent sont masqués aux lecteurs d'écran, qui lisent seulement le nombre final.
+- Chaque variante associe un fond clair et un texte foncé de la même teinte, avec un contraste d'au moins 4,5:1. La couleur n'est jamais la seule information : le texte dit le statut.
+- Avec `live`, l'annonce est polie (`role="status"`) et n'interrompt pas l'utilisateur.
+
+## API
+
+<ApiReference tag="cr-badge" />

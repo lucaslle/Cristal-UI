@@ -7,6 +7,7 @@
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 import { AccordionAnimation, AccordionVariant } from "./utils/accordion";
 import { AvatarStatus } from "./components/cr-avatar/cr-avatar";
+import { BadgeVariant } from "./components/cr-badge/cr-badge";
 import { BoxDisplay } from "./components/cr-box/cr-box";
 import { ButtonSize, ButtonType, ButtonVariant } from "./components/cr-button/cr-button";
 import { CardValue } from "./components/cr-card-input/cr-card-input";
@@ -20,6 +21,7 @@ import { TableColumn, TableDensity, TableLayout, TableVariant } from "./utils/ta
 import { TooltipPlacement as TooltipPlacement1 } from "./components/cr-icon-button/cr-icon-button";
 export { AccordionAnimation, AccordionVariant } from "./utils/accordion";
 export { AvatarStatus } from "./components/cr-avatar/cr-avatar";
+export { BadgeVariant } from "./components/cr-badge/cr-badge";
 export { BoxDisplay } from "./components/cr-box/cr-box";
 export { ButtonSize, ButtonType, ButtonVariant } from "./components/cr-button/cr-button";
 export { CardValue } from "./components/cr-card-input/cr-card-input";
@@ -118,6 +120,26 @@ export namespace Components {
           * Nombre maximal d'avatars affichés ; les autres sont résumés par « +N ». Tous par défaut.
          */
         "max"?: number;
+    }
+    /**
+     * Pastille : court statut ou compteur (« Payée », « Non lus 3 »). Le texte porte le sens, la couleur ne fait que l'appuyer.
+     * Quand count change, le nombre défile jusqu'à sa nouvelle valeur, comme un compteur kilométrique.
+     */
+    interface CrBadge {
+        /**
+          * Nombre affiché après le texte ; il défile jusqu'à chaque nouvelle valeur.
+         */
+        "count"?: number;
+        /**
+          * Annonce poliment chaque changement aux lecteurs d'écran (zone role="status") ; désactivé par défaut.
+          * @default false
+         */
+        "live": boolean;
+        /**
+          * Couleur : neutral (gris), primary, success, danger.
+          * @default 'neutral'
+         */
+        "variant": BadgeVariant;
     }
     /**
      * Remplaçant de div pour la mise en page : espacements, flex et grille avec les valeurs du thème.
@@ -1492,6 +1514,16 @@ declare global {
         new (): HTMLCrAvatarGroupElement;
     };
     /**
+     * Pastille : court statut ou compteur (« Payée », « Non lus 3 »). Le texte porte le sens, la couleur ne fait que l'appuyer.
+     * Quand count change, le nombre défile jusqu'à sa nouvelle valeur, comme un compteur kilométrique.
+     */
+    interface HTMLCrBadgeElement extends Components.CrBadge, HTMLStencilElement {
+    }
+    var HTMLCrBadgeElement: {
+        prototype: HTMLCrBadgeElement;
+        new (): HTMLCrBadgeElement;
+    };
+    /**
      * Remplaçant de div pour la mise en page : espacements, flex et grille avec les valeurs du thème.
      * Les enfants restent des enfants directs : flex et grille s'appliquent à eux.
      * Valeurs d'espacement : xs, sm, lg, xl, 2xl, 3xl, ou toute valeur CSS (« 12px »).
@@ -2136,6 +2168,7 @@ declare global {
         "cr-accordion-item": HTMLCrAccordionItemElement;
         "cr-avatar": HTMLCrAvatarElement;
         "cr-avatar-group": HTMLCrAvatarGroupElement;
+        "cr-badge": HTMLCrBadgeElement;
         "cr-box": HTMLCrBoxElement;
         "cr-button": HTMLCrButtonElement;
         "cr-card": HTMLCrCardElement;
@@ -2268,6 +2301,26 @@ declare namespace LocalJSX {
           * Nombre maximal d'avatars affichés ; les autres sont résumés par « +N ». Tous par défaut.
          */
         "max"?: number;
+    }
+    /**
+     * Pastille : court statut ou compteur (« Payée », « Non lus 3 »). Le texte porte le sens, la couleur ne fait que l'appuyer.
+     * Quand count change, le nombre défile jusqu'à sa nouvelle valeur, comme un compteur kilométrique.
+     */
+    interface CrBadge {
+        /**
+          * Nombre affiché après le texte ; il défile jusqu'à chaque nouvelle valeur.
+         */
+        "count"?: number;
+        /**
+          * Annonce poliment chaque changement aux lecteurs d'écran (zone role="status") ; désactivé par défaut.
+          * @default false
+         */
+        "live"?: boolean;
+        /**
+          * Couleur : neutral (gris), primary, success, danger.
+          * @default 'neutral'
+         */
+        "variant"?: BadgeVariant;
     }
     /**
      * Remplaçant de div pour la mise en page : espacements, flex et grille avec les valeurs du thème.
@@ -3697,6 +3750,11 @@ declare namespace LocalJSX {
     interface CrAvatarGroupAttributes {
         "max": number;
     }
+    interface CrBadgeAttributes {
+        "variant": BadgeVariant;
+        "count": number;
+        "live": boolean;
+    }
     interface CrBoxAttributes {
         "display": BoxDisplay;
         "direction": 'row' | 'column' | 'row-reverse' | 'column-reverse';
@@ -3983,6 +4041,7 @@ declare namespace LocalJSX {
         "cr-accordion-item": Omit<CrAccordionItem, keyof CrAccordionItemAttributes> & { [K in keyof CrAccordionItem & keyof CrAccordionItemAttributes]?: CrAccordionItem[K] } & { [K in keyof CrAccordionItem & keyof CrAccordionItemAttributes as `attr:${K}`]?: CrAccordionItemAttributes[K] } & { [K in keyof CrAccordionItem & keyof CrAccordionItemAttributes as `prop:${K}`]?: CrAccordionItem[K] } & OneOf<"label", CrAccordionItem["label"], CrAccordionItemAttributes["label"]>;
         "cr-avatar": Omit<CrAvatar, keyof CrAvatarAttributes> & { [K in keyof CrAvatar & keyof CrAvatarAttributes]?: CrAvatar[K] } & { [K in keyof CrAvatar & keyof CrAvatarAttributes as `attr:${K}`]?: CrAvatarAttributes[K] } & { [K in keyof CrAvatar & keyof CrAvatarAttributes as `prop:${K}`]?: CrAvatar[K] } & OneOf<"name", CrAvatar["name"], CrAvatarAttributes["name"]>;
         "cr-avatar-group": Omit<CrAvatarGroup, keyof CrAvatarGroupAttributes> & { [K in keyof CrAvatarGroup & keyof CrAvatarGroupAttributes]?: CrAvatarGroup[K] } & { [K in keyof CrAvatarGroup & keyof CrAvatarGroupAttributes as `attr:${K}`]?: CrAvatarGroupAttributes[K] } & { [K in keyof CrAvatarGroup & keyof CrAvatarGroupAttributes as `prop:${K}`]?: CrAvatarGroup[K] };
+        "cr-badge": Omit<CrBadge, keyof CrBadgeAttributes> & { [K in keyof CrBadge & keyof CrBadgeAttributes]?: CrBadge[K] } & { [K in keyof CrBadge & keyof CrBadgeAttributes as `attr:${K}`]?: CrBadgeAttributes[K] } & { [K in keyof CrBadge & keyof CrBadgeAttributes as `prop:${K}`]?: CrBadge[K] };
         "cr-box": Omit<CrBox, keyof CrBoxAttributes> & { [K in keyof CrBox & keyof CrBoxAttributes]?: CrBox[K] } & { [K in keyof CrBox & keyof CrBoxAttributes as `attr:${K}`]?: CrBoxAttributes[K] } & { [K in keyof CrBox & keyof CrBoxAttributes as `prop:${K}`]?: CrBox[K] };
         "cr-button": Omit<CrButton, keyof CrButtonAttributes> & { [K in keyof CrButton & keyof CrButtonAttributes]?: CrButton[K] } & { [K in keyof CrButton & keyof CrButtonAttributes as `attr:${K}`]?: CrButtonAttributes[K] } & { [K in keyof CrButton & keyof CrButtonAttributes as `prop:${K}`]?: CrButton[K] };
         "cr-card": CrCard;
@@ -4044,6 +4103,11 @@ declare module "@stencil/core" {
              * Au-delà de max, les avatars restants sont résumés par une pastille « +N », nommée « N autres personnes ».
              */
             "cr-avatar-group": LocalJSX.IntrinsicElements["cr-avatar-group"] & JSXBase.HTMLAttributes<HTMLCrAvatarGroupElement>;
+            /**
+             * Pastille : court statut ou compteur (« Payée », « Non lus 3 »). Le texte porte le sens, la couleur ne fait que l'appuyer.
+             * Quand count change, le nombre défile jusqu'à sa nouvelle valeur, comme un compteur kilométrique.
+             */
+            "cr-badge": LocalJSX.IntrinsicElements["cr-badge"] & JSXBase.HTMLAttributes<HTMLCrBadgeElement>;
             /**
              * Remplaçant de div pour la mise en page : espacements, flex et grille avec les valeurs du thème.
              * Les enfants restent des enfants directs : flex et grille s'appliquent à eux.

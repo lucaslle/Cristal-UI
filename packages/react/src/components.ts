@@ -66,3 +66,4 @@ export const CrDatePicker = withAttributes(generated.CrDatePicker, elements.CrDa
 export const CrRating = withAttributes(generated.CrRating, elements.CrRating);
 export const CrAvatar = withAttributes(generated.CrAvatar, elements.CrAvatar);
 export const CrAvatarGroup = withAttributes(generated.CrAvatarGroup, elements.CrAvatarGroup);
+export const CrBadge = withAttributes(generated.CrBadge, elements.CrBadge);
