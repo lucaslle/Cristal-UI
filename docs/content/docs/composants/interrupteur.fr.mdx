@@ -1,0 +1,37 @@
+---
+title: Interrupteur
+description: Active ou désactive un réglage, avec effet immédiat. Balise cr-switch, composant React CrSwitch.
+---
+
+import SwitchBasic from '@/demos/switch-basic';
+
+## Exemple
+
+Un interrupteur agit tout de suite (activer les notifications, le mode sombre). Pour un choix qui ne s'applique qu'à l'envoi d'un formulaire, préférez une [case à cocher](/docs/composants/case-a-cocher).
+
+En glissant, la pastille s'étire vers sa destination puis se resserre, et la croix qu'elle porte se transforme en coche.
+
+<Preview>
+  <SwitchBasic />
+</Preview>
+
+<include>../../../demos/switch-basic.tsx</include>
+
+## Dans un formulaire
+
+Activé, l'interrupteur envoie sa `value` (`on` par défaut) sous son `name` ; désactivé, il n'envoie rien, comme une case à cocher.
+
+<Callout>
+  Si l'utilisateur a demandé à son système de réduire les animations, la pastille saute directement de l'autre côté, sans s'étirer, et la coche remplace la croix sans transition.
+</Callout>
+
+## Accessibilité
+
+- Sous le capot, une case à cocher native avec `role="switch"` : annoncée « interrupteur, activé / désactivé », basculée avec Espace. Son état coché donne `aria-checked` sans attribut à maintenir.
+- Le libellé `label` est obligatoire et visible ; un clic dessus bascule l'interrupteur.
+- L'état ne repose pas que sur la couleur : la pastille change de côté et porte une coche ou une croix.
+- Le rail se détache du fond avec un contraste d'au moins 3:1, activé comme désactivé ; le focus clavier l'entoure d'un contour.
+
+## API
+
+<ApiReference tag="cr-switch" />

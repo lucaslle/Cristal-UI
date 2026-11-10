@@ -144,6 +144,14 @@ Grille d'éléments (pour composer un tableau de bord, par exemple) déplacés p
 | `cr-card-input` | carte bancaire : numéro groupé, puis expiration et CVC (`name`, `name-expiry`, `name-cvc`) ; `preview` ajoute une carte dessinée qui se remplit et se retourne, `holder` le champ Titulaire ; `variant="card"` fait tout saisir directement sur la carte |
 | `cr-tag-input` | étiquettes ajoutées avec Entrée ou virgule, retirées avec × (`values`, `onCrChange`) |
 
+### Interrupteur : `cr-switch`
+
+Active ou désactive un réglage, avec effet immédiat : case native avec `role="switch"`, `label` obligatoire, `name`, `value` (`on` par défaut), `checked`, `disabled`. La pastille s'étire en glissant et sa croix devient une coche. Événement `onCrChange`.
+
+```tsx
+<CrSwitch label="Notifications" name="notifications" checked={on} onCrChange={(event) => setOn(event.detail)} />
+```
+
 ### Contrôle segmenté : `cr-segmented`
 
 Choix d'une option parmi quelques-unes, côte à côte : options en `option` enfants (`data-count` ajoute un compteur), `label` obligatoire, `name`, `value`, `variant` (`thumb` par défaut, `clip`, `underline`, `outline`), `fit` (segments à la largeur de leur libellé), `disabled`. Événement `onCrChange`.

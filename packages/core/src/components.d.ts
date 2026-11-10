@@ -882,6 +882,35 @@ export namespace Components {
         "variant": StepperVariant;
     }
     /**
+     * Interrupteur : active ou désactive un réglage, avec effet immédiat.
+     * La pastille s'étire en glissant, et sa croix se transforme en coche.
+     */
+    interface CrSwitch {
+        /**
+          * État activé.
+          * @default false
+         */
+        "checked": boolean;
+        /**
+          * Désactive l'interrupteur.
+          * @default false
+         */
+        "disabled": boolean;
+        /**
+          * Libellé affiché à côté de l'interrupteur.
+         */
+        "label": string;
+        /**
+          * Nom envoyé avec le formulaire.
+         */
+        "name"?: string;
+        /**
+          * Valeur envoyée quand l'interrupteur est activé.
+          * @default 'on'
+         */
+        "value": string;
+    }
+    /**
      * Tableau dont chaque utilisateur règle les colonnes : largeur, ordre, colonnes fixées et masquées, densité des lignes.
      */
     interface CrTable {
@@ -1091,6 +1120,10 @@ export interface CrSelectCustomEvent<T> extends CustomEvent<T> {
 export interface CrStepperCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLCrStepperElement;
+}
+export interface CrSwitchCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLCrSwitchElement;
 }
 export interface CrTableCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -1516,6 +1549,27 @@ declare global {
         prototype: HTMLCrStepperElement;
         new (): HTMLCrStepperElement;
     };
+    interface HTMLCrSwitchElementEventMap {
+        "crChange": boolean;
+    }
+    /**
+     * Interrupteur : active ou désactive un réglage, avec effet immédiat.
+     * La pastille s'étire en glissant, et sa croix se transforme en coche.
+     */
+    interface HTMLCrSwitchElement extends Components.CrSwitch, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLCrSwitchElementEventMap>(type: K, listener: (this: HTMLCrSwitchElement, ev: CrSwitchCustomEvent<HTMLCrSwitchElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLCrSwitchElementEventMap>(type: K, listener: (this: HTMLCrSwitchElement, ev: CrSwitchCustomEvent<HTMLCrSwitchElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLCrSwitchElement: {
+        prototype: HTMLCrSwitchElement;
+        new (): HTMLCrSwitchElement;
+    };
     interface HTMLCrTableElementEventMap {
         "crLayoutChange": TableLayout;
     }
@@ -1633,6 +1687,7 @@ declare global {
         "cr-skeleton": HTMLCrSkeletonElement;
         "cr-step": HTMLCrStepElement;
         "cr-stepper": HTMLCrStepperElement;
+        "cr-switch": HTMLCrSwitchElement;
         "cr-table": HTMLCrTableElement;
         "cr-tag-input": HTMLCrTagInputElement;
         "cr-textarea": HTMLCrTextareaElement;
@@ -2609,6 +2664,43 @@ declare namespace LocalJSX {
         "variant"?: StepperVariant;
     }
     /**
+     * Interrupteur : active ou désactive un réglage, avec effet immédiat.
+     * La pastille s'étire en glissant, et sa croix se transforme en coche.
+     */
+    interface CrSwitch {
+        /**
+          * État activé.
+          * @default false
+         */
+        "checked"?: boolean;
+        /**
+          * Désactive l'interrupteur.
+          * @default false
+         */
+        "disabled"?: boolean;
+        /**
+          * The `id` of a `<form>` element to associate this element with.
+         */
+        "form"?: string;
+        /**
+          * Libellé affiché à côté de l'interrupteur.
+         */
+        "label": string;
+        /**
+          * Nom envoyé avec le formulaire.
+         */
+        "name"?: string;
+        /**
+          * Émis quand l'interrupteur change ; detail : l'état activé.
+         */
+        "onCrChange"?: (event: CrSwitchCustomEvent<boolean>) => void;
+        /**
+          * Valeur envoyée quand l'interrupteur est activé.
+          * @default 'on'
+         */
+        "value"?: string;
+    }
+    /**
      * Tableau dont chaque utilisateur règle les colonnes : largeur, ordre, colonnes fixées et masquées, densité des lignes.
      */
     interface CrTable {
@@ -2979,6 +3071,13 @@ declare namespace LocalJSX {
         "navigation": boolean;
         "label": string;
     }
+    interface CrSwitchAttributes {
+        "label": string;
+        "name": string;
+        "value": string;
+        "checked": boolean;
+        "disabled": boolean;
+    }
     interface CrTableAttributes {
         "label": string;
         "variant": TableVariant;
@@ -3038,6 +3137,7 @@ declare namespace LocalJSX {
         "cr-skeleton": Omit<CrSkeleton, keyof CrSkeletonAttributes> & { [K in keyof CrSkeleton & keyof CrSkeletonAttributes]?: CrSkeleton[K] } & { [K in keyof CrSkeleton & keyof CrSkeletonAttributes as `attr:${K}`]?: CrSkeletonAttributes[K] } & { [K in keyof CrSkeleton & keyof CrSkeletonAttributes as `prop:${K}`]?: CrSkeleton[K] };
         "cr-step": Omit<CrStep, keyof CrStepAttributes> & { [K in keyof CrStep & keyof CrStepAttributes]?: CrStep[K] } & { [K in keyof CrStep & keyof CrStepAttributes as `attr:${K}`]?: CrStepAttributes[K] } & { [K in keyof CrStep & keyof CrStepAttributes as `prop:${K}`]?: CrStep[K] } & OneOf<"label", CrStep["label"], CrStepAttributes["label"]>;
         "cr-stepper": Omit<CrStepper, keyof CrStepperAttributes> & { [K in keyof CrStepper & keyof CrStepperAttributes]?: CrStepper[K] } & { [K in keyof CrStepper & keyof CrStepperAttributes as `attr:${K}`]?: CrStepperAttributes[K] } & { [K in keyof CrStepper & keyof CrStepperAttributes as `prop:${K}`]?: CrStepper[K] };
+        "cr-switch": Omit<CrSwitch, keyof CrSwitchAttributes> & { [K in keyof CrSwitch & keyof CrSwitchAttributes]?: CrSwitch[K] } & { [K in keyof CrSwitch & keyof CrSwitchAttributes as `attr:${K}`]?: CrSwitchAttributes[K] } & { [K in keyof CrSwitch & keyof CrSwitchAttributes as `prop:${K}`]?: CrSwitch[K] } & OneOf<"label", CrSwitch["label"], CrSwitchAttributes["label"]>;
         "cr-table": Omit<CrTable, keyof CrTableAttributes> & { [K in keyof CrTable & keyof CrTableAttributes]?: CrTable[K] } & { [K in keyof CrTable & keyof CrTableAttributes as `attr:${K}`]?: CrTableAttributes[K] } & { [K in keyof CrTable & keyof CrTableAttributes as `prop:${K}`]?: CrTable[K] } & OneOf<"label", CrTable["label"], CrTableAttributes["label"]>;
         "cr-tag-input": Omit<CrTagInput, keyof CrTagInputAttributes> & { [K in keyof CrTagInput & keyof CrTagInputAttributes]?: CrTagInput[K] } & { [K in keyof CrTagInput & keyof CrTagInputAttributes as `attr:${K}`]?: CrTagInputAttributes[K] } & { [K in keyof CrTagInput & keyof CrTagInputAttributes as `prop:${K}`]?: CrTagInput[K] } & OneOf<"label", CrTagInput["label"], CrTagInputAttributes["label"]>;
         "cr-textarea": Omit<CrTextarea, keyof CrTextareaAttributes> & { [K in keyof CrTextarea & keyof CrTextareaAttributes]?: CrTextarea[K] } & { [K in keyof CrTextarea & keyof CrTextareaAttributes as `attr:${K}`]?: CrTextareaAttributes[K] } & { [K in keyof CrTextarea & keyof CrTextareaAttributes as `prop:${K}`]?: CrTextarea[K] } & OneOf<"label", CrTextarea["label"], CrTextareaAttributes["label"]>;
@@ -3160,6 +3260,11 @@ declare module "@stencil/core" {
              * Progression en étapes. Les étapes sont des éléments cr-step enfants.
              */
             "cr-stepper": LocalJSX.IntrinsicElements["cr-stepper"] & JSXBase.HTMLAttributes<HTMLCrStepperElement>;
+            /**
+             * Interrupteur : active ou désactive un réglage, avec effet immédiat.
+             * La pastille s'étire en glissant, et sa croix se transforme en coche.
+             */
+            "cr-switch": LocalJSX.IntrinsicElements["cr-switch"] & JSXBase.HTMLAttributes<HTMLCrSwitchElement>;
             /**
              * Tableau dont chaque utilisateur règle les colonnes : largeur, ordre, colonnes fixées et masquées, densité des lignes.
              */

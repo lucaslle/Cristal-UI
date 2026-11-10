@@ -55,3 +55,4 @@ export const CrProgressSteps = withAttributes(generated.CrProgressSteps, element
 export const CrSkeleton = withAttributes(generated.CrSkeleton, elements.CrSkeleton);
 export const CrToast = withAttributes(generated.CrToast, elements.CrToast);
 export const CrToaster = withAttributes(generated.CrToaster, elements.CrToaster);
+export const CrSwitch = withAttributes(generated.CrSwitch, elements.CrSwitch);
