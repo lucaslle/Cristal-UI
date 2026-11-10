@@ -1,0 +1,37 @@
+---
+title: Switch
+description: Turns a setting on or off, with immediate effect. Tag cr-switch, React component CrSwitch.
+---
+
+import SwitchBasic from '@/demos/en/switch-basic';
+
+## Example
+
+A switch acts right away (turn on notifications, dark mode). For a choice that only applies when a form is submitted, prefer a [checkbox](/docs/composants/case-a-cocher).
+
+While sliding, the knob stretches towards its destination then shrinks back, and the cross it carries turns into a check mark.
+
+<Preview>
+  <SwitchBasic />
+</Preview>
+
+<include>../../../demos/en/switch-basic.tsx</include>
+
+## In a form
+
+When on, the switch submits its `value` (`on` by default) under its `name`; when off, it submits nothing, like a checkbox.
+
+<Callout>
+  If the user asked their system to reduce motion, the knob jumps straight to the other side without stretching, and the check mark replaces the cross without transition.
+</Callout>
+
+## Accessibility
+
+- Under the hood, a native checkbox with `role="switch"`: announced as "switch, on / off", toggled with Space. Its checked state provides `aria-checked`, with no attribute to keep in sync.
+- `label` is required and visible; clicking it toggles the switch.
+- The state does not rely on colour alone: the knob changes side and carries a check mark or a cross.
+- The track stands out from the background with a contrast of at least 3:1, on and off; keyboard focus draws an outline around it.
+
+## API
+
+<ApiReference tag="cr-switch" />

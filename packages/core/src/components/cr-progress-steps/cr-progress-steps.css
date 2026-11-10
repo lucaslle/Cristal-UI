@@ -55,10 +55,10 @@ li {
   white-space: nowrap;
 }
 
+/* Pas de fondu : une étape à demi transparente n'aurait pas le contraste requis. */
 @keyframes cr-progress-steps-in {
   from {
-    opacity: 0;
-    transform: translateY(-4px);
+    transform: translateY(-6px);
   }
 }
 

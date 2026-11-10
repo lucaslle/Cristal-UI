@@ -1,11 +1,19 @@
 ---
 title: Contrôle segmenté
-description: Choix d'une option parmi quelques-unes, côte à côte, avec une pastille qui glisse. Balise cr-segmented, composant React CrSegmented.
+description: Choix d'une option parmi quelques-unes, côte à côte, avec une pastille qui glisse ; ou des onglets, un panneau visible à la fois. Balises cr-segmented et cr-tab-panel, composants React CrSegmented et CrTabPanel.
 ---
 
 import SegmentedBasic from '@/demos/segmented-basic';
 import SegmentedCounts from '@/demos/segmented-counts';
 import SegmentedFit from '@/demos/segmented-fit';
+import SegmentedTabs from '@/demos/segmented-tabs';
+
+Le contrôle a deux modes, choisis par ses enfants :
+
+- des éléments `option` : un groupe de boutons radio, dont la valeur peut partir avec un formulaire ;
+- des `CrTabPanel` : des onglets, chacun avec son panneau de contenu, un seul visible à la fois.
+
+Les quatre `variant` et `fit` valent pour les deux modes.
 
 ## Exemple
 
@@ -15,7 +23,7 @@ Les options sont des éléments `option` enfants, comme pour `CrSelect`. Une pas
 |---|---|
 | `thumb` | Sliding Thumb : pastille en relief, le libellé choisi passe en gras (par défaut) |
 | `clip` | Clip Text : pastille colorée ; pendant qu'elle glisse, le texte ne devient blanc que là où elle passe |
-| `underline` | pas de rail : un trait glisse sous le libellé choisi, pour des onglets légers |
+| `underline` | pas de rail : un trait glisse sous le libellé choisi, l'allure classique des onglets |
 | `outline` | rail bordé, pastille teintée et cerclée de la couleur principale |
 
 <Preview column>
@@ -44,17 +52,44 @@ Par défaut, les segments ont tous la même largeur. Avec `fit`, chacun prend la
 
 <include>../../../demos/segmented-fit.tsx</include>
 
+## Onglets
+
+Avec des enfants `CrTabPanel` à la place des `option`, le contrôle devient des onglets : le `label` de chaque panneau devient un onglet, son contenu le panneau. `value` désigne l'onglet choisi par la `value` de son panneau, ou à défaut par sa position en texte (`"0"`, `"1"`…) ; le premier onglet par défaut. `onCrChange` renvoie cette valeur. En mode onglets, le contrôle n'envoie rien avec un formulaire.
+
+Le contenu arrive du côté de l'onglet choisi : de la droite quand on avance, de la gauche quand on recule. Avec `underline`, le trait de base court sur toute la largeur ; ajoutez `fit` pour des onglets à la largeur de leur libellé.
+
+<Preview column>
+  <SegmentedTabs />
+</Preview>
+
+<include>../../../demos/segmented-tabs.tsx</include>
+
+Les panneaux non choisis sont masqués par le composant lui-même : importés depuis `@cristal/react/ssr`, les onglets arrivent déjà dans le bon état, sans flash des autres panneaux.
+
 <Callout>
-  Si l'utilisateur a demandé à son système de réduire les animations, la pastille saute directement sur l'option choisie et les compteurs ne bougent pas.
+  Si l'utilisateur a demandé à son système de réduire les animations, la pastille saute directement sur l'option ou l'onglet choisi, les compteurs ne bougent pas et le panneau apparaît sans glisser.
 </Callout>
 
 ## Accessibilité
+
+### Avec des options
 
 - Le contrôle est un groupe de boutons radio (`role="radiogroup"`) nommé par `label`, obligatoire puisqu'il n'a pas de libellé visible.
 - Une seule tabulation entre dans le groupe, sur l'option choisie ; les flèches choisissent l'option précédente ou suivante (en bouclant), Début et Fin la première ou la dernière.
 - Le compteur est lu avec le libellé (« Mois (38) ») ; le nombre qui compte n'est pas lu.
 - Avec `name`, la valeur choisie est envoyée avec le formulaire.
 
+### Avec des onglets
+
+- Le composant suit le modèle W3C « tabs » : `role="tablist"` nommé par `label`, un `role="tab"` par onglet avec `aria-selected` et `aria-controls`, et un `role="tabpanel"` nommé par son onglet (`aria-labelledby`).
+- Une seule tabulation entre dans la barre, sur l'onglet choisi ; une tabulation de plus va dans le panneau.
+- Activation automatique : Flèche droite et Flèche gauche choisissent l'onglet suivant ou précédent (en bouclant), Début et Fin le premier ou le dernier.
+- L'onglet choisi ne se distingue pas que par la couleur : la pastille ou le trait épais est sous lui.
+
 ## API
 
 <ApiReference tag="cr-segmented" />
+
+## API CrTabPanel
+
+<ApiReference tag="cr-tab-panel" />

@@ -201,9 +201,9 @@ input::-webkit-search-cancel-button {
   animation: cr-search-roll 0.4s var(--cr-search-ease);
 }
 
+/* Pas de fondu : un mot à demi transparent n'aurait pas le contraste requis ; la fenêtre le masque déjà en dessous. */
 @keyframes cr-search-roll {
   from {
-    opacity: 0;
     transform: translateY(100%);
   }
 }

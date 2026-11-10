@@ -1,9 +1,22 @@
 import type React from 'react';
-import { CrAccordion, CrAccordionItem, CrButton, CrIconButton, CrCard, CrCheckbox, CrInput, CrSelect } from '@cristal/react/ssr';
+import { CrAccordion, CrAccordionItem, CrButton, CrIconButton, CrCard, CrCheckbox, CrInput, CrSegmented, CrSelect, CrTabPanel } from '@cristal/react/ssr';
 import { AccordionDemo } from './accordion-demo';
 import { StepperDemo } from './stepper-demo';
 import { SearchDemo } from './search-demo';
 import { SegmentedDemo } from './segmented-demo';
+import { SwitchDemo } from './switch-demo';
+import { RadioGroupDemo } from './radio-group-demo';
+import { SliderDemo } from './slider-demo';
+import { DatePickerDemo } from './date-picker-demo';
+import { RatingDemo } from './rating-demo';
+import { AvatarDemo } from './avatar-demo';
+import { BadgeDemo } from './badge-demo';
+import { PaginationDemo } from './pagination-demo';
+import { BreadcrumbDemo } from './breadcrumb-demo';
+import { SparklineDemo } from './sparkline-demo';
+import { AlertDemo } from './alert-demo';
+import { EmptyStateDemo } from './empty-state-demo';
+import { FileUploadDemo } from './file-upload-demo';
 import { LoadingDemo } from './loading-demo';
 import { TableDemo } from './table-demo';
 import { FieldsDemo } from './fields-demo';
@@ -13,8 +26,11 @@ import { MenuDemo } from './menu-demo';
 import { SelectDemo } from './select-demo';
 import { RemoteSelectDemo } from './remote-select-demo';
 import { OverlayDemo } from './overlay-demo';
+import { CommandPaletteDemo } from './command-palette-demo';
 import { EnglishDemo } from './english-demo';
 import { IconButtonDemo } from './icon-button-demo';
+import { TooltipDemo } from './tooltip-demo';
+import { PopoverDemo } from './popover-demo';
 
 const row = { display: 'flex', gap: 'var(--cr-spacing-sm)', alignItems: 'center', marginBottom: 'var(--cr-spacing-lg)' };
 const grid = { display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))', gap: 'var(--cr-spacing-lg)' };
@@ -46,10 +62,18 @@ export default function Page() {
       <div style={row}>
         <CrButton disabled>Désactivé</CrButton>
         <CrButton loading>Chargement</CrButton>
+        <CrButton href="/?lien" variant="outline">Lien vers l'accueil</CrButton>
+        <CrButton href="/?lien" disabled>Lien désactivé</CrButton>
       </div>
 
       <h2>Boutons icône</h2>
       <IconButtonDemo />
+
+      <h2>Infobulles</h2>
+      <TooltipDemo />
+
+      <h2>Fenêtre contextuelle</h2>
+      <PopoverDemo />
 
       <h2>Thème local</h2>
       <div className="cr-theme" data-testid="local-theme" style={{ ...row, '--cr-color-primary': '#e11d48' } as React.CSSProperties}>
@@ -108,6 +132,49 @@ export default function Page() {
 
       <h2>Contrôle segmenté</h2>
       <SegmentedDemo />
+      <CrSegmented data-testid="ssr-tabs" label="Conditions" variant="outline" value="1">
+        <CrTabPanel label="Livraison">Livraison offerte dès 50 €.</CrTabPanel>
+        <CrTabPanel label="Retours">Retour gratuit sous 30 jours.</CrTabPanel>
+      </CrSegmented>
+
+      <h2>Interrupteurs</h2>
+      <SwitchDemo />
+
+      <h2>Boutons radio</h2>
+      <RadioGroupDemo />
+
+      <h2>Curseurs</h2>
+      <SliderDemo />
+
+      <h2>Sélecteur de date</h2>
+      <DatePickerDemo />
+
+      <h2>Notation</h2>
+      <RatingDemo />
+
+      <h2>Dépôt de fichiers</h2>
+      <FileUploadDemo />
+
+      <h2>Avatars</h2>
+      <AvatarDemo />
+
+      <h2>Pastilles</h2>
+      <BadgeDemo />
+
+      <h2>Fil d'Ariane</h2>
+      <BreadcrumbDemo />
+
+      <h2>Pagination</h2>
+      <PaginationDemo />
+
+      <h2>Mini-graphiques</h2>
+      <SparklineDemo />
+
+      <h2>Bandeaux et notifications</h2>
+      <AlertDemo />
+
+      <h2>États vides</h2>
+      <EmptyStateDemo />
 
       <h2>Chargement</h2>
       <LoadingDemo />
@@ -126,6 +193,9 @@ export default function Page() {
 
       <h2>Modale et drawer</h2>
       <OverlayDemo />
+
+      <h2>Palette de commandes</h2>
+      <CommandPaletteDemo />
 
       <h2 lang="en">In English</h2>
       <EnglishDemo />

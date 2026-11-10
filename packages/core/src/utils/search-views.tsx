@@ -1,5 +1,6 @@
 import { h } from '@stencil/core';
 import type { Messages } from './i18n';
+import { Magnifier } from './illustrations';
 
 /** Loupe dont le cercle s'efface, le manche pivote en tige et la pointe se trace : elle devient une flèche retour. */
 export const MorphIcon = () => (
@@ -20,15 +21,7 @@ export const ClockIcon = () => (
 /** Loupe qui secoue la tête, puis un « ? » apparaît dedans. */
 export const NoResults = ({ query, m }: { query: string; m: Messages }) => (
   <div class="empty" part="empty">
-    <svg class="empty-icon" viewBox="0 0 48 48" width="48" height="48" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true">
-      <g class="shake">
-        <circle cx="20" cy="20" r="13" />
-        <line x1="30" y1="30" x2="42" y2="42" />
-        <text class="question" x="20" y="26" text-anchor="middle" stroke="none" fill="currentColor">
-          ?
-        </text>
-      </g>
-    </svg>
+    <Magnifier class="empty-icon" />
     <div>
       <strong>{m.noResultsFor(query)}</strong>
       <span class="hint">{m.noResultsHint}</span>

@@ -1,0 +1,34 @@
+---
+title: Pagination
+description: Page numbers, previous and next page, as real links. Tag cr-pagination, React component CrPagination.
+---
+
+import PaginationBasic from '@/demos/en/pagination-basic';
+
+## Example
+
+`cr-pagination` shows the current `page` (from 1) among `total` pages: the first and last ones, the current page and its neighbours, and "…" in place of the others (1 … 4 5 6 … 20). A ringed highlight marks the current page; it slides to the new number when the page changes.
+
+With `href`, every page is a real link: `{page}` is replaced by the number (`/products?page={page}`). Ctrl/Cmd+click, middle click and "Open in new tab" work as on any link. Without `href`, they are buttons: `onCrChange` gives the chosen page, and you update `page`.
+
+<Preview>
+  <PaginationBasic />
+</Preview>
+
+<include>../../../demos/en/pagination-basic.tsx</include>
+
+<Callout>
+  If the user asked their system to reduce motion, the highlight jumps straight to the new page, without sliding.
+</Callout>
+
+## Accessibility
+
+- The pagination is a navigation region (`nav`) named "Pagination", with a list of links or buttons.
+- Each number is named "Page 4"; the current page has `aria-current="page"`. It also stands out without colour: bold, in a ringed highlight.
+- The arrows are named "Previous page" and "Next page"; on the first or last page they stay in place but are inactive (a link without an address, or a disabled button). If focus was on an arrow that becomes inactive, it moves to the current page.
+- The "…" are decorative, hidden from screen readers.
+- Everything works from the keyboard with Tab, Enter (and Space for buttons).
+
+## API
+
+<ApiReference tag="cr-pagination" />

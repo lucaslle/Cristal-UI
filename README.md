@@ -70,6 +70,7 @@ Dans un composant client (`'use client'`), importer depuis `@cristal/react`.
 | `disabled` | booléen | `false` |
 | `loading` | booléen | `false` |
 | `fullWidth` | booléen | `false` |
+| `href`, `target` | adresse : le bouton devient un vrai lien (Ctrl+clic, clic molette, nouvel onglet natifs) ; `rel="noopener noreferrer"` ajouté avec `_blank` | |
 
 Icônes : `slot="start"` (avant le texte) et `slot="end"` (après le texte).
 
@@ -86,12 +87,22 @@ Bouton réduit à une icône (slot par défaut, avec `aria-hidden="true"`). `lab
 | `toggle`, `pressed` | bascule annoncée enfoncée ou non, `onCrToggle` | `false` |
 | `badge` | pastille ajoutée au nom lu : « Notifications (3) » | |
 | `tooltip`, `tooltipPlacement` | infobulle ; `top`, `bottom`, `start`, `end` | `true`, `top` |
-| `type`, `disabled`, `loading` | comme `cr-button` | |
+| `type`, `disabled`, `loading`, `href`, `target` | comme `cr-button` | |
 
 ```tsx
 <CrIconButton label="Ajouter aux favoris" toggle pressed={liked} onCrToggle={(e) => setLiked(e.detail)}>
   <Heart aria-hidden="true" />
 </CrIconButton>
+```
+
+### Infobulle : `cr-tooltip`
+
+Court texte d'aide (`text`, obligatoire) autour d'un seul élément focalisable : bouton ou lien natif, `cr-button`. Elle s'affiche au focus clavier et au survol, reste survolable et se ferme avec Échap ; le texte décrit aussi le déclencheur pour les lecteurs d'écran. `placement` : `top` (défaut), `bottom`, `start`, `end`. Elle grandit depuis le déclencheur avec un léger rebond.
+
+```tsx
+<CrTooltip text="Copie l'adresse de la page">
+  <CrButton variant="outline">Copier le lien</CrButton>
+</CrTooltip>
 ```
 
 ### Champs de formulaire : `cr-input`, `cr-select`, `cr-checkbox`
@@ -144,14 +155,74 @@ Grille d'éléments (pour composer un tableau de bord, par exemple) déplacés p
 | `cr-card-input` | carte bancaire : numéro groupé, puis expiration et CVC (`name`, `name-expiry`, `name-cvc`) ; `preview` ajoute une carte dessinée qui se remplit et se retourne, `holder` le champ Titulaire ; `variant="card"` fait tout saisir directement sur la carte |
 | `cr-tag-input` | étiquettes ajoutées avec Entrée ou virgule, retirées avec × (`values`, `onCrChange`) |
 
-### Contrôle segmenté : `cr-segmented`
+### Interrupteur : `cr-switch`
 
-Choix d'une option parmi quelques-unes, côte à côte : options en `option` enfants (`data-count` ajoute un compteur), `label` obligatoire, `name`, `value`, `variant` (`thumb` par défaut, `clip`, `underline`, `outline`), `fit` (segments à la largeur de leur libellé), `disabled`. Événement `onCrChange`.
+Active ou désactive un réglage, avec effet immédiat : case native avec `role="switch"`, `label` obligatoire, `name`, `value` (`on` par défaut), `checked`, `disabled`. La pastille s'étire en glissant et sa croix devient une coche. Événement `onCrChange`.
+
+```tsx
+<CrSwitch label="Notifications" name="notifications" checked={on} onCrChange={(event) => setOn(event.detail)} />
+```
+
+### Boutons radio : `cr-radio-group`
+
+Choix d'une seule option dans une liste empilée : options en `option` enfants, `label` obligatoire (titre visible du groupe), `name`, `value` (aucune par défaut), `required`, `disabled`. Flèches pour changer d'option (une seule tabulation pour le groupe) ; le point coule de l'ancien cercle au nouveau. Événement `onCrChange`.
+
+```tsx
+<CrRadioGroup label="Mode de livraison" name="delivery" required value={delivery} onCrChange={(event) => setDelivery(event.detail)}>
+  <option value="standard">Standard</option>
+  <option value="express">Express</option>
+</CrRadioGroup>
+```
+
+### Curseur : `cr-slider`
+
+Choix d'une valeur numérique dans un intervalle : `input type="range"` natif (flèches, Page précédente/suivante, Début, Fin), `label` obligatoire et visible, `name`, `min` (0), `max` (100), `step` (1), `value`, `disabled`. Une bulle suit la pastille avec la valeur et grossit pendant le glissement ou au focus ; le rail se remplit jusqu'à la pastille. Événements `onCrInput` (pendant le glissement) et `onCrChange` (au relâchement).
+
+```tsx
+<CrSlider label="Volume" name="volume" step={5} value={volume} onCrInput={(event) => setVolume(event.detail)} />
+```
+
+### Sélecteur de date : `cr-date-picker`
+
+Champ de date associé aux formulaires : saisie au format de la langue (`JJ/MM/AAAA` en français, `MM/DD/YYYY` en anglais, rappelé sous le libellé) ou choix dans un calendrier ouvert par le bouton voisin (motif Date Picker Dialog de l'APG : flèches, Page précédente/suivante, Début, Fin, Échap). `label` obligatoire et visible, `name`, `value`, `min` et `max` au format ISO `AAAA-MM-JJ`, `required`, `disabled`. Les mois glissent du côté de la navigation et le jour choisi rebondit. Événement `onCrChange` (date ISO).
+
+```tsx
+<CrDatePicker label="Date de livraison" name="livraison" min="2025-03-03" value={date} onCrChange={(event) => setDate(event.detail)} />
+```
+
+### Notation : `cr-rating`
+
+Note par étoiles associée aux formulaires : un groupe de boutons radio, une étoile par note, chacune nommée « 3 étoiles sur 5 ». `label` obligatoire et visible, `name`, `value` (0 : aucune note), `max` (5), `disabled`, `readonly` (les étoiles deviennent une image nommée « Note : 4 sur 5 »). Les étoiles se remplissent en vague jusqu'à la note choisie, qui rebondit ; le survol prévisualise la note. Événement `onCrChange`.
+
+```tsx
+<CrRating label="Votre avis" name="avis" value={note} onCrChange={(event) => setNote(event.detail)} />
+```
+
+### Dépôt de fichiers : `cr-file-upload`
+
+Zone de dépôt posée sur un vrai `input type="file"` (clic, Entrée, Espace, Tab) : `label` obligatoire, `hint`, `name` (un envoi par fichier), `accept` (appliqué aussi aux fichiers déposés), `multiple` (les fichiers s'ajoutent ; sinon le nouveau remplace l'ancien), `disabled`. Liste des fichiers avec leur taille et un bouton « Retirer » ; ajouts, retraits et refus annoncés. La zone respire pendant le glissement et chaque fichier glisse en place. Événement `onCrChange` avec les `File[]`.
+
+```tsx
+<CrFileUpload label="Justificatifs" hint="PDF ou image." name="justificatifs" accept=".pdf,image/*" multiple onCrChange={(event) => setFiles(event.detail)} />
+```
+
+### Contrôle segmenté et onglets : `cr-segmented`, `cr-tab-panel`
+
+Choix d'une option parmi quelques-unes, côte à côte : options en `option` enfants (`data-count` ajoute un compteur), `label` obligatoire, `name`, `value`, `variant` (`thumb` par défaut, `clip`, `underline`, `outline`), `fit` (segments à la largeur de leur libellé), `disabled`. Événement `onCrChange` (valeur choisie).
 
 ```tsx
 <CrSegmented label="Période" value="month" onCrChange={(event) => setPeriod(event.detail)}>
   <option value="day">Jour</option>
   <option value="month" data-count="38">Mois</option>
+</CrSegmented>
+```
+
+Avec des enfants `cr-tab-panel` à la place des `option`, le contrôle devient des onglets (modèle W3C à activation automatique : flèches, Début, Fin) : le `label` du panneau devient l'onglet, `value` désigne l'onglet choisi par la `value` du panneau, ou à défaut sa position (`"0"`, `"1"`…). Le contenu arrive du côté du changement, les autres panneaux sont masqués dès le rendu serveur, rien n'est envoyé avec un formulaire. `variant="underline"` donne l'allure classique des onglets.
+
+```tsx
+<CrSegmented label="Fiche produit" variant="underline" fit value={tab} onCrChange={(event) => setTab(event.detail)}>
+  <CrTabPanel label="Description" value="description">…</CrTabPanel>
+  <CrTabPanel label="Avis" value="reviews">…</CrTabPanel>
 </CrSegmented>
 ```
 
@@ -194,6 +265,82 @@ Contenu dans le slot par défaut, boutons d'action dans `slot="footer"`. L'évé
 </CrDialog>
 ```
 
+### Palette de commandes : `cr-command-palette`
+
+Fenêtre modale ouverte par Ctrl+K (⌘K sur Mac) : un champ (motif combobox) qui filtre, sans tenir compte des accents, des commandes données en éléments `option` enfants, rangées par `data-group`. `open`, `label` obligatoire, `placeholder`, `shortcut` (raccourci actif par défaut). Haut, Bas, Entrée, Échap ; « Aucun résultat » reprend l'état vide de `cr-empty-state`. Le focus revient à son point de départ à la fermeture. La fenêtre tombe avec un ressort, le surlignage glisse d'une ligne à l'autre. Événements `onCrSelect` (la valeur) et `onCrClose`.
+
+```tsx
+<CrCommandPalette label="Palette de commandes" open={ouverte} onCrSelect={(event) => lancer(event.detail)} onCrClose={() => setOuverte(false)}>
+  <option value="facture" data-group="Actions">Créer une facture</option>
+</CrCommandPalette>
+```
+
+### Fenêtre contextuelle : `cr-popover`
+
+Petit panneau non modal (`role="dialog"`) ancré sous un bouton, pour du contenu interactif. `label` obligatoire (le bouton, qui nomme aussi le panneau), `open`, `disabled`. Le focus entre dans le panneau à l'ouverture ; Échap le ferme et rend le focus au bouton, un clic à l'extérieur ou Tab le ferment aussi. Il grandit depuis le bouton avec un ressort. Événement `onCrToggle`.
+
+```tsx
+<CrPopover label="Partager" open={open} onCrToggle={(event) => setOpen(event.detail)}>
+  <CrInput label="Adresse du destinataire" type="email" />
+  <CrButton onClick={() => setOpen(false)}>Inviter</CrButton>
+</CrPopover>
+```
+
+### Avatar : `cr-avatar`, `cr-avatar-group`
+
+`cr-avatar` montre la photo d'une personne (`src`), ou ses initiales sur une couleur tirée de son nom si la photo manque ou ne se charge pas. `name` obligatoire (nom lu par les lecteurs d'écran), `size` (`s`, `m`, `l`), `status` (`online`, `away`, `busy`, `offline`) ajouté au nom lu et montré par une pastille dont la forme change avec le statut ; la pastille « en ligne » pulse trois fois puis s'arrête. `cr-avatar-group` fait se chevaucher ses avatars, qui s'écartent au survol, et résume ceux au-delà de `max` par « +N ».
+
+```tsx
+<CrAvatarGroup max={3}>
+  <CrAvatar name="Marie Dupont" status="online" />
+  <CrAvatar name="Karim Benali" src="/photos/karim.jpg" />
+</CrAvatarGroup>
+```
+
+### Pastille : `cr-badge`
+
+Court statut ou compteur : texte en contenu, `variant` (`neutral` par défaut, `primary`, `success`, `danger`), `count` (nombre affiché après le texte, qui défile jusqu'à chaque nouvelle valeur comme un compteur kilométrique), `live` (annonce polie de chaque changement, désactivée par défaut). Le texte porte le sens, la couleur ne fait que l'appuyer.
+
+```tsx
+<CrBadge variant="primary" count={nonLus} live>Non lus</CrBadge>
+```
+
+### Mini-graphique : `cr-sparkline`
+
+Petite courbe sans axes : `values` (tableau de nombres, en propriété), `label` obligatoire, `variant` (`line` par défaut, `area`). C'est une image nommée par le libellé et un résumé (« Ventes : dernière valeur 190, minimum 120, maximum 190, en hausse »). La ligne se trace au premier affichage, puis glisse point par point vers les nouvelles valeurs. Taille par défaut 120 × 32 pixels, à changer en CSS.
+
+```tsx
+<CrSparkline label="Ventes du mois" values={ventes} variant="area" />
+```
+
+### Bandeau et notification : `cr-alert`, `cr-toaster`
+
+Message : `variant` (`info` par défaut, `success`, `warning`, `danger` lu aussitôt), `heading` (titre facultatif), le message en contenu, `open` (`true` par défaut, remis à `false` à chaque fermeture). Une icône propre à chaque type, qui se trace, et un préfixe lu par les lecteurs d'écran (« Erreur : »). Événement `onCrClose` à chaque fermeture. Son emplacement décide de son comportement :
+
+- dans la page, c'est un bandeau : inséré après le chargement, il se déplie ; `dismissible` ajoute un bouton « Fermer » qui le replie ;
+- dans un `cr-toaster` (zone fixée en bas à droite qui empile les messages), c'est une notification : elle glisse depuis le coin et se ferme après `duration` (5000 ms par défaut, `0` pour qu'elle reste) ; une barre montre le temps restant, qui s'arrête sous la souris ou le focus. Elle se ferme aussi avec le bouton Fermer, toujours présent, Échap ou en glissant sur le côté.
+
+```tsx
+<CrAlert variant="danger" heading="Envoi impossible" dismissible onCrClose={() => setErreur(false)}>Vérifiez votre connexion.</CrAlert>
+
+<CrToaster>
+  {toasts.map((toast) => (
+    <CrAlert key={toast.id} variant="success" onCrClose={() => remove(toast.id)}>Modifications enregistrées.</CrAlert>
+  ))}
+</CrToaster>
+```
+
+### État vide : `cr-empty-state`
+
+Écran sans contenu, avec de quoi en sortir : `heading` (ce qui manque), la description en contenu, les boutons dans le slot `actions`, `illustration` décorative (`none` par défaut, `search` — la loupe « aucun résultat » de `cr-search` —, `inbox`, `error`). L'illustration flotte trois fois puis s'arrête.
+
+```tsx
+<CrEmptyState heading="Aucun produit trouvé" illustration="search">
+  Essayez un autre mot ou retirez des filtres.
+  <CrButton slot="actions" variant="outline" onClick={retirerFiltres}>Retirer les filtres</CrButton>
+</CrEmptyState>
+```
+
 ### `cr-card`
 
 Conteneur avec `slot="header"`, contenu par défaut et `slot="footer"`. L'en-tête et le pied ne sont affichés que s'ils sont fournis.
@@ -215,6 +362,26 @@ Contenu de la section dans le slot par défaut, valeur à droite du titre dans `
   <CrAccordionItem label="Conception" open>Maquettes validées.</CrAccordionItem>
   <CrAccordionItem label="Lancement">Mise en ligne.</CrAccordionItem>
 </CrAccordion>
+```
+
+### Fil d'Ariane : `cr-breadcrumb`
+
+Chemin jusqu'à la page courante, écrit avec de simples enfants : des liens `<a href>` (natifs, Ctrl/Cmd+clic compris), puis la page courante, marquée `aria-current="page"`. Zone `nav` nommée « Fil d'Ariane », liste ordonnée, séparateurs décoratifs. Au-delà de `max` niveaux (4), ceux du milieu se replient derrière un bouton « … » qui les déplie en les faisant glisser, et donne le focus au premier lien révélé.
+
+```tsx
+<CrBreadcrumb>
+  <a href="/">Accueil</a>
+  <a href="/docs">Documentation</a>
+  <span>Bouton</span>
+</CrBreadcrumb>
+```
+
+### Pagination : `cr-pagination`
+
+Navigation entre pages : `page` (courante, à partir de 1), `total`, `href` (adresse où `{page}` est remplacé par le numéro : chaque page devient un vrai lien, Ctrl/Cmd+clic et clic molette compris). Sans `href`, des boutons et l'événement `onCrChange` avec le numéro. « … » pour les longues séries (1 … 4 5 6 … 20), page courante marquée `aria-current="page"` par une pastille qui glisse jusqu'au nouveau numéro.
+
+```tsx
+<CrPagination page={page} total={20} href="/produits?page={page}" />
 ```
 
 ### Étapes : `cr-stepper`, `cr-step`

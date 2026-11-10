@@ -1,0 +1,34 @@
+---
+title: Sparkline
+description: Small chart without axes that shows the shape of a series of numbers. Tag cr-sparkline, React component CrSparkline.
+---
+
+import SparklineBasic from '@/demos/en/sparkline-basic';
+
+## Example
+
+`cr-sparkline` draws `values` (an array of numbers) as a 120 × 32 pixel line by default, to slip into a sentence, a card or a table cell; change its size in CSS (`width`, `height`). `variant="area"` tints the surface under the line. A dot marks the last value.
+
+The line draws itself from left to right on first display. When `values` changes, the line slides point by point to the new values, even if their count changes.
+
+<Preview>
+  <SparklineBasic />
+</Preview>
+
+<include>../../../demos/en/sparkline-basic.tsx</include>
+
+`values` is a property: in HTML, set it from JavaScript (`element.values = [1, 2, 3]`), not as an attribute.
+
+<Callout>
+  If the user asked their system to reduce motion, the line shows at once, and jumps straight to new values.
+</Callout>
+
+## Accessibility
+
+- The sparkline is an image (`role="img"`) named by `label` and a summary of the values, in the page language: "Monthly sales: last value 190, minimum 120, maximum 190, trending up". The trend compares the last value with the first one.
+- The name follows the values, but it is not announced by itself: if the update matters, say it in text or in a `role="status"` region.
+- The line has a contrast of at least 3:1 with the background. It only shows a shape: if exact values matter, show them as text or in a table too.
+
+## API
+
+<ApiReference tag="cr-sparkline" />

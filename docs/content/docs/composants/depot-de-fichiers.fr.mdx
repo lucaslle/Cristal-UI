@@ -1,0 +1,43 @@
+---
+title: Dépôt de fichiers
+description: Zone où déposer des fichiers, qui est aussi un sélecteur de fichiers, avec la liste des fichiers choisis. Balise cr-file-upload, composant React CrFileUpload.
+---
+
+import FileUploadBasic from '@/demos/file-upload-basic';
+
+## Exemple
+
+La zone accepte les fichiers glissés depuis le bureau ; un clic, Entrée ou Espace ouvre le sélecteur de fichiers du système. Chaque fichier choisi s'ajoute à la liste avec sa taille et un bouton Retirer.
+
+Tant qu'on glisse des fichiers au-dessus, la zone respire doucement et se colore ; chaque fichier ajouté glisse en place dans la liste.
+
+<Preview>
+  <FileUploadBasic />
+</Preview>
+
+<include>../../../demos/file-upload-basic.tsx</include>
+
+## Types et nombre de fichiers
+
+`accept` reprend l'attribut natif : extensions (`.pdf`), types (`application/pdf`) ou familles (`image/*`), séparés par des virgules. Il s'applique aussi aux fichiers déposés : ceux d'un autre type sont refusés avec un message. Indiquez les formats acceptés dans `hint`.
+
+Avec `multiple`, les fichiers s'ajoutent les uns aux autres ; sans, un nouveau fichier remplace le précédent.
+
+## Dans un formulaire
+
+Le champ envoie chaque fichier sous son `name`, comme un `input type="file"` natif avec `multiple`. `onCrChange` donne la liste à jour des fichiers (`File[]`) après chaque ajout ou retrait.
+
+<Callout>
+  Si l'utilisateur a demandé à son système de réduire les animations, la zone change seulement de couleur pendant le glissement, et les fichiers apparaissent dans la liste sans glisser.
+</Callout>
+
+## Accessibilité
+
+- Sous la zone, un vrai `input type="file"` natif, nommé par `label` et décrit par `hint` : le dépôt n'est jamais le seul moyen d'ajouter un fichier, le clavier y accède avec Tab.
+- Chaque bouton Retirer est nommé par son fichier (« Retirer facture.pdf ») ; après un retrait, le focus passe au fichier suivant, ou au sélecteur quand la liste est vide.
+- Les ajouts, retraits et refus sont annoncés aux lecteurs d'écran (« facture.pdf ajouté. 2 fichiers. »).
+- La bordure de la zone se détache du fond avec un contraste d'au moins 3:1 ; le focus clavier l'entoure d'un contour.
+
+## API
+
+<ApiReference tag="cr-file-upload" />

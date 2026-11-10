@@ -52,9 +52,17 @@ Placez l'icône dans `slot="start"` (avant le libellé) ou `slot="end"` (après)
 
 `type="submit"` envoie le formulaire parent, `type="reset"` le réinitialise, comme un bouton natif. Voir l'exemple complet sur la page [Champ texte](/docs/composants/champ-texte#dans-un-formulaire).
 
+## Lien
+
+Avec `href`, le bouton devient un vrai lien : Ctrl/Cmd+clic, clic molette, Maj+clic et « Ouvrir dans un nouvel onglet » restent ceux du navigateur, ce qu'un `onClick` qui change de page ne permet pas. `target="_blank"` ouvre un nouvel onglet (`rel="noopener noreferrer"` est ajouté). Désactivé ou en chargement, le lien perd son adresse et ne peut plus être ouvert. Valable aussi pour `CrIconButton`.
+
+```tsx
+<CrButton href="/docs" variant="secondary">Lire la documentation</CrButton>
+```
+
 ## Accessibilité
 
-- Bouton natif sous le capot : activable avec Entrée et Espace, annoncé comme « bouton ».
+- Bouton natif sous le capot : activable avec Entrée et Espace, annoncé comme « bouton ». Avec `href`, lien natif : activable avec Entrée, annoncé comme « lien ».
 - Focus visible, contraste du libellé supérieur à 4,5:1 dans toutes les variantes.
 - Le libellé doit décrire l'action : « Ajouter un produit » plutôt que « OK ».
 

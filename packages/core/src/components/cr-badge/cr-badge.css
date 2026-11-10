@@ -1,0 +1,86 @@
+:host {
+  display: inline-flex;
+  vertical-align: middle;
+}
+
+/* Fond clair teinté et texte foncé de la même teinte : contraste d'au moins 4.5:1 dans chaque variante. */
+.badge {
+  --tone-bg: var(--cr-color-disabled);
+  --tone-text: var(--cr-color-text);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--cr-spacing-xs);
+  box-sizing: border-box;
+  min-height: 20px;
+  padding: 0 var(--cr-spacing-sm);
+  font-family: var(--cr-font-family);
+  font-size: var(--cr-font-size-s);
+  font-weight: var(--cr-font-weight-medium);
+  line-height: 1.4;
+  color: var(--tone-text);
+  white-space: nowrap;
+  background: var(--tone-bg);
+  border-radius: 999px;
+}
+
+:host([variant='primary']) .badge {
+  --tone-bg: var(--cr-color-primary-subtle);
+  --tone-text: var(--cr-color-primary-text);
+}
+
+:host([variant='success']) .badge {
+  --tone-bg: color-mix(in oklab, var(--cr-color-success) 12%, var(--cr-color-surface));
+  --tone-text: oklch(from var(--cr-color-success) min(l, 0.45) c h);
+}
+
+:host([variant='danger']) .badge {
+  --tone-bg: color-mix(in oklab, var(--cr-color-danger) 12%, var(--cr-color-surface));
+  --tone-text: oklch(from var(--cr-color-danger) min(l, 0.45) c h);
+}
+
+/* Fenêtre du compteur : les chiffres y entrent par le bas en montant, par le haut en descendant. */
+.count {
+  display: inline-block;
+  overflow: hidden;
+  font-weight: var(--cr-font-weight-bold);
+  font-variant-numeric: tabular-nums;
+}
+
+.digits {
+  display: inline-block;
+}
+
+.digits[data-direction] {
+  animation: cr-badge-roll 0.15s ease-out;
+}
+
+.digits[data-direction='down'] {
+  --cr-badge-from: -100%;
+}
+
+@keyframes cr-badge-roll {
+  from {
+    transform: translateY(var(--cr-badge-from, 100%));
+  }
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .digits[data-direction] {
+    animation: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .badge {
+    border: 1px solid CanvasText;
+  }
+}

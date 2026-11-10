@@ -1,0 +1,62 @@
+---
+title: Bandeau et notification
+description: Message d'information, de réussite, d'avertissement ou d'erreur, posé dans la page ou en notification dans un coin. Balises cr-alert et cr-toaster, composants React CrAlert et CrToaster.
+---
+
+import AlertBasic from '@/demos/alert-basic';
+import AlertToaster from '@/demos/alert-toaster';
+
+`cr-alert` affiche un message avec une icône et un titre facultatif `heading`. Son emplacement décide de son comportement : dans la page, c'est un bandeau ; dans un `cr-toaster`, c'est une notification qui se ferme seule.
+
+| `variant` | Usage |
+|---|---|
+| `info` | information neutre (par défaut) |
+| `success` | une action a réussi |
+| `warning` | un point à surveiller |
+| `danger` | une erreur ; lue aussitôt par les lecteurs d'écran |
+
+## Dans la page
+
+Placé dans le flux, le bandeau reste jusqu'à ce qu'on le ferme. Son icône se trace ; inséré après le chargement de la page (une erreur à l'envoi, par exemple), il se déplie en hauteur. Déjà présent au chargement, il ne bouge pas, pour ne pas décaler la page. Avec `dismissible`, un bouton Fermer le replie puis le masque, et `onCrClose` le signale.
+
+<Preview>
+  <AlertBasic />
+</Preview>
+
+<include>../../../demos/alert-basic.tsx</include>
+
+## En notification
+
+Placez une seule zone `CrToaster` dans la page (fixée en bas à droite) et ajoutez-y un `CrAlert` par message : il glisse depuis le coin, une barre se vide pendant `duration` millisecondes (5000 par défaut), puis il se ferme. Retirez-le de votre liste dans `onCrClose`. `duration` et la barre n'existent que dans un `cr-toaster`.
+
+Avec `duration={0}`, la notification reste jusqu'à ce qu'on la ferme : à préférer pour une erreur, qui doit laisser le temps de lire et d'agir. Le bouton Fermer est toujours là ; Échap la ferme aussi, comme un glissement sur le côté.
+
+<Preview>
+  <AlertToaster />
+</Preview>
+
+<include>../../../demos/alert-toaster.tsx</include>
+
+`open` vaut `true` par défaut et chaque fermeture le remet à `false`, dans la page comme en notification. Une notification unique et toujours présente se pilote donc avec `open` : remettez votre état à `false` dans `onCrClose`.
+
+<Callout>
+  Si l'utilisateur a demandé à son système de réduire les animations, le bandeau apparaît et disparaît d'un coup, la notification apparaît sans glisser et part en fondu, et l'icône est déjà tracée. La barre du temps restant continue de se vider, lentement et sans à-coup : elle indique combien de temps il reste pour lire.
+</Callout>
+
+## Accessibilité
+
+- Le message est une zone annoncée : `role="status"` (lue poliment) pour `info`, `success` et `warning`, `role="alert"` (lue aussitôt) pour `danger`.
+- Dans la page, insérez le bandeau au moment de l'erreur pour qu'il soit annoncé ; présent dès le chargement, il est lu avec la page, sans interrompre.
+- En notification, la zone existe vide avant le message, pour que l'annonce ne se perde pas. La notification ne prend pas le focus : on peut continuer à travailler.
+- Le temps s'arrête tant que la souris survole la notification ou que le focus est dedans (WCAG 2.2.1) ; la barre s'arrête avec lui. Le glissement a toujours une alternative au clavier (Échap quand le focus est dedans) et en un clic (le bouton Fermer).
+- Le type n'est pas donné que par la couleur : chaque type a son icône (i, ✓, ! dans un triangle, ! dans un cercle), et un préfixe lu par les lecteurs d'écran (« Erreur : », « Attention : »…) précède le message.
+- Le bouton Fermer est nommé « Fermer » (« Close » en anglais).
+- Le texte garde sa couleur pleine pendant l'arrivée : le bandeau se déplie, la notification glisse, aucun des deux ne s'éclaircit.
+
+## API
+
+<ApiReference tag="cr-alert" />
+
+## API CrToaster
+
+<ApiReference tag="cr-toaster" />

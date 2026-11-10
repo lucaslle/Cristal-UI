@@ -1,0 +1,137 @@
+:host {
+  display: inline-block;
+  vertical-align: middle;
+  font-family: var(--cr-font-family);
+}
+
+/* Fond tiré de la couleur principale, teinte décalée selon le nom ; luminosité plafonnée pour que le blanc garde au moins 4.5:1. */
+.avatar {
+  --size: var(--cr-control-m);
+  --dot: 12px;
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: var(--size);
+  height: var(--size);
+  font-size: var(--cr-font-size-m);
+  font-weight: var(--cr-font-weight-bold);
+  line-height: 1;
+  color: white;
+  background: oklch(from var(--cr-color-primary) min(l, 0.5) min(c, 0.13) calc(h + var(--cr-avatar-shift)));
+  border-radius: 50%;
+  box-shadow: 0 0 0 2px var(--cr-color-surface);
+  user-select: none;
+}
+
+:host([size='s']) .avatar {
+  --size: var(--cr-control-xs);
+  --dot: 10px;
+  font-size: var(--cr-font-size-s);
+}
+
+:host([size='l']) .avatar {
+  --size: var(--cr-control-l);
+  font-size: var(--cr-font-size-l);
+}
+
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+/* Pastille de statut : plein avec coche (en ligne), horloge (absent), barre (occupé), anneau vide (hors ligne). */
+.status {
+  --tone: var(--cr-color-border);
+  position: absolute;
+  right: -2px;
+  bottom: -2px;
+  z-index: 1;
+  width: var(--dot);
+  height: var(--dot);
+  border-radius: 50%;
+  box-shadow: 0 0 0 2px var(--cr-color-surface);
+}
+
+.status[data-status='online'] {
+  --tone: var(--cr-color-success);
+}
+
+.status[data-status='away'] {
+  --tone: var(--cr-color-text-muted);
+}
+
+.status[data-status='busy'] {
+  --tone: var(--cr-color-danger);
+}
+
+.status circle {
+  fill: var(--tone);
+}
+
+.status[data-status='offline'] circle {
+  fill: var(--cr-color-surface);
+  stroke: var(--tone);
+  stroke-width: 3;
+}
+
+.status path {
+  fill: none;
+  stroke: var(--cr-color-surface);
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* En ligne : un halo pulse trois fois à l'apparition, puis s'arrête (moins de 5 secondes). */
+:host([status='online']) .avatar::after {
+  content: '';
+  position: absolute;
+  right: -2px;
+  bottom: -2px;
+  width: var(--dot);
+  height: var(--dot);
+  background: var(--cr-color-success);
+  border-radius: 50%;
+  opacity: 0;
+  pointer-events: none;
+  animation: cr-avatar-pulse 1.5s ease-out 3;
+}
+
+@keyframes cr-avatar-pulse {
+  from {
+    opacity: 0.5;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(2.4);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :host([status='online']) .avatar::after {
+    animation: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .avatar {
+    border: 1px solid CanvasText;
+  }
+  .status {
+    forced-color-adjust: none;
+    --tone: CanvasText;
+  }
+  .status circle,
+  .status[data-status='offline'] circle {
+    fill: CanvasText;
+  }
+  .status[data-status='offline'] circle {
+    fill: Canvas;
+  }
+  .status path {
+    stroke: Canvas;
+  }
+}

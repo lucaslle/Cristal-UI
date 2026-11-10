@@ -1,0 +1,29 @@
+:host {
+  position: relative;
+  display: inline-block;
+}
+
+/* Au focus clavier tout de suite, au survol après un court délai ; jamais après un simple appui tactile. */
+.tooltip[data-focused]:not([data-dismissed]) {
+  display: block;
+  scale: 1;
+  transition-duration: 0.35s;
+  transition-timing-function: cubic-bezier(0.3, 1.5, 0.5, 1);
+}
+
+@media (hover: hover) {
+  :host(:hover) .tooltip:not([data-dismissed]) {
+    display: block;
+    scale: 1;
+    transition-duration: 0.35s;
+    transition-timing-function: cubic-bezier(0.3, 1.5, 0.5, 1);
+    transition-delay: 0.3s;
+  }
+}
+
+@starting-style {
+  .tooltip[data-focused]:not([data-dismissed]),
+  :host(:hover) .tooltip:not([data-dismissed]) {
+    scale: 0.4;
+  }
+}

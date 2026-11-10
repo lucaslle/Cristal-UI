@@ -1,0 +1,215 @@
+:host {
+  --cr-date-spring: cubic-bezier(0.3, 1.5, 0.5, 1);
+}
+
+.box {
+  display: flex;
+  gap: var(--cr-spacing-xs);
+  max-width: 320px;
+}
+
+.box .control {
+  flex: 1;
+  min-width: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.toggle,
+.nav {
+  display: inline-grid;
+  flex: none;
+  place-items: center;
+  box-sizing: border-box;
+  width: var(--cr-control-m);
+  height: var(--cr-control-m);
+  margin: 0;
+  padding: 0;
+  color: var(--cr-color-text);
+  background: var(--cr-color-surface);
+  border: 1px solid var(--cr-color-border);
+  border-radius: var(--cr-radius-m);
+  cursor: pointer;
+}
+
+.nav {
+  width: var(--cr-control-s);
+  height: var(--cr-control-s);
+  border-color: transparent;
+}
+
+.toggle:hover:not(:disabled),
+.nav:hover:not([aria-disabled='true']) {
+  background: var(--cr-color-primary-subtle);
+}
+
+.toggle:focus-visible,
+.nav:focus-visible,
+.day:focus-visible {
+  outline: 2px solid var(--cr-color-focus);
+  outline-offset: 2px;
+}
+
+.toggle:disabled,
+.nav[aria-disabled='true'] {
+  color: var(--cr-color-on-disabled);
+  cursor: not-allowed;
+}
+
+.toggle:disabled {
+  background: var(--cr-color-disabled);
+}
+
+/* Grandit depuis le champ avec un ressort, sans fondu : les chiffres gardent leur contraste pendant l'animation. */
+.calendar {
+  padding: var(--cr-spacing-sm);
+}
+
+.calendar[data-state='open'] {
+  animation: cr-date-in 0.35s var(--cr-date-spring);
+}
+
+.calendar[data-state='closing'] {
+  animation: cr-date-out 0.15s ease-in forwards;
+}
+
+/* Après un choix, le calendrier laisse le temps au jour choisi de rebondir. */
+.calendar[data-state='closing'][data-picked] {
+  animation-delay: 0.3s;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--cr-spacing-xs);
+  margin-bottom: var(--cr-spacing-xs);
+}
+
+.month {
+  font-weight: var(--cr-font-weight-bold);
+}
+
+.month::first-letter {
+  text-transform: uppercase;
+}
+
+/* Le mois qui arrive glisse dans une fenêtre qui le découpe. */
+.days {
+  overflow: hidden;
+}
+
+.grid {
+  border-collapse: separate;
+  border-spacing: 2px;
+}
+
+.grid[data-direction] {
+  animation: cr-date-slide 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.grid[data-direction='prev'] {
+  --cr-date-from: -100%;
+}
+
+th {
+  height: var(--cr-control-xs);
+  padding: 0;
+  font-size: var(--cr-font-size-s);
+  font-weight: var(--cr-font-weight-medium);
+  color: var(--cr-color-text-muted);
+}
+
+td {
+  padding: 0;
+}
+
+.day {
+  position: relative;
+  width: var(--cr-control-m);
+  height: var(--cr-control-m);
+  margin: 0;
+  padding: 0;
+  font: inherit;
+  font-variant-numeric: tabular-nums;
+  color: var(--cr-color-text);
+  background: none;
+  border: 0;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.day:hover:not(:disabled) {
+  background: var(--cr-color-primary-subtle);
+}
+
+/* Aujourd'hui : un point sous le chiffre, pas seulement une couleur. */
+.day[aria-current='date']::after {
+  content: '';
+  position: absolute;
+  bottom: 5px;
+  left: calc(50% - 2px);
+  width: 4px;
+  height: 4px;
+  background: currentColor;
+  border-radius: 50%;
+}
+
+.day:disabled {
+  color: var(--cr-color-on-disabled);
+  text-decoration: line-through;
+  cursor: not-allowed;
+}
+
+[aria-selected='true'] .day {
+  font-weight: var(--cr-font-weight-bold);
+  color: var(--cr-color-on-primary);
+  background: var(--cr-color-primary);
+  animation: cr-date-pop 0.4s var(--cr-date-spring);
+}
+
+@keyframes cr-date-in {
+  from {
+    transform: scale(0.2);
+  }
+}
+
+@keyframes cr-date-out {
+  to {
+    transform: scale(0);
+  }
+}
+
+@keyframes cr-date-slide {
+  from {
+    transform: translateX(var(--cr-date-from, 100%));
+  }
+}
+
+@keyframes cr-date-pop {
+  from {
+    transform: scale(0.5);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .calendar[data-state],
+  .grid[data-direction],
+  [aria-selected='true'] .day {
+    animation: none !important;
+  }
+}
+
+@media (forced-colors: active) {
+  .calendar {
+    border-color: CanvasText;
+  }
+  [aria-selected='true'] .day {
+    forced-color-adjust: none;
+    color: HighlightText;
+    background: Highlight;
+  }
+  .day:disabled,
+  .nav[aria-disabled='true'] {
+    color: GrayText;
+  }
+}

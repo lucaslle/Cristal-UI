@@ -1,0 +1,48 @@
+---
+title: Avatar
+description: Photo or initials of a person, with their status, alone or in a group. Tags cr-avatar and cr-avatar-group, React components CrAvatar and CrAvatarGroup.
+---
+
+import AvatarBasic from '@/demos/en/avatar-basic';
+import AvatarGroup from '@/demos/en/avatar-group';
+
+## Example
+
+`cr-avatar` shows a person's photo (`src`) or, without one, their initials: the first letter of the first and last words of `name`. If the photo fails to load, the initials replace it. The background colour comes from the name: the same person keeps the same colour everywhere. It is derived from the theme primary colour with a hue shift, dark enough for the white initials to keep a contrast of at least 4.5:1.
+
+`size` sets the size (`s` 30px, `m` 40px, `l` 48px). `status` adds an availability badge: `online` (filled, with a check mark), `away` (a clock), `busy` (a bar), `offline` (an empty ring). The online badge pulses three times when it appears, then stops.
+
+<Preview>
+  <AvatarBasic />
+</Preview>
+
+<include>../../../demos/en/avatar-basic.tsx</include>
+
+## Group
+
+`cr-avatar-group` overlaps the `cr-avatar` elements it contains; they fan out on hover, or when focus is inside the group. With `max`, only the first avatars are shown, and a "+N" badge sums up the others.
+
+<Preview>
+  <AvatarGroup />
+</Preview>
+
+<include>../../../demos/en/avatar-group.tsx</include>
+
+<Callout>
+  If the user asked their system to reduce motion, the online badge does not pulse and the avatars of a group spread without sliding.
+</Callout>
+
+## Accessibility
+
+- Each avatar is an image named by the person, status included: "Mary Smith, online". The initials and the photo are not read on top of it.
+- The status does not rely on colour alone: each status has its own shape (check mark, clock, bar, empty ring), and it is part of the name read aloud.
+- The online badge pulse lasts less than 5 seconds, then stops: nothing moves continuously.
+- The "+N" badge of a group is an image named "2 more people"; hidden avatars are not read.
+
+## API
+
+<ApiReference tag="cr-avatar" />
+
+## API CrAvatarGroup
+
+<ApiReference tag="cr-avatar-group" />

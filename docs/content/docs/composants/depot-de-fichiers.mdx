@@ -1,0 +1,43 @@
+---
+title: File upload
+description: A drop zone that is also a file picker, with the list of chosen files. Tag cr-file-upload, React component CrFileUpload.
+---
+
+import FileUploadBasic from '@/demos/en/file-upload-basic';
+
+## Example
+
+The zone accepts files dragged from the desktop; a click, Enter or Space opens the system file picker. Each chosen file is added to the list with its size and a Remove button.
+
+While files are dragged over it, the zone gently breathes and takes on colour; each added file slides into place in the list.
+
+<Preview>
+  <FileUploadBasic />
+</Preview>
+
+<include>../../../demos/en/file-upload-basic.tsx</include>
+
+## File types and count
+
+`accept` mirrors the native attribute: extensions (`.pdf`), types (`application/pdf`) or families (`image/*`), separated by commas. It also applies to dropped files: files of another type are rejected with a message. State the accepted formats in `hint`.
+
+With `multiple`, files add up; without it, a new file replaces the previous one.
+
+## In a form
+
+The field submits each file under its `name`, like a native `input type="file"` with `multiple`. `onCrChange` gives the updated list of files (`File[]`) after every addition or removal.
+
+<Callout>
+  If the user asked their system to reduce motion, the zone only changes colour while files are dragged over it, and files appear in the list without sliding.
+</Callout>
+
+## Accessibility
+
+- Under the zone, a real native `input type="file"`, named by `label` and described by `hint`: dropping is never the only way to add a file, and the keyboard reaches it with Tab.
+- Each Remove button is named after its file ("Remove invoice.pdf"); after a removal, focus moves to the next file, or to the picker when the list is empty.
+- Additions, removals and rejections are announced to screen readers ("invoice.pdf added. 2 files.").
+- The zone border stands out from the background with a contrast of at least 3:1; keyboard focus draws an outline around it.
+
+## API
+
+<ApiReference tag="cr-file-upload" />

@@ -1,0 +1,37 @@
+---
+title: Badge
+description: Short status or count, in a coloured pill. Tag cr-badge, React component CrBadge.
+---
+
+import BadgeBasic from '@/demos/en/badge-basic';
+
+## Example
+
+`cr-badge` shows a short text in a pill: a status ("Paid", "Overdue") or a count. `variant` picks the colour: `neutral` (default), `primary`, `success` or `danger`. The text must carry the meaning: the colour only supports it.
+
+With `count`, a number is added after the text. When it changes, it rolls to its new value through the numbers in between, like an odometer: digits go up when the number increases, down when it decreases.
+
+<Preview>
+  <BadgeBasic />
+</Preview>
+
+<include>../../../demos/en/badge-basic.tsx</include>
+
+## Announcing changes
+
+By default, a `count` change is not announced: the badge is read with the rest of the page. With `live`, it becomes a `role="status"` region: each change is announced politely ("Unread 7"), once the screen reader has finished its sentence. Keep `live` for counts whose change matters to the user, not for every badge in a list.
+
+<Callout>
+  If the user asked their system to reduce motion, the number goes straight to its new value, without rolling.
+</Callout>
+
+## Accessibility
+
+- The badge is text: it is read with its content and its number ("Unread 3").
+- The rolling digits are hidden from screen readers, which only read the final number.
+- Each variant pairs a light background with a dark text of the same hue, with a contrast of at least 4.5:1. Colour is never the only information: the text states the status.
+- With `live`, the announcement is polite (`role="status"`) and does not interrupt the user.
+
+## API
+
+<ApiReference tag="cr-badge" />

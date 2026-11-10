@@ -1,0 +1,173 @@
+.zone {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--cr-spacing-sm);
+  padding: var(--cr-spacing-xl) var(--cr-spacing-lg);
+  font-size: var(--cr-font-size-m);
+  color: var(--cr-color-text-muted);
+  text-align: center;
+  background: var(--cr-color-surface);
+  border: 2px dashed var(--cr-color-border);
+  border-radius: var(--cr-radius-l);
+  transition:
+    border-color 0.2s,
+    background-color 0.2s;
+}
+
+.icon {
+  color: var(--cr-color-primary-text);
+}
+
+.browse {
+  font-weight: var(--cr-font-weight-bold);
+  color: var(--cr-color-primary-text);
+  text-decoration: underline;
+}
+
+/* Le sélecteur natif, invisible, couvre toute la zone : clic, Entrée, Espace et dépôt passent par lui. */
+.input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.zone:hover,
+.zone[data-over] {
+  border-color: var(--cr-color-primary);
+}
+
+.zone:has(.input:focus-visible) {
+  outline: 2px solid var(--cr-color-focus);
+  outline-offset: 2px;
+}
+
+/* La zone respire tant qu'on y glisse des fichiers. */
+.zone[data-over] {
+  background: var(--cr-color-primary-subtle);
+  animation: cr-file-breathe 0.9s ease-in-out infinite alternate;
+}
+
+@keyframes cr-file-breathe {
+  to {
+    scale: 1.02;
+  }
+}
+
+/* Texte atténué plutôt que gris clair : il reste lisible (4.5:1) sur le fond désactivé. */
+.zone:has(.input:disabled) {
+  color: var(--cr-color-text-muted);
+  background: var(--cr-color-disabled);
+  border-color: var(--cr-color-on-disabled);
+}
+
+.zone:has(.input:disabled) .icon,
+.zone:has(.input:disabled) .browse {
+  color: inherit;
+}
+
+.input:disabled {
+  cursor: not-allowed;
+}
+
+.files {
+  display: flex;
+  flex-direction: column;
+  gap: var(--cr-spacing-xs);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Chaque fichier glisse en place, dévoilé depuis la gauche, sans fondu du texte. */
+.file {
+  display: flex;
+  align-items: center;
+  gap: var(--cr-spacing-sm);
+  padding: var(--cr-spacing-xs) var(--cr-spacing-xs) var(--cr-spacing-xs) var(--cr-spacing-sm);
+  font-size: var(--cr-font-size-m);
+  border: 1px solid var(--cr-color-border);
+  border-radius: var(--cr-radius-m);
+  animation: cr-file-in 0.35s cubic-bezier(0.3, 1.35, 0.5, 1);
+}
+
+@keyframes cr-file-in {
+  from {
+    transform: translateX(-16px);
+    clip-path: inset(0 100% 0 0);
+  }
+}
+
+.name {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.size {
+  flex: none;
+  font-size: var(--cr-font-size-s);
+  color: var(--cr-color-text-muted);
+}
+
+.remove {
+  flex: none;
+  min-height: var(--cr-control-xs);
+  padding: 0 var(--cr-spacing-sm);
+  font: inherit;
+  font-weight: var(--cr-font-weight-medium);
+  color: var(--cr-color-primary-text);
+  background: none;
+  border: 0;
+  border-radius: var(--cr-radius-m);
+  cursor: pointer;
+}
+
+.remove:hover:not(:disabled) {
+  background: var(--cr-color-primary-subtle);
+}
+
+.remove:focus-visible {
+  outline: 2px solid var(--cr-color-focus);
+  outline-offset: 2px;
+}
+
+.remove:disabled {
+  color: var(--cr-color-on-disabled);
+  cursor: not-allowed;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .zone[data-over],
+  .file {
+    animation: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .zone {
+    border-color: CanvasText;
+  }
+  .zone[data-over] {
+    border-color: Highlight;
+  }
+  .remove {
+    border: 1px solid ButtonText;
+  }
+}

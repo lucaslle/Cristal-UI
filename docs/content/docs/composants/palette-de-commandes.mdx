@@ -1,0 +1,42 @@
+---
+title: Command palette
+description: Dialog opened with Ctrl+K to find a command by typing. Tag cr-command-palette, React component CrCommandPalette.
+---
+
+import CommandPaletteBasic from '@/demos/en/command-palette-basic';
+
+## Example
+
+`cr-command-palette` is a modal dialog with a field that filters a list of commands. Commands are child `option` elements (`value` and label); `data-group` puts them under a group heading, in the order the groups appear. A `disabled` option is shown but cannot be chosen.
+
+Ctrl+K (⌘K on Mac) opens it from anywhere in the page; `shortcut={false}` turns this shortcut off, if your page already uses it or has several palettes. You can also drive it with `open`. `onCrSelect` gives the chosen value, then the palette closes; set your state back to `false` in `onCrClose`.
+
+Search ignores accents and case ("parametres" finds "Paramètres"). With no match, the palette shows the "No results" [empty state](/docs/composants/etat-vide).
+
+The dialog drops into place with a slight bounce, and the highlight of the active command slides from row to row.
+
+<Preview>
+  <CommandPaletteBasic />
+</Preview>
+
+<include>../../../demos/en/command-palette-basic.tsx</include>
+
+On this site, Ctrl+K already opens the documentation search, so the demo turns its shortcut off with `shortcut={false}`.
+
+<Callout>
+  If the user asked their system to reduce motion, the dialog appears without dropping and the highlight jumps straight from row to row.
+</Callout>
+
+## Accessibility
+
+- The palette is a modal dialog (native `dialog`) named by `label`: the rest of the page is inert while it is open.
+- The field follows the combobox pattern: `role="combobox"`, a `role="listbox"` list linked with `aria-controls`, the active command given by `aria-activedescendant`; focus stays in the field while moving through the list.
+- Up and Down move through the commands, skipping disabled ones, Enter picks, Escape closes. Clicking outside the dialog closes it too.
+- Groups are `role="group"` elements named by their heading.
+- "No results" is announced by a status region; the field then has `aria-expanded="false"`.
+- On close, focus goes back to the element that had it before opening.
+- The active command also stands out without colour: a bar on the left and bolder text.
+
+## API
+
+<ApiReference tag="cr-command-palette" />

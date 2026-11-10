@@ -1,0 +1,33 @@
+---
+title: Empty state
+description: What shows when there is nothing to display, with a way out. Tag cr-empty-state, React component CrEmptyState.
+---
+
+import EmptyStateBasic from '@/demos/en/empty-state-basic';
+
+## Example
+
+`cr-empty-state` replaces a list, a table or a search with no content: a `heading` that says what is missing, a description as content that says why and what to do, and buttons in the `actions` slot to get out of it. `illustration` adds a small drawing: `search` (the "no results" magnifier, the same as in [search](/docs/composants/recherche)), `inbox` (empty tray), `error` or `none` (default).
+
+The illustration floats gently three times, under 5 seconds in all, then stops.
+
+<Preview>
+  <EmptyStateBasic />
+</Preview>
+
+<include>../../../demos/en/empty-state-basic.tsx</include>
+
+<Callout>
+  If the user asked their system to reduce motion, the illustration stays still.
+</Callout>
+
+## Accessibility
+
+- The illustration is decorative, hidden from screen readers: the heading and the description carry all the meaning.
+- The heading is a bold paragraph, not a section heading: the component cannot know which level fits your page. If the empty state fills the whole page, put a real heading (`h1`, `h2`) above it.
+- The empty state is not announced: if it appears after an action (a search, a filter), announce the result elsewhere, for instance in a `role="status"` region saying "0 results".
+- The motion stops by itself within 5 seconds (WCAG 2.2.2).
+
+## API
+
+<ApiReference tag="cr-empty-state" />

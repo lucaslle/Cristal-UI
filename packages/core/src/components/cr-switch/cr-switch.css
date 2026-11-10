@@ -1,0 +1,133 @@
+:host {
+  --cr-switch-ease: cubic-bezier(0.3, 0.7, 0.4, 1);
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: var(--cr-spacing-sm);
+}
+
+.switch {
+  position: relative;
+  display: inline-flex;
+  flex: none;
+}
+
+/* La case native, invisible, reçoit clics, focus et Espace ; le rail est dessiné dessous. */
+.input {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.track {
+  position: relative;
+  box-sizing: border-box;
+  width: 44px;
+  height: 24px;
+  background: var(--cr-color-border);
+  border-radius: 999px;
+  transition: background-color 0.25s;
+}
+
+.input:checked + .track {
+  background: var(--cr-color-primary);
+}
+
+.input:focus-visible + .track {
+  outline: 2px solid var(--cr-color-focus);
+  outline-offset: 2px;
+}
+
+/* Bords gauche et droit animés avec un décalage : la pastille s'étire vers sa destination, puis se resserre. */
+.knob {
+  position: absolute;
+  top: 3px;
+  right: calc(100% - 21px);
+  bottom: 3px;
+  left: 3px;
+  display: grid;
+  place-items: center;
+  color: var(--cr-color-text-muted);
+  background: var(--cr-color-surface);
+  border-radius: 999px;
+  transition:
+    left 0.25s var(--cr-switch-ease),
+    right 0.25s var(--cr-switch-ease) 0.08s,
+    color 0.25s;
+}
+
+.input:checked + .track .knob {
+  right: 3px;
+  left: calc(100% - 21px);
+  color: var(--cr-color-primary-text);
+  transition:
+    right 0.25s var(--cr-switch-ease),
+    left 0.25s var(--cr-switch-ease) 0.08s,
+    color 0.25s;
+}
+
+/* Croix ↔ coche : les deux traits glissent vers leur nouvelle place. */
+.knob path {
+  transition: d 0.3s var(--cr-switch-ease);
+}
+
+.label {
+  cursor: pointer;
+}
+
+.input:disabled {
+  cursor: not-allowed;
+}
+
+.input:disabled + .track {
+  background: var(--cr-color-disabled);
+  box-shadow: inset 0 0 0 1px var(--cr-color-on-disabled);
+}
+
+.input:disabled + .track .knob {
+  color: var(--cr-color-on-disabled);
+}
+
+:host([disabled]) .label {
+  color: var(--cr-color-on-disabled);
+  cursor: not-allowed;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .knob,
+  .input:checked + .track .knob,
+  .knob path {
+    transition: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .track {
+    forced-color-adjust: none;
+    background: Canvas;
+    box-shadow: inset 0 0 0 1px CanvasText;
+  }
+  .knob {
+    color: Canvas;
+    background: CanvasText;
+  }
+  .input:checked + .track {
+    background: Highlight;
+    box-shadow: none;
+  }
+  .input:checked + .track .knob {
+    color: Highlight;
+    background: HighlightText;
+  }
+  .input:disabled + .track {
+    box-shadow: inset 0 0 0 1px GrayText;
+  }
+  .input:disabled + .track .knob {
+    background: GrayText;
+  }
+}

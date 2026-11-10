@@ -4,6 +4,8 @@ export interface ListOption {
   disabled: boolean;
   /** data-count de l'option (compteur de cr-segmented). */
   count?: string;
+  /** data-group de l'option (groupe de cr-command-palette). */
+  group?: string;
 }
 
 export const normalize = (text: string) =>
@@ -64,11 +66,12 @@ export const readOptions = (host: HTMLElement): ListOption[] =>
     label: option.textContent?.trim() ?? '',
     disabled: option.disabled,
     count: option.dataset.count,
+    group: option.dataset.group,
   }));
 
-export const watchOptions = (host: HTMLElement, onChange: (options: ListOption[]) => void) => {
+export const watchOptions = (host: HTMLElement, onChange: (options: ListOption[]) => void, read = readOptions) => {
   const observer = new MutationObserver((mutations) => {
-    if (mutations.some((mutation) => mutation.target !== host || mutation.type === 'childList')) onChange(readOptions(host));
+    if (mutations.some((mutation) => mutation.target !== host || mutation.type === 'childList')) onChange(read(host));
   });
   observer.observe(host, { childList: true, subtree: true, characterData: true, attributes: true });
   return () => observer.disconnect();

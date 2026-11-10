@@ -1,0 +1,49 @@
+:host {
+  --cr-avatar-group-spring: 0.35s cubic-bezier(0.3, 1.4, 0.5, 1);
+  display: inline-flex;
+  align-items: stretch;
+  font-family: var(--cr-font-family);
+}
+
+/* Chevauchement : chaque avatar recouvre le bord du précédent, séparé par l'anneau du fond. */
+::slotted(:not(:first-child)),
+.more {
+  margin-left: calc(-1 * var(--cr-spacing-sm));
+  transition: margin-left var(--cr-avatar-group-spring);
+}
+
+/* Éventail : au survol ou au focus, les avatars s'écartent pour se montrer en entier. */
+:host(:hover) ::slotted(:not(:first-child)),
+:host(:hover) .more,
+:host(:focus-within) ::slotted(:not(:first-child)),
+:host(:focus-within) .more {
+  margin-left: var(--cr-spacing-xs);
+}
+
+/* Même hauteur que les avatars de la rangée, et carrée. */
+.more {
+  display: grid;
+  place-items: center;
+  box-sizing: border-box;
+  aspect-ratio: 1;
+  padding: 0 var(--cr-spacing-xs);
+  font-size: var(--cr-font-size-s);
+  font-weight: var(--cr-font-weight-bold);
+  color: var(--cr-color-text);
+  background: var(--cr-color-disabled);
+  border-radius: 50%;
+  box-shadow: 0 0 0 2px var(--cr-color-surface);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::slotted(:not(:first-child)),
+  .more {
+    transition: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .more {
+    border: 1px solid CanvasText;
+  }
+}

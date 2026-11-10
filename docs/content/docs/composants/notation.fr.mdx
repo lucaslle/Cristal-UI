@@ -1,0 +1,37 @@
+---
+title: Notation
+description: Note par étoiles, à choisir ou à afficher. Balise cr-rating, composant React CrRating.
+---
+
+import RatingBasic from '@/demos/rating-basic';
+
+## Exemple
+
+`cr-rating` affiche une étoile par note possible, de 1 à `max` (5 par défaut), sous un titre visible `label`. Un clic ou les flèches choisissent la note : les étoiles se remplissent en vague jusqu'à elle, et l'étoile choisie rebondit. Au survol, les étoiles montrent la note que donnerait un clic.
+
+<Preview>
+  <RatingBasic />
+</Preview>
+
+<include>../../../demos/rating-basic.tsx</include>
+
+## Dans un formulaire
+
+La note est envoyée sous le `name` du composant ; rien n'est envoyé tant qu'aucune étoile n'est choisie (`value` à 0). `onCrChange` signale chaque nouvelle note.
+
+Avec `readonly`, la note s'affiche sans pouvoir changer, par exemple pour une moyenne. Les demi-étoiles ne sont pas gérées : une valeur décimale est arrondie.
+
+<Callout>
+  Si l'utilisateur a demandé à son système de réduire les animations, les étoiles se remplissent toutes en même temps et l'étoile choisie ne rebondit pas.
+</Callout>
+
+## Accessibilité
+
+- Le composant suit le motif « boutons radio » : un groupe nommé par le titre visible, une étoile par bouton radio, nommée « 3 étoiles sur 5 », et une seule étape de tabulation, sur la note choisie (ou la première étoile).
+- Les flèches droite et haut augmentent la note, gauche et bas la baissent, en reprenant au début après la dernière ; Début et Fin choisissent la plus basse et la plus haute.
+- En lecture seule, les étoiles forment une image nommée par la note (« Note des clients : 4 sur 5 »), sans élément focalisable.
+- Une étoile pleine est remplie, une étoile vide n'a que son contour : la note ne repose pas que sur la couleur. Le contour se détache du fond avec un contraste d'au moins 3:1.
+
+## API
+
+<ApiReference tag="cr-rating" />

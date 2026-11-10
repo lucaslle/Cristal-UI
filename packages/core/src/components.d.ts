@@ -6,6 +6,8 @@
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 import { AccordionAnimation, AccordionVariant } from "./utils/accordion";
+import { AvatarStatus } from "./components/cr-avatar/cr-avatar";
+import { BadgeVariant } from "./components/cr-badge/cr-badge";
 import { BoxDisplay } from "./components/cr-box/cr-box";
 import { ButtonSize, ButtonType, ButtonVariant } from "./components/cr-button/cr-button";
 import { CardValue } from "./components/cr-card-input/cr-card-input";
@@ -16,7 +18,10 @@ import { InputType } from "./components/cr-input/cr-input";
 import { PopupAnimation } from "./utils/popup";
 import { StepperVariant } from "./utils/stepper";
 import { TableColumn, TableDensity, TableLayout, TableVariant } from "./utils/table-layout";
+import { TooltipPlacement as TooltipPlacement1 } from "./components/cr-icon-button/cr-icon-button";
 export { AccordionAnimation, AccordionVariant } from "./utils/accordion";
+export { AvatarStatus } from "./components/cr-avatar/cr-avatar";
+export { BadgeVariant } from "./components/cr-badge/cr-badge";
 export { BoxDisplay } from "./components/cr-box/cr-box";
 export { ButtonSize, ButtonType, ButtonVariant } from "./components/cr-button/cr-button";
 export { CardValue } from "./components/cr-card-input/cr-card-input";
@@ -27,6 +32,7 @@ export { InputType } from "./components/cr-input/cr-input";
 export { PopupAnimation } from "./utils/popup";
 export { StepperVariant } from "./utils/stepper";
 export { TableColumn, TableDensity, TableLayout, TableVariant } from "./utils/table-layout";
+export { TooltipPlacement as TooltipPlacement1 } from "./components/cr-icon-button/cr-icon-button";
 export namespace Components {
     /**
      * Accordéon : sections cr-accordion-item qui s'ouvrent et se ferment.
@@ -81,6 +87,92 @@ export namespace Components {
           * @default false
          */
         "open": boolean;
+    }
+    /**
+     * Message d'information, de réussite, d'avertissement ou d'erreur, avec un titre facultatif ; son emplacement décide de son comportement.
+     * Dans la page, c'est un bandeau : inséré après le chargement, il se déplie ; avec dismissible, un bouton Fermer le replie.
+     * Dans un cr-toaster, c'est une notification : elle glisse depuis le coin et se ferme seule après duration, avec une barre du temps restant
+     * qui s'arrête sous la souris ou le focus ; on la ferme aussi avec le bouton Fermer, Échap ou en la faisant glisser sur le côté.
+     * Dans les deux cas, son icône se trace.
+     */
+    interface CrAlert {
+        /**
+          * Ajoute un bouton Fermer qui replie et masque le bandeau. Dans un cr-toaster, le bouton est toujours là.
+          * @default false
+         */
+        "dismissible": boolean;
+        /**
+          * Dans un cr-toaster : durée d'affichage en millisecondes avant la fermeture automatique ; 0 : le message reste jusqu'à ce qu'on le ferme. Sans effet dans la page.
+          * @default 5000
+         */
+        "duration": number;
+        /**
+          * Titre affiché en gras au-dessus du message.
+         */
+        "heading"?: string;
+        /**
+          * Affiche le message ; à false, il se ferme (replié dans la page, glissé hors du coin dans un cr-toaster). Chaque fermeture le remet à false.
+          * @default true
+         */
+        "open": boolean;
+        /**
+          * Type de message : info, success (réussite), warning (avertissement) ou danger (erreur, lue aussitôt par les lecteurs d'écran).
+          * @default 'info'
+         */
+        "variant": 'info' | 'success' | 'warning' | 'danger';
+    }
+    /**
+     * Avatar d'une personne : sa photo, ou à défaut ses initiales sur une couleur tirée de son nom.
+     * Le nom (et le statut éventuel) est lu par les lecteurs d'écran ; la pastille de statut change de forme selon le statut.
+     */
+    interface CrAvatar {
+        /**
+          * Nom de la personne (obligatoire) : nom lu par les lecteurs d'écran, et initiales quand il n'y a pas de photo.
+         */
+        "name": string;
+        /**
+          * Taille : s 30px, m 40px, l 48px.
+          * @default 'm'
+         */
+        "size": 's' | 'm' | 'l';
+        /**
+          * Adresse de la photo ; les initiales la remplacent si elle ne se charge pas.
+         */
+        "src"?: string;
+        /**
+          * Disponibilité, ajoutée au nom lu (« Marie Dupont, en ligne ») et montrée par une pastille de forme différente pour chaque statut.
+         */
+        "status"?: AvatarStatus;
+    }
+    /**
+     * Groupe d'avatars qui se chevauchent, et s'écartent au survol ou quand le focus est dedans.
+     * Au-delà de max, les avatars restants sont résumés par une pastille « +N », nommée « N autres personnes ».
+     */
+    interface CrAvatarGroup {
+        /**
+          * Nombre maximal d'avatars affichés ; les autres sont résumés par « +N ». Tous par défaut.
+         */
+        "max"?: number;
+    }
+    /**
+     * Pastille : court statut ou compteur (« Payée », « Non lus 3 »). Le texte porte le sens, la couleur ne fait que l'appuyer.
+     * Quand count change, le nombre défile jusqu'à sa nouvelle valeur, comme un compteur kilométrique.
+     */
+    interface CrBadge {
+        /**
+          * Nombre affiché après le texte ; il défile jusqu'à chaque nouvelle valeur.
+         */
+        "count"?: number;
+        /**
+          * Annonce poliment chaque changement aux lecteurs d'écran (zone role="status") ; désactivé par défaut.
+          * @default false
+         */
+        "live": boolean;
+        /**
+          * Couleur : neutral (gris), primary, success, danger.
+          * @default 'neutral'
+         */
+        "variant": BadgeVariant;
     }
     /**
      * Remplaçant de div pour la mise en page : espacements, flex et grille avec les valeurs du thème.
@@ -146,6 +238,18 @@ export namespace Components {
         "wrap": boolean;
     }
     /**
+     * Fil d'Ariane : le chemin jusqu'à la page courante. Les niveaux sont les enfants, écrits tels quels :
+     * des liens a href (Ctrl/Cmd+clic restent natifs), puis la page courante en dernier (un span), marquée aria-current="page".
+     * Au-delà de max niveaux, ceux du milieu se replient derrière un bouton « … » ; ils glissent hors de lui quand on le déplie.
+     */
+    interface CrBreadcrumb {
+        /**
+          * Nombre de niveaux au-delà duquel ceux du milieu se replient (le premier et les max - 2 derniers restent visibles).
+          * @default 4
+         */
+        "max": number;
+    }
+    /**
      * Bouton d'action.
      */
     interface CrButton {
@@ -160,6 +264,10 @@ export namespace Components {
          */
         "fullWidth": boolean;
         /**
+          * Adresse : le bouton devient un vrai lien (Ctrl+clic, clic molette et « Ouvrir dans un nouvel onglet » natifs).
+         */
+        "href"?: string;
+        /**
           * Affiche l'indicateur de chargement et bloque les clics.
           * @default false
          */
@@ -170,7 +278,11 @@ export namespace Components {
          */
         "size": ButtonSize;
         /**
-          * Comportement dans un formulaire.
+          * Où ouvrir le lien (avec href), par exemple _blank ; rel="noopener noreferrer" est ajouté pour _blank.
+         */
+        "target"?: string;
+        /**
+          * Comportement dans un formulaire (sans effet avec href).
           * @default 'button'
          */
         "type": ButtonType;
@@ -279,6 +391,70 @@ export namespace Components {
         "value": string;
     }
     /**
+     * Palette de commandes : une fenêtre modale avec un champ qui filtre une liste de commandes (motif combobox).
+     * Les commandes sont des éléments option enfants ; data-group les range sous un titre de groupe.
+     * Ctrl+K (⌘K sur Mac) l'ouvre de n'importe où dans la page. Haut et Bas parcourent les commandes, Entrée choisit, Échap ferme.
+     * La fenêtre tombe en place avec un ressort, et le surlignage de la commande active glisse d'une ligne à l'autre.
+     */
+    interface CrCommandPalette {
+        /**
+          * Nom de la fenêtre et du champ pour les lecteurs d'écran (« Palette de commandes »).
+         */
+        "label": string;
+        /**
+          * Ouvre ou ferme la palette.
+          * @default false
+         */
+        "open": boolean;
+        /**
+          * Texte indicatif du champ (« Rechercher… » par défaut).
+         */
+        "placeholder"?: string;
+        /**
+          * Ouvre la palette avec Ctrl+K (⌘K sur Mac), où que soit le focus dans la page.
+          * @default true
+         */
+        "shortcut": boolean;
+    }
+    /**
+     * Champ de date : saisie au clavier dans le format de la langue (JJ/MM/AAAA en français, MM/DD/YYYY en anglais),
+     * ou choix dans un calendrier ouvert par le bouton voisin. Le calendrier suit le motif Date Picker Dialog de l'APG ;
+     * les mois glissent du côté de la navigation et le jour choisi s'affiche avec un petit rebond.
+     */
+    interface CrDatePicker {
+        /**
+          * Désactive le champ et le calendrier.
+          * @default false
+         */
+        "disabled": boolean;
+        /**
+          * Libellé affiché au-dessus du champ (obligatoire).
+         */
+        "label": string;
+        /**
+          * Dernière date possible, au format ISO AAAA-MM-JJ.
+         */
+        "max"?: string;
+        /**
+          * Première date possible, au format ISO AAAA-MM-JJ.
+         */
+        "min"?: string;
+        /**
+          * Nom envoyé avec le formulaire.
+         */
+        "name"?: string;
+        /**
+          * Rend la date obligatoire.
+          * @default false
+         */
+        "required": boolean;
+        /**
+          * Date choisie, au format ISO AAAA-MM-JJ ; chaîne vide sans date.
+          * @default ''
+         */
+        "value": string;
+    }
+    /**
      * Fenêtre modale, basée sur l'élément dialog natif.
      */
     interface CrDialog {
@@ -318,6 +494,53 @@ export namespace Components {
           * @default 'end'
          */
         "placement": 'start' | 'end';
+    }
+    /**
+     * État vide : ce qui s'affiche quand une liste, une recherche ou une page n'a rien à montrer, avec de quoi en sortir.
+     * L'illustration flotte doucement trois fois, puis s'arrête.
+     */
+    interface CrEmptyState {
+        /**
+          * Titre court, en gras : ce qui manque (« Aucune commande »).
+         */
+        "heading": string;
+        /**
+          * Illustration décorative : none (aucune), search (loupe, aucun résultat), inbox (boîte vide) ou error (erreur).
+          * @default 'none'
+         */
+        "illustration": 'none' | 'search' | 'inbox' | 'error';
+    }
+    /**
+     * Dépôt de fichiers : une zone où glisser des fichiers, qui est aussi un vrai sélecteur de fichiers natif, atteignable au clavier.
+     * Les fichiers choisis s'affichent en liste, avec leur taille et un bouton Retirer. La zone respire quand on y glisse des fichiers.
+     */
+    interface CrFileUpload {
+        /**
+          * Types acceptés, comme l'attribut accept natif (« .pdf,image/* ») ; appliqué aussi aux fichiers déposés.
+         */
+        "accept"?: string;
+        /**
+          * Désactive le champ.
+          * @default false
+         */
+        "disabled": boolean;
+        /**
+          * Texte d'aide (formats, taille), lu par les lecteurs d'écran.
+         */
+        "hint"?: string;
+        /**
+          * Libellé affiché au-dessus de la zone (obligatoire).
+         */
+        "label": string;
+        /**
+          * Plusieurs fichiers ; sinon un nouveau fichier remplace le précédent.
+          * @default false
+         */
+        "multiple": boolean;
+        /**
+          * Nom envoyé avec le formulaire, une fois par fichier.
+         */
+        "name"?: string;
     }
     /**
      * Élément d'un cr-grid-layout. Se déplace par sa poignée et se redimensionne par son coin.
@@ -429,6 +652,10 @@ export namespace Components {
          */
         "disabled": boolean;
         /**
+          * Adresse : le bouton devient un vrai lien (Ctrl+clic, clic molette et « Ouvrir dans un nouvel onglet » natifs).
+         */
+        "href"?: string;
+        /**
           * Nom du bouton, lu par les lecteurs d'écran et affiché dans l'infobulle (obligatoire).
          */
         "label": string;
@@ -453,6 +680,10 @@ export namespace Components {
          */
         "size": ButtonSize1;
         /**
+          * Où ouvrir le lien (avec href), par exemple _blank ; rel="noopener noreferrer" est ajouté pour _blank.
+         */
+        "target"?: string;
+        /**
           * Bouton bascule (favori, muet…) : chaque clic inverse pressed, annoncé enfoncé ou non.
           * @default false
          */
@@ -468,7 +699,7 @@ export namespace Components {
          */
         "tooltipPlacement": TooltipPlacement;
         /**
-          * Comportement dans un formulaire.
+          * Comportement dans un formulaire (sans effet avec href).
           * @default 'button'
          */
         "type": ButtonType1;
@@ -629,6 +860,47 @@ export namespace Components {
         "value": string;
     }
     /**
+     * Pagination : page précédente, numéros de pages (avec « … » quand il y en a beaucoup) et page suivante.
+     * Avec href, chaque numéro est un vrai lien : Ctrl/Cmd+clic, clic molette et « Ouvrir dans un nouvel onglet » restent natifs.
+     * Sans href, ce sont des boutons et crChange donne la page choisie. La pastille de la page courante glisse jusqu'au nouveau numéro.
+     */
+    interface CrPagination {
+        /**
+          * Adresse des pages, où {page} est remplacé par le numéro (« /produits?page={page} ») : les pages deviennent des liens.
+         */
+        "href"?: string;
+        /**
+          * Page courante, à partir de 1.
+          * @default 1
+         */
+        "page": number;
+        /**
+          * Nombre de pages.
+          * @default 1
+         */
+        "total": number;
+    }
+    /**
+     * Fenêtre contextuelle : petit panneau non modal ouvert par un bouton, pour du contenu interactif (formulaire court, réglages…).
+     * Le focus entre dans le panneau à l'ouverture et revient au bouton à la fermeture (Échap, clic à l'extérieur, bouton).
+     */
+    interface CrPopover {
+        /**
+          * Désactive le bouton.
+          * @default false
+         */
+        "disabled": boolean;
+        /**
+          * Libellé du bouton, qui nomme aussi le panneau pour les lecteurs d'écran (obligatoire).
+         */
+        "label": string;
+        /**
+          * Panneau ouvert ; à remettre à false pour le fermer après une action (« Appliquer »).
+          * @default false
+         */
+        "open": boolean;
+    }
+    /**
      * Barre de progression. Avec value, elle se remplit jusqu'à la valeur ; sans, un segment glisse en boucle (durée inconnue).
      */
     interface CrProgress {
@@ -666,6 +938,70 @@ export namespace Components {
           * @default []
          */
         "steps": string[];
+    }
+    /**
+     * Choix d'une seule option dans une liste de boutons radio empilés, sous un titre visible.
+     * Les options sont des éléments option enfants. Le point du bouton choisi coule jusqu'au nouveau choix.
+     */
+    interface CrRadioGroup {
+        /**
+          * Désactive le groupe.
+          * @default false
+         */
+        "disabled": boolean;
+        /**
+          * Titre affiché au-dessus des options, et nom du groupe pour les lecteurs d'écran.
+         */
+        "label": string;
+        /**
+          * Nom envoyé avec le formulaire.
+         */
+        "name"?: string;
+        /**
+          * Rend le choix obligatoire.
+          * @default false
+         */
+        "required": boolean;
+        /**
+          * Valeur de l'option choisie ; aucune par défaut.
+          * @default ''
+         */
+        "value": string;
+    }
+    /**
+     * Notation par étoiles : un groupe de boutons radio, une étoile par note possible, sous un titre visible.
+     * Les étoiles se remplissent en vague jusqu'à la note choisie, qui rebondit ; le survol prévisualise la note.
+     * En lecture seule, les étoiles forment une image nommée par la note (« Note : 4 sur 5 »).
+     */
+    interface CrRating {
+        /**
+          * Désactive la notation.
+          * @default false
+         */
+        "disabled": boolean;
+        /**
+          * Titre affiché au-dessus des étoiles, et nom du groupe pour les lecteurs d'écran (obligatoire).
+         */
+        "label": string;
+        /**
+          * Nombre d'étoiles, donc note maximale.
+          * @default 5
+         */
+        "max": number;
+        /**
+          * Nom envoyé avec le formulaire.
+         */
+        "name"?: string;
+        /**
+          * Affiche la note sans permettre de la changer.
+          * @default false
+         */
+        "readonly": boolean;
+        /**
+          * Note choisie, de 0 (aucune) à max ; arrondie à l'entier.
+          * @default 0
+         */
+        "value": number;
     }
     /**
      * Champ de recherche. En entrant dans le champ, la loupe devient une flèche qui efface la recherche.
@@ -716,6 +1052,8 @@ export namespace Components {
     /**
      * Choix d'une option parmi quelques-unes, côte à côte (Jour, Semaine, Mois…). Les options sont des éléments option enfants ;
      * data-count sur une option ajoute un compteur, qui compte et rebondit quand on choisit l'option.
+     * Avec des enfants cr-tab-panel à la place, le contrôle devient des onglets : chaque panneau donne un onglet,
+     * seul le panneau choisi est affiché et il arrive du côté du changement.
      */
     interface CrSegmented {
         /**
@@ -729,15 +1067,15 @@ export namespace Components {
          */
         "fit": boolean;
         /**
-          * Nom lu par les lecteurs d'écran (le contrôle n'a pas de libellé visible).
+          * Nom lu par les lecteurs d'écran (le contrôle, ou la barre d'onglets, n'a pas de libellé visible).
          */
         "label": string;
         /**
-          * Nom envoyé avec le formulaire.
+          * Nom envoyé avec le formulaire ; sans effet en mode onglets.
          */
         "name"?: string;
         /**
-          * Valeur de l'option choisie ; la première option disponible par défaut.
+          * Valeur de l'option choisie ; la première option disponible par défaut. En mode onglets : value du cr-tab-panel choisi, ou à défaut sa position en texte ("0", "1"…).
           * @default ''
          */
         "value": string;
@@ -837,6 +1175,66 @@ export namespace Components {
         "width"?: string;
     }
     /**
+     * Curseur : choix d'une valeur numérique dans un intervalle, à la souris, au doigt ou au clavier (flèches, Page précédente/suivante, Début, Fin).
+     * Une bulle suit la pastille en affichant la valeur et grossit pendant le glissement ou au focus ; la partie remplie du rail suit la valeur.
+     */
+    interface CrSlider {
+        /**
+          * Désactive le curseur.
+          * @default false
+         */
+        "disabled": boolean;
+        /**
+          * Libellé affiché au-dessus du curseur (obligatoire).
+         */
+        "label": string;
+        /**
+          * Valeur maximale.
+          * @default 100
+         */
+        "max": number;
+        /**
+          * Valeur minimale.
+          * @default 0
+         */
+        "min": number;
+        /**
+          * Nom envoyé avec le formulaire.
+         */
+        "name"?: string;
+        /**
+          * Écart entre deux valeurs possibles.
+          * @default 1
+         */
+        "step": number;
+        /**
+          * Valeur choisie, ramenée entre min et max.
+          * @default 0
+         */
+        "value": number;
+    }
+    /**
+     * Mini-graphique en ligne : l'allure d'une série de nombres, à glisser dans un texte, une carte ou un tableau.
+     * C'est une image nommée par son libellé et un résumé (dernière valeur, minimum, maximum, tendance).
+     * La ligne se trace au premier affichage ; quand les valeurs changent, elle glisse point par point vers les nouvelles.
+     */
+    interface CrSparkline {
+        /**
+          * Ce que mesurent les valeurs (« Ventes de la semaine ») ; début du nom lu par les lecteurs d'écran (obligatoire).
+         */
+        "label": string;
+        /**
+          * Les valeurs, dans l'ordre (en JavaScript ou en React : un tableau de nombres).
+          * @default []
+         */
+        "values": number[];
+        /**
+          * Style : line (ligne seule) ou area (ligne et surface teintée dessous).
+          * @default 'line'
+         */
+        "variant": 'line' | 'area';
+    }
+    /**
      * Étape d'un cr-stepper. Son contenu n'est affiché que pendant l'étape.
      */
     interface CrStep {
@@ -880,6 +1278,48 @@ export namespace Components {
           * @default 'line'
          */
         "variant": StepperVariant;
+    }
+    /**
+     * Interrupteur : active ou désactive un réglage, avec effet immédiat.
+     * La pastille s'étire en glissant, et sa croix se transforme en coche.
+     */
+    interface CrSwitch {
+        /**
+          * État activé.
+          * @default false
+         */
+        "checked": boolean;
+        /**
+          * Désactive l'interrupteur.
+          * @default false
+         */
+        "disabled": boolean;
+        /**
+          * Libellé affiché à côté de l'interrupteur.
+         */
+        "label": string;
+        /**
+          * Nom envoyé avec le formulaire.
+         */
+        "name"?: string;
+        /**
+          * Valeur envoyée quand l'interrupteur est activé.
+          * @default 'on'
+         */
+        "value": string;
+    }
+    /**
+     * Contenu d'un onglet, enfant de cr-segmented (mode onglets). Seul le panneau de l'onglet choisi est affiché.
+     */
+    interface CrTabPanel {
+        /**
+          * Libellé de l'onglet.
+         */
+        "label": string;
+        /**
+          * Valeur de l'onglet, reprise par value et crChange de cr-segmented ; sa position en texte ("0", "1"…) par défaut.
+         */
+        "value"?: string;
     }
     /**
      * Tableau dont chaque utilisateur règle les colonnes : largeur, ordre, colonnes fixées et masquées, densité des lignes.
@@ -1004,10 +1444,34 @@ export namespace Components {
          */
         "value": string;
     }
+    /**
+     * Zone fixe en bas à droite de l'écran qui empile les cr-alert en notifications, la plus récente en bas.
+     */
+    interface CrToaster {
+    }
+    /**
+     * Infobulle : court texte d'aide affiché au survol et au focus clavier de l'élément qu'elle entoure.
+     * Le texte décrit aussi cet élément pour les lecteurs d'écran. Échap la masque ; on peut la survoler sans qu'elle disparaisse.
+     */
+    interface CrTooltip {
+        /**
+          * Côté où s'ouvre l'infobulle.
+          * @default 'top'
+         */
+        "placement": TooltipPlacement1;
+        /**
+          * Texte de l'infobulle, court et sans lien ni bouton (obligatoire).
+         */
+        "text": string;
+    }
 }
 export interface CrAccordionItemCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLCrAccordionItemElement;
+}
+export interface CrAlertCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLCrAlertElement;
 }
 export interface CrCardInputCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -1017,6 +1481,14 @@ export interface CrCheckboxCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLCrCheckboxElement;
 }
+export interface CrCommandPaletteCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLCrCommandPaletteElement;
+}
+export interface CrDatePickerCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLCrDatePickerElement;
+}
 export interface CrDialogCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLCrDialogElement;
@@ -1024,6 +1496,10 @@ export interface CrDialogCustomEvent<T> extends CustomEvent<T> {
 export interface CrDrawerCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLCrDrawerElement;
+}
+export interface CrFileUploadCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLCrFileUploadElement;
 }
 export interface CrGridItemCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -1049,6 +1525,22 @@ export interface CrOtpCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLCrOtpElement;
 }
+export interface CrPaginationCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLCrPaginationElement;
+}
+export interface CrPopoverCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLCrPopoverElement;
+}
+export interface CrRadioGroupCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLCrRadioGroupElement;
+}
+export interface CrRatingCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLCrRatingElement;
+}
 export interface CrSearchCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLCrSearchElement;
@@ -1061,9 +1553,17 @@ export interface CrSelectCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLCrSelectElement;
 }
+export interface CrSliderCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLCrSliderElement;
+}
 export interface CrStepperCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLCrStepperElement;
+}
+export interface CrSwitchCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLCrSwitchElement;
 }
 export interface CrTableCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -1107,6 +1607,60 @@ declare global {
         prototype: HTMLCrAccordionItemElement;
         new (): HTMLCrAccordionItemElement;
     };
+    interface HTMLCrAlertElementEventMap {
+        "crClose": void;
+    }
+    /**
+     * Message d'information, de réussite, d'avertissement ou d'erreur, avec un titre facultatif ; son emplacement décide de son comportement.
+     * Dans la page, c'est un bandeau : inséré après le chargement, il se déplie ; avec dismissible, un bouton Fermer le replie.
+     * Dans un cr-toaster, c'est une notification : elle glisse depuis le coin et se ferme seule après duration, avec une barre du temps restant
+     * qui s'arrête sous la souris ou le focus ; on la ferme aussi avec le bouton Fermer, Échap ou en la faisant glisser sur le côté.
+     * Dans les deux cas, son icône se trace.
+     */
+    interface HTMLCrAlertElement extends Components.CrAlert, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLCrAlertElementEventMap>(type: K, listener: (this: HTMLCrAlertElement, ev: CrAlertCustomEvent<HTMLCrAlertElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLCrAlertElementEventMap>(type: K, listener: (this: HTMLCrAlertElement, ev: CrAlertCustomEvent<HTMLCrAlertElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLCrAlertElement: {
+        prototype: HTMLCrAlertElement;
+        new (): HTMLCrAlertElement;
+    };
+    /**
+     * Avatar d'une personne : sa photo, ou à défaut ses initiales sur une couleur tirée de son nom.
+     * Le nom (et le statut éventuel) est lu par les lecteurs d'écran ; la pastille de statut change de forme selon le statut.
+     */
+    interface HTMLCrAvatarElement extends Components.CrAvatar, HTMLStencilElement {
+    }
+    var HTMLCrAvatarElement: {
+        prototype: HTMLCrAvatarElement;
+        new (): HTMLCrAvatarElement;
+    };
+    /**
+     * Groupe d'avatars qui se chevauchent, et s'écartent au survol ou quand le focus est dedans.
+     * Au-delà de max, les avatars restants sont résumés par une pastille « +N », nommée « N autres personnes ».
+     */
+    interface HTMLCrAvatarGroupElement extends Components.CrAvatarGroup, HTMLStencilElement {
+    }
+    var HTMLCrAvatarGroupElement: {
+        prototype: HTMLCrAvatarGroupElement;
+        new (): HTMLCrAvatarGroupElement;
+    };
+    /**
+     * Pastille : court statut ou compteur (« Payée », « Non lus 3 »). Le texte porte le sens, la couleur ne fait que l'appuyer.
+     * Quand count change, le nombre défile jusqu'à sa nouvelle valeur, comme un compteur kilométrique.
+     */
+    interface HTMLCrBadgeElement extends Components.CrBadge, HTMLStencilElement {
+    }
+    var HTMLCrBadgeElement: {
+        prototype: HTMLCrBadgeElement;
+        new (): HTMLCrBadgeElement;
+    };
     /**
      * Remplaçant de div pour la mise en page : espacements, flex et grille avec les valeurs du thème.
      * Les enfants restent des enfants directs : flex et grille s'appliquent à eux.
@@ -1117,6 +1671,17 @@ declare global {
     var HTMLCrBoxElement: {
         prototype: HTMLCrBoxElement;
         new (): HTMLCrBoxElement;
+    };
+    /**
+     * Fil d'Ariane : le chemin jusqu'à la page courante. Les niveaux sont les enfants, écrits tels quels :
+     * des liens a href (Ctrl/Cmd+clic restent natifs), puis la page courante en dernier (un span), marquée aria-current="page".
+     * Au-delà de max niveaux, ceux du milieu se replient derrière un bouton « … » ; ils glissent hors de lui quand on le déplie.
+     */
+    interface HTMLCrBreadcrumbElement extends Components.CrBreadcrumb, HTMLStencilElement {
+    }
+    var HTMLCrBreadcrumbElement: {
+        prototype: HTMLCrBreadcrumbElement;
+        new (): HTMLCrBreadcrumbElement;
     };
     /**
      * Bouton d'action.
@@ -1177,6 +1742,52 @@ declare global {
         prototype: HTMLCrCheckboxElement;
         new (): HTMLCrCheckboxElement;
     };
+    interface HTMLCrCommandPaletteElementEventMap {
+        "crSelect": string;
+        "crClose": void;
+    }
+    /**
+     * Palette de commandes : une fenêtre modale avec un champ qui filtre une liste de commandes (motif combobox).
+     * Les commandes sont des éléments option enfants ; data-group les range sous un titre de groupe.
+     * Ctrl+K (⌘K sur Mac) l'ouvre de n'importe où dans la page. Haut et Bas parcourent les commandes, Entrée choisit, Échap ferme.
+     * La fenêtre tombe en place avec un ressort, et le surlignage de la commande active glisse d'une ligne à l'autre.
+     */
+    interface HTMLCrCommandPaletteElement extends Components.CrCommandPalette, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLCrCommandPaletteElementEventMap>(type: K, listener: (this: HTMLCrCommandPaletteElement, ev: CrCommandPaletteCustomEvent<HTMLCrCommandPaletteElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLCrCommandPaletteElementEventMap>(type: K, listener: (this: HTMLCrCommandPaletteElement, ev: CrCommandPaletteCustomEvent<HTMLCrCommandPaletteElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLCrCommandPaletteElement: {
+        prototype: HTMLCrCommandPaletteElement;
+        new (): HTMLCrCommandPaletteElement;
+    };
+    interface HTMLCrDatePickerElementEventMap {
+        "crChange": string;
+    }
+    /**
+     * Champ de date : saisie au clavier dans le format de la langue (JJ/MM/AAAA en français, MM/DD/YYYY en anglais),
+     * ou choix dans un calendrier ouvert par le bouton voisin. Le calendrier suit le motif Date Picker Dialog de l'APG ;
+     * les mois glissent du côté de la navigation et le jour choisi s'affiche avec un petit rebond.
+     */
+    interface HTMLCrDatePickerElement extends Components.CrDatePicker, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLCrDatePickerElementEventMap>(type: K, listener: (this: HTMLCrDatePickerElement, ev: CrDatePickerCustomEvent<HTMLCrDatePickerElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLCrDatePickerElementEventMap>(type: K, listener: (this: HTMLCrDatePickerElement, ev: CrDatePickerCustomEvent<HTMLCrDatePickerElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLCrDatePickerElement: {
+        prototype: HTMLCrDatePickerElement;
+        new (): HTMLCrDatePickerElement;
+    };
     interface HTMLCrDialogElementEventMap {
         "crClose": void;
     }
@@ -1216,6 +1827,37 @@ declare global {
     var HTMLCrDrawerElement: {
         prototype: HTMLCrDrawerElement;
         new (): HTMLCrDrawerElement;
+    };
+    /**
+     * État vide : ce qui s'affiche quand une liste, une recherche ou une page n'a rien à montrer, avec de quoi en sortir.
+     * L'illustration flotte doucement trois fois, puis s'arrête.
+     */
+    interface HTMLCrEmptyStateElement extends Components.CrEmptyState, HTMLStencilElement {
+    }
+    var HTMLCrEmptyStateElement: {
+        prototype: HTMLCrEmptyStateElement;
+        new (): HTMLCrEmptyStateElement;
+    };
+    interface HTMLCrFileUploadElementEventMap {
+        "crChange": File[];
+    }
+    /**
+     * Dépôt de fichiers : une zone où glisser des fichiers, qui est aussi un vrai sélecteur de fichiers natif, atteignable au clavier.
+     * Les fichiers choisis s'affichent en liste, avec leur taille et un bouton Retirer. La zone respire quand on y glisse des fichiers.
+     */
+    interface HTMLCrFileUploadElement extends Components.CrFileUpload, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLCrFileUploadElementEventMap>(type: K, listener: (this: HTMLCrFileUploadElement, ev: CrFileUploadCustomEvent<HTMLCrFileUploadElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLCrFileUploadElementEventMap>(type: K, listener: (this: HTMLCrFileUploadElement, ev: CrFileUploadCustomEvent<HTMLCrFileUploadElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLCrFileUploadElement: {
+        prototype: HTMLCrFileUploadElement;
+        new (): HTMLCrFileUploadElement;
     };
     interface HTMLCrGridItemElementEventMap {
         "crRemove": void;
@@ -1361,6 +2003,49 @@ declare global {
         prototype: HTMLCrOtpElement;
         new (): HTMLCrOtpElement;
     };
+    interface HTMLCrPaginationElementEventMap {
+        "crChange": number;
+    }
+    /**
+     * Pagination : page précédente, numéros de pages (avec « … » quand il y en a beaucoup) et page suivante.
+     * Avec href, chaque numéro est un vrai lien : Ctrl/Cmd+clic, clic molette et « Ouvrir dans un nouvel onglet » restent natifs.
+     * Sans href, ce sont des boutons et crChange donne la page choisie. La pastille de la page courante glisse jusqu'au nouveau numéro.
+     */
+    interface HTMLCrPaginationElement extends Components.CrPagination, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLCrPaginationElementEventMap>(type: K, listener: (this: HTMLCrPaginationElement, ev: CrPaginationCustomEvent<HTMLCrPaginationElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLCrPaginationElementEventMap>(type: K, listener: (this: HTMLCrPaginationElement, ev: CrPaginationCustomEvent<HTMLCrPaginationElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLCrPaginationElement: {
+        prototype: HTMLCrPaginationElement;
+        new (): HTMLCrPaginationElement;
+    };
+    interface HTMLCrPopoverElementEventMap {
+        "crToggle": boolean;
+    }
+    /**
+     * Fenêtre contextuelle : petit panneau non modal ouvert par un bouton, pour du contenu interactif (formulaire court, réglages…).
+     * Le focus entre dans le panneau à l'ouverture et revient au bouton à la fermeture (Échap, clic à l'extérieur, bouton).
+     */
+    interface HTMLCrPopoverElement extends Components.CrPopover, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLCrPopoverElementEventMap>(type: K, listener: (this: HTMLCrPopoverElement, ev: CrPopoverCustomEvent<HTMLCrPopoverElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLCrPopoverElementEventMap>(type: K, listener: (this: HTMLCrPopoverElement, ev: CrPopoverCustomEvent<HTMLCrPopoverElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLCrPopoverElement: {
+        prototype: HTMLCrPopoverElement;
+        new (): HTMLCrPopoverElement;
+    };
     /**
      * Barre de progression. Avec value, elle se remplit jusqu'à la valeur ; sans, un segment glisse en boucle (durée inconnue).
      */
@@ -1380,6 +2065,49 @@ declare global {
     var HTMLCrProgressStepsElement: {
         prototype: HTMLCrProgressStepsElement;
         new (): HTMLCrProgressStepsElement;
+    };
+    interface HTMLCrRadioGroupElementEventMap {
+        "crChange": string;
+    }
+    /**
+     * Choix d'une seule option dans une liste de boutons radio empilés, sous un titre visible.
+     * Les options sont des éléments option enfants. Le point du bouton choisi coule jusqu'au nouveau choix.
+     */
+    interface HTMLCrRadioGroupElement extends Components.CrRadioGroup, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLCrRadioGroupElementEventMap>(type: K, listener: (this: HTMLCrRadioGroupElement, ev: CrRadioGroupCustomEvent<HTMLCrRadioGroupElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLCrRadioGroupElementEventMap>(type: K, listener: (this: HTMLCrRadioGroupElement, ev: CrRadioGroupCustomEvent<HTMLCrRadioGroupElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLCrRadioGroupElement: {
+        prototype: HTMLCrRadioGroupElement;
+        new (): HTMLCrRadioGroupElement;
+    };
+    interface HTMLCrRatingElementEventMap {
+        "crChange": number;
+    }
+    /**
+     * Notation par étoiles : un groupe de boutons radio, une étoile par note possible, sous un titre visible.
+     * Les étoiles se remplissent en vague jusqu'à la note choisie, qui rebondit ; le survol prévisualise la note.
+     * En lecture seule, les étoiles forment une image nommée par la note (« Note : 4 sur 5 »).
+     */
+    interface HTMLCrRatingElement extends Components.CrRating, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLCrRatingElementEventMap>(type: K, listener: (this: HTMLCrRatingElement, ev: CrRatingCustomEvent<HTMLCrRatingElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLCrRatingElementEventMap>(type: K, listener: (this: HTMLCrRatingElement, ev: CrRatingCustomEvent<HTMLCrRatingElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLCrRatingElement: {
+        prototype: HTMLCrRatingElement;
+        new (): HTMLCrRatingElement;
     };
     interface HTMLCrSearchElementEventMap {
         "crInput": string;
@@ -1409,6 +2137,8 @@ declare global {
     /**
      * Choix d'une option parmi quelques-unes, côte à côte (Jour, Semaine, Mois…). Les options sont des éléments option enfants ;
      * data-count sur une option ajoute un compteur, qui compte et rebondit quand on choisit l'option.
+     * Avec des enfants cr-tab-panel à la place, le contrôle devient des onglets : chaque panneau donne un onglet,
+     * seul le panneau choisi est affiché et il arrive du côté du changement.
      */
     interface HTMLCrSegmentedElement extends Components.CrSegmented, HTMLStencilElement {
         addEventListener<K extends keyof HTMLCrSegmentedElementEventMap>(type: K, listener: (this: HTMLCrSegmentedElement, ev: CrSegmentedCustomEvent<HTMLCrSegmentedElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -1455,6 +2185,39 @@ declare global {
         prototype: HTMLCrSkeletonElement;
         new (): HTMLCrSkeletonElement;
     };
+    interface HTMLCrSliderElementEventMap {
+        "crInput": number;
+        "crChange": number;
+    }
+    /**
+     * Curseur : choix d'une valeur numérique dans un intervalle, à la souris, au doigt ou au clavier (flèches, Page précédente/suivante, Début, Fin).
+     * Une bulle suit la pastille en affichant la valeur et grossit pendant le glissement ou au focus ; la partie remplie du rail suit la valeur.
+     */
+    interface HTMLCrSliderElement extends Components.CrSlider, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLCrSliderElementEventMap>(type: K, listener: (this: HTMLCrSliderElement, ev: CrSliderCustomEvent<HTMLCrSliderElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLCrSliderElementEventMap>(type: K, listener: (this: HTMLCrSliderElement, ev: CrSliderCustomEvent<HTMLCrSliderElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLCrSliderElement: {
+        prototype: HTMLCrSliderElement;
+        new (): HTMLCrSliderElement;
+    };
+    /**
+     * Mini-graphique en ligne : l'allure d'une série de nombres, à glisser dans un texte, une carte ou un tableau.
+     * C'est une image nommée par son libellé et un résumé (dernière valeur, minimum, maximum, tendance).
+     * La ligne se trace au premier affichage ; quand les valeurs changent, elle glisse point par point vers les nouvelles.
+     */
+    interface HTMLCrSparklineElement extends Components.CrSparkline, HTMLStencilElement {
+    }
+    var HTMLCrSparklineElement: {
+        prototype: HTMLCrSparklineElement;
+        new (): HTMLCrSparklineElement;
+    };
     /**
      * Étape d'un cr-stepper. Son contenu n'est affiché que pendant l'étape.
      */
@@ -1484,6 +2247,36 @@ declare global {
     var HTMLCrStepperElement: {
         prototype: HTMLCrStepperElement;
         new (): HTMLCrStepperElement;
+    };
+    interface HTMLCrSwitchElementEventMap {
+        "crChange": boolean;
+    }
+    /**
+     * Interrupteur : active ou désactive un réglage, avec effet immédiat.
+     * La pastille s'étire en glissant, et sa croix se transforme en coche.
+     */
+    interface HTMLCrSwitchElement extends Components.CrSwitch, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLCrSwitchElementEventMap>(type: K, listener: (this: HTMLCrSwitchElement, ev: CrSwitchCustomEvent<HTMLCrSwitchElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLCrSwitchElementEventMap>(type: K, listener: (this: HTMLCrSwitchElement, ev: CrSwitchCustomEvent<HTMLCrSwitchElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLCrSwitchElement: {
+        prototype: HTMLCrSwitchElement;
+        new (): HTMLCrSwitchElement;
+    };
+    /**
+     * Contenu d'un onglet, enfant de cr-segmented (mode onglets). Seul le panneau de l'onglet choisi est affiché.
+     */
+    interface HTMLCrTabPanelElement extends Components.CrTabPanel, HTMLStencilElement {
+    }
+    var HTMLCrTabPanelElement: {
+        prototype: HTMLCrTabPanelElement;
+        new (): HTMLCrTabPanelElement;
     };
     interface HTMLCrTableElementEventMap {
         "crLayoutChange": TableLayout;
@@ -1545,16 +2338,44 @@ declare global {
         prototype: HTMLCrTextareaElement;
         new (): HTMLCrTextareaElement;
     };
+    /**
+     * Zone fixe en bas à droite de l'écran qui empile les cr-alert en notifications, la plus récente en bas.
+     */
+    interface HTMLCrToasterElement extends Components.CrToaster, HTMLStencilElement {
+    }
+    var HTMLCrToasterElement: {
+        prototype: HTMLCrToasterElement;
+        new (): HTMLCrToasterElement;
+    };
+    /**
+     * Infobulle : court texte d'aide affiché au survol et au focus clavier de l'élément qu'elle entoure.
+     * Le texte décrit aussi cet élément pour les lecteurs d'écran. Échap la masque ; on peut la survoler sans qu'elle disparaisse.
+     */
+    interface HTMLCrTooltipElement extends Components.CrTooltip, HTMLStencilElement {
+    }
+    var HTMLCrTooltipElement: {
+        prototype: HTMLCrTooltipElement;
+        new (): HTMLCrTooltipElement;
+    };
     interface HTMLElementTagNameMap {
         "cr-accordion": HTMLCrAccordionElement;
         "cr-accordion-item": HTMLCrAccordionItemElement;
+        "cr-alert": HTMLCrAlertElement;
+        "cr-avatar": HTMLCrAvatarElement;
+        "cr-avatar-group": HTMLCrAvatarGroupElement;
+        "cr-badge": HTMLCrBadgeElement;
         "cr-box": HTMLCrBoxElement;
+        "cr-breadcrumb": HTMLCrBreadcrumbElement;
         "cr-button": HTMLCrButtonElement;
         "cr-card": HTMLCrCardElement;
         "cr-card-input": HTMLCrCardInputElement;
         "cr-checkbox": HTMLCrCheckboxElement;
+        "cr-command-palette": HTMLCrCommandPaletteElement;
+        "cr-date-picker": HTMLCrDatePickerElement;
         "cr-dialog": HTMLCrDialogElement;
         "cr-drawer": HTMLCrDrawerElement;
+        "cr-empty-state": HTMLCrEmptyStateElement;
+        "cr-file-upload": HTMLCrFileUploadElement;
         "cr-grid-item": HTMLCrGridItemElement;
         "cr-grid-layout": HTMLCrGridLayoutElement;
         "cr-icon-button": HTMLCrIconButtonElement;
@@ -1563,17 +2384,27 @@ declare global {
         "cr-loader": HTMLCrLoaderElement;
         "cr-menu": HTMLCrMenuElement;
         "cr-otp": HTMLCrOtpElement;
+        "cr-pagination": HTMLCrPaginationElement;
+        "cr-popover": HTMLCrPopoverElement;
         "cr-progress": HTMLCrProgressElement;
         "cr-progress-steps": HTMLCrProgressStepsElement;
+        "cr-radio-group": HTMLCrRadioGroupElement;
+        "cr-rating": HTMLCrRatingElement;
         "cr-search": HTMLCrSearchElement;
         "cr-segmented": HTMLCrSegmentedElement;
         "cr-select": HTMLCrSelectElement;
         "cr-skeleton": HTMLCrSkeletonElement;
+        "cr-slider": HTMLCrSliderElement;
+        "cr-sparkline": HTMLCrSparklineElement;
         "cr-step": HTMLCrStepElement;
         "cr-stepper": HTMLCrStepperElement;
+        "cr-switch": HTMLCrSwitchElement;
+        "cr-tab-panel": HTMLCrTabPanelElement;
         "cr-table": HTMLCrTableElement;
         "cr-tag-input": HTMLCrTagInputElement;
         "cr-textarea": HTMLCrTextareaElement;
+        "cr-toaster": HTMLCrToasterElement;
+        "cr-tooltip": HTMLCrTooltipElement;
     }
 }
 declare namespace LocalJSX {
@@ -1636,6 +2467,96 @@ declare namespace LocalJSX {
           * @default false
          */
         "open"?: boolean;
+    }
+    /**
+     * Message d'information, de réussite, d'avertissement ou d'erreur, avec un titre facultatif ; son emplacement décide de son comportement.
+     * Dans la page, c'est un bandeau : inséré après le chargement, il se déplie ; avec dismissible, un bouton Fermer le replie.
+     * Dans un cr-toaster, c'est une notification : elle glisse depuis le coin et se ferme seule après duration, avec une barre du temps restant
+     * qui s'arrête sous la souris ou le focus ; on la ferme aussi avec le bouton Fermer, Échap ou en la faisant glisser sur le côté.
+     * Dans les deux cas, son icône se trace.
+     */
+    interface CrAlert {
+        /**
+          * Ajoute un bouton Fermer qui replie et masque le bandeau. Dans un cr-toaster, le bouton est toujours là.
+          * @default false
+         */
+        "dismissible"?: boolean;
+        /**
+          * Dans un cr-toaster : durée d'affichage en millisecondes avant la fermeture automatique ; 0 : le message reste jusqu'à ce qu'on le ferme. Sans effet dans la page.
+          * @default 5000
+         */
+        "duration"?: number;
+        /**
+          * Titre affiché en gras au-dessus du message.
+         */
+        "heading"?: string;
+        /**
+          * Émis à chaque fermeture : bouton Fermer, Échap, glissement, fin du temps ou open à false.
+         */
+        "onCrClose"?: (event: CrAlertCustomEvent<void>) => void;
+        /**
+          * Affiche le message ; à false, il se ferme (replié dans la page, glissé hors du coin dans un cr-toaster). Chaque fermeture le remet à false.
+          * @default true
+         */
+        "open"?: boolean;
+        /**
+          * Type de message : info, success (réussite), warning (avertissement) ou danger (erreur, lue aussitôt par les lecteurs d'écran).
+          * @default 'info'
+         */
+        "variant"?: 'info' | 'success' | 'warning' | 'danger';
+    }
+    /**
+     * Avatar d'une personne : sa photo, ou à défaut ses initiales sur une couleur tirée de son nom.
+     * Le nom (et le statut éventuel) est lu par les lecteurs d'écran ; la pastille de statut change de forme selon le statut.
+     */
+    interface CrAvatar {
+        /**
+          * Nom de la personne (obligatoire) : nom lu par les lecteurs d'écran, et initiales quand il n'y a pas de photo.
+         */
+        "name": string;
+        /**
+          * Taille : s 30px, m 40px, l 48px.
+          * @default 'm'
+         */
+        "size"?: 's' | 'm' | 'l';
+        /**
+          * Adresse de la photo ; les initiales la remplacent si elle ne se charge pas.
+         */
+        "src"?: string;
+        /**
+          * Disponibilité, ajoutée au nom lu (« Marie Dupont, en ligne ») et montrée par une pastille de forme différente pour chaque statut.
+         */
+        "status"?: AvatarStatus;
+    }
+    /**
+     * Groupe d'avatars qui se chevauchent, et s'écartent au survol ou quand le focus est dedans.
+     * Au-delà de max, les avatars restants sont résumés par une pastille « +N », nommée « N autres personnes ».
+     */
+    interface CrAvatarGroup {
+        /**
+          * Nombre maximal d'avatars affichés ; les autres sont résumés par « +N ». Tous par défaut.
+         */
+        "max"?: number;
+    }
+    /**
+     * Pastille : court statut ou compteur (« Payée », « Non lus 3 »). Le texte porte le sens, la couleur ne fait que l'appuyer.
+     * Quand count change, le nombre défile jusqu'à sa nouvelle valeur, comme un compteur kilométrique.
+     */
+    interface CrBadge {
+        /**
+          * Nombre affiché après le texte ; il défile jusqu'à chaque nouvelle valeur.
+         */
+        "count"?: number;
+        /**
+          * Annonce poliment chaque changement aux lecteurs d'écran (zone role="status") ; désactivé par défaut.
+          * @default false
+         */
+        "live"?: boolean;
+        /**
+          * Couleur : neutral (gris), primary, success, danger.
+          * @default 'neutral'
+         */
+        "variant"?: BadgeVariant;
     }
     /**
      * Remplaçant de div pour la mise en page : espacements, flex et grille avec les valeurs du thème.
@@ -1701,6 +2622,18 @@ declare namespace LocalJSX {
         "wrap"?: boolean;
     }
     /**
+     * Fil d'Ariane : le chemin jusqu'à la page courante. Les niveaux sont les enfants, écrits tels quels :
+     * des liens a href (Ctrl/Cmd+clic restent natifs), puis la page courante en dernier (un span), marquée aria-current="page".
+     * Au-delà de max niveaux, ceux du milieu se replient derrière un bouton « … » ; ils glissent hors de lui quand on le déplie.
+     */
+    interface CrBreadcrumb {
+        /**
+          * Nombre de niveaux au-delà duquel ceux du milieu se replient (le premier et les max - 2 derniers restent visibles).
+          * @default 4
+         */
+        "max"?: number;
+    }
+    /**
      * Bouton d'action.
      */
     interface CrButton {
@@ -1719,6 +2652,10 @@ declare namespace LocalJSX {
          */
         "fullWidth"?: boolean;
         /**
+          * Adresse : le bouton devient un vrai lien (Ctrl+clic, clic molette et « Ouvrir dans un nouvel onglet » natifs).
+         */
+        "href"?: string;
+        /**
           * Affiche l'indicateur de chargement et bloque les clics.
           * @default false
          */
@@ -1733,7 +2670,11 @@ declare namespace LocalJSX {
          */
         "size"?: ButtonSize;
         /**
-          * Comportement dans un formulaire.
+          * Où ouvrir le lien (avec href), par exemple _blank ; rel="noopener noreferrer" est ajouté pour _blank.
+         */
+        "target"?: string;
+        /**
+          * Comportement dans un formulaire (sans effet avec href).
           * @default 'button'
          */
         "type"?: ButtonType;
@@ -1858,6 +2799,86 @@ declare namespace LocalJSX {
         "value"?: string;
     }
     /**
+     * Palette de commandes : une fenêtre modale avec un champ qui filtre une liste de commandes (motif combobox).
+     * Les commandes sont des éléments option enfants ; data-group les range sous un titre de groupe.
+     * Ctrl+K (⌘K sur Mac) l'ouvre de n'importe où dans la page. Haut et Bas parcourent les commandes, Entrée choisit, Échap ferme.
+     * La fenêtre tombe en place avec un ressort, et le surlignage de la commande active glisse d'une ligne à l'autre.
+     */
+    interface CrCommandPalette {
+        /**
+          * Nom de la fenêtre et du champ pour les lecteurs d'écran (« Palette de commandes »).
+         */
+        "label": string;
+        /**
+          * Émis à chaque fermeture : Échap, choix d'une commande, clic hors de la fenêtre ou open à false.
+         */
+        "onCrClose"?: (event: CrCommandPaletteCustomEvent<void>) => void;
+        /**
+          * Émis au choix d'une commande, juste avant la fermeture ; detail : sa valeur.
+         */
+        "onCrSelect"?: (event: CrCommandPaletteCustomEvent<string>) => void;
+        /**
+          * Ouvre ou ferme la palette.
+          * @default false
+         */
+        "open"?: boolean;
+        /**
+          * Texte indicatif du champ (« Rechercher… » par défaut).
+         */
+        "placeholder"?: string;
+        /**
+          * Ouvre la palette avec Ctrl+K (⌘K sur Mac), où que soit le focus dans la page.
+          * @default true
+         */
+        "shortcut"?: boolean;
+    }
+    /**
+     * Champ de date : saisie au clavier dans le format de la langue (JJ/MM/AAAA en français, MM/DD/YYYY en anglais),
+     * ou choix dans un calendrier ouvert par le bouton voisin. Le calendrier suit le motif Date Picker Dialog de l'APG ;
+     * les mois glissent du côté de la navigation et le jour choisi s'affiche avec un petit rebond.
+     */
+    interface CrDatePicker {
+        /**
+          * Désactive le champ et le calendrier.
+          * @default false
+         */
+        "disabled"?: boolean;
+        /**
+          * The `id` of a `<form>` element to associate this element with.
+         */
+        "form"?: string;
+        /**
+          * Libellé affiché au-dessus du champ (obligatoire).
+         */
+        "label": string;
+        /**
+          * Dernière date possible, au format ISO AAAA-MM-JJ.
+         */
+        "max"?: string;
+        /**
+          * Première date possible, au format ISO AAAA-MM-JJ.
+         */
+        "min"?: string;
+        /**
+          * Nom envoyé avec le formulaire.
+         */
+        "name"?: string;
+        /**
+          * Émis quand la date change (choix dans le calendrier, ou champ quitté après saisie) ; detail : la date ISO, ou une chaîne vide.
+         */
+        "onCrChange"?: (event: CrDatePickerCustomEvent<string>) => void;
+        /**
+          * Rend la date obligatoire.
+          * @default false
+         */
+        "required"?: boolean;
+        /**
+          * Date choisie, au format ISO AAAA-MM-JJ ; chaîne vide sans date.
+          * @default ''
+         */
+        "value"?: string;
+    }
+    /**
      * Fenêtre modale, basée sur l'élément dialog natif.
      */
     interface CrDialog {
@@ -1905,6 +2926,61 @@ declare namespace LocalJSX {
           * @default 'end'
          */
         "placement"?: 'start' | 'end';
+    }
+    /**
+     * État vide : ce qui s'affiche quand une liste, une recherche ou une page n'a rien à montrer, avec de quoi en sortir.
+     * L'illustration flotte doucement trois fois, puis s'arrête.
+     */
+    interface CrEmptyState {
+        /**
+          * Titre court, en gras : ce qui manque (« Aucune commande »).
+         */
+        "heading": string;
+        /**
+          * Illustration décorative : none (aucune), search (loupe, aucun résultat), inbox (boîte vide) ou error (erreur).
+          * @default 'none'
+         */
+        "illustration"?: 'none' | 'search' | 'inbox' | 'error';
+    }
+    /**
+     * Dépôt de fichiers : une zone où glisser des fichiers, qui est aussi un vrai sélecteur de fichiers natif, atteignable au clavier.
+     * Les fichiers choisis s'affichent en liste, avec leur taille et un bouton Retirer. La zone respire quand on y glisse des fichiers.
+     */
+    interface CrFileUpload {
+        /**
+          * Types acceptés, comme l'attribut accept natif (« .pdf,image/* ») ; appliqué aussi aux fichiers déposés.
+         */
+        "accept"?: string;
+        /**
+          * Désactive le champ.
+          * @default false
+         */
+        "disabled"?: boolean;
+        /**
+          * The `id` of a `<form>` element to associate this element with.
+         */
+        "form"?: string;
+        /**
+          * Texte d'aide (formats, taille), lu par les lecteurs d'écran.
+         */
+        "hint"?: string;
+        /**
+          * Libellé affiché au-dessus de la zone (obligatoire).
+         */
+        "label": string;
+        /**
+          * Plusieurs fichiers ; sinon un nouveau fichier remplace le précédent.
+          * @default false
+         */
+        "multiple"?: boolean;
+        /**
+          * Nom envoyé avec le formulaire, une fois par fichier.
+         */
+        "name"?: string;
+        /**
+          * Émis quand la liste des fichiers change ; detail : les fichiers.
+         */
+        "onCrChange"?: (event: CrFileUploadCustomEvent<File[]>) => void;
     }
     /**
      * Élément d'un cr-grid-layout. Se déplace par sa poignée et se redimensionne par son coin.
@@ -2028,6 +3104,10 @@ declare namespace LocalJSX {
          */
         "form"?: string;
         /**
+          * Adresse : le bouton devient un vrai lien (Ctrl+clic, clic molette et « Ouvrir dans un nouvel onglet » natifs).
+         */
+        "href"?: string;
+        /**
           * Nom du bouton, lu par les lecteurs d'écran et affiché dans l'infobulle (obligatoire).
          */
         "label": string;
@@ -2060,6 +3140,10 @@ declare namespace LocalJSX {
          */
         "size"?: ButtonSize1;
         /**
+          * Où ouvrir le lien (avec href), par exemple _blank ; rel="noopener noreferrer" est ajouté pour _blank.
+         */
+        "target"?: string;
+        /**
           * Bouton bascule (favori, muet…) : chaque clic inverse pressed, annoncé enfoncé ou non.
           * @default false
          */
@@ -2075,7 +3159,7 @@ declare namespace LocalJSX {
          */
         "tooltipPlacement"?: TooltipPlacement;
         /**
-          * Comportement dans un formulaire.
+          * Comportement dans un formulaire (sans effet avec href).
           * @default 'button'
          */
         "type"?: ButtonType1;
@@ -2264,6 +3348,55 @@ declare namespace LocalJSX {
         "value"?: string;
     }
     /**
+     * Pagination : page précédente, numéros de pages (avec « … » quand il y en a beaucoup) et page suivante.
+     * Avec href, chaque numéro est un vrai lien : Ctrl/Cmd+clic, clic molette et « Ouvrir dans un nouvel onglet » restent natifs.
+     * Sans href, ce sont des boutons et crChange donne la page choisie. La pastille de la page courante glisse jusqu'au nouveau numéro.
+     */
+    interface CrPagination {
+        /**
+          * Adresse des pages, où {page} est remplacé par le numéro (« /produits?page={page} ») : les pages deviennent des liens.
+         */
+        "href"?: string;
+        /**
+          * Émis au choix d'une page, sans href ; detail : le numéro de la page.
+         */
+        "onCrChange"?: (event: CrPaginationCustomEvent<number>) => void;
+        /**
+          * Page courante, à partir de 1.
+          * @default 1
+         */
+        "page"?: number;
+        /**
+          * Nombre de pages.
+          * @default 1
+         */
+        "total"?: number;
+    }
+    /**
+     * Fenêtre contextuelle : petit panneau non modal ouvert par un bouton, pour du contenu interactif (formulaire court, réglages…).
+     * Le focus entre dans le panneau à l'ouverture et revient au bouton à la fermeture (Échap, clic à l'extérieur, bouton).
+     */
+    interface CrPopover {
+        /**
+          * Désactive le bouton.
+          * @default false
+         */
+        "disabled"?: boolean;
+        /**
+          * Libellé du bouton, qui nomme aussi le panneau pour les lecteurs d'écran (obligatoire).
+         */
+        "label": string;
+        /**
+          * Émis quand l'utilisateur ouvre ou ferme le panneau ; detail : l'état ouvert.
+         */
+        "onCrToggle"?: (event: CrPopoverCustomEvent<boolean>) => void;
+        /**
+          * Panneau ouvert ; à remettre à false pour le fermer après une action (« Appliquer »).
+          * @default false
+         */
+        "open"?: boolean;
+    }
+    /**
      * Barre de progression. Avec value, elle se remplit jusqu'à la valeur ; sans, un segment glisse en boucle (durée inconnue).
      */
     interface CrProgress {
@@ -2301,6 +3434,86 @@ declare namespace LocalJSX {
           * @default []
          */
         "steps"?: string[];
+    }
+    /**
+     * Choix d'une seule option dans une liste de boutons radio empilés, sous un titre visible.
+     * Les options sont des éléments option enfants. Le point du bouton choisi coule jusqu'au nouveau choix.
+     */
+    interface CrRadioGroup {
+        /**
+          * Désactive le groupe.
+          * @default false
+         */
+        "disabled"?: boolean;
+        /**
+          * The `id` of a `<form>` element to associate this element with.
+         */
+        "form"?: string;
+        /**
+          * Titre affiché au-dessus des options, et nom du groupe pour les lecteurs d'écran.
+         */
+        "label": string;
+        /**
+          * Nom envoyé avec le formulaire.
+         */
+        "name"?: string;
+        /**
+          * Émis quand l'option choisie change ; detail : sa valeur.
+         */
+        "onCrChange"?: (event: CrRadioGroupCustomEvent<string>) => void;
+        /**
+          * Rend le choix obligatoire.
+          * @default false
+         */
+        "required"?: boolean;
+        /**
+          * Valeur de l'option choisie ; aucune par défaut.
+          * @default ''
+         */
+        "value"?: string;
+    }
+    /**
+     * Notation par étoiles : un groupe de boutons radio, une étoile par note possible, sous un titre visible.
+     * Les étoiles se remplissent en vague jusqu'à la note choisie, qui rebondit ; le survol prévisualise la note.
+     * En lecture seule, les étoiles forment une image nommée par la note (« Note : 4 sur 5 »).
+     */
+    interface CrRating {
+        /**
+          * Désactive la notation.
+          * @default false
+         */
+        "disabled"?: boolean;
+        /**
+          * The `id` of a `<form>` element to associate this element with.
+         */
+        "form"?: string;
+        /**
+          * Titre affiché au-dessus des étoiles, et nom du groupe pour les lecteurs d'écran (obligatoire).
+         */
+        "label": string;
+        /**
+          * Nombre d'étoiles, donc note maximale.
+          * @default 5
+         */
+        "max"?: number;
+        /**
+          * Nom envoyé avec le formulaire.
+         */
+        "name"?: string;
+        /**
+          * Émis quand l'utilisateur change la note ; detail : la nouvelle note.
+         */
+        "onCrChange"?: (event: CrRatingCustomEvent<number>) => void;
+        /**
+          * Affiche la note sans permettre de la changer.
+          * @default false
+         */
+        "readonly"?: boolean;
+        /**
+          * Note choisie, de 0 (aucune) à max ; arrondie à l'entier.
+          * @default 0
+         */
+        "value"?: number;
     }
     /**
      * Champ de recherche. En entrant dans le champ, la loupe devient une flèche qui efface la recherche.
@@ -2363,6 +3576,8 @@ declare namespace LocalJSX {
     /**
      * Choix d'une option parmi quelques-unes, côte à côte (Jour, Semaine, Mois…). Les options sont des éléments option enfants ;
      * data-count sur une option ajoute un compteur, qui compte et rebondit quand on choisit l'option.
+     * Avec des enfants cr-tab-panel à la place, le contrôle devient des onglets : chaque panneau donne un onglet,
+     * seul le panneau choisi est affiché et il arrive du côté du changement.
      */
     interface CrSegmented {
         /**
@@ -2380,19 +3595,19 @@ declare namespace LocalJSX {
          */
         "form"?: string;
         /**
-          * Nom lu par les lecteurs d'écran (le contrôle n'a pas de libellé visible).
+          * Nom lu par les lecteurs d'écran (le contrôle, ou la barre d'onglets, n'a pas de libellé visible).
          */
         "label": string;
         /**
-          * Nom envoyé avec le formulaire.
+          * Nom envoyé avec le formulaire ; sans effet en mode onglets.
          */
         "name"?: string;
         /**
-          * Émis quand l'option choisie change ; detail : sa valeur.
+          * Émis quand l'option (ou l'onglet) choisie change ; detail : sa valeur.
          */
         "onCrChange"?: (event: CrSegmentedCustomEvent<string>) => void;
         /**
-          * Valeur de l'option choisie ; la première option disponible par défaut.
+          * Valeur de l'option choisie ; la première option disponible par défaut. En mode onglets : value du cr-tab-panel choisi, ou à défaut sa position en texte ("0", "1"…).
           * @default ''
          */
         "value"?: string;
@@ -2504,6 +3719,78 @@ declare namespace LocalJSX {
         "width"?: string;
     }
     /**
+     * Curseur : choix d'une valeur numérique dans un intervalle, à la souris, au doigt ou au clavier (flèches, Page précédente/suivante, Début, Fin).
+     * Une bulle suit la pastille en affichant la valeur et grossit pendant le glissement ou au focus ; la partie remplie du rail suit la valeur.
+     */
+    interface CrSlider {
+        /**
+          * Désactive le curseur.
+          * @default false
+         */
+        "disabled"?: boolean;
+        /**
+          * The `id` of a `<form>` element to associate this element with.
+         */
+        "form"?: string;
+        /**
+          * Libellé affiché au-dessus du curseur (obligatoire).
+         */
+        "label": string;
+        /**
+          * Valeur maximale.
+          * @default 100
+         */
+        "max"?: number;
+        /**
+          * Valeur minimale.
+          * @default 0
+         */
+        "min"?: number;
+        /**
+          * Nom envoyé avec le formulaire.
+         */
+        "name"?: string;
+        /**
+          * Émis quand l'utilisateur relâche la pastille ou change la valeur au clavier ; detail : la valeur.
+         */
+        "onCrChange"?: (event: CrSliderCustomEvent<number>) => void;
+        /**
+          * Émis pendant le glissement, à chaque nouvelle valeur ; detail : la valeur.
+         */
+        "onCrInput"?: (event: CrSliderCustomEvent<number>) => void;
+        /**
+          * Écart entre deux valeurs possibles.
+          * @default 1
+         */
+        "step"?: number;
+        /**
+          * Valeur choisie, ramenée entre min et max.
+          * @default 0
+         */
+        "value"?: number;
+    }
+    /**
+     * Mini-graphique en ligne : l'allure d'une série de nombres, à glisser dans un texte, une carte ou un tableau.
+     * C'est une image nommée par son libellé et un résumé (dernière valeur, minimum, maximum, tendance).
+     * La ligne se trace au premier affichage ; quand les valeurs changent, elle glisse point par point vers les nouvelles.
+     */
+    interface CrSparkline {
+        /**
+          * Ce que mesurent les valeurs (« Ventes de la semaine ») ; début du nom lu par les lecteurs d'écran (obligatoire).
+         */
+        "label": string;
+        /**
+          * Les valeurs, dans l'ordre (en JavaScript ou en React : un tableau de nombres).
+          * @default []
+         */
+        "values"?: number[];
+        /**
+          * Style : line (ligne seule) ou area (ligne et surface teintée dessous).
+          * @default 'line'
+         */
+        "variant"?: 'line' | 'area';
+    }
+    /**
      * Étape d'un cr-stepper. Son contenu n'est affiché que pendant l'étape.
      */
     interface CrStep {
@@ -2543,6 +3830,56 @@ declare namespace LocalJSX {
           * @default 'line'
          */
         "variant"?: StepperVariant;
+    }
+    /**
+     * Interrupteur : active ou désactive un réglage, avec effet immédiat.
+     * La pastille s'étire en glissant, et sa croix se transforme en coche.
+     */
+    interface CrSwitch {
+        /**
+          * État activé.
+          * @default false
+         */
+        "checked"?: boolean;
+        /**
+          * Désactive l'interrupteur.
+          * @default false
+         */
+        "disabled"?: boolean;
+        /**
+          * The `id` of a `<form>` element to associate this element with.
+         */
+        "form"?: string;
+        /**
+          * Libellé affiché à côté de l'interrupteur.
+         */
+        "label": string;
+        /**
+          * Nom envoyé avec le formulaire.
+         */
+        "name"?: string;
+        /**
+          * Émis quand l'interrupteur change ; detail : l'état activé.
+         */
+        "onCrChange"?: (event: CrSwitchCustomEvent<boolean>) => void;
+        /**
+          * Valeur envoyée quand l'interrupteur est activé.
+          * @default 'on'
+         */
+        "value"?: string;
+    }
+    /**
+     * Contenu d'un onglet, enfant de cr-segmented (mode onglets). Seul le panneau de l'onglet choisi est affiché.
+     */
+    interface CrTabPanel {
+        /**
+          * Libellé de l'onglet.
+         */
+        "label": string;
+        /**
+          * Valeur de l'onglet, reprise par value et crChange de cr-segmented ; sa position en texte ("0", "1"…) par défaut.
+         */
+        "value"?: string;
     }
     /**
      * Tableau dont chaque utilisateur règle les colonnes : largeur, ordre, colonnes fixées et masquées, densité des lignes.
@@ -2687,6 +4024,26 @@ declare namespace LocalJSX {
          */
         "value"?: string;
     }
+    /**
+     * Zone fixe en bas à droite de l'écran qui empile les cr-alert en notifications, la plus récente en bas.
+     */
+    interface CrToaster {
+    }
+    /**
+     * Infobulle : court texte d'aide affiché au survol et au focus clavier de l'élément qu'elle entoure.
+     * Le texte décrit aussi cet élément pour les lecteurs d'écran. Échap la masque ; on peut la survoler sans qu'elle disparaisse.
+     */
+    interface CrTooltip {
+        /**
+          * Côté où s'ouvre l'infobulle.
+          * @default 'top'
+         */
+        "placement"?: TooltipPlacement1;
+        /**
+          * Texte de l'infobulle, court et sans lien ni bouton (obligatoire).
+         */
+        "text": string;
+    }
 
     interface CrAccordionAttributes {
         "multiple": boolean;
@@ -2700,6 +4057,27 @@ declare namespace LocalJSX {
         "label": string;
         "open": boolean;
         "disabled": boolean;
+    }
+    interface CrAlertAttributes {
+        "variant": 'info' | 'success' | 'warning' | 'danger';
+        "heading": string;
+        "dismissible": boolean;
+        "open": boolean;
+        "duration": number;
+    }
+    interface CrAvatarAttributes {
+        "name": string;
+        "src": string;
+        "size": 's' | 'm' | 'l';
+        "status": AvatarStatus;
+    }
+    interface CrAvatarGroupAttributes {
+        "max": number;
+    }
+    interface CrBadgeAttributes {
+        "variant": BadgeVariant;
+        "count": number;
+        "live": boolean;
     }
     interface CrBoxAttributes {
         "display": BoxDisplay;
@@ -2716,10 +4094,15 @@ declare namespace LocalJSX {
         "shadow": boolean;
         "maxWidth": string;
     }
+    interface CrBreadcrumbAttributes {
+        "max": number;
+    }
     interface CrButtonAttributes {
         "variant": ButtonVariant;
         "size": ButtonSize;
         "type": ButtonType;
+        "href": string;
+        "target": string;
         "disabled": boolean;
         "loading": boolean;
         "fullWidth": boolean;
@@ -2746,6 +4129,21 @@ declare namespace LocalJSX {
         "required": boolean;
         "disabled": boolean;
     }
+    interface CrCommandPaletteAttributes {
+        "open": boolean;
+        "label": string;
+        "placeholder": string;
+        "shortcut": boolean;
+    }
+    interface CrDatePickerAttributes {
+        "label": string;
+        "name": string;
+        "value": string;
+        "min": string;
+        "max": string;
+        "required": boolean;
+        "disabled": boolean;
+    }
     interface CrDialogAttributes {
         "open": boolean;
         "label": string;
@@ -2756,6 +4154,18 @@ declare namespace LocalJSX {
         "label": string;
         "closeLabel": string;
         "placement": 'start' | 'end';
+    }
+    interface CrEmptyStateAttributes {
+        "heading": string;
+        "illustration": 'none' | 'search' | 'inbox' | 'error';
+    }
+    interface CrFileUploadAttributes {
+        "label": string;
+        "hint": string;
+        "name": string;
+        "accept": string;
+        "multiple": boolean;
+        "disabled": boolean;
     }
     interface CrGridItemAttributes {
         "label": string;
@@ -2784,6 +4194,8 @@ declare namespace LocalJSX {
         "size": ButtonSize;
         "shape": 'square' | 'round';
         "type": ButtonType;
+        "href": string;
+        "target": string;
         "disabled": boolean;
         "loading": boolean;
         "toggle": boolean;
@@ -2829,6 +4241,16 @@ declare namespace LocalJSX {
         "required": boolean;
         "disabled": boolean;
     }
+    interface CrPaginationAttributes {
+        "page": number;
+        "total": number;
+        "href": string;
+    }
+    interface CrPopoverAttributes {
+        "label": string;
+        "open": boolean;
+        "disabled": boolean;
+    }
     interface CrProgressAttributes {
         "value": number;
         "label": string;
@@ -2837,6 +4259,21 @@ declare namespace LocalJSX {
     interface CrProgressStepsAttributes {
         "current": number;
         "label": string;
+    }
+    interface CrRadioGroupAttributes {
+        "label": string;
+        "name": string;
+        "value": string;
+        "required": boolean;
+        "disabled": boolean;
+    }
+    interface CrRatingAttributes {
+        "label": string;
+        "name": string;
+        "value": number;
+        "max": number;
+        "disabled": boolean;
+        "readonly": boolean;
     }
     interface CrSearchAttributes {
         "label": string;
@@ -2875,6 +4312,19 @@ declare namespace LocalJSX {
         "width": string;
         "height": string;
     }
+    interface CrSliderAttributes {
+        "label": string;
+        "name": string;
+        "min": number;
+        "max": number;
+        "step": number;
+        "value": number;
+        "disabled": boolean;
+    }
+    interface CrSparklineAttributes {
+        "label": string;
+        "variant": 'line' | 'area';
+    }
     interface CrStepAttributes {
         "label": string;
     }
@@ -2883,6 +4333,17 @@ declare namespace LocalJSX {
         "variant": StepperVariant;
         "navigation": boolean;
         "label": string;
+    }
+    interface CrSwitchAttributes {
+        "label": string;
+        "name": string;
+        "value": string;
+        "checked": boolean;
+        "disabled": boolean;
+    }
+    interface CrTabPanelAttributes {
+        "label": string;
+        "value": string;
     }
     interface CrTableAttributes {
         "label": string;
@@ -2911,17 +4372,30 @@ declare namespace LocalJSX {
         "required": boolean;
         "disabled": boolean;
     }
+    interface CrTooltipAttributes {
+        "text": string;
+        "placement": TooltipPlacement;
+    }
 
     interface IntrinsicElements {
         "cr-accordion": Omit<CrAccordion, keyof CrAccordionAttributes> & { [K in keyof CrAccordion & keyof CrAccordionAttributes]?: CrAccordion[K] } & { [K in keyof CrAccordion & keyof CrAccordionAttributes as `attr:${K}`]?: CrAccordionAttributes[K] } & { [K in keyof CrAccordion & keyof CrAccordionAttributes as `prop:${K}`]?: CrAccordion[K] };
         "cr-accordion-item": Omit<CrAccordionItem, keyof CrAccordionItemAttributes> & { [K in keyof CrAccordionItem & keyof CrAccordionItemAttributes]?: CrAccordionItem[K] } & { [K in keyof CrAccordionItem & keyof CrAccordionItemAttributes as `attr:${K}`]?: CrAccordionItemAttributes[K] } & { [K in keyof CrAccordionItem & keyof CrAccordionItemAttributes as `prop:${K}`]?: CrAccordionItem[K] } & OneOf<"label", CrAccordionItem["label"], CrAccordionItemAttributes["label"]>;
+        "cr-alert": Omit<CrAlert, keyof CrAlertAttributes> & { [K in keyof CrAlert & keyof CrAlertAttributes]?: CrAlert[K] } & { [K in keyof CrAlert & keyof CrAlertAttributes as `attr:${K}`]?: CrAlertAttributes[K] } & { [K in keyof CrAlert & keyof CrAlertAttributes as `prop:${K}`]?: CrAlert[K] };
+        "cr-avatar": Omit<CrAvatar, keyof CrAvatarAttributes> & { [K in keyof CrAvatar & keyof CrAvatarAttributes]?: CrAvatar[K] } & { [K in keyof CrAvatar & keyof CrAvatarAttributes as `attr:${K}`]?: CrAvatarAttributes[K] } & { [K in keyof CrAvatar & keyof CrAvatarAttributes as `prop:${K}`]?: CrAvatar[K] } & OneOf<"name", CrAvatar["name"], CrAvatarAttributes["name"]>;
+        "cr-avatar-group": Omit<CrAvatarGroup, keyof CrAvatarGroupAttributes> & { [K in keyof CrAvatarGroup & keyof CrAvatarGroupAttributes]?: CrAvatarGroup[K] } & { [K in keyof CrAvatarGroup & keyof CrAvatarGroupAttributes as `attr:${K}`]?: CrAvatarGroupAttributes[K] } & { [K in keyof CrAvatarGroup & keyof CrAvatarGroupAttributes as `prop:${K}`]?: CrAvatarGroup[K] };
+        "cr-badge": Omit<CrBadge, keyof CrBadgeAttributes> & { [K in keyof CrBadge & keyof CrBadgeAttributes]?: CrBadge[K] } & { [K in keyof CrBadge & keyof CrBadgeAttributes as `attr:${K}`]?: CrBadgeAttributes[K] } & { [K in keyof CrBadge & keyof CrBadgeAttributes as `prop:${K}`]?: CrBadge[K] };
         "cr-box": Omit<CrBox, keyof CrBoxAttributes> & { [K in keyof CrBox & keyof CrBoxAttributes]?: CrBox[K] } & { [K in keyof CrBox & keyof CrBoxAttributes as `attr:${K}`]?: CrBoxAttributes[K] } & { [K in keyof CrBox & keyof CrBoxAttributes as `prop:${K}`]?: CrBox[K] };
+        "cr-breadcrumb": Omit<CrBreadcrumb, keyof CrBreadcrumbAttributes> & { [K in keyof CrBreadcrumb & keyof CrBreadcrumbAttributes]?: CrBreadcrumb[K] } & { [K in keyof CrBreadcrumb & keyof CrBreadcrumbAttributes as `attr:${K}`]?: CrBreadcrumbAttributes[K] } & { [K in keyof CrBreadcrumb & keyof CrBreadcrumbAttributes as `prop:${K}`]?: CrBreadcrumb[K] };
         "cr-button": Omit<CrButton, keyof CrButtonAttributes> & { [K in keyof CrButton & keyof CrButtonAttributes]?: CrButton[K] } & { [K in keyof CrButton & keyof CrButtonAttributes as `attr:${K}`]?: CrButtonAttributes[K] } & { [K in keyof CrButton & keyof CrButtonAttributes as `prop:${K}`]?: CrButton[K] };
         "cr-card": CrCard;
         "cr-card-input": Omit<CrCardInput, keyof CrCardInputAttributes> & { [K in keyof CrCardInput & keyof CrCardInputAttributes]?: CrCardInput[K] } & { [K in keyof CrCardInput & keyof CrCardInputAttributes as `attr:${K}`]?: CrCardInputAttributes[K] } & { [K in keyof CrCardInput & keyof CrCardInputAttributes as `prop:${K}`]?: CrCardInput[K] } & OneOf<"label", CrCardInput["label"], CrCardInputAttributes["label"]>;
         "cr-checkbox": Omit<CrCheckbox, keyof CrCheckboxAttributes> & { [K in keyof CrCheckbox & keyof CrCheckboxAttributes]?: CrCheckbox[K] } & { [K in keyof CrCheckbox & keyof CrCheckboxAttributes as `attr:${K}`]?: CrCheckboxAttributes[K] } & { [K in keyof CrCheckbox & keyof CrCheckboxAttributes as `prop:${K}`]?: CrCheckbox[K] } & OneOf<"label", CrCheckbox["label"], CrCheckboxAttributes["label"]>;
+        "cr-command-palette": Omit<CrCommandPalette, keyof CrCommandPaletteAttributes> & { [K in keyof CrCommandPalette & keyof CrCommandPaletteAttributes]?: CrCommandPalette[K] } & { [K in keyof CrCommandPalette & keyof CrCommandPaletteAttributes as `attr:${K}`]?: CrCommandPaletteAttributes[K] } & { [K in keyof CrCommandPalette & keyof CrCommandPaletteAttributes as `prop:${K}`]?: CrCommandPalette[K] } & OneOf<"label", CrCommandPalette["label"], CrCommandPaletteAttributes["label"]>;
+        "cr-date-picker": Omit<CrDatePicker, keyof CrDatePickerAttributes> & { [K in keyof CrDatePicker & keyof CrDatePickerAttributes]?: CrDatePicker[K] } & { [K in keyof CrDatePicker & keyof CrDatePickerAttributes as `attr:${K}`]?: CrDatePickerAttributes[K] } & { [K in keyof CrDatePicker & keyof CrDatePickerAttributes as `prop:${K}`]?: CrDatePicker[K] } & OneOf<"label", CrDatePicker["label"], CrDatePickerAttributes["label"]>;
         "cr-dialog": Omit<CrDialog, keyof CrDialogAttributes> & { [K in keyof CrDialog & keyof CrDialogAttributes]?: CrDialog[K] } & { [K in keyof CrDialog & keyof CrDialogAttributes as `attr:${K}`]?: CrDialogAttributes[K] } & { [K in keyof CrDialog & keyof CrDialogAttributes as `prop:${K}`]?: CrDialog[K] } & OneOf<"label", CrDialog["label"], CrDialogAttributes["label"]>;
         "cr-drawer": Omit<CrDrawer, keyof CrDrawerAttributes> & { [K in keyof CrDrawer & keyof CrDrawerAttributes]?: CrDrawer[K] } & { [K in keyof CrDrawer & keyof CrDrawerAttributes as `attr:${K}`]?: CrDrawerAttributes[K] } & { [K in keyof CrDrawer & keyof CrDrawerAttributes as `prop:${K}`]?: CrDrawer[K] } & OneOf<"label", CrDrawer["label"], CrDrawerAttributes["label"]>;
+        "cr-empty-state": Omit<CrEmptyState, keyof CrEmptyStateAttributes> & { [K in keyof CrEmptyState & keyof CrEmptyStateAttributes]?: CrEmptyState[K] } & { [K in keyof CrEmptyState & keyof CrEmptyStateAttributes as `attr:${K}`]?: CrEmptyStateAttributes[K] } & { [K in keyof CrEmptyState & keyof CrEmptyStateAttributes as `prop:${K}`]?: CrEmptyState[K] } & OneOf<"heading", CrEmptyState["heading"], CrEmptyStateAttributes["heading"]>;
+        "cr-file-upload": Omit<CrFileUpload, keyof CrFileUploadAttributes> & { [K in keyof CrFileUpload & keyof CrFileUploadAttributes]?: CrFileUpload[K] } & { [K in keyof CrFileUpload & keyof CrFileUploadAttributes as `attr:${K}`]?: CrFileUploadAttributes[K] } & { [K in keyof CrFileUpload & keyof CrFileUploadAttributes as `prop:${K}`]?: CrFileUpload[K] } & OneOf<"label", CrFileUpload["label"], CrFileUploadAttributes["label"]>;
         "cr-grid-item": Omit<CrGridItem, keyof CrGridItemAttributes> & { [K in keyof CrGridItem & keyof CrGridItemAttributes]?: CrGridItem[K] } & { [K in keyof CrGridItem & keyof CrGridItemAttributes as `attr:${K}`]?: CrGridItemAttributes[K] } & { [K in keyof CrGridItem & keyof CrGridItemAttributes as `prop:${K}`]?: CrGridItem[K] } & OneOf<"label", CrGridItem["label"], CrGridItemAttributes["label"]>;
         "cr-grid-layout": Omit<CrGridLayout, keyof CrGridLayoutAttributes> & { [K in keyof CrGridLayout & keyof CrGridLayoutAttributes]?: CrGridLayout[K] } & { [K in keyof CrGridLayout & keyof CrGridLayoutAttributes as `attr:${K}`]?: CrGridLayoutAttributes[K] } & { [K in keyof CrGridLayout & keyof CrGridLayoutAttributes as `prop:${K}`]?: CrGridLayout[K] };
         "cr-icon-button": Omit<CrIconButton, keyof CrIconButtonAttributes> & { [K in keyof CrIconButton & keyof CrIconButtonAttributes]?: CrIconButton[K] } & { [K in keyof CrIconButton & keyof CrIconButtonAttributes as `attr:${K}`]?: CrIconButtonAttributes[K] } & { [K in keyof CrIconButton & keyof CrIconButtonAttributes as `prop:${K}`]?: CrIconButton[K] } & OneOf<"label", CrIconButton["label"], CrIconButtonAttributes["label"]>;
@@ -2930,17 +4404,27 @@ declare namespace LocalJSX {
         "cr-loader": Omit<CrLoader, keyof CrLoaderAttributes> & { [K in keyof CrLoader & keyof CrLoaderAttributes]?: CrLoader[K] } & { [K in keyof CrLoader & keyof CrLoaderAttributes as `attr:${K}`]?: CrLoaderAttributes[K] } & { [K in keyof CrLoader & keyof CrLoaderAttributes as `prop:${K}`]?: CrLoader[K] };
         "cr-menu": Omit<CrMenu, keyof CrMenuAttributes> & { [K in keyof CrMenu & keyof CrMenuAttributes]?: CrMenu[K] } & { [K in keyof CrMenu & keyof CrMenuAttributes as `attr:${K}`]?: CrMenuAttributes[K] } & { [K in keyof CrMenu & keyof CrMenuAttributes as `prop:${K}`]?: CrMenu[K] } & OneOf<"label", CrMenu["label"], CrMenuAttributes["label"]>;
         "cr-otp": Omit<CrOtp, keyof CrOtpAttributes> & { [K in keyof CrOtp & keyof CrOtpAttributes]?: CrOtp[K] } & { [K in keyof CrOtp & keyof CrOtpAttributes as `attr:${K}`]?: CrOtpAttributes[K] } & { [K in keyof CrOtp & keyof CrOtpAttributes as `prop:${K}`]?: CrOtp[K] } & OneOf<"label", CrOtp["label"], CrOtpAttributes["label"]>;
+        "cr-pagination": Omit<CrPagination, keyof CrPaginationAttributes> & { [K in keyof CrPagination & keyof CrPaginationAttributes]?: CrPagination[K] } & { [K in keyof CrPagination & keyof CrPaginationAttributes as `attr:${K}`]?: CrPaginationAttributes[K] } & { [K in keyof CrPagination & keyof CrPaginationAttributes as `prop:${K}`]?: CrPagination[K] };
+        "cr-popover": Omit<CrPopover, keyof CrPopoverAttributes> & { [K in keyof CrPopover & keyof CrPopoverAttributes]?: CrPopover[K] } & { [K in keyof CrPopover & keyof CrPopoverAttributes as `attr:${K}`]?: CrPopoverAttributes[K] } & { [K in keyof CrPopover & keyof CrPopoverAttributes as `prop:${K}`]?: CrPopover[K] } & OneOf<"label", CrPopover["label"], CrPopoverAttributes["label"]>;
         "cr-progress": Omit<CrProgress, keyof CrProgressAttributes> & { [K in keyof CrProgress & keyof CrProgressAttributes]?: CrProgress[K] } & { [K in keyof CrProgress & keyof CrProgressAttributes as `attr:${K}`]?: CrProgressAttributes[K] } & { [K in keyof CrProgress & keyof CrProgressAttributes as `prop:${K}`]?: CrProgress[K] };
         "cr-progress-steps": Omit<CrProgressSteps, keyof CrProgressStepsAttributes> & { [K in keyof CrProgressSteps & keyof CrProgressStepsAttributes]?: CrProgressSteps[K] } & { [K in keyof CrProgressSteps & keyof CrProgressStepsAttributes as `attr:${K}`]?: CrProgressStepsAttributes[K] } & { [K in keyof CrProgressSteps & keyof CrProgressStepsAttributes as `prop:${K}`]?: CrProgressSteps[K] };
+        "cr-radio-group": Omit<CrRadioGroup, keyof CrRadioGroupAttributes> & { [K in keyof CrRadioGroup & keyof CrRadioGroupAttributes]?: CrRadioGroup[K] } & { [K in keyof CrRadioGroup & keyof CrRadioGroupAttributes as `attr:${K}`]?: CrRadioGroupAttributes[K] } & { [K in keyof CrRadioGroup & keyof CrRadioGroupAttributes as `prop:${K}`]?: CrRadioGroup[K] } & OneOf<"label", CrRadioGroup["label"], CrRadioGroupAttributes["label"]>;
+        "cr-rating": Omit<CrRating, keyof CrRatingAttributes> & { [K in keyof CrRating & keyof CrRatingAttributes]?: CrRating[K] } & { [K in keyof CrRating & keyof CrRatingAttributes as `attr:${K}`]?: CrRatingAttributes[K] } & { [K in keyof CrRating & keyof CrRatingAttributes as `prop:${K}`]?: CrRating[K] } & OneOf<"label", CrRating["label"], CrRatingAttributes["label"]>;
         "cr-search": Omit<CrSearch, keyof CrSearchAttributes> & { [K in keyof CrSearch & keyof CrSearchAttributes]?: CrSearch[K] } & { [K in keyof CrSearch & keyof CrSearchAttributes as `attr:${K}`]?: CrSearchAttributes[K] } & { [K in keyof CrSearch & keyof CrSearchAttributes as `prop:${K}`]?: CrSearch[K] } & OneOf<"label", CrSearch["label"], CrSearchAttributes["label"]>;
         "cr-segmented": Omit<CrSegmented, keyof CrSegmentedAttributes> & { [K in keyof CrSegmented & keyof CrSegmentedAttributes]?: CrSegmented[K] } & { [K in keyof CrSegmented & keyof CrSegmentedAttributes as `attr:${K}`]?: CrSegmentedAttributes[K] } & { [K in keyof CrSegmented & keyof CrSegmentedAttributes as `prop:${K}`]?: CrSegmented[K] } & OneOf<"label", CrSegmented["label"], CrSegmentedAttributes["label"]>;
         "cr-select": Omit<CrSelect, keyof CrSelectAttributes> & { [K in keyof CrSelect & keyof CrSelectAttributes]?: CrSelect[K] } & { [K in keyof CrSelect & keyof CrSelectAttributes as `attr:${K}`]?: CrSelectAttributes[K] } & { [K in keyof CrSelect & keyof CrSelectAttributes as `prop:${K}`]?: CrSelect[K] } & OneOf<"label", CrSelect["label"], CrSelectAttributes["label"]>;
         "cr-skeleton": Omit<CrSkeleton, keyof CrSkeletonAttributes> & { [K in keyof CrSkeleton & keyof CrSkeletonAttributes]?: CrSkeleton[K] } & { [K in keyof CrSkeleton & keyof CrSkeletonAttributes as `attr:${K}`]?: CrSkeletonAttributes[K] } & { [K in keyof CrSkeleton & keyof CrSkeletonAttributes as `prop:${K}`]?: CrSkeleton[K] };
+        "cr-slider": Omit<CrSlider, keyof CrSliderAttributes> & { [K in keyof CrSlider & keyof CrSliderAttributes]?: CrSlider[K] } & { [K in keyof CrSlider & keyof CrSliderAttributes as `attr:${K}`]?: CrSliderAttributes[K] } & { [K in keyof CrSlider & keyof CrSliderAttributes as `prop:${K}`]?: CrSlider[K] } & OneOf<"label", CrSlider["label"], CrSliderAttributes["label"]>;
+        "cr-sparkline": Omit<CrSparkline, keyof CrSparklineAttributes> & { [K in keyof CrSparkline & keyof CrSparklineAttributes]?: CrSparkline[K] } & { [K in keyof CrSparkline & keyof CrSparklineAttributes as `attr:${K}`]?: CrSparklineAttributes[K] } & { [K in keyof CrSparkline & keyof CrSparklineAttributes as `prop:${K}`]?: CrSparkline[K] } & OneOf<"label", CrSparkline["label"], CrSparklineAttributes["label"]>;
         "cr-step": Omit<CrStep, keyof CrStepAttributes> & { [K in keyof CrStep & keyof CrStepAttributes]?: CrStep[K] } & { [K in keyof CrStep & keyof CrStepAttributes as `attr:${K}`]?: CrStepAttributes[K] } & { [K in keyof CrStep & keyof CrStepAttributes as `prop:${K}`]?: CrStep[K] } & OneOf<"label", CrStep["label"], CrStepAttributes["label"]>;
         "cr-stepper": Omit<CrStepper, keyof CrStepperAttributes> & { [K in keyof CrStepper & keyof CrStepperAttributes]?: CrStepper[K] } & { [K in keyof CrStepper & keyof CrStepperAttributes as `attr:${K}`]?: CrStepperAttributes[K] } & { [K in keyof CrStepper & keyof CrStepperAttributes as `prop:${K}`]?: CrStepper[K] };
+        "cr-switch": Omit<CrSwitch, keyof CrSwitchAttributes> & { [K in keyof CrSwitch & keyof CrSwitchAttributes]?: CrSwitch[K] } & { [K in keyof CrSwitch & keyof CrSwitchAttributes as `attr:${K}`]?: CrSwitchAttributes[K] } & { [K in keyof CrSwitch & keyof CrSwitchAttributes as `prop:${K}`]?: CrSwitch[K] } & OneOf<"label", CrSwitch["label"], CrSwitchAttributes["label"]>;
+        "cr-tab-panel": Omit<CrTabPanel, keyof CrTabPanelAttributes> & { [K in keyof CrTabPanel & keyof CrTabPanelAttributes]?: CrTabPanel[K] } & { [K in keyof CrTabPanel & keyof CrTabPanelAttributes as `attr:${K}`]?: CrTabPanelAttributes[K] } & { [K in keyof CrTabPanel & keyof CrTabPanelAttributes as `prop:${K}`]?: CrTabPanel[K] } & OneOf<"label", CrTabPanel["label"], CrTabPanelAttributes["label"]>;
         "cr-table": Omit<CrTable, keyof CrTableAttributes> & { [K in keyof CrTable & keyof CrTableAttributes]?: CrTable[K] } & { [K in keyof CrTable & keyof CrTableAttributes as `attr:${K}`]?: CrTableAttributes[K] } & { [K in keyof CrTable & keyof CrTableAttributes as `prop:${K}`]?: CrTable[K] } & OneOf<"label", CrTable["label"], CrTableAttributes["label"]>;
         "cr-tag-input": Omit<CrTagInput, keyof CrTagInputAttributes> & { [K in keyof CrTagInput & keyof CrTagInputAttributes]?: CrTagInput[K] } & { [K in keyof CrTagInput & keyof CrTagInputAttributes as `attr:${K}`]?: CrTagInputAttributes[K] } & { [K in keyof CrTagInput & keyof CrTagInputAttributes as `prop:${K}`]?: CrTagInput[K] } & OneOf<"label", CrTagInput["label"], CrTagInputAttributes["label"]>;
         "cr-textarea": Omit<CrTextarea, keyof CrTextareaAttributes> & { [K in keyof CrTextarea & keyof CrTextareaAttributes]?: CrTextarea[K] } & { [K in keyof CrTextarea & keyof CrTextareaAttributes as `attr:${K}`]?: CrTextareaAttributes[K] } & { [K in keyof CrTextarea & keyof CrTextareaAttributes as `prop:${K}`]?: CrTextarea[K] } & OneOf<"label", CrTextarea["label"], CrTextareaAttributes["label"]>;
+        "cr-toaster": CrToaster;
+        "cr-tooltip": Omit<CrTooltip, keyof CrTooltipAttributes> & { [K in keyof CrTooltip & keyof CrTooltipAttributes]?: CrTooltip[K] } & { [K in keyof CrTooltip & keyof CrTooltipAttributes as `attr:${K}`]?: CrTooltipAttributes[K] } & { [K in keyof CrTooltip & keyof CrTooltipAttributes as `prop:${K}`]?: CrTooltip[K] } & OneOf<"text", CrTooltip["text"], CrTooltipAttributes["text"]>;
     }
 }
 export { LocalJSX as JSX };
@@ -2956,11 +4440,40 @@ declare module "@stencil/core" {
              */
             "cr-accordion-item": LocalJSX.IntrinsicElements["cr-accordion-item"] & JSXBase.HTMLAttributes<HTMLCrAccordionItemElement>;
             /**
+             * Message d'information, de réussite, d'avertissement ou d'erreur, avec un titre facultatif ; son emplacement décide de son comportement.
+             * Dans la page, c'est un bandeau : inséré après le chargement, il se déplie ; avec dismissible, un bouton Fermer le replie.
+             * Dans un cr-toaster, c'est une notification : elle glisse depuis le coin et se ferme seule après duration, avec une barre du temps restant
+             * qui s'arrête sous la souris ou le focus ; on la ferme aussi avec le bouton Fermer, Échap ou en la faisant glisser sur le côté.
+             * Dans les deux cas, son icône se trace.
+             */
+            "cr-alert": LocalJSX.IntrinsicElements["cr-alert"] & JSXBase.HTMLAttributes<HTMLCrAlertElement>;
+            /**
+             * Avatar d'une personne : sa photo, ou à défaut ses initiales sur une couleur tirée de son nom.
+             * Le nom (et le statut éventuel) est lu par les lecteurs d'écran ; la pastille de statut change de forme selon le statut.
+             */
+            "cr-avatar": LocalJSX.IntrinsicElements["cr-avatar"] & JSXBase.HTMLAttributes<HTMLCrAvatarElement>;
+            /**
+             * Groupe d'avatars qui se chevauchent, et s'écartent au survol ou quand le focus est dedans.
+             * Au-delà de max, les avatars restants sont résumés par une pastille « +N », nommée « N autres personnes ».
+             */
+            "cr-avatar-group": LocalJSX.IntrinsicElements["cr-avatar-group"] & JSXBase.HTMLAttributes<HTMLCrAvatarGroupElement>;
+            /**
+             * Pastille : court statut ou compteur (« Payée », « Non lus 3 »). Le texte porte le sens, la couleur ne fait que l'appuyer.
+             * Quand count change, le nombre défile jusqu'à sa nouvelle valeur, comme un compteur kilométrique.
+             */
+            "cr-badge": LocalJSX.IntrinsicElements["cr-badge"] & JSXBase.HTMLAttributes<HTMLCrBadgeElement>;
+            /**
              * Remplaçant de div pour la mise en page : espacements, flex et grille avec les valeurs du thème.
              * Les enfants restent des enfants directs : flex et grille s'appliquent à eux.
              * Valeurs d'espacement : xs, sm, lg, xl, 2xl, 3xl, ou toute valeur CSS (« 12px »).
              */
             "cr-box": LocalJSX.IntrinsicElements["cr-box"] & JSXBase.HTMLAttributes<HTMLCrBoxElement>;
+            /**
+             * Fil d'Ariane : le chemin jusqu'à la page courante. Les niveaux sont les enfants, écrits tels quels :
+             * des liens a href (Ctrl/Cmd+clic restent natifs), puis la page courante en dernier (un span), marquée aria-current="page".
+             * Au-delà de max niveaux, ceux du milieu se replient derrière un bouton « … » ; ils glissent hors de lui quand on le déplie.
+             */
+            "cr-breadcrumb": LocalJSX.IntrinsicElements["cr-breadcrumb"] & JSXBase.HTMLAttributes<HTMLCrBreadcrumbElement>;
             /**
              * Bouton d'action.
              */
@@ -2979,6 +4492,19 @@ declare module "@stencil/core" {
              */
             "cr-checkbox": LocalJSX.IntrinsicElements["cr-checkbox"] & JSXBase.HTMLAttributes<HTMLCrCheckboxElement>;
             /**
+             * Palette de commandes : une fenêtre modale avec un champ qui filtre une liste de commandes (motif combobox).
+             * Les commandes sont des éléments option enfants ; data-group les range sous un titre de groupe.
+             * Ctrl+K (⌘K sur Mac) l'ouvre de n'importe où dans la page. Haut et Bas parcourent les commandes, Entrée choisit, Échap ferme.
+             * La fenêtre tombe en place avec un ressort, et le surlignage de la commande active glisse d'une ligne à l'autre.
+             */
+            "cr-command-palette": LocalJSX.IntrinsicElements["cr-command-palette"] & JSXBase.HTMLAttributes<HTMLCrCommandPaletteElement>;
+            /**
+             * Champ de date : saisie au clavier dans le format de la langue (JJ/MM/AAAA en français, MM/DD/YYYY en anglais),
+             * ou choix dans un calendrier ouvert par le bouton voisin. Le calendrier suit le motif Date Picker Dialog de l'APG ;
+             * les mois glissent du côté de la navigation et le jour choisi s'affiche avec un petit rebond.
+             */
+            "cr-date-picker": LocalJSX.IntrinsicElements["cr-date-picker"] & JSXBase.HTMLAttributes<HTMLCrDatePickerElement>;
+            /**
              * Fenêtre modale, basée sur l'élément dialog natif.
              */
             "cr-dialog": LocalJSX.IntrinsicElements["cr-dialog"] & JSXBase.HTMLAttributes<HTMLCrDialogElement>;
@@ -2986,6 +4512,16 @@ declare module "@stencil/core" {
              * Panneau latéral, basé sur l'élément dialog natif.
              */
             "cr-drawer": LocalJSX.IntrinsicElements["cr-drawer"] & JSXBase.HTMLAttributes<HTMLCrDrawerElement>;
+            /**
+             * État vide : ce qui s'affiche quand une liste, une recherche ou une page n'a rien à montrer, avec de quoi en sortir.
+             * L'illustration flotte doucement trois fois, puis s'arrête.
+             */
+            "cr-empty-state": LocalJSX.IntrinsicElements["cr-empty-state"] & JSXBase.HTMLAttributes<HTMLCrEmptyStateElement>;
+            /**
+             * Dépôt de fichiers : une zone où glisser des fichiers, qui est aussi un vrai sélecteur de fichiers natif, atteignable au clavier.
+             * Les fichiers choisis s'affichent en liste, avec leur taille et un bouton Retirer. La zone respire quand on y glisse des fichiers.
+             */
+            "cr-file-upload": LocalJSX.IntrinsicElements["cr-file-upload"] & JSXBase.HTMLAttributes<HTMLCrFileUploadElement>;
             /**
              * Élément d'un cr-grid-layout. Se déplace par sa poignée et se redimensionne par son coin.
              * Donnez-lui un id pour retrouver sa place dans les réglages enregistrés.
@@ -3022,6 +4558,17 @@ declare module "@stencil/core" {
              */
             "cr-otp": LocalJSX.IntrinsicElements["cr-otp"] & JSXBase.HTMLAttributes<HTMLCrOtpElement>;
             /**
+             * Pagination : page précédente, numéros de pages (avec « … » quand il y en a beaucoup) et page suivante.
+             * Avec href, chaque numéro est un vrai lien : Ctrl/Cmd+clic, clic molette et « Ouvrir dans un nouvel onglet » restent natifs.
+             * Sans href, ce sont des boutons et crChange donne la page choisie. La pastille de la page courante glisse jusqu'au nouveau numéro.
+             */
+            "cr-pagination": LocalJSX.IntrinsicElements["cr-pagination"] & JSXBase.HTMLAttributes<HTMLCrPaginationElement>;
+            /**
+             * Fenêtre contextuelle : petit panneau non modal ouvert par un bouton, pour du contenu interactif (formulaire court, réglages…).
+             * Le focus entre dans le panneau à l'ouverture et revient au bouton à la fermeture (Échap, clic à l'extérieur, bouton).
+             */
+            "cr-popover": LocalJSX.IntrinsicElements["cr-popover"] & JSXBase.HTMLAttributes<HTMLCrPopoverElement>;
+            /**
              * Barre de progression. Avec value, elle se remplit jusqu'à la valeur ; sans, un segment glisse en boucle (durée inconnue).
              */
             "cr-progress": LocalJSX.IntrinsicElements["cr-progress"] & JSXBase.HTMLAttributes<HTMLCrProgressElement>;
@@ -3032,6 +4579,17 @@ declare module "@stencil/core" {
              */
             "cr-progress-steps": LocalJSX.IntrinsicElements["cr-progress-steps"] & JSXBase.HTMLAttributes<HTMLCrProgressStepsElement>;
             /**
+             * Choix d'une seule option dans une liste de boutons radio empilés, sous un titre visible.
+             * Les options sont des éléments option enfants. Le point du bouton choisi coule jusqu'au nouveau choix.
+             */
+            "cr-radio-group": LocalJSX.IntrinsicElements["cr-radio-group"] & JSXBase.HTMLAttributes<HTMLCrRadioGroupElement>;
+            /**
+             * Notation par étoiles : un groupe de boutons radio, une étoile par note possible, sous un titre visible.
+             * Les étoiles se remplissent en vague jusqu'à la note choisie, qui rebondit ; le survol prévisualise la note.
+             * En lecture seule, les étoiles forment une image nommée par la note (« Note : 4 sur 5 »).
+             */
+            "cr-rating": LocalJSX.IntrinsicElements["cr-rating"] & JSXBase.HTMLAttributes<HTMLCrRatingElement>;
+            /**
              * Champ de recherche. En entrant dans le champ, la loupe devient une flèche qui efface la recherche.
              * Options : mots qui défilent dans le texte indicatif, recherches récentes en puces, état « aucun résultat ».
              */
@@ -3039,6 +4597,8 @@ declare module "@stencil/core" {
             /**
              * Choix d'une option parmi quelques-unes, côte à côte (Jour, Semaine, Mois…). Les options sont des éléments option enfants ;
              * data-count sur une option ajoute un compteur, qui compte et rebondit quand on choisit l'option.
+             * Avec des enfants cr-tab-panel à la place, le contrôle devient des onglets : chaque panneau donne un onglet,
+             * seul le panneau choisi est affiché et il arrive du côté du changement.
              */
             "cr-segmented": LocalJSX.IntrinsicElements["cr-segmented"] & JSXBase.HTMLAttributes<HTMLCrSegmentedElement>;
             /**
@@ -3051,6 +4611,17 @@ declare module "@stencil/core" {
              */
             "cr-skeleton": LocalJSX.IntrinsicElements["cr-skeleton"] & JSXBase.HTMLAttributes<HTMLCrSkeletonElement>;
             /**
+             * Curseur : choix d'une valeur numérique dans un intervalle, à la souris, au doigt ou au clavier (flèches, Page précédente/suivante, Début, Fin).
+             * Une bulle suit la pastille en affichant la valeur et grossit pendant le glissement ou au focus ; la partie remplie du rail suit la valeur.
+             */
+            "cr-slider": LocalJSX.IntrinsicElements["cr-slider"] & JSXBase.HTMLAttributes<HTMLCrSliderElement>;
+            /**
+             * Mini-graphique en ligne : l'allure d'une série de nombres, à glisser dans un texte, une carte ou un tableau.
+             * C'est une image nommée par son libellé et un résumé (dernière valeur, minimum, maximum, tendance).
+             * La ligne se trace au premier affichage ; quand les valeurs changent, elle glisse point par point vers les nouvelles.
+             */
+            "cr-sparkline": LocalJSX.IntrinsicElements["cr-sparkline"] & JSXBase.HTMLAttributes<HTMLCrSparklineElement>;
+            /**
              * Étape d'un cr-stepper. Son contenu n'est affiché que pendant l'étape.
              */
             "cr-step": LocalJSX.IntrinsicElements["cr-step"] & JSXBase.HTMLAttributes<HTMLCrStepElement>;
@@ -3058,6 +4629,15 @@ declare module "@stencil/core" {
              * Progression en étapes. Les étapes sont des éléments cr-step enfants.
              */
             "cr-stepper": LocalJSX.IntrinsicElements["cr-stepper"] & JSXBase.HTMLAttributes<HTMLCrStepperElement>;
+            /**
+             * Interrupteur : active ou désactive un réglage, avec effet immédiat.
+             * La pastille s'étire en glissant, et sa croix se transforme en coche.
+             */
+            "cr-switch": LocalJSX.IntrinsicElements["cr-switch"] & JSXBase.HTMLAttributes<HTMLCrSwitchElement>;
+            /**
+             * Contenu d'un onglet, enfant de cr-segmented (mode onglets). Seul le panneau de l'onglet choisi est affiché.
+             */
+            "cr-tab-panel": LocalJSX.IntrinsicElements["cr-tab-panel"] & JSXBase.HTMLAttributes<HTMLCrTabPanelElement>;
             /**
              * Tableau dont chaque utilisateur règle les colonnes : largeur, ordre, colonnes fixées et masquées, densité des lignes.
              */
@@ -3070,6 +4650,15 @@ declare module "@stencil/core" {
              * Zone de texte sur plusieurs lignes qui grandit d'une ligne à la fois, avec un léger rebond.
              */
             "cr-textarea": LocalJSX.IntrinsicElements["cr-textarea"] & JSXBase.HTMLAttributes<HTMLCrTextareaElement>;
+            /**
+             * Zone fixe en bas à droite de l'écran qui empile les cr-alert en notifications, la plus récente en bas.
+             */
+            "cr-toaster": LocalJSX.IntrinsicElements["cr-toaster"] & JSXBase.HTMLAttributes<HTMLCrToasterElement>;
+            /**
+             * Infobulle : court texte d'aide affiché au survol et au focus clavier de l'élément qu'elle entoure.
+             * Le texte décrit aussi cet élément pour les lecteurs d'écran. Échap la masque ; on peut la survoler sans qu'elle disparaisse.
+             */
+            "cr-tooltip": LocalJSX.IntrinsicElements["cr-tooltip"] & JSXBase.HTMLAttributes<HTMLCrTooltipElement>;
         }
     }
 }

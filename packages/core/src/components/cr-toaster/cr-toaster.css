@@ -1,0 +1,13 @@
+:host {
+  position: fixed;
+  right: var(--cr-spacing-lg);
+  bottom: var(--cr-spacing-lg);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  width: min(360px, calc(100vw - 2 * var(--cr-spacing-lg)));
+}
+
+::slotted([open]) {
+  margin-top: var(--cr-spacing-sm);
+}

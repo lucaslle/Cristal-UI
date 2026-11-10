@@ -6,6 +6,7 @@ export const en = {
   checkbox: 'Check this box to continue.',
   select: 'Choose an option from the list.',
   selectMultiple: 'Choose at least one option from the list.',
+  radio: 'Choose one of the options.',
   email: 'Enter a valid email address, for example name@domain.com.',
   url: 'Enter a valid web address, for example https://example.com.',
   format: 'The format is incorrect.',
@@ -49,6 +50,45 @@ export const en = {
   tagsList: (label: string, total: number) => `${label}: ${total} tags`,
   tagRemove: (tag: string) => `Remove ${tag}`,
   tagsHelp: 'Enter or comma to add, Backspace to remove the last one.',
+
+  fileDrop: 'Drop files here or',
+  fileBrowse: 'browse',
+  remove: 'Remove',
+  sizeUnits: ['B', 'KB', 'MB', 'GB'],
+  fileRemove: (name: string) => `Remove ${name}`,
+  fileCount: (count: number) => (count === 1 ? '1 file' : `${count} files`),
+  filesAdded: (names: string[], count: string) => `${names.join(', ')} added. ${count}.`,
+  fileRemoved: (name: string, count: string) => `${name} removed. ${count}.`,
+  filesRejected: (names: string[]) => `${names.join(', ')}: file type not accepted.`,
+
+  dateChoose: 'Choose a date',
+  dateChange: (date: string) => `Change the date, ${date}`,
+  dateLetters: { day: 'DD', month: 'MM', year: 'YYYY' },
+  dateHint: (pattern: string) => `Format: ${pattern}`,
+  dateFormat: (pattern: string) => `Enter a valid date as ${pattern}.`,
+  dateRange: (from: string, to: string) => (from && to ? `Choose a date between ${from} and ${to}.` : from ? `Choose a date on or after ${from}.` : `Choose a date on or before ${to}.`),
+  previousMonth: 'Previous month',
+  nextMonth: 'Next month',
+  firstDay: 0,
+
+  ratingStar: (count: number, max: number) => `${count} ${count === 1 ? 'star' : 'stars'} out of ${max}`,
+  ratingImage: (label: string, value: number, max: number) => `${label}: ${value} out of ${max}`,
+
+  avatarStatus: { online: 'online', away: 'away', busy: 'busy', offline: 'offline' },
+  avatarMore: (count: number) => `${count} more ${count === 1 ? 'person' : 'people'}`,
+
+  alertPrefix: { info: 'Information: ', success: 'Success: ', warning: 'Warning: ', danger: 'Error: ' },
+
+  sparkline: (label: string, min: string, max: string, last: string, trend: -1 | 0 | 1) =>
+    `${label}: last value ${last}, minimum ${min}, maximum ${max}, ${{ 1: 'trending up', 0: 'stable', [-1]: 'trending down' }[trend]}`,
+
+  pagination: 'Pagination',
+  previousPage: 'Previous page',
+  nextPage: 'Next page',
+  pageNumber: (page: number) => `Page ${page}`,
+
+  breadcrumb: 'Breadcrumb',
+  breadcrumbMore: (count: number) => `Show ${count} hidden ${count === 1 ? 'level' : 'levels'}`,
 
   openAll: 'Open all',
   closeAll: 'Close all',

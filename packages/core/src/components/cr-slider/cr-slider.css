@@ -1,0 +1,143 @@
+:host {
+  --cr-slider-thumb: 20px;
+}
+
+/* La hauteur réservée au-dessus du rail accueille la bulle. */
+.slider {
+  --fill: var(--cr-color-primary);
+  position: relative;
+  padding-top: var(--cr-spacing-2xl);
+}
+
+.input {
+  display: block;
+  width: 100%;
+  height: var(--cr-slider-thumb);
+  margin: 0;
+  background: none;
+  cursor: pointer;
+  appearance: none;
+}
+
+.input:focus-visible {
+  outline: none;
+}
+
+/* Le rail se remplit jusqu'à la pastille. */
+.input::-webkit-slider-runnable-track {
+  height: 6px;
+  background: linear-gradient(to right, var(--fill) calc(var(--ratio) * 100%), var(--cr-color-border) 0);
+  border-radius: 999px;
+}
+
+.input::-moz-range-track {
+  height: 6px;
+  background: linear-gradient(to right, var(--fill) calc(var(--ratio) * 100%), var(--cr-color-border) 0);
+  border-radius: 999px;
+}
+
+.input::-webkit-slider-thumb {
+  box-sizing: border-box;
+  width: var(--cr-slider-thumb);
+  height: var(--cr-slider-thumb);
+  margin-top: calc((6px - var(--cr-slider-thumb)) / 2);
+  background: var(--cr-color-surface);
+  border: 4px solid var(--fill);
+  border-radius: 50%;
+  appearance: none;
+}
+
+.input::-moz-range-thumb {
+  box-sizing: border-box;
+  width: var(--cr-slider-thumb);
+  height: var(--cr-slider-thumb);
+  background: var(--cr-color-surface);
+  border: 4px solid var(--fill);
+  border-radius: 50%;
+}
+
+.input:focus-visible::-webkit-slider-thumb {
+  outline: 2px solid var(--cr-color-focus);
+  outline-offset: 2px;
+}
+
+.input:focus-visible::-moz-range-thumb {
+  outline: 2px solid var(--cr-color-focus);
+  outline-offset: 2px;
+}
+
+/* La bulle suit le centre de la pastille, qui va de son demi-diamètre au bord à 100 % moins ce demi-diamètre. */
+.bubble {
+  position: absolute;
+  bottom: calc(var(--cr-slider-thumb) + var(--cr-spacing-xs));
+  left: calc(var(--cr-slider-thumb) / 2 + var(--ratio) * (100% - var(--cr-slider-thumb)));
+  min-width: 2ch;
+  padding: 2px var(--cr-spacing-sm);
+  font-size: var(--cr-font-size-m);
+  font-weight: var(--cr-font-weight-bold);
+  font-variant-numeric: tabular-nums;
+  line-height: 1.3;
+  text-align: center;
+  color: var(--cr-color-on-primary);
+  white-space: nowrap;
+  pointer-events: none;
+  background: var(--fill);
+  border-radius: var(--cr-radius-m);
+  translate: -50% 0;
+  transform-origin: 50% 100%;
+  scale: 0.85;
+  transition: scale 0.3s cubic-bezier(0.3, 1.5, 0.5, 1);
+}
+
+/* Elle grossit pendant le glissement et au focus clavier. */
+.input:active + .bubble,
+.input:focus-visible + .bubble {
+  scale: 1;
+}
+
+.input:disabled {
+  cursor: not-allowed;
+}
+
+.slider:has(.input:disabled) {
+  --fill: var(--cr-color-on-disabled);
+}
+
+.input:disabled + .bubble {
+  color: var(--cr-color-surface);
+}
+
+:host([disabled]) .label {
+  color: var(--cr-color-on-disabled);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bubble {
+    transition: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .slider {
+    forced-color-adjust: none;
+    --fill: Highlight;
+  }
+  .input::-webkit-slider-runnable-track {
+    background: linear-gradient(to right, Highlight calc(var(--ratio) * 100%), CanvasText 0);
+  }
+  .input::-moz-range-track {
+    background: linear-gradient(to right, Highlight calc(var(--ratio) * 100%), CanvasText 0);
+  }
+  .input::-webkit-slider-thumb {
+    background: Canvas;
+  }
+  .input::-moz-range-thumb {
+    background: Canvas;
+  }
+  .bubble {
+    color: HighlightText;
+  }
+  .slider:has(.input:disabled) {
+    --fill: GrayText;
+  }
+}

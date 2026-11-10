@@ -47,7 +47,7 @@
   width: 100%;
 }
 
-button {
+.control {
   display: inline-flex;
   flex: 1;
   align-items: center;
@@ -63,36 +63,39 @@ button {
   background: var(--cr-button-background);
   border: 1px solid var(--cr-button-border);
   border-radius: var(--cr-radius-m);
+  text-decoration: none;
   cursor: pointer;
 }
 
-:host([variant='link']) button {
+:host([variant='link']) .control {
   padding: 0 var(--cr-spacing-xs);
   text-decoration: underline;
   text-underline-offset: 2px;
 }
 
-button:hover:not(:disabled, [aria-disabled='true']) {
+.control:hover:not(:disabled, [aria-disabled='true']) {
   background: var(--cr-button-background-hover);
 }
 
-button:focus-visible {
+.control:focus-visible {
   outline: 2px solid var(--cr-color-focus);
   outline-offset: 2px;
 }
 
-button:disabled {
+.control:disabled,
+.control[data-disabled] {
   color: var(--cr-color-on-disabled);
   background: var(--cr-color-disabled);
   border-color: transparent;
   cursor: not-allowed;
 }
 
-:host([variant='link']) button:disabled {
+:host([variant='link']) .control:disabled,
+:host([variant='link']) .control[data-disabled] {
   background: transparent;
 }
 
-button[aria-disabled='true'] {
+.control[aria-busy='true'] {
   cursor: progress;
 }
 
@@ -134,7 +137,7 @@ button[aria-disabled='true'] {
 }
 
 @media (forced-colors: active) {
-  button {
+  .control {
     border-color: ButtonText;
   }
 }

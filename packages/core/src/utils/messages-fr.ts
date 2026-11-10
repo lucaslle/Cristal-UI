@@ -8,6 +8,7 @@ export const fr: Messages = {
   checkbox: 'Cochez cette case pour continuer.',
   select: 'Choisissez une option dans la liste.',
   selectMultiple: 'Choisissez au moins une option dans la liste.',
+  radio: 'Choisissez une des options.',
   email: 'Saisissez une adresse e-mail valide, par exemple nom@domaine.fr.',
   url: 'Saisissez une adresse web valide, par exemple https://exemple.fr.',
   format: 'Le format saisi est incorrect.',
@@ -51,6 +52,45 @@ export const fr: Messages = {
   tagsList: (label, total) => `${label} : ${total} étiquettes`,
   tagRemove: (tag) => `Retirer ${tag}`,
   tagsHelp: 'Entrée ou virgule pour ajouter, retour arrière pour retirer la dernière.',
+
+  fileDrop: 'Déposez des fichiers ici ou',
+  fileBrowse: 'parcourez',
+  remove: 'Retirer',
+  sizeUnits: ['o', 'ko', 'Mo', 'Go'],
+  fileRemove: (name) => `Retirer ${name}`,
+  fileCount: (count) => (count > 1 ? `${count} fichiers` : `${count} fichier`),
+  filesAdded: (names, count) => `${names.join(', ')} ${names.length > 1 ? 'ajoutés' : 'ajouté'}. ${count}.`,
+  fileRemoved: (name, count) => `${name} retiré. ${count}.`,
+  filesRejected: (names) => `${names.join(', ')} : format de fichier non accepté.`,
+
+  dateChoose: 'Choisir une date',
+  dateChange: (date) => `Changer la date, ${date}`,
+  dateLetters: { day: 'JJ', month: 'MM', year: 'AAAA' },
+  dateHint: (pattern) => `Format : ${pattern}`,
+  dateFormat: (pattern) => `Saisissez une date valide au format ${pattern}.`,
+  dateRange: (from, to) => (from && to ? `Choisissez une date entre le ${from} et le ${to}.` : from ? `Choisissez une date à partir du ${from}.` : `Choisissez une date jusqu’au ${to}.`),
+  previousMonth: 'Mois précédent',
+  nextMonth: 'Mois suivant',
+  firstDay: 1,
+
+  ratingStar: (count, max) => `${count} ${count > 1 ? 'étoiles' : 'étoile'} sur ${max}`,
+  ratingImage: (label, value, max) => `${label} : ${value} sur ${max}`,
+
+  avatarStatus: { online: 'en ligne', away: 'absent', busy: 'occupé', offline: 'hors ligne' },
+  avatarMore: (count) => `${count} ${count > 1 ? 'autres personnes' : 'autre personne'}`,
+
+  alertPrefix: { info: 'Information : ', success: 'Succès : ', warning: 'Attention : ', danger: 'Erreur : ' },
+
+  sparkline: (label, min, max, last, trend) =>
+    `${label} : dernière valeur ${last}, minimum ${min}, maximum ${max}, ${{ 1: 'en hausse', 0: 'stable', [-1]: 'en baisse' }[trend]}`,
+
+  pagination: 'Pagination',
+  previousPage: 'Page précédente',
+  nextPage: 'Page suivante',
+  pageNumber: (page) => `Page ${page}`,
+
+  breadcrumb: "Fil d'Ariane",
+  breadcrumbMore: (count) => `Afficher ${count === 1 ? 'le niveau masqué' : `les ${count} niveaux masqués`}`,
 
   openAll: 'Tout ouvrir',
   closeAll: 'Tout fermer',
