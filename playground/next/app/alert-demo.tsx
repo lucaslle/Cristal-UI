@@ -1,11 +1,24 @@
 'use client';
 
 import { useState } from 'react';
-import { CrAlert, CrButton } from '@cristal/react';
+import { CrAlert, CrButton, CrToaster } from '@cristal/react';
+
+interface Toast {
+  id: number;
+  variant: 'success' | 'danger';
+  text: string;
+}
 
 export function AlertDemo() {
   const [closed, setClosed] = useState(0);
   const [late, setLate] = useState(false);
+  const [toasts, setToasts] = useState<Toast[]>([]);
+  const [toastsClosed, setToastsClosed] = useState(0);
+  const add = (variant: Toast['variant'], text: string) => setToasts((list) => [...list, { id: Date.now(), variant, text }]);
+  const remove = (id: number) => {
+    setToasts((list) => list.filter((toast) => toast.id !== id));
+    setToastsClosed((count) => count + 1);
+  };
 
   return (
     <div style={{ display: 'grid', gap: 'var(--cr-spacing-sm)' }}>
@@ -30,6 +43,20 @@ export function AlertDemo() {
       <CrButton size="s" variant="secondary" style={{ justifySelf: 'start' }} onClick={() => setLate(true)}>
         Lancer l'export
       </CrButton>
+      <div style={{ display: 'flex', gap: 'var(--cr-spacing-sm)', alignItems: 'center' }}>
+        <CrButton onClick={() => add('success', 'Modifications enregistrées.')}>Enregistrer la fiche</CrButton>
+        <CrButton variant="secondary" onClick={() => add('danger', 'Synchronisation impossible : vérifiez votre connexion.')}>
+          Synchroniser
+        </CrButton>
+        <span data-testid="toast-closed">{toastsClosed}</span>
+      </div>
+      <CrToaster>
+        {toasts.map((toast) => (
+          <CrAlert key={toast.id} variant={toast.variant} duration={toast.variant === 'danger' ? 0 : 2000} onCrClose={() => remove(toast.id)}>
+            {toast.text}
+          </CrAlert>
+        ))}
+      </CrToaster>
     </div>
   );
 }

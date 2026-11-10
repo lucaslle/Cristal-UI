@@ -4,7 +4,6 @@ import { AccordionDemo } from './accordion-demo';
 import { StepperDemo } from './stepper-demo';
 import { SearchDemo } from './search-demo';
 import { SegmentedDemo } from './segmented-demo';
-import { ToastDemo } from './toast-demo';
 import { SwitchDemo } from './switch-demo';
 import { RadioGroupDemo } from './radio-group-demo';
 import { SliderDemo } from './slider-demo';
@@ -171,14 +170,11 @@ export default function Page() {
       <h2>Mini-graphiques</h2>
       <SparklineDemo />
 
-      <h2>Bandeaux</h2>
+      <h2>Bandeaux et notifications</h2>
       <AlertDemo />
 
       <h2>États vides</h2>
       <EmptyStateDemo />
-
-      <h2>Notifications</h2>
-      <ToastDemo />
 
       <h2>Chargement</h2>
       <LoadingDemo />

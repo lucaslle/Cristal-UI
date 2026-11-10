@@ -1,8 +1,8 @@
 import { Component, h } from '@stencil/core';
 
 /**
- * Zone fixe en bas à droite de l'écran qui empile les cr-toast, le plus récent en bas.
- * @slot - Les cr-toast.
+ * Zone fixe en bas à droite de l'écran qui empile les cr-alert en notifications, la plus récente en bas.
+ * @slot - Les cr-alert.
  */
 @Component({
   tag: 'cr-toaster',

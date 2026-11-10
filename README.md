@@ -313,12 +313,21 @@ Petite courbe sans axes : `values` (tableau de nombres, en propriété), `label`
 <CrSparkline label="Ventes du mois" values={ventes} variant="area" />
 ```
 
-### Bandeau : `cr-alert`
+### Bandeau et notification : `cr-alert`, `cr-toaster`
 
-Message posé dans la page : `variant` (`info` par défaut, `success`, `warning`, `danger` lu aussitôt), `heading` (titre facultatif), le message en contenu, `dismissible` (bouton « Fermer » qui replie le bandeau). Une icône propre à chaque type et un préfixe lu par les lecteurs d'écran (« Erreur : ») ; inséré après le chargement, le bandeau se déplie, et son icône se trace. Événement `onCrClose`.
+Message : `variant` (`info` par défaut, `success`, `warning`, `danger` lu aussitôt), `heading` (titre facultatif), le message en contenu, `open` (`true` par défaut, remis à `false` à chaque fermeture). Une icône propre à chaque type, qui se trace, et un préfixe lu par les lecteurs d'écran (« Erreur : »). Événement `onCrClose` à chaque fermeture. Son emplacement décide de son comportement :
+
+- dans la page, c'est un bandeau : inséré après le chargement, il se déplie ; `dismissible` ajoute un bouton « Fermer » qui le replie ;
+- dans un `cr-toaster` (zone fixée en bas à droite qui empile les messages), c'est une notification : elle glisse depuis le coin et se ferme après `duration` (5000 ms par défaut, `0` pour qu'elle reste) ; une barre montre le temps restant, qui s'arrête sous la souris ou le focus. Elle se ferme aussi avec le bouton Fermer, toujours présent, Échap ou en glissant sur le côté.
 
 ```tsx
 <CrAlert variant="danger" heading="Envoi impossible" dismissible onCrClose={() => setErreur(false)}>Vérifiez votre connexion.</CrAlert>
+
+<CrToaster>
+  {toasts.map((toast) => (
+    <CrAlert key={toast.id} variant="success" onCrClose={() => remove(toast.id)}>Modifications enregistrées.</CrAlert>
+  ))}
+</CrToaster>
 ```
 
 ### État vide : `cr-empty-state`
@@ -330,18 +339,6 @@ Message posé dans la page : `variant` (`info` par défaut, `success`, `warning`
   Essayez un autre mot ou retirez des filtres.
   <CrButton slot="actions" variant="outline" onClick={retirerFiltres}>Retirer les filtres</CrButton>
 </CrEmptyState>
-```
-
-### Notification : `cr-toast`, `cr-toaster`
-
-Message temporaire : `cr-toaster` est une zone fixée en bas à droite qui empile les `cr-toast`. Un toast a `open`, `variant` (`info` par défaut, `success`, `danger` lu aussitôt) et `duration` (5000 ms par défaut, `0` pour qu'il reste) ; une barre montre le temps restant, qui s'arrête sous la souris ou le focus. Il se ferme avec le bouton Fermer, Échap ou en glissant sur le côté. Événement `onCrClose`.
-
-```tsx
-<CrToaster>
-  {toasts.map((toast) => (
-    <CrToast key={toast.id} open variant="success" onCrClose={() => remove(toast.id)}>Modifications enregistrées.</CrToast>
-  ))}
-</CrToaster>
 ```
 
 ### `cr-card`

@@ -89,19 +89,32 @@ export namespace Components {
         "open": boolean;
     }
     /**
-     * Bandeau de message dans la page : information, réussite, avertissement ou erreur, avec un titre facultatif.
-     * Inséré après le chargement de la page, il se déplie ; son icône se trace ; avec dismissible, un bouton Fermer le replie.
+     * Message d'information, de réussite, d'avertissement ou d'erreur, avec un titre facultatif ; son emplacement décide de son comportement.
+     * Dans la page, c'est un bandeau : inséré après le chargement, il se déplie ; avec dismissible, un bouton Fermer le replie.
+     * Dans un cr-toaster, c'est une notification : elle glisse depuis le coin et se ferme seule après duration, avec une barre du temps restant
+     * qui s'arrête sous la souris ou le focus ; on la ferme aussi avec le bouton Fermer, Échap ou en la faisant glisser sur le côté.
+     * Dans les deux cas, son icône se trace.
      */
     interface CrAlert {
         /**
-          * Ajoute un bouton Fermer qui replie et masque le bandeau.
+          * Ajoute un bouton Fermer qui replie et masque le bandeau. Dans un cr-toaster, le bouton est toujours là.
           * @default false
          */
         "dismissible": boolean;
         /**
+          * Dans un cr-toaster : durée d'affichage en millisecondes avant la fermeture automatique ; 0 : le message reste jusqu'à ce qu'on le ferme. Sans effet dans la page.
+          * @default 5000
+         */
+        "duration": number;
+        /**
           * Titre affiché en gras au-dessus du message.
          */
         "heading"?: string;
+        /**
+          * Affiche le message ; à false, il se ferme (replié dans la page, glissé hors du coin dans un cr-toaster). Chaque fermeture le remet à false.
+          * @default true
+         */
+        "open": boolean;
         /**
           * Type de message : info, success (réussite), warning (avertissement) ou danger (erreur, lue aussitôt par les lecteurs d'écran).
           * @default 'info'
@@ -1432,29 +1445,7 @@ export namespace Components {
         "value": string;
     }
     /**
-     * Notification temporaire : un message court qui glisse en bas à droite (dans un cr-toaster), puis se ferme seul.
-     * Une barre montre le temps restant ; il s'arrête tant que la souris ou le focus est sur le toast.
-     * On peut aussi le fermer avec le bouton Fermer, Échap, ou en le faisant glisser sur le côté.
-     */
-    interface CrToast {
-        /**
-          * Durée d'affichage en millisecondes avant la fermeture automatique ; 0 : le toast reste jusqu'à ce qu'on le ferme.
-          * @default 5000
-         */
-        "duration": number;
-        /**
-          * Affiche ou ferme le toast.
-          * @default false
-         */
-        "open": boolean;
-        /**
-          * Type de message : info, success (réussite) ou danger (erreur, lue aussitôt par les lecteurs d'écran).
-          * @default 'info'
-         */
-        "variant": 'info' | 'success' | 'danger';
-    }
-    /**
-     * Zone fixe en bas à droite de l'écran qui empile les cr-toast, le plus récent en bas.
+     * Zone fixe en bas à droite de l'écran qui empile les cr-alert en notifications, la plus récente en bas.
      */
     interface CrToaster {
     }
@@ -1586,10 +1577,6 @@ export interface CrTextareaCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLCrTextareaElement;
 }
-export interface CrToastCustomEvent<T> extends CustomEvent<T> {
-    detail: T;
-    target: HTMLCrToastElement;
-}
 declare global {
     /**
      * Accordéon : sections cr-accordion-item qui s'ouvrent et se ferment.
@@ -1624,8 +1611,11 @@ declare global {
         "crClose": void;
     }
     /**
-     * Bandeau de message dans la page : information, réussite, avertissement ou erreur, avec un titre facultatif.
-     * Inséré après le chargement de la page, il se déplie ; son icône se trace ; avec dismissible, un bouton Fermer le replie.
+     * Message d'information, de réussite, d'avertissement ou d'erreur, avec un titre facultatif ; son emplacement décide de son comportement.
+     * Dans la page, c'est un bandeau : inséré après le chargement, il se déplie ; avec dismissible, un bouton Fermer le replie.
+     * Dans un cr-toaster, c'est une notification : elle glisse depuis le coin et se ferme seule après duration, avec une barre du temps restant
+     * qui s'arrête sous la souris ou le focus ; on la ferme aussi avec le bouton Fermer, Échap ou en la faisant glisser sur le côté.
+     * Dans les deux cas, son icône se trace.
      */
     interface HTMLCrAlertElement extends Components.CrAlert, HTMLStencilElement {
         addEventListener<K extends keyof HTMLCrAlertElementEventMap>(type: K, listener: (this: HTMLCrAlertElement, ev: CrAlertCustomEvent<HTMLCrAlertElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -2348,30 +2338,8 @@ declare global {
         prototype: HTMLCrTextareaElement;
         new (): HTMLCrTextareaElement;
     };
-    interface HTMLCrToastElementEventMap {
-        "crClose": void;
-    }
     /**
-     * Notification temporaire : un message court qui glisse en bas à droite (dans un cr-toaster), puis se ferme seul.
-     * Une barre montre le temps restant ; il s'arrête tant que la souris ou le focus est sur le toast.
-     * On peut aussi le fermer avec le bouton Fermer, Échap, ou en le faisant glisser sur le côté.
-     */
-    interface HTMLCrToastElement extends Components.CrToast, HTMLStencilElement {
-        addEventListener<K extends keyof HTMLCrToastElementEventMap>(type: K, listener: (this: HTMLCrToastElement, ev: CrToastCustomEvent<HTMLCrToastElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
-        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
-        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
-        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
-        removeEventListener<K extends keyof HTMLCrToastElementEventMap>(type: K, listener: (this: HTMLCrToastElement, ev: CrToastCustomEvent<HTMLCrToastElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
-        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
-        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
-        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
-    }
-    var HTMLCrToastElement: {
-        prototype: HTMLCrToastElement;
-        new (): HTMLCrToastElement;
-    };
-    /**
-     * Zone fixe en bas à droite de l'écran qui empile les cr-toast, le plus récent en bas.
+     * Zone fixe en bas à droite de l'écran qui empile les cr-alert en notifications, la plus récente en bas.
      */
     interface HTMLCrToasterElement extends Components.CrToaster, HTMLStencilElement {
     }
@@ -2435,7 +2403,6 @@ declare global {
         "cr-table": HTMLCrTableElement;
         "cr-tag-input": HTMLCrTagInputElement;
         "cr-textarea": HTMLCrTextareaElement;
-        "cr-toast": HTMLCrToastElement;
         "cr-toaster": HTMLCrToasterElement;
         "cr-tooltip": HTMLCrTooltipElement;
     }
@@ -2502,23 +2469,36 @@ declare namespace LocalJSX {
         "open"?: boolean;
     }
     /**
-     * Bandeau de message dans la page : information, réussite, avertissement ou erreur, avec un titre facultatif.
-     * Inséré après le chargement de la page, il se déplie ; son icône se trace ; avec dismissible, un bouton Fermer le replie.
+     * Message d'information, de réussite, d'avertissement ou d'erreur, avec un titre facultatif ; son emplacement décide de son comportement.
+     * Dans la page, c'est un bandeau : inséré après le chargement, il se déplie ; avec dismissible, un bouton Fermer le replie.
+     * Dans un cr-toaster, c'est une notification : elle glisse depuis le coin et se ferme seule après duration, avec une barre du temps restant
+     * qui s'arrête sous la souris ou le focus ; on la ferme aussi avec le bouton Fermer, Échap ou en la faisant glisser sur le côté.
+     * Dans les deux cas, son icône se trace.
      */
     interface CrAlert {
         /**
-          * Ajoute un bouton Fermer qui replie et masque le bandeau.
+          * Ajoute un bouton Fermer qui replie et masque le bandeau. Dans un cr-toaster, le bouton est toujours là.
           * @default false
          */
         "dismissible"?: boolean;
+        /**
+          * Dans un cr-toaster : durée d'affichage en millisecondes avant la fermeture automatique ; 0 : le message reste jusqu'à ce qu'on le ferme. Sans effet dans la page.
+          * @default 5000
+         */
+        "duration"?: number;
         /**
           * Titre affiché en gras au-dessus du message.
          */
         "heading"?: string;
         /**
-          * Émis quand le bouton Fermer a masqué le bandeau.
+          * Émis à chaque fermeture : bouton Fermer, Échap, glissement, fin du temps ou open à false.
          */
         "onCrClose"?: (event: CrAlertCustomEvent<void>) => void;
+        /**
+          * Affiche le message ; à false, il se ferme (replié dans la page, glissé hors du coin dans un cr-toaster). Chaque fermeture le remet à false.
+          * @default true
+         */
+        "open"?: boolean;
         /**
           * Type de message : info, success (réussite), warning (avertissement) ou danger (erreur, lue aussitôt par les lecteurs d'écran).
           * @default 'info'
@@ -4045,33 +4025,7 @@ declare namespace LocalJSX {
         "value"?: string;
     }
     /**
-     * Notification temporaire : un message court qui glisse en bas à droite (dans un cr-toaster), puis se ferme seul.
-     * Une barre montre le temps restant ; il s'arrête tant que la souris ou le focus est sur le toast.
-     * On peut aussi le fermer avec le bouton Fermer, Échap, ou en le faisant glisser sur le côté.
-     */
-    interface CrToast {
-        /**
-          * Durée d'affichage en millisecondes avant la fermeture automatique ; 0 : le toast reste jusqu'à ce qu'on le ferme.
-          * @default 5000
-         */
-        "duration"?: number;
-        /**
-          * Émis à chaque fermeture : fin du temps, bouton Fermer, Échap, glissement ou open à false.
-         */
-        "onCrClose"?: (event: CrToastCustomEvent<void>) => void;
-        /**
-          * Affiche ou ferme le toast.
-          * @default false
-         */
-        "open"?: boolean;
-        /**
-          * Type de message : info, success (réussite) ou danger (erreur, lue aussitôt par les lecteurs d'écran).
-          * @default 'info'
-         */
-        "variant"?: 'info' | 'success' | 'danger';
-    }
-    /**
-     * Zone fixe en bas à droite de l'écran qui empile les cr-toast, le plus récent en bas.
+     * Zone fixe en bas à droite de l'écran qui empile les cr-alert en notifications, la plus récente en bas.
      */
     interface CrToaster {
     }
@@ -4108,6 +4062,8 @@ declare namespace LocalJSX {
         "variant": 'info' | 'success' | 'warning' | 'danger';
         "heading": string;
         "dismissible": boolean;
+        "open": boolean;
+        "duration": number;
     }
     interface CrAvatarAttributes {
         "name": string;
@@ -4416,11 +4372,6 @@ declare namespace LocalJSX {
         "required": boolean;
         "disabled": boolean;
     }
-    interface CrToastAttributes {
-        "open": boolean;
-        "variant": 'info' | 'success' | 'danger';
-        "duration": number;
-    }
     interface CrTooltipAttributes {
         "text": string;
         "placement": TooltipPlacement;
@@ -4472,7 +4423,6 @@ declare namespace LocalJSX {
         "cr-table": Omit<CrTable, keyof CrTableAttributes> & { [K in keyof CrTable & keyof CrTableAttributes]?: CrTable[K] } & { [K in keyof CrTable & keyof CrTableAttributes as `attr:${K}`]?: CrTableAttributes[K] } & { [K in keyof CrTable & keyof CrTableAttributes as `prop:${K}`]?: CrTable[K] } & OneOf<"label", CrTable["label"], CrTableAttributes["label"]>;
         "cr-tag-input": Omit<CrTagInput, keyof CrTagInputAttributes> & { [K in keyof CrTagInput & keyof CrTagInputAttributes]?: CrTagInput[K] } & { [K in keyof CrTagInput & keyof CrTagInputAttributes as `attr:${K}`]?: CrTagInputAttributes[K] } & { [K in keyof CrTagInput & keyof CrTagInputAttributes as `prop:${K}`]?: CrTagInput[K] } & OneOf<"label", CrTagInput["label"], CrTagInputAttributes["label"]>;
         "cr-textarea": Omit<CrTextarea, keyof CrTextareaAttributes> & { [K in keyof CrTextarea & keyof CrTextareaAttributes]?: CrTextarea[K] } & { [K in keyof CrTextarea & keyof CrTextareaAttributes as `attr:${K}`]?: CrTextareaAttributes[K] } & { [K in keyof CrTextarea & keyof CrTextareaAttributes as `prop:${K}`]?: CrTextarea[K] } & OneOf<"label", CrTextarea["label"], CrTextareaAttributes["label"]>;
-        "cr-toast": Omit<CrToast, keyof CrToastAttributes> & { [K in keyof CrToast & keyof CrToastAttributes]?: CrToast[K] } & { [K in keyof CrToast & keyof CrToastAttributes as `attr:${K}`]?: CrToastAttributes[K] } & { [K in keyof CrToast & keyof CrToastAttributes as `prop:${K}`]?: CrToast[K] };
         "cr-toaster": CrToaster;
         "cr-tooltip": Omit<CrTooltip, keyof CrTooltipAttributes> & { [K in keyof CrTooltip & keyof CrTooltipAttributes]?: CrTooltip[K] } & { [K in keyof CrTooltip & keyof CrTooltipAttributes as `attr:${K}`]?: CrTooltipAttributes[K] } & { [K in keyof CrTooltip & keyof CrTooltipAttributes as `prop:${K}`]?: CrTooltip[K] } & OneOf<"text", CrTooltip["text"], CrTooltipAttributes["text"]>;
     }
@@ -4490,8 +4440,11 @@ declare module "@stencil/core" {
              */
             "cr-accordion-item": LocalJSX.IntrinsicElements["cr-accordion-item"] & JSXBase.HTMLAttributes<HTMLCrAccordionItemElement>;
             /**
-             * Bandeau de message dans la page : information, réussite, avertissement ou erreur, avec un titre facultatif.
-             * Inséré après le chargement de la page, il se déplie ; son icône se trace ; avec dismissible, un bouton Fermer le replie.
+             * Message d'information, de réussite, d'avertissement ou d'erreur, avec un titre facultatif ; son emplacement décide de son comportement.
+             * Dans la page, c'est un bandeau : inséré après le chargement, il se déplie ; avec dismissible, un bouton Fermer le replie.
+             * Dans un cr-toaster, c'est une notification : elle glisse depuis le coin et se ferme seule après duration, avec une barre du temps restant
+             * qui s'arrête sous la souris ou le focus ; on la ferme aussi avec le bouton Fermer, Échap ou en la faisant glisser sur le côté.
+             * Dans les deux cas, son icône se trace.
              */
             "cr-alert": LocalJSX.IntrinsicElements["cr-alert"] & JSXBase.HTMLAttributes<HTMLCrAlertElement>;
             /**
@@ -4698,13 +4651,7 @@ declare module "@stencil/core" {
              */
             "cr-textarea": LocalJSX.IntrinsicElements["cr-textarea"] & JSXBase.HTMLAttributes<HTMLCrTextareaElement>;
             /**
-             * Notification temporaire : un message court qui glisse en bas à droite (dans un cr-toaster), puis se ferme seul.
-             * Une barre montre le temps restant ; il s'arrête tant que la souris ou le focus est sur le toast.
-             * On peut aussi le fermer avec le bouton Fermer, Échap, ou en le faisant glisser sur le côté.
-             */
-            "cr-toast": LocalJSX.IntrinsicElements["cr-toast"] & JSXBase.HTMLAttributes<HTMLCrToastElement>;
-            /**
-             * Zone fixe en bas à droite de l'écran qui empile les cr-toast, le plus récent en bas.
+             * Zone fixe en bas à droite de l'écran qui empile les cr-alert en notifications, la plus récente en bas.
              */
             "cr-toaster": LocalJSX.IntrinsicElements["cr-toaster"] & JSXBase.HTMLAttributes<HTMLCrToasterElement>;
             /**

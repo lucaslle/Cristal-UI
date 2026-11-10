@@ -1,13 +1,12 @@
 ---
-title: Alert
-description: Message placed in the page, for information, success, warning or error. Tag cr-alert, React component CrAlert.
+title: Alert and toast
+description: Message for information, success, warning or error, placed in the page or as a toast in a corner. Tags cr-alert and cr-toaster, React components CrAlert and CrToaster.
 ---
 
 import AlertBasic from '@/demos/en/alert-basic';
+import AlertToaster from '@/demos/en/alert-toaster';
 
-## Example
-
-`cr-alert` shows a message in the page flow, with an icon and an optional `heading`. Its icon draws itself; when inserted after the page has loaded (an error on submit, for instance), the alert unfolds in height. When already there at page load, it does not move, so the page does not shift. With `dismissible`, a Close button folds it back then hides it, and `onCrClose` reports it.
+`cr-alert` shows a message with an icon and an optional `heading`. Where you place it decides how it behaves: in the page, it is an alert banner; inside a `cr-toaster`, it is a toast that closes by itself.
 
 | `variant` | Use |
 |---|---|
@@ -16,7 +15,9 @@ import AlertBasic from '@/demos/en/alert-basic';
 | `warning` | something to watch |
 | `danger` | an error; read immediately by screen readers |
 
-For a message that goes away on its own, prefer a [toast](/docs/composants/notification).
+## In the page
+
+Placed in the page flow, the alert stays until it is closed. Its icon draws itself; when inserted after the page has loaded (an error on submit, for instance), it unfolds in height. When already there at page load, it does not move, so the page does not shift. With `dismissible`, a Close button folds it back then hides it, and `onCrClose` reports it.
 
 <Preview>
   <AlertBasic />
@@ -24,17 +25,38 @@ For a message that goes away on its own, prefer a [toast](/docs/composants/notif
 
 <include>../../../demos/en/alert-basic.tsx</include>
 
+## As a toast
+
+Put a single `CrToaster` area in the page (fixed at the bottom right) and add one `CrAlert` per message to it: it slides in from the corner, a bar empties for `duration` milliseconds (5000 by default), then it closes. Remove it from your list in `onCrClose`. `duration` and the bar only exist inside a `cr-toaster`.
+
+With `duration={0}`, the toast stays until it is closed: prefer it for an error, which must leave time to read and act. The Close button is always there; Escape closes it too, as does dragging it sideways.
+
+<Preview>
+  <AlertToaster />
+</Preview>
+
+<include>../../../demos/en/alert-toaster.tsx</include>
+
+`open` is `true` by default and every close sets it back to `false`, in the page as in a toaster. A single, always-present toast can therefore be driven with `open`: set your state back to `false` in `onCrClose`.
+
 <Callout>
-  If the user asked their system to reduce motion, the alert appears and disappears at once and its icon is already drawn.
+  If the user asked their system to reduce motion, the alert appears and disappears at once, the toast appears without sliding and fades out, and the icon is already drawn. The remaining-time bar keeps emptying, slowly and smoothly: it tells how long is left to read.
 </Callout>
 
 ## Accessibility
 
-- The message is a live region: `role="status"` (read politely) for `info`, `success` and `warning`, `role="alert"` (read immediately) for `danger`. Insert the alert when the error happens so that it is announced; when present at page load, it is read with the page, without interrupting.
+- The message is a live region: `role="status"` (read politely) for `info`, `success` and `warning`, `role="alert"` (read immediately) for `danger`.
+- In the page, insert the alert when the error happens so that it is announced; when present at page load, it is read with the page, without interrupting.
+- As a toast, the region exists, empty, before the message so the announcement is not lost. The toast does not take focus: the user can keep working.
+- Time stops while the pointer hovers the toast or focus is inside it (WCAG 2.2.1); the bar stops with it. Dragging always has a keyboard alternative (Escape when focus is inside) and a single-click one (the Close button).
 - The type does not rely on colour alone: each type has its own icon (i, ✓, ! in a triangle, ! in a circle), and a prefix read by screen readers ("Error: ", "Warning: "…) comes before the message.
 - The Close button is named "Close" ("Fermer" in French).
-- The text keeps its full colour while arriving: the alert unfolds, it does not fade in.
+- The text keeps its full colour while arriving: the alert unfolds, the toast slides, neither fades in.
 
 ## API
 
 <ApiReference tag="cr-alert" />
+
+## CrToaster API
+
+<ApiReference tag="cr-toaster" />

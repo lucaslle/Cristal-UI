@@ -117,8 +117,68 @@
   outline-offset: 2px;
 }
 
+/* Dans un cr-toaster : carte flottante qui glisse depuis le coin, sans fondu non plus. */
+:host([data-toast]) .clip {
+  overflow: visible;
+}
+
+:host([data-toast]) .alert {
+  position: relative;
+  background: var(--cr-color-surface);
+  border-color: var(--cr-color-border);
+  border-left-color: var(--cr-alert-accent);
+  box-shadow: var(--cr-shadow-m);
+  touch-action: pan-y;
+  user-select: none;
+}
+
+:host([data-toast]) .alert[data-visible] {
+  animation: cr-alert-slide 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+/* Avant son message, la notification garde sa zone annoncée vide, masquée mais présente pour les lecteurs d'écran. */
+:host([data-toast]) .alert:not([data-visible]) {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  border: 0;
+  clip-path: inset(50%);
+}
+
+@keyframes cr-alert-slide {
+  from {
+    transform: translateX(calc(100% + var(--cr-spacing-lg)));
+  }
+}
+
+/* Temps restant : la barre se vide, et s'arrête sous la souris ou le focus (WCAG 2.2.1). */
+.bar {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 3px;
+  background: var(--cr-alert-accent);
+  transform-origin: left;
+  animation: cr-alert-time linear forwards;
+}
+
+:host(:hover) .bar,
+:host(:focus-within) .bar {
+  animation-play-state: paused;
+}
+
+@keyframes cr-alert-time {
+  to {
+    transform: scaleX(0);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   :host([data-enter]),
+  :host([data-toast]) .alert[data-visible],
   .icon * {
     animation: none;
   }
@@ -130,5 +190,9 @@
   }
   .icon {
     color: CanvasText;
+  }
+  .bar {
+    forced-color-adjust: none;
+    background: CanvasText;
   }
 }

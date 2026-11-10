@@ -1,17 +1,17 @@
 'use client';
 
 import { useState } from 'react';
-import { CrBox, CrButton, CrToast, CrToaster } from '@cristal/react';
+import { CrBox, CrButton, CrAlert, CrToaster } from '@cristal/react';
 
 const messages = {
-  info: 'A new version is available.',
-  success: 'Changes saved.',
-  danger: 'Sending failed: check your connection.',
+  info: 'Une nouvelle version est disponible.',
+  success: 'Modifications enregistrées.',
+  danger: 'Envoi impossible : vérifiez votre connexion.',
 } as const;
 
 type Variant = keyof typeof messages;
 
-export default function ToastBasic() {
+export default function AlertToaster() {
   const [toasts, setToasts] = useState<{ id: number; variant: Variant }[]>([]);
   const show = (variant: Variant) => setToasts((list) => [...list, { id: Date.now(), variant }]);
 
@@ -20,15 +20,15 @@ export default function ToastBasic() {
       <CrButton variant="secondary" onClick={() => show('info')}>
         Information
       </CrButton>
-      <CrButton onClick={() => show('success')}>Save</CrButton>
+      <CrButton onClick={() => show('success')}>Enregistrer</CrButton>
       <CrButton variant="outline" onClick={() => show('danger')}>
-        Send
+        Envoyer
       </CrButton>
       <CrToaster>
         {toasts.map(({ id, variant }) => (
-          <CrToast key={id} open variant={variant} duration={variant === 'danger' ? 0 : 5000} onCrClose={() => setToasts((list) => list.filter((toast) => toast.id !== id))}>
+          <CrAlert key={id} variant={variant} duration={variant === 'danger' ? 0 : 5000} onCrClose={() => setToasts((list) => list.filter((toast) => toast.id !== id))}>
             {messages[variant]}
-          </CrToast>
+          </CrAlert>
         ))}
       </CrToaster>
     </CrBox>

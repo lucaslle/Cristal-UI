@@ -53,7 +53,6 @@ export const CrLoader = withAttributes(generated.CrLoader, elements.CrLoader);
 export const CrProgress = withAttributes(generated.CrProgress, elements.CrProgress);
 export const CrProgressSteps = withAttributes(generated.CrProgressSteps, elements.CrProgressSteps);
 export const CrSkeleton = withAttributes(generated.CrSkeleton, elements.CrSkeleton);
-export const CrToast = withAttributes(generated.CrToast, elements.CrToast);
 export const CrToaster = withAttributes(generated.CrToaster, elements.CrToaster);
 export const CrSwitch = withAttributes(generated.CrSwitch, elements.CrSwitch);
 export const CrRadioGroup = withAttributes(generated.CrRadioGroup, elements.CrRadioGroup);
