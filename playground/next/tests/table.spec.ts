@@ -1,6 +1,6 @@
 import { expect, test, type Page } from '@playwright/test';
 
-const table = (page: Page) => page.locator('cr-table');
+const table = (page: Page) => page.locator('cr-table[label="Commandes de la semaine"]');
 const order = (page: Page) => table(page).locator('th .text').allTextContents();
 const header = (page: Page, name: string) => table(page).getByRole('columnheader', { name: new RegExp(`^${name}`) });
 const status = (page: Page) => table(page).locator('[role="status"]');
@@ -121,7 +121,7 @@ for (const variant of ['striped', 'cards', 'minimal', 'grid']) {
     await page.getByRole('combobox', { name: 'Style du tableau' }).click();
     await page.getByRole('option', { name: variant }).click();
     await expect(table(page)).toHaveAttribute('data-variant', variant);
-    const result = await new AxeBuilder({ page }).include('cr-table').withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa']).analyze();
+    const result = await new AxeBuilder({ page }).include('cr-table[label="Commandes de la semaine"]').withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa']).analyze();
     expect(result.violations).toEqual([]);
   });
 }

@@ -1,4 +1,4 @@
-import { Component, Element, Event, EventEmitter, Host, Prop, Watch, h } from '@stencil/core';
+import { Component, Element, Event, EventEmitter, Host, Prop, State, Watch, h } from '@stencil/core';
 
 /**
  * Carte d'un cr-dashboard. Se déplace par sa poignée et se redimensionne par son coin.
@@ -42,6 +42,34 @@ export class CrWidget {
   /** Interne : prévient le tableau de bord qu'une position ou une taille a changé. */
   @Event({ eventName: 'crWidgetUpdate' }) crWidgetUpdate: EventEmitter<void>;
 
+  /** Contenu plus grand que la carte : le corps défile, et doit alors pouvoir recevoir le focus pour défiler au clavier. */
+  @State() scrollable = false;
+
+  private body?: HTMLElement;
+  private sizes?: ResizeObserver;
+
+  componentDidLoad() {
+    if (typeof ResizeObserver === 'undefined' || !this.body) return;
+    this.sizes = new ResizeObserver(this.measure);
+    this.watchContent();
+  }
+
+  disconnectedCallback() {
+    this.sizes?.disconnect();
+  }
+
+  private watchContent = () => {
+    if (!this.sizes || !this.body) return;
+    this.sizes.disconnect();
+    this.sizes.observe(this.body);
+    this.body.querySelector('slot')?.assignedElements().forEach((el) => this.sizes!.observe(el));
+  };
+
+  private measure = () => {
+    const body = this.body!;
+    this.scrollable = body.scrollHeight > body.clientHeight + 1 || body.scrollWidth > body.clientWidth + 1;
+  };
+
   @Watch('x')
   @Watch('y')
   @Watch('w')
@@ -78,8 +106,8 @@ export class CrWidget {
               </button>
             )}
           </div>
-          <div class="body">
-            <slot />
+          <div ref={(el) => (this.body = el)} class="body" {...(this.scrollable ? { tabIndex: 0, role: 'region', 'aria-label': this.label } : {})}>
+            <slot onSlotchange={this.watchContent} />
           </div>
           <span class="resize" part="resize" aria-hidden="true" />
         </div>

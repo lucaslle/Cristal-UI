@@ -134,3 +134,12 @@ kbd {
   background: var(--cr-color-primary-subtle);
   border-radius: 4px;
 }
+
+.more {
+  position: sticky;
+  left: 0;
+  margin: 0;
+  padding: var(--cr-spacing-sm) var(--cr-spacing-lg);
+  font-size: var(--cr-font-size-s);
+  color: var(--cr-color-text-muted);
+}
