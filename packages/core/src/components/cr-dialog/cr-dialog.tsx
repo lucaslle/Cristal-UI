@@ -1,6 +1,6 @@
 import { Component, Element, Event, EventEmitter, Prop, Watch, h } from '@stencil/core';
 import { t } from '../../utils/i18n';
-import { OverlayContent, releaseScroll, syncDialog } from '../../utils/overlay';
+import { OverlayContent, backdropClick, releaseScroll, syncDialog } from '../../utils/overlay';
 
 /**
  * Fenêtre modale, basée sur l'élément dialog natif.
@@ -27,10 +27,14 @@ export class CrDialog {
   /** Libellé du bouton de fermeture (« Close », ou « Fermer » en français, par défaut). */
   @Prop() closeLabel?: string;
 
-  /** Émis à chaque fermeture : Échap, bouton Fermer ou open à false. */
+  /** Un clic sur le fond assombri, à côté, ferme la fenêtre. */
+  @Prop() closeOnBackdrop = false;
+
+  /** Émis à chaque fermeture : Échap, bouton Fermer, clic à côté (avec closeOnBackdrop) ou open à false. */
   @Event() crClose: EventEmitter<void>;
 
   private dialog?: HTMLDialogElement;
+  private backdrop = backdropClick(() => this.closeOnBackdrop && (this.open = false));
 
   @Watch('open')
   openChanged() {
@@ -53,7 +57,7 @@ export class CrDialog {
 
   render() {
     return (
-      <dialog ref={(el) => (this.dialog = el)} class="dialog" part="dialog" aria-labelledby="title" onClose={this.onClose}>
+      <dialog ref={(el) => (this.dialog = el)} class="dialog" part="dialog" aria-labelledby="title" onClose={this.onClose} {...this.backdrop}>
         <OverlayContent
           label={this.label}
           closeLabel={this.closeLabel ?? t(this.el).close}

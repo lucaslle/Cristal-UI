@@ -48,3 +48,26 @@ test('drawer slides from the end edge and locks page scroll while open', async (
   await expect(drawer).toBeHidden();
   await expect.poll(() => page.evaluate(() => document.documentElement.style.overflow)).toBe('');
 });
+
+test('clicking next to it closes only with closeOnBackdrop, and not after a selection that ends outside', async ({ page }) => {
+  await page.getByRole('button', { name: 'Supprimer le produit' }).click();
+  const dialog = page.getByRole('dialog', { name: 'Supprimer le produit ?' });
+  await expect(dialog).toBeVisible();
+  await page.mouse.click(5, 5);
+  await expect(dialog).toBeVisible();
+  await page.keyboard.press('Escape');
+
+  const trigger = page.getByRole('button', { name: 'Filtres' });
+  await trigger.click();
+  const drawer = page.getByRole('dialog', { name: 'Filtres' });
+  await expect(drawer).toBeVisible();
+  const box = (await drawer.boundingBox())!;
+  await page.mouse.move(box.x + box.width / 2, box.y + 20);
+  await page.mouse.down();
+  await page.mouse.move(10, box.y + 20);
+  await page.mouse.up();
+  await expect(drawer).toBeVisible();
+  await page.mouse.click(10, box.y + 20);
+  await expect(drawer).toBeHidden();
+  await expect(trigger).toBeFocused();
+});
