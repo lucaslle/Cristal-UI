@@ -1,3 +1,4 @@
+import type { Messages } from './i18n';
 import { h } from '@stencil/core';
 import { ListOption } from './listbox';
 
@@ -56,17 +57,18 @@ interface SearchBoxProps {
   active: number;
   onQuery: (query: string) => void;
   onKeyDown: (event: KeyboardEvent) => void;
+  m: Messages;
 }
 
-export const SearchBox = ({ inputRef, query, active, onQuery, onKeyDown }: SearchBoxProps) => (
+export const SearchBox = ({ inputRef, query, active, onQuery, onKeyDown, m }: SearchBoxProps) => (
   <div class="search">
     <input
       ref={inputRef}
       class="search-input"
       part="search"
       type="search"
-      placeholder="Rechercher…"
-      aria-label="Rechercher dans la liste"
+      placeholder={m.searchPlaceholder}
+      aria-label={m.searchLabel}
       aria-controls="listbox"
       aria-autocomplete="list"
       aria-activedescendant={active >= 0 ? `option-${active}` : undefined}
@@ -128,18 +130,19 @@ interface SelectPanelProps extends Omit<OptionListProps, 'visible'> {
   searchRef: (el: HTMLInputElement) => void;
   onQuery: (query: string) => void;
   onKeyDown: (event: KeyboardEvent) => void;
+  m: Messages;
 }
 
 export const SelectPanel = (props: SelectPanelProps) => [
   props.searchable && (
-    <SearchBox inputRef={props.searchRef} query={props.query} active={props.active} onQuery={props.onQuery} onKeyDown={props.onKeyDown} />
+    <SearchBox inputRef={props.searchRef} query={props.query} active={props.active} onQuery={props.onQuery} onKeyDown={props.onKeyDown} m={props.m} />
   ),
   <div class="list" id="listbox" role="listbox" aria-labelledby="label" aria-multiselectable={props.multiple ? 'true' : undefined} aria-busy={props.loading ? 'true' : undefined}>
     <OptionList {...props} />
   </div>,
   props.searchable && (
     <p class="empty" role="status">
-      {props.loading ? 'Recherche en cours…' : props.visible.length ? '' : 'Aucun résultat'}
+      {props.loading ? props.m.searching : props.visible.length ? '' : props.m.noResults}
     </p>
   ),
 ];

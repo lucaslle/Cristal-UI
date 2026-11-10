@@ -2,6 +2,7 @@ import { AttachInternals, Component, Element, Event, EventEmitter, Listen, Prop,
 import { FieldHeader, describedBy } from '../../utils/field';
 import { Ghost, StrengthMeter, completionFor } from '../../utils/input-extras';
 import { handleInvalid, kindOf, validationMessage } from '../../utils/validation';
+import { t } from '../../utils/i18n';
 
 export type InputType = 'text' | 'email' | 'password' | 'number' | 'tel' | 'url' | 'search';
 
@@ -80,7 +81,7 @@ export class CrInput {
 
   private syncForm() {
     this.internals.setFormValue(this.value);
-    if (this.input) this.internals.setValidity(this.input.validity, validationMessage(this.input.validity, kindOf(this.type)), this.input);
+    if (this.input) this.internals.setValidity(this.input.validity, validationMessage(this.input.validity, kindOf(this.type), t(this.el)), this.input);
   }
 
   private onInput = (event: Event) => {
@@ -112,7 +113,7 @@ export class CrInput {
 
   render() {
     const id = 'control';
-    const error = this.error || (this.touched ? validationMessage(this.input?.validity, kindOf(this.type)) : '');
+    const error = this.error || (this.touched ? validationMessage(this.input?.validity, kindOf(this.type), t(this.el)) : '');
     const completion = this.focused ? completionFor(this.value, this.completions) : undefined;
     const extra = [this.strength && `${id}-strength`, completion && `${id}-completion`, this.filled && `${id}-filled`].filter(Boolean).join(' ');
     const described = [describedBy({ id, hint: this.hint, error }), extra].filter(Boolean).join(' ') || undefined;
@@ -146,9 +147,9 @@ export class CrInput {
           onKeyDown={this.onKeyDown}
         />
         </div>
-        {completion && <span id={`${id}-completion`} class="sr-only">{`Suggestion : ${completion}. Flèche droite pour l'accepter.`}</span>}
-        {this.filled && <span id={`${id}-filled`} class="filled-hint">Complété pour vous</span>}
-        {this.strength && <StrengthMeter id={`${id}-strength`} password={this.value} />}
+        {completion && <span id={`${id}-completion`} class="sr-only">{t(this.el).suggestion(completion)}</span>}
+        {this.filled && <span id={`${id}-filled`} class="filled-hint">{t(this.el).filled}</span>}
+        {this.strength && <StrengthMeter id={`${id}-strength`} password={this.value} m={t(this.el)} />}
       </div>
     );
   }

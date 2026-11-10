@@ -58,7 +58,7 @@ for (const [variant, title] of [
     const group = stepper(page, `Inscription ${title}`);
     await group.getByRole('button', { name: 'Suivant' }).click();
     await expect(current(page, `Inscription ${title}`)).toHaveText('Profil : en cours');
-    const hidden = await page.locator(`cr-stepper[variant="${variant}"]`).evaluate((el) => el.shadowRoot!.querySelector('.stepper > :nth-child(2)')!.getAttribute('aria-hidden'));
+    const hidden = await page.locator(`section:not([lang]) cr-stepper[variant="${variant}"]`).evaluate((el) => el.shadowRoot!.querySelector('.stepper > :nth-child(2)')!.getAttribute('aria-hidden'));
     expect(hidden).toBe('true');
   });
 }

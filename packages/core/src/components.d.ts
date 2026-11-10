@@ -299,10 +299,9 @@ export namespace Components {
          */
         "gap": number;
         /**
-          * Nom du tableau de bord, lu par les lecteurs d'écran.
-          * @default 'Tableau de bord'
+          * Nom du tableau de bord, lu par les lecteurs d'écran (« Dashboard », ou « Tableau de bord » en français, par défaut).
          */
-        "label": string;
+        "label"?: string;
         /**
           * Revient à la disposition de départ et oublie celle enregistrée.
          */
@@ -327,10 +326,9 @@ export namespace Components {
      */
     interface CrDialog {
         /**
-          * Libellé du bouton de fermeture.
-          * @default 'Fermer'
+          * Libellé du bouton de fermeture (« Close », ou « Fermer » en français, par défaut).
          */
-        "closeLabel": string;
+        "closeLabel"?: string;
         /**
           * Titre affiché, et nom de la fenêtre pour les lecteurs d'écran.
          */
@@ -346,10 +344,9 @@ export namespace Components {
      */
     interface CrDrawer {
         /**
-          * Libellé du bouton de fermeture.
-          * @default 'Fermer'
+          * Libellé du bouton de fermeture (« Close », ou « Fermer » en français, par défaut).
          */
-        "closeLabel": string;
+        "closeLabel"?: string;
         /**
           * Titre affiché, et nom du panneau pour les lecteurs d'écran.
          */
@@ -643,10 +640,9 @@ export namespace Components {
          */
         "goTo": (index: number) => Promise<void>;
         /**
-          * Nom de la progression, lu par les lecteurs d'écran.
-          * @default 'Progression'
+          * Nom de la progression, lu par les lecteurs d'écran (« Progress », ou « Progression » en français, par défaut).
          */
-        "label": string;
+        "label"?: string;
         /**
           * Ajoute les boutons « Précédent » et « Suivant » (« Terminer » à la dernière étape).
           * @default false
@@ -1609,8 +1605,7 @@ declare namespace LocalJSX {
          */
         "gap"?: number;
         /**
-          * Nom du tableau de bord, lu par les lecteurs d'écran.
-          * @default 'Tableau de bord'
+          * Nom du tableau de bord, lu par les lecteurs d'écran (« Dashboard », ou « Tableau de bord » en français, par défaut).
          */
         "label"?: string;
         /**
@@ -1637,8 +1632,7 @@ declare namespace LocalJSX {
      */
     interface CrDialog {
         /**
-          * Libellé du bouton de fermeture.
-          * @default 'Fermer'
+          * Libellé du bouton de fermeture (« Close », ou « Fermer » en français, par défaut).
          */
         "closeLabel"?: string;
         /**
@@ -1660,8 +1654,7 @@ declare namespace LocalJSX {
      */
     interface CrDrawer {
         /**
-          * Libellé du bouton de fermeture.
-          * @default 'Fermer'
+          * Libellé du bouton de fermeture (« Close », ou « Fermer » en français, par défaut).
          */
         "closeLabel"?: string;
         /**
@@ -2009,8 +2002,7 @@ declare namespace LocalJSX {
          */
         "current"?: number;
         /**
-          * Nom de la progression, lu par les lecteurs d'écran.
-          * @default 'Progression'
+          * Nom de la progression, lu par les lecteurs d'écran (« Progress », ou « Progression » en français, par défaut).
          */
         "label"?: string;
         /**

@@ -1,25 +1,17 @@
+import type { Messages } from './i18n';
+
 export type FieldKind = 'text' | 'email' | 'url' | 'number' | 'checkbox' | 'select' | 'select-multiple';
 
-const missing: Partial<Record<FieldKind, string>> = {
-  checkbox: 'Cochez cette case pour continuer.',
-  select: 'Choisissez une option dans la liste.',
-  'select-multiple': 'Choisissez au moins une option dans la liste.',
-};
-
-const mismatch: Partial<Record<FieldKind, string>> = {
-  email: 'Saisissez une adresse e-mail valide, par exemple nom@domaine.fr.',
-  url: 'Saisissez une adresse web valide, par exemple https://exemple.fr.',
-};
-
-export const validationMessage = (validity: ValidityState | undefined, kind: FieldKind): string => {
+export const validationMessage = (validity: ValidityState | undefined, kind: FieldKind, m: Messages): string => {
   if (!validity || validity.valid) return '';
-  if (validity.valueMissing) return missingMessage(kind);
-  if (validity.typeMismatch) return mismatch[kind] ?? 'Le format saisi est incorrect.';
-  if (validity.badInput) return 'Saisissez un nombre.';
-  return 'La valeur saisie est incorrecte.';
+  if (validity.valueMissing) return missingMessage(kind, m);
+  if (validity.typeMismatch) return kind === 'email' ? m.email : kind === 'url' ? m.url : m.format;
+  if (validity.badInput) return m.number;
+  return m.invalid;
 };
 
-export const missingMessage = (kind: FieldKind) => missing[kind] ?? 'Ce champ est obligatoire.';
+export const missingMessage = (kind: FieldKind, m: Messages) =>
+  kind === 'checkbox' ? m.checkbox : kind === 'select' ? m.select : kind === 'select-multiple' ? m.selectMultiple : m.required;
 
 export const kindOf = (type: string): FieldKind =>
   type === 'email' || type === 'url' || type === 'number' ? type : 'text';

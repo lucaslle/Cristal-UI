@@ -1,3 +1,5 @@
+import type { Messages } from './i18n';
+
 export const digitsOf = (text: string) => text.replace(/\D/g, '');
 
 const isAmex = (digits: string) => /^3[47]/.test(digits);
@@ -45,17 +47,17 @@ export const formatExpiry = (text: string) => {
   return digits.length > 2 ? `${digits.slice(0, 2)}/${digits.slice(2)}` : digits;
 };
 
-export const expiryError = (expiry: string, now = new Date()) => {
+export const expiryError = (expiry: string, m: Messages, now = new Date()) => {
   const match = expiry.match(/^(\d{2})\/(\d{2})$/);
-  if (!match) return 'Saisissez la date d’expiration au format MM/AA.';
+  if (!match) return m.expiryFormat;
   const month = Number(match[1]);
   const year = 2000 + Number(match[2]);
-  if (month < 1 || month > 12) return 'Le mois doit être compris entre 01 et 12.';
-  if (year < now.getFullYear() || (year === now.getFullYear() && month < now.getMonth() + 1)) return 'Cette carte est expirée.';
+  if (month < 1 || month > 12) return m.expiryMonth;
+  if (year < now.getFullYear() || (year === now.getFullYear() && month < now.getMonth() + 1)) return m.expired;
   return '';
 };
 
-export const cardError = (digits: string) => {
-  if (digits.length < cardLength(digits)) return `Saisissez les ${cardLength(digits)} chiffres de la carte.`;
-  return luhn(digits) ? '' : 'Ce numéro de carte n’est pas valide. Vérifiez les chiffres.';
+export const cardError = (digits: string, m: Messages) => {
+  if (digits.length < cardLength(digits)) return m.cardDigits(cardLength(digits));
+  return luhn(digits) ? '' : m.cardInvalid;
 };

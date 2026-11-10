@@ -1,4 +1,5 @@
 import { Component, Element, Event, EventEmitter, Prop, Watch, h } from '@stencil/core';
+import { t } from '../../utils/i18n';
 import { OverlayContent, releaseScroll, syncDialog } from '../../utils/overlay';
 
 /**
@@ -23,8 +24,8 @@ export class CrDrawer {
   @Prop({ mutable: true, reflect: true }) open = false;
   /** Titre affiché, et nom du panneau pour les lecteurs d'écran. */
   @Prop() label!: string;
-  /** Libellé du bouton de fermeture. */
-  @Prop() closeLabel = 'Fermer';
+  /** Libellé du bouton de fermeture (« Close », ou « Fermer » en français, par défaut). */
+  @Prop() closeLabel?: string;
   /** Bord d'apparition : end (droite) ou start (gauche). */
   @Prop({ reflect: true }) placement: 'start' | 'end' = 'end';
 
@@ -57,7 +58,7 @@ export class CrDrawer {
       <dialog ref={(el) => (this.dialog = el)} class={`drawer ${this.placement}`} part="dialog" aria-labelledby="title" onClose={this.onClose}>
         <OverlayContent
           label={this.label}
-          closeLabel={this.closeLabel}
+          closeLabel={this.closeLabel ?? t(this.el).close}
           hasFooter={!!this.el.querySelector('[slot="footer"]')}
           onCloseClick={() => (this.open = false)}
         />

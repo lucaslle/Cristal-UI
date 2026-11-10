@@ -1,4 +1,5 @@
 import { AttachInternals, Component, Element, Event, EventEmitter, Listen, Prop, State, h } from '@stencil/core';
+import { t } from '../../utils/i18n';
 import { FieldHeader, describedBy } from '../../utils/field';
 import { reducedMotion } from '../../utils/popup';
 import { handleInvalid } from '../../utils/validation';
@@ -67,7 +68,7 @@ export class CrTagInput {
     if (this.name) this.values.forEach((value) => data.append(this.name!, value));
     this.internals.setFormValue(this.values.length ? data : null);
     const missing = this.required && !this.values.length;
-    this.internals.setValidity(missing ? { valueMissing: true } : {}, missing ? 'Ajoutez au moins une étiquette.' : '', this.input);
+    this.internals.setValidity(missing ? { valueMissing: true } : {}, missing ? t(this.el).tagsMissing : '', this.input);
   }
 
   private update(next: string[], message: string) {
@@ -81,15 +82,15 @@ export class CrTagInput {
     const words = text.split(',').map((word) => word.trim()).filter(Boolean);
     const fresh = words.filter((word, i) => !this.values.some((v) => v.toLowerCase() === word.toLowerCase()) && words.indexOf(word) === i);
     if (fresh.length) this.fresh = [...this.fresh, ...fresh];
-    if (fresh.length) this.update([...this.values, ...fresh], `${fresh.join(', ')} ${fresh.length > 1 ? 'ajoutées' : 'ajoutée'}. ${this.values.length + fresh.length} étiquettes.`);
-    else if (words.length) this.message = `${words[0]} est déjà dans la liste.`;
+    if (fresh.length) this.update([...this.values, ...fresh], t(this.el).tagsAdded(fresh, this.values.length + fresh.length));
+    else if (words.length) this.message = t(this.el).tagDuplicate(words[0]);
   }
 
   private async remove(value: string, refocus: boolean) {
     const tag = Array.from(this.list?.children ?? []).find((el) => (el as HTMLElement).dataset.value === value) as HTMLElement | undefined;
     if (tag && !reducedMotion()) await tag.animate([{ transform: 'none', opacity: 1 }, { transform: 'scale(0.6)', opacity: 0 }], { duration: 160, easing: 'ease-in' }).finished;
     const next = this.values.filter((v) => v !== value);
-    this.update(next, `${value} retirée. ${next.length} étiquettes.`);
+    this.update(next, t(this.el).tagRemoved(value, next.length));
     if (refocus) this.input?.focus();
   }
 
@@ -112,16 +113,17 @@ export class CrTagInput {
 
   render() {
     const id = 'control';
-    const error = this.error || (this.touched && this.required && !this.values.length ? 'Ajoutez au moins une étiquette.' : '');
+    const error = this.error || (this.touched && this.required && !this.values.length ? t(this.el).tagsMissing : '');
+    const m = t(this.el);
     return (
       <div class="field">
         <FieldHeader id={id} label={this.label} required={this.required} hint={this.hint} error={error} />
         <div class={{ tags: true, invalid: !!error, disabled: this.disabled }} onClick={() => this.input?.focus()}>
-          <ul ref={(el) => (this.list = el)} class="list" aria-label={`${this.label} : ${this.values.length} étiquettes`}>
+          <ul ref={(el) => (this.list = el)} class="list" aria-label={m.tagsList(this.label, this.values.length)}>
             {this.values.map((value) => (
               <li key={value} class={{ tag: true, pop: this.fresh.includes(value) }} part="tag" data-value={value}>
                 {value}
-                <button type="button" class="remove" aria-label={`Retirer ${value}`} disabled={this.disabled} onClick={(event) => (event.stopPropagation(), this.remove(value, true))}>
+                <button type="button" class="remove" aria-label={m.tagRemove(value)} disabled={this.disabled} onClick={(event) => (event.stopPropagation(), this.remove(value, true))}>
                   <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true">
                     <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" />
                   </svg>
@@ -143,7 +145,7 @@ export class CrTagInput {
           />
         </div>
         <span id={`${id}-help`} class="sr-only">
-          Entrée ou virgule pour ajouter, retour arrière pour retirer la dernière.
+          {m.tagsHelp}
         </span>
         <span class="sr-only" role="status">
           {this.message}

@@ -1,6 +1,7 @@
 import { AttachInternals, Component, Element, Event, EventEmitter, Listen, Prop, State, h } from '@stencil/core';
 import { FieldHeader, describedBy } from '../../utils/field';
 import { handleInvalid, validationMessage } from '../../utils/validation';
+import { t } from '../../utils/i18n';
 
 /**
  * Zone de texte sur plusieurs lignes qui grandit d'une ligne à la fois, avec un léger rebond.
@@ -67,7 +68,7 @@ export class CrTextarea {
 
   componentDidRender() {
     this.internals.setFormValue(this.value);
-    if (this.textarea) this.internals.setValidity(this.textarea.validity, validationMessage(this.textarea.validity, 'text'), this.textarea);
+    if (this.textarea) this.internals.setValidity(this.textarea.validity, validationMessage(this.textarea.validity, 'text', t(this.el)), this.textarea);
     this.measure();
   }
 
@@ -92,7 +93,7 @@ export class CrTextarea {
 
   render() {
     const id = 'control';
-    const error = this.error || (this.touched ? validationMessage(this.textarea?.validity, 'text') : '');
+    const error = this.error || (this.touched ? validationMessage(this.textarea?.validity, 'text', t(this.el)) : '');
     return (
       <div class="field">
         <FieldHeader id={id} label={this.label} required={this.required} hint={this.hint} error={error} />

@@ -8,6 +8,7 @@ import { PopupAnimation } from '../../utils/popup';
 import { PopupPanel } from '../../utils/popup-view';
 import { ComboTrigger, SelectPanel } from '../../utils/listbox-view';
 import { handleInvalid, missingMessage } from '../../utils/validation';
+import { t } from '../../utils/i18n';
 
 /**
  * Liste déroulante. Les options sont des éléments option enfants.
@@ -102,7 +103,7 @@ export class CrSelect {
     this.options.forEach((option) => chosen.includes(option.value) && this.labels.set(option.value, option.label));
     const missing = this.required && !this.selection().length;
     this.internals.setFormValue(formValue(this.name, this.selection(), this.multiple));
-    this.internals.setValidity({ valueMissing: missing }, missing ? missingMessage(this.kind()) : '', this.trigger);
+    this.internals.setValidity({ valueMissing: missing }, missing ? missingMessage(this.kind(), t(this.el)) : '', this.trigger);
     if (this.open) revealInList(this.listbox?.querySelector<HTMLElement>('[data-active]'));
   }
 
@@ -157,7 +158,7 @@ export class CrSelect {
     const selection = this.selection();
     const text = summary(this.options, selection, this.labels);
     const visible = this.visible();
-    const error = this.error || (this.touched && this.required && !selection.length ? missingMessage(this.kind()) : '');
+    const error = this.error || (this.touched && this.required && !selection.length ? missingMessage(this.kind(), t(this.el)) : '');
     return (
       <div class="field">
         <FieldHeader id={id} labelId="label" label={this.label} required={this.required} hint={this.hint} error={error} />
@@ -176,7 +177,7 @@ export class CrSelect {
         />
         <PopupPanel panelRef={(el) => (this.listbox = el)} part="listbox" animation={this.animation}>
           <SelectPanel
-            {...{ options: this.options, visible, selection, multiple: this.multiple, active: this.active, open: this.open, searchable: this.searchable, query: this.query, loading: this.loading }}
+            {...{ options: this.options, visible, selection, multiple: this.multiple, active: this.active, open: this.open, searchable: this.searchable, query: this.query, loading: this.loading, m: t(this.el) }}
             searchRef={(el) => (this.search = el)}
             onQuery={this.setQuery}
             onKeyDown={this.keys.onKeyDown}

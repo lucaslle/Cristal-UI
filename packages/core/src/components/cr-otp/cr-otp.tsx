@@ -1,4 +1,5 @@
 import { AttachInternals, Component, Element, Event, EventEmitter, Listen, Prop, State, h } from '@stencil/core';
+import { t } from '../../utils/i18n';
 import { FieldHeader, describedBy } from '../../utils/field';
 import { handleInvalid } from '../../utils/validation';
 
@@ -61,8 +62,8 @@ export class CrOtp {
 
   private message() {
     if (this.value.length === this.length) return '';
-    if (!this.value) return this.required ? 'Ce champ est obligatoire.' : '';
-    return `Saisissez les ${this.length} chiffres du code.`;
+    if (!this.value) return this.required ? t(this.el).required : '';
+    return t(this.el).otpDigits(this.length);
   }
 
   componentDidRender() {

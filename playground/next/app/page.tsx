@@ -10,6 +10,7 @@ import { MenuDemo } from './menu-demo';
 import { SelectDemo } from './select-demo';
 import { RemoteSelectDemo } from './remote-select-demo';
 import { OverlayDemo } from './overlay-demo';
+import { EnglishDemo } from './english-demo';
 import { IconButtonDemo } from './icon-button-demo';
 
 const row = { display: 'flex', gap: 'var(--cr-spacing-sm)', alignItems: 'center', marginBottom: 'var(--cr-spacing-lg)' };
@@ -113,6 +114,9 @@ export default function Page() {
 
       <h2>Modale et drawer</h2>
       <OverlayDemo />
+
+      <h2 lang="en">In English</h2>
+      <EnglishDemo />
     </main>
   );
 }

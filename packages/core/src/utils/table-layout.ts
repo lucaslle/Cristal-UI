@@ -1,3 +1,5 @@
+import type { Messages } from './i18n';
+
 export type BadgeTone = 'primary' | 'success' | 'warning' | 'danger' | 'neutral';
 
 export type TableVariant = 'default' | 'striped' | 'cards' | 'minimal' | 'grid';
@@ -30,8 +32,6 @@ export interface TableLayout {
 export const MIN_WIDTH = 64;
 export const MAX_WIDTH = 640;
 const DEFAULT_WIDTH = 160;
-
-export const DENSITIES: Record<TableDensity, string> = { comfortable: 'confortables', normal: 'normales', compact: 'compactes' };
 
 /** Les colonnes fixées passent devant, dans leur ordre relatif. */
 export const pinnedFirst = (state: ColumnState[]) => [...state.filter((column) => column.pinned), ...state.filter((column) => !column.pinned)];
@@ -73,10 +73,10 @@ export const neighbour = (state: ColumnState[], key: string, step: 1 | -1) => {
   return visible[visible.findIndex((column) => column.key === key) + step]?.key;
 };
 
-export const summary = (state: ColumnState[], density: TableDensity) => {
+export const summary = (state: ColumnState[], density: TableDensity, m: Messages) => {
   const shown = state.filter((column) => !column.hidden).length;
   const pinned = state.filter((column) => column.pinned && !column.hidden).length;
-  return `${shown} colonnes sur ${state.length} · ${pinned} ${pinned > 1 ? 'fixées' : 'fixée'} · lignes ${DENSITIES[density]}`;
+  return m.tableSummary(shown, state.length, pinned, m.densityRows[density]);
 };
 
 /** Décalage gauche de chaque colonne fixée visible, pour position: sticky. */
