@@ -62,3 +62,4 @@ export const CrTooltip = withAttributes(generated.CrTooltip, elements.CrTooltip)
 export const CrPopover = withAttributes(generated.CrPopover, elements.CrPopover);
 export const CrSlider = withAttributes(generated.CrSlider, elements.CrSlider);
 export const CrFileUpload = withAttributes(generated.CrFileUpload, elements.CrFileUpload);
+export const CrDatePicker = withAttributes(generated.CrDatePicker, elements.CrDatePicker);

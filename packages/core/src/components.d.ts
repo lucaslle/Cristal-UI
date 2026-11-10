@@ -289,6 +289,44 @@ export namespace Components {
         "value": string;
     }
     /**
+     * Champ de date : saisie au clavier dans le format de la langue (JJ/MM/AAAA en français, MM/DD/YYYY en anglais),
+     * ou choix dans un calendrier ouvert par le bouton voisin. Le calendrier suit le motif Date Picker Dialog de l'APG ;
+     * les mois glissent du côté de la navigation et le jour choisi s'affiche avec un petit rebond.
+     */
+    interface CrDatePicker {
+        /**
+          * Désactive le champ et le calendrier.
+          * @default false
+         */
+        "disabled": boolean;
+        /**
+          * Libellé affiché au-dessus du champ (obligatoire).
+         */
+        "label": string;
+        /**
+          * Dernière date possible, au format ISO AAAA-MM-JJ.
+         */
+        "max"?: string;
+        /**
+          * Première date possible, au format ISO AAAA-MM-JJ.
+         */
+        "min"?: string;
+        /**
+          * Nom envoyé avec le formulaire.
+         */
+        "name"?: string;
+        /**
+          * Rend la date obligatoire.
+          * @default false
+         */
+        "required": boolean;
+        /**
+          * Date choisie, au format ISO AAAA-MM-JJ ; chaîne vide sans date.
+          * @default ''
+         */
+        "value": string;
+    }
+    /**
      * Fenêtre modale, basée sur l'élément dialog natif.
      */
     interface CrDialog {
@@ -1241,6 +1279,10 @@ export interface CrCheckboxCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLCrCheckboxElement;
 }
+export interface CrDatePickerCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLCrDatePickerElement;
+}
 export interface CrDialogCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLCrDialogElement;
@@ -1424,6 +1466,28 @@ declare global {
     var HTMLCrCheckboxElement: {
         prototype: HTMLCrCheckboxElement;
         new (): HTMLCrCheckboxElement;
+    };
+    interface HTMLCrDatePickerElementEventMap {
+        "crChange": string;
+    }
+    /**
+     * Champ de date : saisie au clavier dans le format de la langue (JJ/MM/AAAA en français, MM/DD/YYYY en anglais),
+     * ou choix dans un calendrier ouvert par le bouton voisin. Le calendrier suit le motif Date Picker Dialog de l'APG ;
+     * les mois glissent du côté de la navigation et le jour choisi s'affiche avec un petit rebond.
+     */
+    interface HTMLCrDatePickerElement extends Components.CrDatePicker, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLCrDatePickerElementEventMap>(type: K, listener: (this: HTMLCrDatePickerElement, ev: CrDatePickerCustomEvent<HTMLCrDatePickerElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLCrDatePickerElementEventMap>(type: K, listener: (this: HTMLCrDatePickerElement, ev: CrDatePickerCustomEvent<HTMLCrDatePickerElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLCrDatePickerElement: {
+        prototype: HTMLCrDatePickerElement;
+        new (): HTMLCrDatePickerElement;
     };
     interface HTMLCrDialogElementEventMap {
         "crClose": void;
@@ -1959,6 +2023,7 @@ declare global {
         "cr-card": HTMLCrCardElement;
         "cr-card-input": HTMLCrCardInputElement;
         "cr-checkbox": HTMLCrCheckboxElement;
+        "cr-date-picker": HTMLCrDatePickerElement;
         "cr-dialog": HTMLCrDialogElement;
         "cr-drawer": HTMLCrDrawerElement;
         "cr-file-upload": HTMLCrFileUploadElement;
@@ -2277,6 +2342,52 @@ declare namespace LocalJSX {
         /**
           * Valeur envoyée quand la case est cochée.
           * @default 'on'
+         */
+        "value"?: string;
+    }
+    /**
+     * Champ de date : saisie au clavier dans le format de la langue (JJ/MM/AAAA en français, MM/DD/YYYY en anglais),
+     * ou choix dans un calendrier ouvert par le bouton voisin. Le calendrier suit le motif Date Picker Dialog de l'APG ;
+     * les mois glissent du côté de la navigation et le jour choisi s'affiche avec un petit rebond.
+     */
+    interface CrDatePicker {
+        /**
+          * Désactive le champ et le calendrier.
+          * @default false
+         */
+        "disabled"?: boolean;
+        /**
+          * The `id` of a `<form>` element to associate this element with.
+         */
+        "form"?: string;
+        /**
+          * Libellé affiché au-dessus du champ (obligatoire).
+         */
+        "label": string;
+        /**
+          * Dernière date possible, au format ISO AAAA-MM-JJ.
+         */
+        "max"?: string;
+        /**
+          * Première date possible, au format ISO AAAA-MM-JJ.
+         */
+        "min"?: string;
+        /**
+          * Nom envoyé avec le formulaire.
+         */
+        "name"?: string;
+        /**
+          * Émis quand la date change (choix dans le calendrier, ou champ quitté après saisie) ; detail : la date ISO, ou une chaîne vide.
+         */
+        "onCrChange"?: (event: CrDatePickerCustomEvent<string>) => void;
+        /**
+          * Rend la date obligatoire.
+          * @default false
+         */
+        "required"?: boolean;
+        /**
+          * Date choisie, au format ISO AAAA-MM-JJ ; chaîne vide sans date.
+          * @default ''
          */
         "value"?: string;
     }
@@ -3429,6 +3540,15 @@ declare namespace LocalJSX {
         "required": boolean;
         "disabled": boolean;
     }
+    interface CrDatePickerAttributes {
+        "label": string;
+        "name": string;
+        "value": string;
+        "min": string;
+        "max": string;
+        "required": boolean;
+        "disabled": boolean;
+    }
     interface CrDialogAttributes {
         "open": boolean;
         "label": string;
@@ -3654,6 +3774,7 @@ declare namespace LocalJSX {
         "cr-card": CrCard;
         "cr-card-input": Omit<CrCardInput, keyof CrCardInputAttributes> & { [K in keyof CrCardInput & keyof CrCardInputAttributes]?: CrCardInput[K] } & { [K in keyof CrCardInput & keyof CrCardInputAttributes as `attr:${K}`]?: CrCardInputAttributes[K] } & { [K in keyof CrCardInput & keyof CrCardInputAttributes as `prop:${K}`]?: CrCardInput[K] } & OneOf<"label", CrCardInput["label"], CrCardInputAttributes["label"]>;
         "cr-checkbox": Omit<CrCheckbox, keyof CrCheckboxAttributes> & { [K in keyof CrCheckbox & keyof CrCheckboxAttributes]?: CrCheckbox[K] } & { [K in keyof CrCheckbox & keyof CrCheckboxAttributes as `attr:${K}`]?: CrCheckboxAttributes[K] } & { [K in keyof CrCheckbox & keyof CrCheckboxAttributes as `prop:${K}`]?: CrCheckbox[K] } & OneOf<"label", CrCheckbox["label"], CrCheckboxAttributes["label"]>;
+        "cr-date-picker": Omit<CrDatePicker, keyof CrDatePickerAttributes> & { [K in keyof CrDatePicker & keyof CrDatePickerAttributes]?: CrDatePicker[K] } & { [K in keyof CrDatePicker & keyof CrDatePickerAttributes as `attr:${K}`]?: CrDatePickerAttributes[K] } & { [K in keyof CrDatePicker & keyof CrDatePickerAttributes as `prop:${K}`]?: CrDatePicker[K] } & OneOf<"label", CrDatePicker["label"], CrDatePickerAttributes["label"]>;
         "cr-dialog": Omit<CrDialog, keyof CrDialogAttributes> & { [K in keyof CrDialog & keyof CrDialogAttributes]?: CrDialog[K] } & { [K in keyof CrDialog & keyof CrDialogAttributes as `attr:${K}`]?: CrDialogAttributes[K] } & { [K in keyof CrDialog & keyof CrDialogAttributes as `prop:${K}`]?: CrDialog[K] } & OneOf<"label", CrDialog["label"], CrDialogAttributes["label"]>;
         "cr-drawer": Omit<CrDrawer, keyof CrDrawerAttributes> & { [K in keyof CrDrawer & keyof CrDrawerAttributes]?: CrDrawer[K] } & { [K in keyof CrDrawer & keyof CrDrawerAttributes as `attr:${K}`]?: CrDrawerAttributes[K] } & { [K in keyof CrDrawer & keyof CrDrawerAttributes as `prop:${K}`]?: CrDrawer[K] } & OneOf<"label", CrDrawer["label"], CrDrawerAttributes["label"]>;
         "cr-file-upload": Omit<CrFileUpload, keyof CrFileUploadAttributes> & { [K in keyof CrFileUpload & keyof CrFileUploadAttributes]?: CrFileUpload[K] } & { [K in keyof CrFileUpload & keyof CrFileUploadAttributes as `attr:${K}`]?: CrFileUploadAttributes[K] } & { [K in keyof CrFileUpload & keyof CrFileUploadAttributes as `prop:${K}`]?: CrFileUpload[K] } & OneOf<"label", CrFileUpload["label"], CrFileUploadAttributes["label"]>;
@@ -3721,6 +3842,12 @@ declare module "@stencil/core" {
              * Case à cocher.
              */
             "cr-checkbox": LocalJSX.IntrinsicElements["cr-checkbox"] & JSXBase.HTMLAttributes<HTMLCrCheckboxElement>;
+            /**
+             * Champ de date : saisie au clavier dans le format de la langue (JJ/MM/AAAA en français, MM/DD/YYYY en anglais),
+             * ou choix dans un calendrier ouvert par le bouton voisin. Le calendrier suit le motif Date Picker Dialog de l'APG ;
+             * les mois glissent du côté de la navigation et le jour choisi s'affiche avec un petit rebond.
+             */
+            "cr-date-picker": LocalJSX.IntrinsicElements["cr-date-picker"] & JSXBase.HTMLAttributes<HTMLCrDatePickerElement>;
             /**
              * Fenêtre modale, basée sur l'élément dialog natif.
              */

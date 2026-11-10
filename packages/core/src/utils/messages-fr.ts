@@ -63,6 +63,16 @@ export const fr: Messages = {
   fileRemoved: (name, count) => `${name} retiré. ${count}.`,
   filesRejected: (names) => `${names.join(', ')} : format de fichier non accepté.`,
 
+  dateChoose: 'Choisir une date',
+  dateChange: (date) => `Changer la date, ${date}`,
+  dateLetters: { day: 'JJ', month: 'MM', year: 'AAAA' },
+  dateHint: (pattern) => `Format : ${pattern}`,
+  dateFormat: (pattern) => `Saisissez une date valide au format ${pattern}.`,
+  dateRange: (from, to) => (from && to ? `Choisissez une date entre le ${from} et le ${to}.` : from ? `Choisissez une date à partir du ${from}.` : `Choisissez une date jusqu’au ${to}.`),
+  previousMonth: 'Mois précédent',
+  nextMonth: 'Mois suivant',
+  firstDay: 1,
+
   openAll: 'Tout ouvrir',
   closeAll: 'Tout fermer',
 

@@ -182,6 +182,14 @@ Choix d'une valeur numérique dans un intervalle : `input type="range"` natif (f
 <CrSlider label="Volume" name="volume" step={5} value={volume} onCrInput={(event) => setVolume(event.detail)} />
 ```
 
+### Sélecteur de date : `cr-date-picker`
+
+Champ de date associé aux formulaires : saisie au format de la langue (`JJ/MM/AAAA` en français, `MM/DD/YYYY` en anglais, rappelé sous le libellé) ou choix dans un calendrier ouvert par le bouton voisin (motif Date Picker Dialog de l'APG : flèches, Page précédente/suivante, Début, Fin, Échap). `label` obligatoire et visible, `name`, `value`, `min` et `max` au format ISO `AAAA-MM-JJ`, `required`, `disabled`. Les mois glissent du côté de la navigation et le jour choisi rebondit. Événement `onCrChange` (date ISO).
+
+```tsx
+<CrDatePicker label="Date de livraison" name="livraison" min="2025-03-03" value={date} onCrChange={(event) => setDate(event.detail)} />
+```
+
 ### Dépôt de fichiers : `cr-file-upload`
 
 Zone de dépôt posée sur un vrai `input type="file"` (clic, Entrée, Espace, Tab) : `label` obligatoire, `hint`, `name` (un envoi par fichier), `accept` (appliqué aussi aux fichiers déposés), `multiple` (les fichiers s'ajoutent ; sinon le nouveau remplace l'ancien), `disabled`. Liste des fichiers avec leur taille et un bouton « Retirer » ; ajouts, retraits et refus annoncés. La zone respire pendant le glissement et chaque fichier glisse en place. Événement `onCrChange` avec les `File[]`.

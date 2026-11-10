@@ -61,6 +61,16 @@ export const en = {
   fileRemoved: (name: string, count: string) => `${name} removed. ${count}.`,
   filesRejected: (names: string[]) => `${names.join(', ')}: file type not accepted.`,
 
+  dateChoose: 'Choose a date',
+  dateChange: (date: string) => `Change the date, ${date}`,
+  dateLetters: { day: 'DD', month: 'MM', year: 'YYYY' },
+  dateHint: (pattern: string) => `Format: ${pattern}`,
+  dateFormat: (pattern: string) => `Enter a valid date as ${pattern}.`,
+  dateRange: (from: string, to: string) => (from && to ? `Choose a date between ${from} and ${to}.` : from ? `Choose a date on or after ${from}.` : `Choose a date on or before ${to}.`),
+  previousMonth: 'Previous month',
+  nextMonth: 'Next month',
+  firstDay: 0,
+
   openAll: 'Open all',
   closeAll: 'Close all',
 

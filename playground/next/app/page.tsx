@@ -8,6 +8,7 @@ import { ToastDemo } from './toast-demo';
 import { SwitchDemo } from './switch-demo';
 import { RadioGroupDemo } from './radio-group-demo';
 import { SliderDemo } from './slider-demo';
+import { DatePickerDemo } from './date-picker-demo';
 import { FileUploadDemo } from './file-upload-demo';
 import { LoadingDemo } from './loading-demo';
 import { TableDemo } from './table-demo';
@@ -136,6 +137,9 @@ export default function Page() {
 
       <h2>Curseurs</h2>
       <SliderDemo />
+
+      <h2>Sélecteur de date</h2>
+      <DatePickerDemo />
 
       <h2>Dépôt de fichiers</h2>
       <FileUploadDemo />

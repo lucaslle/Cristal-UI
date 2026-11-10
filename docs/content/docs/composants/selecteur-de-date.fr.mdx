@@ -1,0 +1,40 @@
+---
+title: Sélecteur de date
+description: Champ de date, saisi au clavier ou choisi dans un calendrier. Balise cr-date-picker, composant React CrDatePicker.
+---
+
+import DatePickerBasic from '@/demos/date-picker-basic';
+
+## Exemple
+
+`cr-date-picker` accepte deux façons de donner une date : la taper dans le champ, dans le format de la langue de la page (`JJ/MM/AAAA` en français, `MM/DD/YYYY` en anglais, rappelé sous le libellé), ou la choisir dans le calendrier ouvert par le bouton voisin. Les séparateurs sont libres (`1/3/2025`, `01.03.2025`) : le champ remet la date au format en le quittant.
+
+Les noms des mois et des jours viennent de `Intl.DateTimeFormat`, dans la langue du composant ; la semaine commence le lundi en français, le dimanche en anglais. Dans le calendrier, le nouveau mois glisse du côté où l'on navigue et le jour choisi s'affiche avec un petit rebond.
+
+<Preview>
+  <DatePickerBasic />
+</Preview>
+
+<include>../../../demos/date-picker-basic.tsx</include>
+
+## Dans un formulaire
+
+`value`, `min` et `max` s'écrivent au format ISO `AAAA-MM-JJ`, quelle que soit la langue ; le formulaire reçoit la date sous ce format, sous le `name` du champ. `onCrChange` signale chaque nouvelle date (chaîne vide quand le champ est vidé), après un choix dans le calendrier ou quand l'utilisateur quitte le champ.
+
+Une date impossible (31/02), hors de l'intervalle `min`–`max`, ou absente avec `required` bloque l'envoi du formulaire, avec un message qui dit quoi corriger.
+
+<Callout>
+  Si l'utilisateur a demandé à son système de réduire les animations, le calendrier apparaît directement, les mois changent sans glisser et le jour choisi ne rebondit pas.
+</Callout>
+
+## Accessibilité
+
+- Le champ texte a un libellé visible, et le format attendu est rappelé sous le libellé et relié au champ : la saisie au clavier reste toujours possible, le calendrier n'est qu'une aide.
+- Le bouton du calendrier est nommé « Choisir une date », puis « Changer la date, » suivi de la date choisie en toutes lettres ; il porte `aria-haspopup="dialog"` et `aria-expanded`.
+- Le calendrier suit le motif Date Picker Dialog de l'APG : un dialogue modal (le focus y reste, Tab tourne entre mois précédent, mois suivant et la grille), une grille de boutons nommés par la date complète (« vendredi 14 mars 2025 »), le mois affiché annoncé à chaque changement.
+- Au clavier dans la grille : flèches gauche et droite pour un jour, haut et bas pour une semaine, Page précédente et Page suivante pour un mois (avec Maj, une année), Début et Fin pour le début et la fin de la semaine, Entrée ou Espace pour choisir, Échap pour fermer ; le focus revient alors au bouton.
+- Le jour choisi est un disque plein, aujourd'hui porte un point sous le chiffre (`aria-current="date"`), les jours hors de l'intervalle sont barrés et désactivés : rien n'est indiqué par la seule couleur.
+
+## API
+
+<ApiReference tag="cr-date-picker" />

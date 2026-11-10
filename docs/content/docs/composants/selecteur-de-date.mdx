@@ -1,0 +1,40 @@
+---
+title: Date picker
+description: Date field, typed in or picked from a calendar. Tag cr-date-picker, React component CrDatePicker.
+---
+
+import DatePickerBasic from '@/demos/en/date-picker-basic';
+
+## Example
+
+`cr-date-picker` offers two ways to give a date: type it in the field, in the page language format (`MM/DD/YYYY` in English, `JJ/MM/AAAA` in French, shown under the label), or pick it from the calendar opened by the button next to it. Separators are free (`3/1/2025`, `03.01.2025`): the field puts the date back in the format when you leave it.
+
+Month and weekday names come from `Intl.DateTimeFormat`, in the component language; weeks start on Sunday in English, on Monday in French. In the calendar, the new month slides in from the side you navigate to and the selected day pops.
+
+<Preview>
+  <DatePickerBasic />
+</Preview>
+
+<include>../../../demos/en/date-picker-basic.tsx</include>
+
+## In a form
+
+`value`, `min` and `max` use the ISO format `YYYY-MM-DD`, whatever the language; the form receives the date in that format, under the field `name`. `onCrChange` reports every new date (an empty string when the field is cleared), after a pick in the calendar or when the user leaves the field.
+
+An impossible date (02/31), a date outside `min`–`max`, or no date with `required` blocks the form submission, with a message saying what to fix.
+
+<Callout>
+  If the user asked their system to reduce motion, the calendar appears directly, months change without sliding and the selected day does not pop.
+</Callout>
+
+## Accessibility
+
+- The text field has a visible label, and the expected format is shown under the label and linked to the field: typing always works, the calendar is only a help.
+- The calendar button is named "Choose a date", then "Change the date," followed by the selected date in words; it has `aria-haspopup="dialog"` and `aria-expanded`.
+- The calendar follows the APG Date Picker Dialog pattern: a modal dialog (focus stays inside, Tab cycles through previous month, next month and the grid), a grid of buttons named by the full date ("Friday, March 14, 2025"), the shown month announced on every change.
+- With the keyboard in the grid: Left and Right Arrow for a day, Up and Down Arrow for a week, Page Up and Page Down for a month (with Shift, a year), Home and End for the start and end of the week, Enter or Space to pick, Escape to close; focus then goes back to the button.
+- The selected day is a filled disc, today has a dot under the number (`aria-current="date"`), days outside the range are struck through and disabled: nothing relies on colour alone.
+
+## API
+
+<ApiReference tag="cr-date-picker" />
