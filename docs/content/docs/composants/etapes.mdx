@@ -1,73 +1,73 @@
 ---
-title: Étapes
-description: Progression dans un parcours en plusieurs étapes. Balises cr-stepper et cr-step, composants React CrStepper et CrStep.
+title: Stepper
+description: Progress through a multi-step flow. cr-stepper and cr-step tags, CrStepper and CrStep React components.
 ---
 
-import StepperBasic from '@/demos/stepper-basic';
-import StepperStyles from '@/demos/stepper-styles';
-import StepperTimeline from '@/demos/stepper-timeline';
+import StepperBasic from '@/demos/en/stepper-basic';
+import StepperStyles from '@/demos/en/stepper-styles';
+import StepperTimeline from '@/demos/en/stepper-timeline';
 
-## Exemple
+## Example
 
-Chaque étape est un `CrStep` avec un `label` ; seul le contenu de l'étape en cours est affiché. Avec `navigation`, les boutons « Précédent » et « Suivant » (« Terminer » à la dernière étape) sont ajoutés : le titre de l'étape arrive du côté où l'on avance et repart dans l'autre sens au retour. Par défaut (`variant="line"`), une bille lumineuse court sur la ligne et allume l'étape atteinte.
+Each step is a `CrStep` with a `label`; only the content of the current step is displayed. With `navigation`, "Previous" and "Next" buttons ("Finish" on the last step) are added: the step title comes in from the side you move towards and leaves the other way when going back. By default (`variant="line"`), a glowing bead runs along the line and lights up the step reached.
 
 <Preview column>
   <StepperBasic />
 </Preview>
 
-<include>../../../demos/stepper-basic.tsx</include>
+<include>../../../demos/en/stepper-basic.tsx</include>
 
 ## Styles
 
-La propriété `variant` change la façon de montrer la progression :
+The `variant` property changes how progress is shown:
 
-| Valeur | Effet |
+| Value | Effect |
 |---|---|
-| `line` | Bead Line : une bille lumineuse court sur la ligne et allume l'étape suivante (par défaut) |
-| `number` | Big Number : un grand numéro bascule comme un panneau à volets, le nom de l'étape arrive en roulant |
-| `path` | Skill Path : un chemin en zigzag ; l'étape en cours rebondit trois fois |
-| `blocks` | Level Blocks : des blocs en escalier se remplissent l'un après l'autre, une bille saute sur l'étape en cours |
-| `gauge` | Gauge Arc : une jauge en demi-cercle dont l'aiguille saute à la graduation suivante, comme un ressort |
-| `timeline` | les étapes sont empilées verticalement, reliées par une ligne qui se remplit ; une étape validée se coche |
+| `line` | Bead Line: a glowing bead runs along the line and lights up the next step (default) |
+| `number` | Big Number: a large number flips like a split-flap display, the step name rolls in |
+| `path` | Skill Path: a zigzag path; the current step bounces three times |
+| `blocks` | Level Blocks: stair-step blocks fill up one after another, a bead jumps onto the current step |
+| `gauge` | Gauge Arc: a half-circle gauge whose needle springs to the next mark |
+| `timeline` | steps are stacked vertically, joined by a line that fills up; a completed step gets a check mark |
 
 <Preview column>
   <StepperStyles />
 </Preview>
 
-<include>../../../demos/stepper-styles.tsx</include>
+<include>../../../demos/en/stepper-styles.tsx</include>
 
-## Étapes verticales
+## Vertical steps
 
-Avec `variant="timeline"`, chaque étape affiche son titre et son contenu dans la ligne de progression. Placez vos propres boutons dans les étapes et appelez la méthode `next()` : l'étape se coche, la ligne se remplit, l'étape suivante s'ouvre et reçoit le focus. Après la dernière étape, `onCrComplete` est émis.
+With `variant="timeline"`, each step displays its title and content inside the progress line. Put your own buttons in the steps and call the `next()` method: the step is checked, the line fills up, the next step opens and receives focus. After the last step, `onCrComplete` is emitted.
 
 <Preview column>
   <StepperTimeline />
 </Preview>
 
-<include>../../../demos/stepper-timeline.tsx</include>
+<include>../../../demos/en/stepper-timeline.tsx</include>
 
-## Piloter les étapes
+## Controlling the steps
 
-- `current` donne l'étape en cours (0 pour la première) ; elle vaut le nombre d'étapes quand tout est terminé.
-- Les méthodes `next()`, `previous()` et `goTo(index)` changent d'étape, depuis une `ref` en React.
-- `onCrStepChange` donne le nouvel index dans `event.detail` à chaque changement.
+- `current` gives the current step (0 for the first one); it equals the number of steps once everything is completed.
+- The `next()`, `previous()` and `goTo(index)` methods change the step, from a `ref` in React.
+- `onCrStepChange` gives the new index in `event.detail` on every change.
 
 <Callout>
-  Si l'utilisateur a demandé à son système de réduire les animations, la progression change sans aucun mouvement.
+  If the user has asked their system to reduce motion, progress changes without any movement.
 </Callout>
 
-## Accessibilité
+## Accessibility
 
-- La progression est un groupe nommé par `label` (« Progress » par défaut, « Progression » en français).
-- Les lecteurs d'écran lisent la liste des étapes avec leur état (« terminée », « en cours », « à venir ») et l'étape en cours porte `aria-current="step"` ; les dessins (ligne, jauge, blocs…) leur sont masqués.
-- Chaque changement d'étape est annoncé : « Étape 2 sur 4 : Profil », puis « Toutes les étapes sont terminées. ».
-- Si le focus était dans une étape qui se masque, il passe sur la nouvelle étape ; si le bouton utilisé disparaît, il passe sur l'autre bouton.
-- Le rebond de `path` s'arrête après trois fois : aucun mouvement sans fin.
+- The progress indicator is a group named by `label` ("Progress" by default, "Progression" in French).
+- Screen readers read the list of steps with their state ("completed", "current", "upcoming") and the current step has `aria-current="step"`; the drawings (line, gauge, blocks…) are hidden from them.
+- Each step change is announced: "Step 2 of 4: Profile", then "All steps are completed.".
+- If focus was in a step that gets hidden, it moves to the new step; if the button used disappears, it moves to the other button.
+- The `path` bounce stops after three times: no endless motion.
 
 ## API
 
 <ApiReference tag="cr-stepper" />
 
-## API de CrStep
+## CrStep API
 
 <ApiReference tag="cr-step" />

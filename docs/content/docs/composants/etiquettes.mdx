@@ -1,25 +1,25 @@
 ---
-title: Étiquettes
-description: Saisie de mots-clés transformés en pastilles. Balise cr-tag-input, composant React CrTagInput.
+title: Tags
+description: Keyword input turned into chips. Tag cr-tag-input, React component CrTagInput.
 ---
 
-import TagsBasic from '@/demos/tags-basic';
+import TagsBasic from '@/demos/en/tags-basic';
 
-## Exemple
+## Example
 
-Chaque mot validé avec Entrée ou une virgule saute dans une pastille ; × la retire, et Retour arrière dans le champ vide retire la dernière. Un texte collé avec des virgules (« ui, motion, design ») donne plusieurs pastilles ; un doublon est refusé. `values` lit et fixe la liste, `onCrChange` la donne à chaque changement.
+Each word confirmed with Enter or a comma jumps into a chip; × removes it, and Backspace in the empty field removes the last one. Pasted text with commas ("ui, motion, design") gives several chips; a duplicate is rejected. `values` reads and sets the list, `onCrChange` gives it on every change.
 
 <Preview column>
   <TagsBasic />
 </Preview>
 
-<include>../../../demos/tags-basic.tsx</include>
+<include>../../../demos/en/tags-basic.tsx</include>
 
-## Accessibilité
+## Accessibility
 
-- Les pastilles forment une liste nommée ; chaque × est un bouton « Retirer design ».
-- Chaque ajout ou retrait est annoncé : « ui ajoutée. 3 étiquettes. ».
-- Le formulaire reçoit une valeur par étiquette sous le même `name` ; avec `required`, il faut au moins une étiquette.
+- The chips form a named list; each × is a "Remove design" button.
+- Every addition or removal is announced: "ui added. 3 tags.".
+- The form receives one value per tag under the same `name`; with `required`, at least one tag is needed.
 
 ## API
 

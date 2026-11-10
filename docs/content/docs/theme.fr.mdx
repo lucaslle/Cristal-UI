@@ -1,0 +1,79 @@
+---
+title: Thème
+description: Adapter Cristal à votre identité visuelle, en une ligne de CSS.
+---
+
+import { ThemeBuilder } from '@/components/theme-builder';
+
+## Une seule couleur à choisir
+
+Pour donner votre couleur à toute l'application, une ligne suffit, après l'import de `@cristal/tokens/tokens.css` :
+
+```css title="theme.css"
+:root {
+  --cr-color-primary: #e11d48;
+}
+```
+
+Toutes les autres nuances sont **calculées automatiquement** à partir de cette couleur :
+
+- le survol (plus foncé pour une couleur foncée, plus clair pour une couleur claire) ;
+- le fond clair des boutons secondaires et des options survolées ;
+- une version assez foncée pour être lue comme texte, contour ou indicateur de focus sur fond blanc ;
+- la couleur du texte posé sur la couleur principale : blanc sur une couleur foncée, noir sur une couleur claire.
+
+## Générateur de thème
+
+Choisissez une couleur et un arrondi : l'aperçu se met à jour, les contrastes sont vérifiés, et il ne reste qu'à copier le CSS.
+
+<ThemeBuilder />
+
+## Un thème pour une partie de la page
+
+Ajoutez la classe `cr-theme` à un conteneur et redéfinissez la couleur sur ce conteneur : seuls les composants qu'il contient changent.
+
+```tsx
+<section className="cr-theme" style={{ '--cr-color-primary': '#0f766e' }}>
+  <CrButton>Bouton sarcelle</CrButton>
+</section>
+```
+
+<Callout type="warn">
+  Le générateur vérifie les contrastes de votre couleur. Les couleurs de milieu de gamme (ni vraiment claires, ni vraiment foncées) peuvent rester sous le seuil de 4,5:1 : le générateur l'indique alors.
+</Callout>
+
+## Aller plus loin : toutes les variables
+
+Chaque valeur est une variable CSS préfixée par `--cr-`, que vous pouvez redéfinir. Les couleurs dérivées affichent la formule qui les calcule.
+
+### Couleurs
+
+<TokenTable prefix="--cr-color" />
+
+### Espacements
+
+<TokenTable prefix="--cr-spacing" />
+
+### Hauteurs de contrôle
+
+<TokenTable prefix="--cr-control" />
+
+### Typographie
+
+<TokenTable prefix="--cr-font" />
+
+### Rayons et ombres
+
+<TokenTable prefix="--cr-radius" />
+
+<TokenTable prefix="--cr-shadow" />
+
+### Parts CSS
+
+Pour un réglage plus fin, chaque composant expose des **parts** stylables depuis l'extérieur avec `::part()`. Elles sont listées en bas de chaque page de composant.
+
+```css
+cr-input.search::part(label) {
+  color: white;
+}
+```

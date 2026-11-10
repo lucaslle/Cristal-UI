@@ -1,62 +1,62 @@
 ---
-title: Bouton
-description: Déclenche une action. Balise cr-button, composant React CrButton.
+title: Button
+description: Triggers an action. Tag cr-button, React component CrButton.
 ---
 
-import ButtonVariants from '@/demos/button-variants';
-import ButtonSizes from '@/demos/button-sizes';
-import ButtonStates from '@/demos/button-states';
-import ButtonIcons from '@/demos/button-icons';
+import ButtonVariants from '@/demos/en/button-variants';
+import ButtonSizes from '@/demos/en/button-sizes';
+import ButtonStates from '@/demos/en/button-states';
+import ButtonIcons from '@/demos/en/button-icons';
 
-## Variantes
+## Variants
 
-Une seule action **principale** par contexte (une page, ou une modale ouverte). Les autres actions prennent un niveau inférieur : secondaire, contour, puis lien.
+Only one **primary** action per context (a page, or an open modal). Other actions take a lower level: secondary, outline, then link.
 
 <Preview>
   <ButtonVariants />
 </Preview>
 
-<include>../../../demos/button-variants.tsx</include>
+<include>../../../demos/en/button-variants.tsx</include>
 
-## Tailles
+## Sizes
 
-La taille dépend du **conteneur**, pas de la variante : deux boutons côte à côte ont la même taille. Repères : `m` dans un formulaire ou une modale, `s` dans une carte ou une barre d'outils, `xs` dans un tableau dense, `l` pour l'action principale sur mobile.
+Size depends on the **container**, not on the variant: two buttons side by side have the same size. Guidelines: `m` in a form or a modal, `s` in a card or a toolbar, `xs` in a dense table, `l` for the primary action on mobile.
 
 <Preview>
   <ButtonSizes />
 </Preview>
 
-<include>../../../demos/button-sizes.tsx</include>
+<include>../../../demos/en/button-sizes.tsx</include>
 
-## États
+## States
 
-`loading` affiche un indicateur, signale le bouton comme occupé (`aria-busy`) et bloque les clics, tout en gardant le focus.
+`loading` shows an indicator, marks the button as busy (`aria-busy`) and blocks clicks, while keeping focus.
 
 <Preview>
   <ButtonStates />
 </Preview>
 
-<include>../../../demos/button-states.tsx</include>
+<include>../../../demos/en/button-states.tsx</include>
 
-## Icônes
+## Icons
 
-Placez l'icône dans `slot="start"` (avant le libellé) ou `slot="end"` (après). Elle est dimensionnée automatiquement : 20px en `xs`, 24px sinon. Une icône décorative prend `aria-hidden="true"`.
+Put the icon in `slot="start"` (before the label) or `slot="end"` (after). It is sized automatically: 20px in `xs`, 24px otherwise. A decorative icon gets `aria-hidden="true"`.
 
 <Preview>
   <ButtonIcons />
 </Preview>
 
-<include>../../../demos/button-icons.tsx</include>
+<include>../../../demos/en/button-icons.tsx</include>
 
-## Dans un formulaire
+## In a form
 
-`type="submit"` envoie le formulaire parent, `type="reset"` le réinitialise, comme un bouton natif. Voir l'exemple complet sur la page [Champ texte](/docs/composants/champ-texte#dans-un-formulaire).
+`type="submit"` submits the parent form and `type="reset"` resets it, like a native button. See the full example on the [Text field](/docs/composants/champ-texte#in-a-form) page.
 
-## Accessibilité
+## Accessibility
 
-- Bouton natif sous le capot : activable avec Entrée et Espace, annoncé comme « bouton ».
-- Focus visible, contraste du libellé supérieur à 4,5:1 dans toutes les variantes.
-- Le libellé doit décrire l'action : « Ajouter un produit » plutôt que « OK ».
+- Native button under the hood: activated with Enter and Space, announced as "button".
+- Visible focus, label contrast above 4.5:1 in every variant.
+- The label must describe the action: "Add a product" rather than "OK".
 
 ## API
 

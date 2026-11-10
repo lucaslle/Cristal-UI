@@ -1,23 +1,23 @@
 ---
-title: Zone de texte
-description: Texte sur plusieurs lignes, qui grandit d'une ligne à la fois. Balise cr-textarea, composant React CrTextarea.
+title: Text area
+description: Multi-line text that grows one line at a time. Tag cr-textarea, React component CrTextarea.
 ---
 
-import TextareaBasic from '@/demos/textarea-basic';
+import TextareaBasic from '@/demos/en/textarea-basic';
 
-## Exemple
+## Example
 
-Le champ commence sur `rows` lignes (1 par défaut) et grandit d'une ligne à la fois, avec un léger rebond, jusqu'à `maxRows` (8 par défaut) ; au-delà, il défile. Le slot `end` place un bouton en bas à droite, par exemple pour envoyer.
+The field starts at `rows` lines (1 by default) and grows one line at a time, with a slight bounce, up to `maxRows` (8 by default); beyond that, it scrolls. The `end` slot places a button at the bottom right, for example to send.
 
 <Preview column>
   <TextareaBasic />
 </Preview>
 
-<include>../../../demos/textarea-basic.tsx</include>
+<include>../../../demos/en/textarea-basic.tsx</include>
 
-## Clavier
+## Keyboard
 
-Entrée passe à la ligne ; Ctrl + Entrée (Cmd + Entrée sur Mac) envoie le formulaire.
+Enter inserts a new line; Ctrl + Enter (Cmd + Enter on Mac) submits the form.
 
 ## API
 

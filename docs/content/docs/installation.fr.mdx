@@ -1,0 +1,62 @@
+---
+title: Installation
+description: Ajouter Cristal à un projet React ou Next.js.
+---
+
+## Installer les paquets
+
+```bash
+npm install @cristal/react @cristal/tokens
+```
+
+<Callout type="warn">
+  Cristal n'est pas encore publié sur npm. En attendant, les paquets s'installent depuis les archives générées par `pnpm pack` (voir le README du dépôt).
+</Callout>
+
+## Importer les tokens
+
+Une seule fois, à la racine de l'application : `app/layout.tsx` avec Next.js, `main.tsx` avec React.
+
+```tsx
+import '@cristal/tokens/tokens.css';
+```
+
+## Choisir la langue
+
+Les textes intégrés aux composants (messages d'erreur, boutons, annonces pour les lecteurs d'écran) sont en anglais par défaut. Ils passent en français quand le composant ou un de ses parents porte `lang="fr"` : le plus simple est de le mettre sur la page.
+
+```tsx title="app/layout.tsx"
+<html lang="fr">
+```
+
+`lang` se pose aussi sur une seule zone (`<section lang="en">`) ou sur un composant. Les textes que vous fournissez (`label`, `hint`, `error`, options…) restent les vôtres.
+
+## Utiliser un composant
+
+### React
+
+```tsx
+import { CrButton } from '@cristal/react';
+
+export function Toolbar() {
+  return <CrButton onClick={() => alert('Enregistré')}>Enregistrer</CrButton>;
+}
+```
+
+### Next.js
+
+Dans un **composant serveur**, importez depuis `@cristal/react/ssr` : le composant est rendu côté serveur, sans flash au chargement.
+
+```tsx
+import { CrButton } from '@cristal/react/ssr';
+```
+
+Dans un **composant client** (`'use client'`), importez depuis `@cristal/react`.
+
+## Écouter les événements
+
+Les composants émettent des événements préfixés par `cr`. En React, ils s'écoutent avec `onCr…`, et la valeur est dans `event.detail`.
+
+```tsx
+<CrInput label="Recherche" onCrInput={(event) => setQuery(event.detail)} />
+```

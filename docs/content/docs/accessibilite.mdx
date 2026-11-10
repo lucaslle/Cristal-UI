@@ -1,33 +1,33 @@
 ---
-title: Accessibilité
-description: Comment Cristal vise un haut niveau de conformité RGAA.
+title: Accessibility
+description: How Cristal aims for a high level of RGAA compliance.
 ---
 
-## Notre approche
+## Our approach
 
-- **Des éléments natifs sous le capot.** `cr-button` contient un vrai `button`, `cr-input` un vrai `input`, `cr-dialog` un vrai `dialog`. Le clavier, les rôles ARIA et les comportements mobiles viennent du navigateur, pas d'une réimplémentation. Quand il n'existe pas d'élément natif assez riche, comme pour la liste déroulante, Cristal suit les modèles du W3C (ARIA Authoring Practices).
-- **Des libellés obligatoires.** Chaque champ prend une propriété `label`, rendue et reliée au champ par le composant lui-même.
-- **Aide et erreurs annoncées.** `hint` et `error` sont reliés au champ par `aria-describedby` ; une erreur ajoute `aria-invalid`.
-- **Erreurs explicites.** Les erreurs de saisie s'affichent automatiquement en français et disent comment corriger ; à l'envoi, le focus va sur le premier champ en erreur.
-- **Focus visible** sur tous les éléments interactifs, avec un contraste d'au moins 3:1.
-- **Mouvement réduit** respecté : si l'utilisateur l'a demandé, les animations des menus et des listes deviennent un simple fondu, et l'indicateur de chargement ralentit.
-- **Mode contraste élevé** de Windows (forced colors) pris en charge.
+- **Native elements under the hood.** `cr-button` contains a real `button`, `cr-input` a real `input`, `cr-dialog` a real `dialog`. Keyboard support, ARIA roles and mobile behavior come from the browser, not from a reimplementation. When no native element is rich enough, as for the select, Cristal follows the W3C patterns (ARIA Authoring Practices).
+- **Required labels.** Every field takes a `label` property, rendered and linked to the field by the component itself.
+- **Announced hints and errors.** `hint` and `error` are linked to the field with `aria-describedby`; an error adds `aria-invalid`.
+- **Explicit errors.** Input errors are displayed automatically, in English by default or in French with `lang="fr"`, and say how to fix the problem; on submit, focus moves to the first invalid field.
+- **Visible focus** on every interactive element, with a contrast of at least 3:1.
+- **Reduced motion** respected: if the user asked for it, menu and list animations become a simple fade, and the loading indicator slows down.
+- Windows **high contrast mode** (forced colors) supported.
 
-## Tests automatiques
+## Automated tests
 
-Chaque modification passe par des tests navigateur (Playwright) qui vérifient le clavier, les formulaires, le focus des fenêtres, et un audit **axe** WCAG 2.1 AA de la page, fenêtres fermées et ouvertes.
+Every change goes through browser tests (Playwright) that check the keyboard, forms, dialog focus, and an **axe** WCAG 2.1 AA audit of the page, with dialogs closed and open.
 
 <Callout>
-  Un audit automatique détecte environ un tiers des problèmes d'accessibilité. Une conformité RGAA demande aussi une vérification manuelle, en particulier avec un lecteur d'écran.
+  An automated audit detects about a third of accessibility issues. RGAA compliance also requires manual checking, especially with a screen reader.
 </Callout>
 
-## Ce qui reste de votre responsabilité
+## What remains your responsibility
 
-- Une **hiérarchie de titres** cohérente dans vos pages.
-- Des **textes de boutons explicites** (« Supprimer le produit » plutôt que « OK »).
-- Un `aria-label` sur les icônes seules, et `aria-hidden="true"` sur les icônes décoratives.
-- Les **contrastes** si vous modifiez les couleurs du thème.
+- A consistent **heading hierarchy** in your pages.
+- **Explicit button texts** ("Delete product" rather than "OK").
+- An `aria-label` on standalone icons, and `aria-hidden="true"` on decorative icons.
+- **Contrasts**, if you change the theme colors.
 
-## Limites connues
+## Known limitations
 
-- Pas encore de bouton icône seule ni de variante « danger ».
+- No "danger" button variant yet.

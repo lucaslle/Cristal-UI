@@ -2,9 +2,10 @@ import type { BaseLayoutProps } from 'fumadocs-ui/layouts/shared';
 import { Logo } from '@/components/logo';
 import { appName, gitConfig } from './shared';
 
-export function baseOptions(): BaseLayoutProps {
+export function baseOptions(lang: string): BaseLayoutProps {
   return {
     nav: {
+      url: `/${lang}`,
       title: (
         <span className="font-display inline-flex items-center gap-2 text-lg font-bold">
           <Logo />

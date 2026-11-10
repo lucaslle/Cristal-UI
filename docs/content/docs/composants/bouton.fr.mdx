@@ -1,0 +1,63 @@
+---
+title: Bouton
+description: Déclenche une action. Balise cr-button, composant React CrButton.
+---
+
+import ButtonVariants from '@/demos/button-variants';
+import ButtonSizes from '@/demos/button-sizes';
+import ButtonStates from '@/demos/button-states';
+import ButtonIcons from '@/demos/button-icons';
+
+## Variantes
+
+Une seule action **principale** par contexte (une page, ou une modale ouverte). Les autres actions prennent un niveau inférieur : secondaire, contour, puis lien.
+
+<Preview>
+  <ButtonVariants />
+</Preview>
+
+<include>../../../demos/button-variants.tsx</include>
+
+## Tailles
+
+La taille dépend du **conteneur**, pas de la variante : deux boutons côte à côte ont la même taille. Repères : `m` dans un formulaire ou une modale, `s` dans une carte ou une barre d'outils, `xs` dans un tableau dense, `l` pour l'action principale sur mobile.
+
+<Preview>
+  <ButtonSizes />
+</Preview>
+
+<include>../../../demos/button-sizes.tsx</include>
+
+## États
+
+`loading` affiche un indicateur, signale le bouton comme occupé (`aria-busy`) et bloque les clics, tout en gardant le focus.
+
+<Preview>
+  <ButtonStates />
+</Preview>
+
+<include>../../../demos/button-states.tsx</include>
+
+## Icônes
+
+Placez l'icône dans `slot="start"` (avant le libellé) ou `slot="end"` (après). Elle est dimensionnée automatiquement : 20px en `xs`, 24px sinon. Une icône décorative prend `aria-hidden="true"`.
+
+<Preview>
+  <ButtonIcons />
+</Preview>
+
+<include>../../../demos/button-icons.tsx</include>
+
+## Dans un formulaire
+
+`type="submit"` envoie le formulaire parent, `type="reset"` le réinitialise, comme un bouton natif. Voir l'exemple complet sur la page [Champ texte](/docs/composants/champ-texte#dans-un-formulaire).
+
+## Accessibilité
+
+- Bouton natif sous le capot : activable avec Entrée et Espace, annoncé comme « bouton ».
+- Focus visible, contraste du libellé supérieur à 4,5:1 dans toutes les variantes.
+- Le libellé doit décrire l'action : « Ajouter un produit » plutôt que « OK ».
+
+## API
+
+<ApiReference tag="cr-button" />

@@ -1,64 +1,64 @@
 ---
 title: Menu
-description: Liste d'actions ouverte depuis un bouton. Balise cr-menu, composant React CrMenu.
+description: A list of actions opened from a button. cr-menu tag, CrMenu React component.
 ---
 
-import MenuActions from '@/demos/menu-actions';
-import MenuAnimations from '@/demos/menu-animations';
+import MenuActions from '@/demos/en/menu-actions';
+import MenuAnimations from '@/demos/en/menu-animations';
 
-## Exemple
+## Example
 
-Les actions s'écrivent avec des éléments `<option>` enfants, comme pour la [liste déroulante](/docs/composants/liste-deroulante). L'événement `onCrSelect` donne la valeur de l'action choisie dans `event.detail`.
+Actions are written as child `<option>` elements, as in the [select](/docs/composants/liste-deroulante). The `onCrSelect` event gives the value of the chosen action in `event.detail`.
 
 <Preview>
   <MenuActions />
 </Preview>
 
-<include>../../../demos/menu-actions.tsx</include>
+<include>../../../demos/en/menu-actions.tsx</include>
 
 ## Animations
 
-La propriété `animation` choisit l'effet d'ouverture et de fermeture. Elle existe aussi sur la [liste déroulante](/docs/composants/liste-deroulante#animations). Ouvrez chaque menu pour comparer.
+The `animation` property picks the opening and closing effect. It is also available on the [select](/docs/composants/liste-deroulante#animations). Open each menu to compare.
 
 <Preview>
   <MenuAnimations />
 </Preview>
 
-| Valeur | Effet |
+| Value | Effect |
 |---|---|
-| `fade` | fondu discret (par défaut) |
-| `anchor-pop` | le menu jaillit du bouton avec un léger rebond, et s'y rétracte au choix |
-| `turn-over` | le panneau se retourne comme une carte |
-| `card-deal` | les actions sont distribuées comme des cartes ; celle choisie vole jusqu'au bouton |
-| `drum-roll` | les actions arrivent en tournant sur un tambour, puis repartent vers le bas |
-| `outline-trace` | un contour violet → cyan dessine le panneau, puis les lignes apparaissent en balayage |
-| `tile-build` | le panneau se construit en tuiles par vagues, puis éclate |
+| `fade` | subtle fade (default) |
+| `anchor-pop` | the menu springs out of the button with a slight bounce, and shrinks back into it on selection |
+| `turn-over` | the panel flips over like a card |
+| `card-deal` | the actions are dealt like cards; the chosen one flies back to the button |
+| `drum-roll` | the actions roll in on a drum, then roll away downwards |
+| `outline-trace` | a purple → cyan outline draws the panel, then the items sweep in |
+| `tile-build` | the panel builds up in waves of tiles, then bursts apart |
 
-<include>../../../demos/menu-animations.tsx</include>
+<include>../../../demos/en/menu-animations.tsx</include>
 
 <Callout>
-  Si l'utilisateur a demandé à son système de réduire les animations, toutes deviennent un simple fondu. Les animations durent moins d'une demi-seconde et n'empêchent jamais d'utiliser le clavier.
+  If the user has asked their system to reduce motion, every animation becomes a simple fade. Animations last less than half a second and never block keyboard use.
 </Callout>
 
-## Clavier
+## Keyboard
 
-| Touche | Bouton | Menu ouvert |
+| Key | Button | Open menu |
 |---|---|---|
-| Entrée, Espace, flèche bas | ouvre le menu sur la première action | choisit l'action |
-| Flèche haut | ouvre le menu sur la dernière action | action précédente |
-| Flèche bas | — | action suivante |
-| Début / Fin | — | première / dernière action |
-| Lettres | — | va à l'action qui commence par ces lettres |
-| Échap | — | ferme et rend le focus au bouton |
-| Tab | — | ferme et passe à l'élément suivant |
+| Enter, Space, Down Arrow | opens the menu on the first action | selects the action |
+| Up Arrow | opens the menu on the last action | previous action |
+| Down Arrow | — | next action |
+| Home / End | — | first / last action |
+| Letters | — | moves to the action starting with those letters |
+| Escape | — | closes and returns focus to the button |
+| Tab | — | closes and moves to the next element |
 
-## Accessibilité
+## Accessibility
 
-- Suit le modèle « menu button » du W3C (ARIA Authoring Practices) : `aria-haspopup="menu"`, `aria-expanded`, rôles `menu` et `menuitem`.
-- Le focus entre dans le menu à l'ouverture et revient au bouton après un choix ou Échap.
-- Les actions indisponibles (`disabled`) sont annoncées et ignorées par la navigation.
-- Quand plusieurs menus ont le même libellé (un menu « Actions » par ligne de tableau), donnez à chacun un nom précis avec `accessibleLabel` : « Actions pour Clavier », « Actions pour Souris »… Ce nom doit **contenir le libellé visible** (WCAG 2.5.3), pour que les personnes qui pilotent leur ordinateur à la voix puissent dire « Actions ».
-- Le menu s'affiche au-dessus de la page : jamais coupé par un conteneur ou une modale, il s'ouvre vers le haut quand la place manque. Dans une modale, Échap ferme le menu sans fermer la modale.
+- Follows the W3C "menu button" pattern (ARIA Authoring Practices): `aria-haspopup="menu"`, `aria-expanded`, `menu` and `menuitem` roles.
+- Focus moves into the menu when it opens and returns to the button after a selection or Escape.
+- Unavailable actions (`disabled`) are announced and skipped by navigation.
+- When several menus share the same label (an "Actions" menu on each table row), give each one a specific name with `accessibleLabel`: "Actions for Keyboard", "Actions for Mouse"… This name must **contain the visible label** (WCAG 2.5.3), so that people who control their computer by voice can say "Actions".
+- The menu is displayed above the page: it is never clipped by a container or a dialog, and it opens upwards when space runs out. Inside a dialog, Escape closes the menu without closing the dialog.
 
 ## API
 

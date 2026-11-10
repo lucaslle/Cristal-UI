@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { Check, Copy } from 'lucide-react';
 
-export function CopyCommand({ command }: { command: string }) {
+export function CopyCommand({ command, label, done }: { command: string; label: string; done: string }) {
   const [copied, setCopied] = useState(false);
   const copy = async () => {
     await navigator.clipboard.writeText(command);
@@ -16,11 +16,11 @@ export function CopyCommand({ command }: { command: string }) {
         $
       </span>
       <code className="overflow-x-auto whitespace-nowrap text-violet-50">{command}</code>
-      <button type="button" onClick={copy} className="rounded-lg p-2 text-violet-100 hover:bg-white/10" aria-label="Copier la commande d'installation">
+      <button type="button" onClick={copy} className="rounded-lg p-2 text-violet-100 hover:bg-white/10" aria-label={label}>
         {copied ? <Check size={16} aria-hidden="true" /> : <Copy size={16} aria-hidden="true" />}
       </button>
       <span role="status" className="sr-only">
-        {copied ? 'Commande copiée' : ''}
+        {copied ? done : ''}
       </span>
     </div>
   );

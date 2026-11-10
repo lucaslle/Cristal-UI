@@ -1,0 +1,26 @@
+---
+title: Étiquettes
+description: Saisie de mots-clés transformés en pastilles. Balise cr-tag-input, composant React CrTagInput.
+---
+
+import TagsBasic from '@/demos/tags-basic';
+
+## Exemple
+
+Chaque mot validé avec Entrée ou une virgule saute dans une pastille ; × la retire, et Retour arrière dans le champ vide retire la dernière. Un texte collé avec des virgules (« ui, motion, design ») donne plusieurs pastilles ; un doublon est refusé. `values` lit et fixe la liste, `onCrChange` la donne à chaque changement.
+
+<Preview column>
+  <TagsBasic />
+</Preview>
+
+<include>../../../demos/tags-basic.tsx</include>
+
+## Accessibilité
+
+- Les pastilles forment une liste nommée ; chaque × est un bouton « Retirer design ».
+- Chaque ajout ou retrait est annoncé : « ui ajoutée. 3 étiquettes. ».
+- Le formulaire reçoit une valeur par étiquette sous le même `name` ; avec `required`, il faut au moins une étiquette.
+
+## API
+
+<ApiReference tag="cr-tag-input" />

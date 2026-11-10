@@ -1,0 +1,33 @@
+---
+title: Accessibilité
+description: Comment Cristal vise un haut niveau de conformité RGAA.
+---
+
+## Notre approche
+
+- **Des éléments natifs sous le capot.** `cr-button` contient un vrai `button`, `cr-input` un vrai `input`, `cr-dialog` un vrai `dialog`. Le clavier, les rôles ARIA et les comportements mobiles viennent du navigateur, pas d'une réimplémentation. Quand il n'existe pas d'élément natif assez riche, comme pour la liste déroulante, Cristal suit les modèles du W3C (ARIA Authoring Practices).
+- **Des libellés obligatoires.** Chaque champ prend une propriété `label`, rendue et reliée au champ par le composant lui-même.
+- **Aide et erreurs annoncées.** `hint` et `error` sont reliés au champ par `aria-describedby` ; une erreur ajoute `aria-invalid`.
+- **Erreurs explicites.** Les erreurs de saisie s'affichent automatiquement dans la langue de la page (français avec `lang="fr"`) et disent comment corriger ; à l'envoi, le focus va sur le premier champ en erreur.
+- **Focus visible** sur tous les éléments interactifs, avec un contraste d'au moins 3:1.
+- **Mouvement réduit** respecté : si l'utilisateur l'a demandé, les animations des menus et des listes deviennent un simple fondu, et l'indicateur de chargement ralentit.
+- **Mode contraste élevé** de Windows (forced colors) pris en charge.
+
+## Tests automatiques
+
+Chaque modification passe par des tests navigateur (Playwright) qui vérifient le clavier, les formulaires, le focus des fenêtres, et un audit **axe** WCAG 2.1 AA de la page, fenêtres fermées et ouvertes.
+
+<Callout>
+  Un audit automatique détecte environ un tiers des problèmes d'accessibilité. Une conformité RGAA demande aussi une vérification manuelle, en particulier avec un lecteur d'écran.
+</Callout>
+
+## Ce qui reste de votre responsabilité
+
+- Une **hiérarchie de titres** cohérente dans vos pages.
+- Des **textes de boutons explicites** (« Supprimer le produit » plutôt que « OK »).
+- Un `aria-label` sur les icônes seules, et `aria-hidden="true"` sur les icônes décoratives.
+- Les **contrastes** si vous modifiez les couleurs du thème.
+
+## Limites connues
+
+- Pas encore de variante « danger ».
