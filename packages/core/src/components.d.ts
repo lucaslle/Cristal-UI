@@ -225,6 +225,18 @@ export namespace Components {
         "wrap": boolean;
     }
     /**
+     * Fil d'Ariane : le chemin jusqu'à la page courante. Les niveaux sont les enfants, écrits tels quels :
+     * des liens a href (Ctrl/Cmd+clic restent natifs), puis la page courante en dernier (un span), marquée aria-current="page".
+     * Au-delà de max niveaux, ceux du milieu se replient derrière un bouton « … » ; ils glissent hors de lui quand on le déplie.
+     */
+    interface CrBreadcrumb {
+        /**
+          * Nombre de niveaux au-delà duquel ceux du milieu se replient (le premier et les max - 2 derniers restent visibles).
+          * @default 4
+         */
+        "max": number;
+    }
+    /**
      * Bouton d'action.
      */
     interface CrButton {
@@ -1641,6 +1653,17 @@ declare global {
         new (): HTMLCrBoxElement;
     };
     /**
+     * Fil d'Ariane : le chemin jusqu'à la page courante. Les niveaux sont les enfants, écrits tels quels :
+     * des liens a href (Ctrl/Cmd+clic restent natifs), puis la page courante en dernier (un span), marquée aria-current="page".
+     * Au-delà de max niveaux, ceux du milieu se replient derrière un bouton « … » ; ils glissent hors de lui quand on le déplie.
+     */
+    interface HTMLCrBreadcrumbElement extends Components.CrBreadcrumb, HTMLStencilElement {
+    }
+    var HTMLCrBreadcrumbElement: {
+        prototype: HTMLCrBreadcrumbElement;
+        new (): HTMLCrBreadcrumbElement;
+    };
+    /**
      * Bouton d'action.
      */
     interface HTMLCrButtonElement extends Components.CrButton, HTMLStencilElement {
@@ -2320,6 +2343,7 @@ declare global {
         "cr-avatar-group": HTMLCrAvatarGroupElement;
         "cr-badge": HTMLCrBadgeElement;
         "cr-box": HTMLCrBoxElement;
+        "cr-breadcrumb": HTMLCrBreadcrumbElement;
         "cr-button": HTMLCrButtonElement;
         "cr-card": HTMLCrCardElement;
         "cr-card-input": HTMLCrCardInputElement;
@@ -2561,6 +2585,18 @@ declare namespace LocalJSX {
           * @default false
          */
         "wrap"?: boolean;
+    }
+    /**
+     * Fil d'Ariane : le chemin jusqu'à la page courante. Les niveaux sont les enfants, écrits tels quels :
+     * des liens a href (Ctrl/Cmd+clic restent natifs), puis la page courante en dernier (un span), marquée aria-current="page".
+     * Au-delà de max niveaux, ceux du milieu se replient derrière un bouton « … » ; ils glissent hors de lui quand on le déplie.
+     */
+    interface CrBreadcrumb {
+        /**
+          * Nombre de niveaux au-delà duquel ceux du milieu se replient (le premier et les max - 2 derniers restent visibles).
+          * @default 4
+         */
+        "max"?: number;
     }
     /**
      * Bouton d'action.
@@ -4013,6 +4049,9 @@ declare namespace LocalJSX {
         "shadow": boolean;
         "maxWidth": string;
     }
+    interface CrBreadcrumbAttributes {
+        "max": number;
+    }
     interface CrButtonAttributes {
         "variant": ButtonVariant;
         "size": ButtonSize;
@@ -4300,6 +4339,7 @@ declare namespace LocalJSX {
         "cr-avatar-group": Omit<CrAvatarGroup, keyof CrAvatarGroupAttributes> & { [K in keyof CrAvatarGroup & keyof CrAvatarGroupAttributes]?: CrAvatarGroup[K] } & { [K in keyof CrAvatarGroup & keyof CrAvatarGroupAttributes as `attr:${K}`]?: CrAvatarGroupAttributes[K] } & { [K in keyof CrAvatarGroup & keyof CrAvatarGroupAttributes as `prop:${K}`]?: CrAvatarGroup[K] };
         "cr-badge": Omit<CrBadge, keyof CrBadgeAttributes> & { [K in keyof CrBadge & keyof CrBadgeAttributes]?: CrBadge[K] } & { [K in keyof CrBadge & keyof CrBadgeAttributes as `attr:${K}`]?: CrBadgeAttributes[K] } & { [K in keyof CrBadge & keyof CrBadgeAttributes as `prop:${K}`]?: CrBadge[K] };
         "cr-box": Omit<CrBox, keyof CrBoxAttributes> & { [K in keyof CrBox & keyof CrBoxAttributes]?: CrBox[K] } & { [K in keyof CrBox & keyof CrBoxAttributes as `attr:${K}`]?: CrBoxAttributes[K] } & { [K in keyof CrBox & keyof CrBoxAttributes as `prop:${K}`]?: CrBox[K] };
+        "cr-breadcrumb": Omit<CrBreadcrumb, keyof CrBreadcrumbAttributes> & { [K in keyof CrBreadcrumb & keyof CrBreadcrumbAttributes]?: CrBreadcrumb[K] } & { [K in keyof CrBreadcrumb & keyof CrBreadcrumbAttributes as `attr:${K}`]?: CrBreadcrumbAttributes[K] } & { [K in keyof CrBreadcrumb & keyof CrBreadcrumbAttributes as `prop:${K}`]?: CrBreadcrumb[K] };
         "cr-button": Omit<CrButton, keyof CrButtonAttributes> & { [K in keyof CrButton & keyof CrButtonAttributes]?: CrButton[K] } & { [K in keyof CrButton & keyof CrButtonAttributes as `attr:${K}`]?: CrButtonAttributes[K] } & { [K in keyof CrButton & keyof CrButtonAttributes as `prop:${K}`]?: CrButton[K] };
         "cr-card": CrCard;
         "cr-card-input": Omit<CrCardInput, keyof CrCardInputAttributes> & { [K in keyof CrCardInput & keyof CrCardInputAttributes]?: CrCardInput[K] } & { [K in keyof CrCardInput & keyof CrCardInputAttributes as `attr:${K}`]?: CrCardInputAttributes[K] } & { [K in keyof CrCardInput & keyof CrCardInputAttributes as `prop:${K}`]?: CrCardInput[K] } & OneOf<"label", CrCardInput["label"], CrCardInputAttributes["label"]>;
@@ -4379,6 +4419,12 @@ declare module "@stencil/core" {
              * Valeurs d'espacement : xs, sm, lg, xl, 2xl, 3xl, ou toute valeur CSS (« 12px »).
              */
             "cr-box": LocalJSX.IntrinsicElements["cr-box"] & JSXBase.HTMLAttributes<HTMLCrBoxElement>;
+            /**
+             * Fil d'Ariane : le chemin jusqu'à la page courante. Les niveaux sont les enfants, écrits tels quels :
+             * des liens a href (Ctrl/Cmd+clic restent natifs), puis la page courante en dernier (un span), marquée aria-current="page".
+             * Au-delà de max niveaux, ceux du milieu se replient derrière un bouton « … » ; ils glissent hors de lui quand on le déplie.
+             */
+            "cr-breadcrumb": LocalJSX.IntrinsicElements["cr-breadcrumb"] & JSXBase.HTMLAttributes<HTMLCrBreadcrumbElement>;
             /**
              * Bouton d'action.
              */

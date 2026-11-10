@@ -1,0 +1,110 @@
+:host {
+  display: block;
+  font-family: var(--cr-font-family);
+  font-size: var(--cr-font-size-m);
+  color: var(--cr-color-text);
+}
+
+ol {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--cr-spacing-xs) var(--cr-spacing-sm);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+li {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--cr-spacing-sm);
+  min-height: var(--cr-control-xs);
+}
+
+li[hidden] {
+  display: none;
+}
+
+/* Séparateur dessiné en CSS, sans texte : rien à lire pour les lecteurs d'écran. */
+li + li::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-top: 1.5px solid var(--cr-color-text-muted);
+  border-right: 1.5px solid var(--cr-color-text-muted);
+  transform: rotate(45deg);
+}
+
+::slotted(a) {
+  color: var(--cr-color-primary-text);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  border-radius: var(--cr-radius-m);
+}
+
+::slotted(a:hover) {
+  text-decoration-thickness: 2px;
+}
+
+::slotted(a:focus-visible) {
+  outline: 2px solid var(--cr-color-focus);
+  outline-offset: 2px;
+}
+
+::slotted([aria-current='page']) {
+  font-weight: var(--cr-font-weight-medium);
+  color: var(--cr-color-text);
+  text-decoration: none;
+}
+
+button {
+  display: inline-grid;
+  place-items: center;
+  min-width: var(--cr-control-xs);
+  height: var(--cr-control-xs);
+  padding: 0 var(--cr-spacing-xs);
+  font: inherit;
+  font-weight: var(--cr-font-weight-bold);
+  color: var(--cr-color-primary-text);
+  background: var(--cr-color-primary-subtle);
+  border: 0;
+  border-radius: var(--cr-radius-m);
+  cursor: pointer;
+}
+
+button:hover {
+  background: var(--cr-color-primary-subtle-hover);
+}
+
+button:focus-visible {
+  outline: 2px solid var(--cr-color-focus);
+  outline-offset: 2px;
+}
+
+/* Les niveaux dépliés glissent hors du « … », l'un après l'autre, sans fondu. */
+.revealed {
+  animation: cr-breadcrumb-in 0.35s calc(var(--i) * 50ms) cubic-bezier(0.2, 0.8, 0.2, 1) backwards;
+}
+
+@keyframes cr-breadcrumb-in {
+  from {
+    clip-path: inset(0 100% 0 0);
+    transform: translateX(calc(-1 * var(--cr-spacing-xl)));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .revealed {
+    animation: none;
+  }
+}
+
+@media (forced-colors: active) {
+  li + li::before {
+    border-color: CanvasText;
+  }
+  button {
+    border: 1px solid ButtonText;
+  }
+}

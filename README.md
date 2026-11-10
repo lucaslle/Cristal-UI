@@ -357,6 +357,18 @@ Contenu de la section dans le slot par défaut, valeur à droite du titre dans `
 </CrAccordion>
 ```
 
+### Fil d'Ariane : `cr-breadcrumb`
+
+Chemin jusqu'à la page courante, écrit avec de simples enfants : des liens `<a href>` (natifs, Ctrl/Cmd+clic compris), puis la page courante, marquée `aria-current="page"`. Zone `nav` nommée « Fil d'Ariane », liste ordonnée, séparateurs décoratifs. Au-delà de `max` niveaux (4), ceux du milieu se replient derrière un bouton « … » qui les déplie en les faisant glisser, et donne le focus au premier lien révélé.
+
+```tsx
+<CrBreadcrumb>
+  <a href="/">Accueil</a>
+  <a href="/docs">Documentation</a>
+  <span>Bouton</span>
+</CrBreadcrumb>
+```
+
 ### Pagination : `cr-pagination`
 
 Navigation entre pages : `page` (courante, à partir de 1), `total`, `href` (adresse où `{page}` est remplacé par le numéro : chaque page devient un vrai lien, Ctrl/Cmd+clic et clic molette compris). Sans `href`, des boutons et l'événement `onCrChange` avec le numéro. « … » pour les longues séries (1 … 4 5 6 … 20), page courante marquée `aria-current="page"` par une pastille qui glisse jusqu'au nouveau numéro.

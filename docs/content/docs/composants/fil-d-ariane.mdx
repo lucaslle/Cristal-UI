@@ -1,0 +1,33 @@
+---
+title: Breadcrumb
+description: The path to the current page, as real links. Tag cr-breadcrumb, React component CrBreadcrumb.
+---
+
+import BreadcrumbBasic from '@/demos/en/breadcrumb-basic';
+
+## Example
+
+Write the levels as they are inside `cr-breadcrumb`: `<a href>` links (or your router's `Link`, which renders an `<a>`), then the current page last, in a `<span>`. The links stay yours, in the page: Ctrl/Cmd+click, middle click and "Open in new tab" are the browser's own. Chevrons separate the levels.
+
+Beyond `max` levels (4 by default), the middle ones collapse behind a "…" button: only the first one and the last `max - 2` stay visible. Clicking "…" reveals the hidden levels, which slide out of it one after the other.
+
+<Preview>
+  <BreadcrumbBasic />
+</Preview>
+
+<include>../../../demos/en/breadcrumb-basic.tsx</include>
+
+<Callout>
+  If the user asked their system to reduce motion, the revealed levels appear at once, without sliding.
+</Callout>
+
+## Accessibility
+
+- The breadcrumb is a navigation region (`nav`) named "Breadcrumb", with an ordered list: one list item per level.
+- The last level gets `aria-current="page"`; it also stands out without colour, since it is not a link (no underline).
+- Separators are drawn in CSS, without text: screen readers do not read them.
+- The "…" button is named by what it does ("Show 3 hidden levels") and has `aria-expanded`. Once the levels are revealed, it goes away and focus moves to the first revealed link.
+
+## API
+
+<ApiReference tag="cr-breadcrumb" />

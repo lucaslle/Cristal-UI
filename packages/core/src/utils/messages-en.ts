@@ -87,6 +87,9 @@ export const en = {
   nextPage: 'Next page',
   pageNumber: (page: number) => `Page ${page}`,
 
+  breadcrumb: 'Breadcrumb',
+  breadcrumbMore: (count: number) => `Show ${count} hidden ${count === 1 ? 'level' : 'levels'}`,
+
   openAll: 'Open all',
   closeAll: 'Close all',
 

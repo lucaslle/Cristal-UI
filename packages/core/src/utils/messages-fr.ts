@@ -89,6 +89,9 @@ export const fr: Messages = {
   nextPage: 'Page suivante',
   pageNumber: (page) => `Page ${page}`,
 
+  breadcrumb: "Fil d'Ariane",
+  breadcrumbMore: (count) => `Afficher ${count === 1 ? 'le niveau masqué' : `les ${count} niveaux masqués`}`,
+
   openAll: 'Tout ouvrir',
   closeAll: 'Tout fermer',
 

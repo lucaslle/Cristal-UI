@@ -1,0 +1,33 @@
+---
+title: Fil d'Ariane
+description: Le chemin jusqu'à la page courante, en vrais liens. Balise cr-breadcrumb, composant React CrBreadcrumb.
+---
+
+import BreadcrumbBasic from '@/demos/breadcrumb-basic';
+
+## Exemple
+
+Écrivez les niveaux tels quels dans `cr-breadcrumb` : des liens `<a href>` (ou les `Link` de votre routeur, qui rendent un `<a>`), puis la page courante en dernier, dans un `<span>`. Les liens restent les vôtres, dans la page : Ctrl/Cmd+clic, clic molette et « Ouvrir dans un nouvel onglet » sont ceux du navigateur. Des chevrons séparent les niveaux.
+
+Au-delà de `max` niveaux (4 par défaut), ceux du milieu se replient derrière un bouton « … » : seuls le premier et les `max - 2` derniers restent affichés. Un clic sur « … » déplie les niveaux masqués, qui glissent hors de lui l'un après l'autre.
+
+<Preview>
+  <BreadcrumbBasic />
+</Preview>
+
+<include>../../../demos/breadcrumb-basic.tsx</include>
+
+<Callout>
+  Si l'utilisateur a demandé à son système de réduire les animations, les niveaux dépliés apparaissent directement, sans glisser.
+</Callout>
+
+## Accessibilité
+
+- Le fil d'Ariane est une zone de navigation (`nav`) nommée « Fil d'Ariane », avec une liste ordonnée : un élément de liste par niveau.
+- Le dernier niveau reçoit `aria-current="page"` ; il se distingue aussi sans couleur, car ce n'est pas un lien (pas de soulignement).
+- Les séparateurs sont dessinés en CSS, sans texte : les lecteurs d'écran ne les lisent pas.
+- Le bouton « … » est nommé par ce qu'il fait (« Afficher les 3 niveaux masqués ») et porte `aria-expanded`. Une fois les niveaux dépliés, il disparaît et le focus passe sur le premier lien révélé.
+
+## API
+
+<ApiReference tag="cr-breadcrumb" />
