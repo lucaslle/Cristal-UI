@@ -50,6 +50,7 @@ export const en = {
   closeAll: 'Close all',
 
   progress: 'Progress',
+  loading: 'Loading…',
   stepStatus: { done: 'completed', current: 'current', todo: 'upcoming' },
   stepSuffix: { done: ' (completed)', current: ' (current)' },
   allStepsDone: 'All steps are completed.',

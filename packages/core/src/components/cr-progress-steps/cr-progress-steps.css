@@ -1,0 +1,85 @@
+:host {
+  display: block;
+  font-family: var(--cr-font-family);
+  color: var(--cr-color-text);
+}
+
+ol {
+  display: flex;
+  flex-direction: column;
+  gap: var(--cr-spacing-sm);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+li {
+  display: flex;
+  align-items: center;
+  gap: var(--cr-spacing-sm);
+  animation: cr-progress-steps-in 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.done {
+  color: var(--cr-color-text-muted);
+}
+
+.icon {
+  display: inline-grid;
+  place-items: center;
+  width: 1.25em;
+  height: 1.25em;
+  color: var(--cr-color-primary-text);
+}
+
+.spinner {
+  box-sizing: border-box;
+  width: 0.9em;
+  height: 0.9em;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: cr-progress-steps-spin 0.8s linear infinite;
+}
+
+.tick {
+  animation: cr-progress-steps-tick 0.35s cubic-bezier(0.2, 0.8, 0.2, 1.4);
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+@keyframes cr-progress-steps-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+}
+
+@keyframes cr-progress-steps-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes cr-progress-steps-tick {
+  from {
+    transform: scale(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  li,
+  .tick {
+    animation: none;
+  }
+  .spinner {
+    animation-duration: 2.4s;
+  }
+}

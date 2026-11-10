@@ -479,6 +479,20 @@ export namespace Components {
         "variant": IconButtonVariant;
     }
     /**
+     * Image qui apparaît floue puis devient nette en 2 s une fois chargée (blur-up), avec un léger dézoom.
+     * Donnez une taille au composant (width, height ou aspect-ratio) : l'image le remplit.
+     */
+    interface CrImage {
+        /**
+          * Texte alternatif ; chaîne vide pour une image décorative.
+         */
+        "alt": string;
+        /**
+          * Adresse de l'image.
+         */
+        "src": string;
+    }
+    /**
      * Champ de saisie de texte.
      */
     interface CrInput {
@@ -535,6 +549,20 @@ export namespace Components {
           * @default ''
          */
         "value": string;
+    }
+    /**
+     * Indicateur de chargement de durée inconnue. Sa taille suit la taille du texte (font-size).
+     */
+    interface CrLoader {
+        /**
+          * Texte lu par les lecteurs d'écran (« Chargement… » par défaut).
+         */
+        "label"?: string;
+        /**
+          * Style : spinner (cercle qui tourne) ou bounce (balle qui rebondit et s'écrase en touchant le sol).
+          * @default 'spinner'
+         */
+        "variant": 'spinner' | 'bounce';
     }
     /**
      * Menu d'actions. Les actions sont des éléments option enfants.
@@ -599,6 +627,45 @@ export namespace Components {
           * @default ''
          */
         "value": string;
+    }
+    /**
+     * Barre de progression. Avec value, elle se remplit jusqu'à la valeur ; sans, un segment glisse en boucle (durée inconnue).
+     */
+    interface CrProgress {
+        /**
+          * Nom lu par les lecteurs d'écran (« Progression » par défaut).
+         */
+        "label"?: string;
+        /**
+          * Affiche le pourcentage en grand au-dessus de la barre ; il compte jusqu'à chaque nouvelle valeur.
+          * @default false
+         */
+        "showValue": boolean;
+        /**
+          * Avancement de 0 à 100. Sans valeur, la barre est indéterminée.
+         */
+        "value"?: number;
+    }
+    /**
+     * Étapes d'un traitement qui s'enchaînent (« Recherche », « Lecture », « Rédaction… ») :
+     * les étapes passées sont cochées, l'étape en cours a un indicateur qui tourne, les suivantes n'apparaissent pas encore.
+     * Chaque nouvelle étape est annoncée aux lecteurs d'écran.
+     */
+    interface CrProgressSteps {
+        /**
+          * Étape en cours (0 pour la première) ; vaut le nombre d'étapes quand tout est terminé.
+          * @default 0
+         */
+        "current": number;
+        /**
+          * Nom de la liste (« Progression » par défaut).
+         */
+        "label"?: string;
+        /**
+          * Noms des étapes, dans l'ordre.
+          * @default []
+         */
+        "steps": string[];
     }
     /**
      * Liste déroulante. Les options sont des éléments option enfants.
@@ -669,6 +736,25 @@ export namespace Components {
           * @default []
          */
         "values": string[];
+    }
+    /**
+     * Forme grise qui pulse à la place d'un contenu en cours de chargement.
+     * Masquée des lecteurs d'écran : signalez le chargement sur le conteneur (aria-busy) ou avec cr-loader.
+     */
+    interface CrSkeleton {
+        /**
+          * Hauteur, toute valeur CSS.
+         */
+        "height"?: string;
+        /**
+          * Forme : line (ligne de texte), block (image, carte) ou circle (avatar).
+          * @default 'line'
+         */
+        "shape": 'line' | 'block' | 'circle';
+        /**
+          * Largeur, toute valeur CSS (« 60% », « 120px »).
+         */
+        "width"?: string;
     }
     /**
      * Étape d'un cr-stepper. Son contenu n'est affiché que pendant l'étape.
@@ -1106,6 +1192,16 @@ declare global {
         prototype: HTMLCrIconButtonElement;
         new (): HTMLCrIconButtonElement;
     };
+    /**
+     * Image qui apparaît floue puis devient nette en 2 s une fois chargée (blur-up), avec un léger dézoom.
+     * Donnez une taille au composant (width, height ou aspect-ratio) : l'image le remplit.
+     */
+    interface HTMLCrImageElement extends Components.CrImage, HTMLStencilElement {
+    }
+    var HTMLCrImageElement: {
+        prototype: HTMLCrImageElement;
+        new (): HTMLCrImageElement;
+    };
     interface HTMLCrInputElementEventMap {
         "crInput": string;
         "crChange": string;
@@ -1126,6 +1222,15 @@ declare global {
     var HTMLCrInputElement: {
         prototype: HTMLCrInputElement;
         new (): HTMLCrInputElement;
+    };
+    /**
+     * Indicateur de chargement de durée inconnue. Sa taille suit la taille du texte (font-size).
+     */
+    interface HTMLCrLoaderElement extends Components.CrLoader, HTMLStencilElement {
+    }
+    var HTMLCrLoaderElement: {
+        prototype: HTMLCrLoaderElement;
+        new (): HTMLCrLoaderElement;
     };
     interface HTMLCrMenuElementEventMap {
         "crSelect": string;
@@ -1168,6 +1273,26 @@ declare global {
         prototype: HTMLCrOtpElement;
         new (): HTMLCrOtpElement;
     };
+    /**
+     * Barre de progression. Avec value, elle se remplit jusqu'à la valeur ; sans, un segment glisse en boucle (durée inconnue).
+     */
+    interface HTMLCrProgressElement extends Components.CrProgress, HTMLStencilElement {
+    }
+    var HTMLCrProgressElement: {
+        prototype: HTMLCrProgressElement;
+        new (): HTMLCrProgressElement;
+    };
+    /**
+     * Étapes d'un traitement qui s'enchaînent (« Recherche », « Lecture », « Rédaction… ») :
+     * les étapes passées sont cochées, l'étape en cours a un indicateur qui tourne, les suivantes n'apparaissent pas encore.
+     * Chaque nouvelle étape est annoncée aux lecteurs d'écran.
+     */
+    interface HTMLCrProgressStepsElement extends Components.CrProgressSteps, HTMLStencilElement {
+    }
+    var HTMLCrProgressStepsElement: {
+        prototype: HTMLCrProgressStepsElement;
+        new (): HTMLCrProgressStepsElement;
+    };
     interface HTMLCrSelectElementEventMap {
         "crChange": string | string[];
         "crSearch": string;
@@ -1188,6 +1313,16 @@ declare global {
     var HTMLCrSelectElement: {
         prototype: HTMLCrSelectElement;
         new (): HTMLCrSelectElement;
+    };
+    /**
+     * Forme grise qui pulse à la place d'un contenu en cours de chargement.
+     * Masquée des lecteurs d'écran : signalez le chargement sur le conteneur (aria-busy) ou avec cr-loader.
+     */
+    interface HTMLCrSkeletonElement extends Components.CrSkeleton, HTMLStencilElement {
+    }
+    var HTMLCrSkeletonElement: {
+        prototype: HTMLCrSkeletonElement;
+        new (): HTMLCrSkeletonElement;
     };
     /**
      * Étape d'un cr-stepper. Son contenu n'est affiché que pendant l'étape.
@@ -1292,10 +1427,15 @@ declare global {
         "cr-grid-item": HTMLCrGridItemElement;
         "cr-grid-layout": HTMLCrGridLayoutElement;
         "cr-icon-button": HTMLCrIconButtonElement;
+        "cr-image": HTMLCrImageElement;
         "cr-input": HTMLCrInputElement;
+        "cr-loader": HTMLCrLoaderElement;
         "cr-menu": HTMLCrMenuElement;
         "cr-otp": HTMLCrOtpElement;
+        "cr-progress": HTMLCrProgressElement;
+        "cr-progress-steps": HTMLCrProgressStepsElement;
         "cr-select": HTMLCrSelectElement;
+        "cr-skeleton": HTMLCrSkeletonElement;
         "cr-step": HTMLCrStepElement;
         "cr-stepper": HTMLCrStepperElement;
         "cr-table": HTMLCrTableElement;
@@ -1813,6 +1953,20 @@ declare namespace LocalJSX {
         "variant"?: IconButtonVariant;
     }
     /**
+     * Image qui apparaît floue puis devient nette en 2 s une fois chargée (blur-up), avec un léger dézoom.
+     * Donnez une taille au composant (width, height ou aspect-ratio) : l'image le remplit.
+     */
+    interface CrImage {
+        /**
+          * Texte alternatif ; chaîne vide pour une image décorative.
+         */
+        "alt": string;
+        /**
+          * Adresse de l'image.
+         */
+        "src": string;
+    }
+    /**
      * Champ de saisie de texte.
      */
     interface CrInput {
@@ -1881,6 +2035,20 @@ declare namespace LocalJSX {
           * @default ''
          */
         "value"?: string;
+    }
+    /**
+     * Indicateur de chargement de durée inconnue. Sa taille suit la taille du texte (font-size).
+     */
+    interface CrLoader {
+        /**
+          * Texte lu par les lecteurs d'écran (« Chargement… » par défaut).
+         */
+        "label"?: string;
+        /**
+          * Style : spinner (cercle qui tourne) ou bounce (balle qui rebondit et s'écrase en touchant le sol).
+          * @default 'spinner'
+         */
+        "variant"?: 'spinner' | 'bounce';
     }
     /**
      * Menu d'actions. Les actions sont des éléments option enfants.
@@ -1963,6 +2131,45 @@ declare namespace LocalJSX {
         "value"?: string;
     }
     /**
+     * Barre de progression. Avec value, elle se remplit jusqu'à la valeur ; sans, un segment glisse en boucle (durée inconnue).
+     */
+    interface CrProgress {
+        /**
+          * Nom lu par les lecteurs d'écran (« Progression » par défaut).
+         */
+        "label"?: string;
+        /**
+          * Affiche le pourcentage en grand au-dessus de la barre ; il compte jusqu'à chaque nouvelle valeur.
+          * @default false
+         */
+        "showValue"?: boolean;
+        /**
+          * Avancement de 0 à 100. Sans valeur, la barre est indéterminée.
+         */
+        "value"?: number;
+    }
+    /**
+     * Étapes d'un traitement qui s'enchaînent (« Recherche », « Lecture », « Rédaction… ») :
+     * les étapes passées sont cochées, l'étape en cours a un indicateur qui tourne, les suivantes n'apparaissent pas encore.
+     * Chaque nouvelle étape est annoncée aux lecteurs d'écran.
+     */
+    interface CrProgressSteps {
+        /**
+          * Étape en cours (0 pour la première) ; vaut le nombre d'étapes quand tout est terminé.
+          * @default 0
+         */
+        "current"?: number;
+        /**
+          * Nom de la liste (« Progression » par défaut).
+         */
+        "label"?: string;
+        /**
+          * Noms des étapes, dans l'ordre.
+          * @default []
+         */
+        "steps"?: string[];
+    }
+    /**
      * Liste déroulante. Les options sont des éléments option enfants.
      */
     interface CrSelect {
@@ -2043,6 +2250,25 @@ declare namespace LocalJSX {
           * @default []
          */
         "values"?: string[];
+    }
+    /**
+     * Forme grise qui pulse à la place d'un contenu en cours de chargement.
+     * Masquée des lecteurs d'écran : signalez le chargement sur le conteneur (aria-busy) ou avec cr-loader.
+     */
+    interface CrSkeleton {
+        /**
+          * Hauteur, toute valeur CSS.
+         */
+        "height"?: string;
+        /**
+          * Forme : line (ligne de texte), block (image, carte) ou circle (avatar).
+          * @default 'line'
+         */
+        "shape"?: 'line' | 'block' | 'circle';
+        /**
+          * Largeur, toute valeur CSS (« 60% », « 120px »).
+         */
+        "width"?: string;
     }
     /**
      * Étape d'un cr-stepper. Son contenu n'est affiché que pendant l'étape.
@@ -2333,6 +2559,10 @@ declare namespace LocalJSX {
         "tooltip": boolean;
         "tooltipPlacement": TooltipPlacement;
     }
+    interface CrImageAttributes {
+        "src": string;
+        "alt": string;
+    }
     interface CrInputAttributes {
         "label": string;
         "name": string;
@@ -2345,6 +2575,10 @@ declare namespace LocalJSX {
         "required": boolean;
         "disabled": boolean;
         "strength": boolean;
+    }
+    interface CrLoaderAttributes {
+        "variant": 'spinner' | 'bounce';
+        "label": string;
     }
     interface CrMenuAttributes {
         "label": string;
@@ -2362,6 +2596,15 @@ declare namespace LocalJSX {
         "required": boolean;
         "disabled": boolean;
     }
+    interface CrProgressAttributes {
+        "value": number;
+        "label": string;
+        "showValue": boolean;
+    }
+    interface CrProgressStepsAttributes {
+        "current": number;
+        "label": string;
+    }
     interface CrSelectAttributes {
         "label": string;
         "name": string;
@@ -2376,6 +2619,11 @@ declare namespace LocalJSX {
         "required": boolean;
         "disabled": boolean;
         "animation": PopupAnimation;
+    }
+    interface CrSkeletonAttributes {
+        "shape": 'line' | 'block' | 'circle';
+        "width": string;
+        "height": string;
     }
     interface CrStepAttributes {
         "label": string;
@@ -2427,10 +2675,15 @@ declare namespace LocalJSX {
         "cr-grid-item": Omit<CrGridItem, keyof CrGridItemAttributes> & { [K in keyof CrGridItem & keyof CrGridItemAttributes]?: CrGridItem[K] } & { [K in keyof CrGridItem & keyof CrGridItemAttributes as `attr:${K}`]?: CrGridItemAttributes[K] } & { [K in keyof CrGridItem & keyof CrGridItemAttributes as `prop:${K}`]?: CrGridItem[K] } & OneOf<"label", CrGridItem["label"], CrGridItemAttributes["label"]>;
         "cr-grid-layout": Omit<CrGridLayout, keyof CrGridLayoutAttributes> & { [K in keyof CrGridLayout & keyof CrGridLayoutAttributes]?: CrGridLayout[K] } & { [K in keyof CrGridLayout & keyof CrGridLayoutAttributes as `attr:${K}`]?: CrGridLayoutAttributes[K] } & { [K in keyof CrGridLayout & keyof CrGridLayoutAttributes as `prop:${K}`]?: CrGridLayout[K] };
         "cr-icon-button": Omit<CrIconButton, keyof CrIconButtonAttributes> & { [K in keyof CrIconButton & keyof CrIconButtonAttributes]?: CrIconButton[K] } & { [K in keyof CrIconButton & keyof CrIconButtonAttributes as `attr:${K}`]?: CrIconButtonAttributes[K] } & { [K in keyof CrIconButton & keyof CrIconButtonAttributes as `prop:${K}`]?: CrIconButton[K] } & OneOf<"label", CrIconButton["label"], CrIconButtonAttributes["label"]>;
+        "cr-image": Omit<CrImage, keyof CrImageAttributes> & { [K in keyof CrImage & keyof CrImageAttributes]?: CrImage[K] } & { [K in keyof CrImage & keyof CrImageAttributes as `attr:${K}`]?: CrImageAttributes[K] } & { [K in keyof CrImage & keyof CrImageAttributes as `prop:${K}`]?: CrImage[K] } & OneOf<"src", CrImage["src"], CrImageAttributes["src"]> & OneOf<"alt", CrImage["alt"], CrImageAttributes["alt"]>;
         "cr-input": Omit<CrInput, keyof CrInputAttributes> & { [K in keyof CrInput & keyof CrInputAttributes]?: CrInput[K] } & { [K in keyof CrInput & keyof CrInputAttributes as `attr:${K}`]?: CrInputAttributes[K] } & { [K in keyof CrInput & keyof CrInputAttributes as `prop:${K}`]?: CrInput[K] } & OneOf<"label", CrInput["label"], CrInputAttributes["label"]>;
+        "cr-loader": Omit<CrLoader, keyof CrLoaderAttributes> & { [K in keyof CrLoader & keyof CrLoaderAttributes]?: CrLoader[K] } & { [K in keyof CrLoader & keyof CrLoaderAttributes as `attr:${K}`]?: CrLoaderAttributes[K] } & { [K in keyof CrLoader & keyof CrLoaderAttributes as `prop:${K}`]?: CrLoader[K] };
         "cr-menu": Omit<CrMenu, keyof CrMenuAttributes> & { [K in keyof CrMenu & keyof CrMenuAttributes]?: CrMenu[K] } & { [K in keyof CrMenu & keyof CrMenuAttributes as `attr:${K}`]?: CrMenuAttributes[K] } & { [K in keyof CrMenu & keyof CrMenuAttributes as `prop:${K}`]?: CrMenu[K] } & OneOf<"label", CrMenu["label"], CrMenuAttributes["label"]>;
         "cr-otp": Omit<CrOtp, keyof CrOtpAttributes> & { [K in keyof CrOtp & keyof CrOtpAttributes]?: CrOtp[K] } & { [K in keyof CrOtp & keyof CrOtpAttributes as `attr:${K}`]?: CrOtpAttributes[K] } & { [K in keyof CrOtp & keyof CrOtpAttributes as `prop:${K}`]?: CrOtp[K] } & OneOf<"label", CrOtp["label"], CrOtpAttributes["label"]>;
+        "cr-progress": Omit<CrProgress, keyof CrProgressAttributes> & { [K in keyof CrProgress & keyof CrProgressAttributes]?: CrProgress[K] } & { [K in keyof CrProgress & keyof CrProgressAttributes as `attr:${K}`]?: CrProgressAttributes[K] } & { [K in keyof CrProgress & keyof CrProgressAttributes as `prop:${K}`]?: CrProgress[K] };
+        "cr-progress-steps": Omit<CrProgressSteps, keyof CrProgressStepsAttributes> & { [K in keyof CrProgressSteps & keyof CrProgressStepsAttributes]?: CrProgressSteps[K] } & { [K in keyof CrProgressSteps & keyof CrProgressStepsAttributes as `attr:${K}`]?: CrProgressStepsAttributes[K] } & { [K in keyof CrProgressSteps & keyof CrProgressStepsAttributes as `prop:${K}`]?: CrProgressSteps[K] };
         "cr-select": Omit<CrSelect, keyof CrSelectAttributes> & { [K in keyof CrSelect & keyof CrSelectAttributes]?: CrSelect[K] } & { [K in keyof CrSelect & keyof CrSelectAttributes as `attr:${K}`]?: CrSelectAttributes[K] } & { [K in keyof CrSelect & keyof CrSelectAttributes as `prop:${K}`]?: CrSelect[K] } & OneOf<"label", CrSelect["label"], CrSelectAttributes["label"]>;
+        "cr-skeleton": Omit<CrSkeleton, keyof CrSkeletonAttributes> & { [K in keyof CrSkeleton & keyof CrSkeletonAttributes]?: CrSkeleton[K] } & { [K in keyof CrSkeleton & keyof CrSkeletonAttributes as `attr:${K}`]?: CrSkeletonAttributes[K] } & { [K in keyof CrSkeleton & keyof CrSkeletonAttributes as `prop:${K}`]?: CrSkeleton[K] };
         "cr-step": Omit<CrStep, keyof CrStepAttributes> & { [K in keyof CrStep & keyof CrStepAttributes]?: CrStep[K] } & { [K in keyof CrStep & keyof CrStepAttributes as `attr:${K}`]?: CrStepAttributes[K] } & { [K in keyof CrStep & keyof CrStepAttributes as `prop:${K}`]?: CrStep[K] } & OneOf<"label", CrStep["label"], CrStepAttributes["label"]>;
         "cr-stepper": Omit<CrStepper, keyof CrStepperAttributes> & { [K in keyof CrStepper & keyof CrStepperAttributes]?: CrStepper[K] } & { [K in keyof CrStepper & keyof CrStepperAttributes as `attr:${K}`]?: CrStepperAttributes[K] } & { [K in keyof CrStepper & keyof CrStepperAttributes as `prop:${K}`]?: CrStepper[K] };
         "cr-table": Omit<CrTable, keyof CrTableAttributes> & { [K in keyof CrTable & keyof CrTableAttributes]?: CrTable[K] } & { [K in keyof CrTable & keyof CrTableAttributes as `attr:${K}`]?: CrTableAttributes[K] } & { [K in keyof CrTable & keyof CrTableAttributes as `prop:${K}`]?: CrTable[K] } & OneOf<"label", CrTable["label"], CrTableAttributes["label"]>;
@@ -2496,9 +2749,18 @@ declare module "@stencil/core" {
              */
             "cr-icon-button": LocalJSX.IntrinsicElements["cr-icon-button"] & JSXBase.HTMLAttributes<HTMLCrIconButtonElement>;
             /**
+             * Image qui apparaît floue puis devient nette en 2 s une fois chargée (blur-up), avec un léger dézoom.
+             * Donnez une taille au composant (width, height ou aspect-ratio) : l'image le remplit.
+             */
+            "cr-image": LocalJSX.IntrinsicElements["cr-image"] & JSXBase.HTMLAttributes<HTMLCrImageElement>;
+            /**
              * Champ de saisie de texte.
              */
             "cr-input": LocalJSX.IntrinsicElements["cr-input"] & JSXBase.HTMLAttributes<HTMLCrInputElement>;
+            /**
+             * Indicateur de chargement de durée inconnue. Sa taille suit la taille du texte (font-size).
+             */
+            "cr-loader": LocalJSX.IntrinsicElements["cr-loader"] & JSXBase.HTMLAttributes<HTMLCrLoaderElement>;
             /**
              * Menu d'actions. Les actions sont des éléments option enfants.
              */
@@ -2508,9 +2770,24 @@ declare module "@stencil/core" {
              */
             "cr-otp": LocalJSX.IntrinsicElements["cr-otp"] & JSXBase.HTMLAttributes<HTMLCrOtpElement>;
             /**
+             * Barre de progression. Avec value, elle se remplit jusqu'à la valeur ; sans, un segment glisse en boucle (durée inconnue).
+             */
+            "cr-progress": LocalJSX.IntrinsicElements["cr-progress"] & JSXBase.HTMLAttributes<HTMLCrProgressElement>;
+            /**
+             * Étapes d'un traitement qui s'enchaînent (« Recherche », « Lecture », « Rédaction… ») :
+             * les étapes passées sont cochées, l'étape en cours a un indicateur qui tourne, les suivantes n'apparaissent pas encore.
+             * Chaque nouvelle étape est annoncée aux lecteurs d'écran.
+             */
+            "cr-progress-steps": LocalJSX.IntrinsicElements["cr-progress-steps"] & JSXBase.HTMLAttributes<HTMLCrProgressStepsElement>;
+            /**
              * Liste déroulante. Les options sont des éléments option enfants.
              */
             "cr-select": LocalJSX.IntrinsicElements["cr-select"] & JSXBase.HTMLAttributes<HTMLCrSelectElement>;
+            /**
+             * Forme grise qui pulse à la place d'un contenu en cours de chargement.
+             * Masquée des lecteurs d'écran : signalez le chargement sur le conteneur (aria-busy) ou avec cr-loader.
+             */
+            "cr-skeleton": LocalJSX.IntrinsicElements["cr-skeleton"] & JSXBase.HTMLAttributes<HTMLCrSkeletonElement>;
             /**
              * Étape d'un cr-stepper. Son contenu n'est affiché que pendant l'étape.
              */

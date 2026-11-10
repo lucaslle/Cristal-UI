@@ -1,0 +1,82 @@
+:host {
+  display: block;
+  font-family: var(--cr-font-family);
+  color: var(--cr-color-text);
+}
+
+.value {
+  margin-bottom: var(--cr-spacing-sm);
+  font-size: 3rem;
+  font-weight: var(--cr-font-weight-bold);
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  text-align: center;
+}
+
+.unit {
+  margin-left: var(--cr-spacing-xs);
+  font-size: 0.5em;
+  color: var(--cr-color-primary-text);
+}
+
+.track {
+  position: relative;
+  height: 4px;
+  overflow: hidden;
+  background: var(--cr-color-disabled);
+  border-radius: 999px;
+}
+
+/* Dégradé vers une teinte voisine de la couleur principale : même luminosité, donc même contraste avec le rail. */
+.bar {
+  height: 100%;
+  background: linear-gradient(90deg, oklch(from var(--cr-color-primary) l c calc(h - 40)), var(--cr-color-primary));
+  border-radius: inherit;
+  transition: width 1s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.indeterminate {
+  position: absolute;
+  top: 0;
+  animation: cr-progress-glide 1.5s ease-in-out infinite;
+}
+
+@keyframes cr-progress-glide {
+  from {
+    left: -20%;
+    width: 20%;
+  }
+  50% {
+    width: 45%;
+  }
+  to {
+    left: 100%;
+    width: 20%;
+  }
+}
+
+@keyframes cr-progress-fade {
+  50% {
+    opacity: 0.35;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bar {
+    transition: none;
+  }
+  .indeterminate {
+    left: 0;
+    width: 100%;
+    animation: cr-progress-fade 2.4s ease-in-out infinite;
+  }
+}
+
+@media (forced-colors: active) {
+  .track {
+    border: 1px solid CanvasText;
+  }
+  .bar {
+    background: Highlight;
+  }
+}

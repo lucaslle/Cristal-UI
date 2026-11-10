@@ -1,0 +1,93 @@
+---
+title: Chargement
+description: Squelettes, barres de progression, étapes, indicateurs et images floues pour faire patienter. Balises cr-skeleton, cr-progress, cr-progress-steps, cr-loader, cr-image.
+---
+
+import LoadingSkeleton from '@/demos/loading-skeleton';
+import LoadingProgress from '@/demos/loading-progress';
+import LoadingSteps from '@/demos/loading-steps';
+import LoadingLoader from '@/demos/loading-loader';
+import LoadingImage from '@/demos/loading-image';
+
+## Squelette
+
+`CrSkeleton` dessine la forme du contenu attendu et pulse doucement (1,6 s). `shape` vaut `line` (ligne de texte, par défaut), `block` (image, carte) ou `circle` (avatar) ; `width` et `height` acceptent toute valeur CSS.
+
+<Preview>
+  <LoadingSkeleton />
+</Preview>
+
+<include>../../../demos/loading-skeleton.tsx</include>
+
+## Barre de progression
+
+Sans `value`, `CrProgress` est indéterminée : un segment glisse le long du rail en s'allongeant à mi-course (1,5 s). Avec `value` (0 à 100), la barre se remplit ; `showValue` affiche en plus le pourcentage en grand, qui compte jusqu'à chaque nouvelle valeur.
+
+<Preview>
+  <LoadingProgress />
+</Preview>
+
+<include>../../../demos/loading-progress.tsx</include>
+
+## Étapes d'un traitement
+
+`CrProgressSteps` montre ce qui se passe pendant une attente longue : les étapes passées sont cochées, l'étape en cours a un indicateur qui tourne, les suivantes n'apparaissent qu'à leur tour. `current` donne l'étape en cours ; elle vaut le nombre d'étapes quand tout est terminé.
+
+<Preview>
+  <LoadingSteps />
+</Preview>
+
+<include>../../../demos/loading-steps.tsx</include>
+
+## Indicateur
+
+`CrLoader` signale une attente de durée inconnue : un cercle qui tourne (par défaut) ou, avec `variant="bounce"`, une balle qui rebondit, s'écrase en touchant le sol, et dont l'ombre rétrécit quand elle monte. Sa taille suit `font-size`.
+
+<Preview>
+  <LoadingLoader />
+</Preview>
+
+<include>../../../demos/loading-loader.tsx</include>
+
+## Image floue
+
+`CrImage` affiche l'image floue (18px) et légèrement agrandie, puis la rend nette en 2 s une fois chargée. Donnez une taille au composant (`width`, `height` ou `aspect-ratio`) : l'image le remplit et reste cadrée.
+
+<Preview>
+  <LoadingImage />
+</Preview>
+
+<include>../../../demos/loading-image.tsx</include>
+
+<Callout>
+  Si l'utilisateur a demandé à son système de réduire les animations, le squelette ne pulse plus, la barre indéterminée et la balle clignotent doucement au lieu de bouger, le cercle tourne lentement, les nombres et l'image apparaissent sans transition.
+</Callout>
+
+## Accessibilité
+
+- `CrSkeleton` est masqué des lecteurs d'écran : indiquez le chargement sur le conteneur (`aria-busy="true"`) ou avec un `CrLoader`.
+- `CrProgress` est une barre de progression (`role="progressbar"`) nommée par `label` (« Progression » par défaut) ; avec `value`, sa valeur est lue. Le grand pourcentage est masqué pour ne pas être lu deux fois.
+- `CrLoader` est une zone de statut qui lit `label` (« Chargement… » par défaut).
+- `CrProgressSteps` est une liste ordonnée : l'étape en cours porte `aria-current="step"`, chaque étape est lue avec son état (« en cours », « terminée ») et les nouvelles étapes sont annoncées.
+- `alt` est obligatoire sur `CrImage` ; laissez-le vide (`alt=""`) pour une image décorative.
+- Ces animations tournent en boucle : ne les affichez que pendant le chargement, retirez-les dès qu'il est fini.
+
+## API de CrSkeleton
+
+<ApiReference tag="cr-skeleton" />
+
+## API de CrProgress
+
+<ApiReference tag="cr-progress" />
+
+## API de CrProgressSteps
+
+<ApiReference tag="cr-progress-steps" />
+
+## API de CrLoader
+
+<ApiReference tag="cr-loader" />
+
+## API de CrImage
+
+<ApiReference tag="cr-image" />

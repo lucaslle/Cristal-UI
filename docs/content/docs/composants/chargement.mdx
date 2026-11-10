@@ -1,0 +1,93 @@
+---
+title: Loading
+description: Skeletons, progress bars, steps, indicators and blur-up images to show that something is coming. Tags cr-skeleton, cr-progress, cr-progress-steps, cr-loader, cr-image.
+---
+
+import LoadingSkeleton from '@/demos/en/loading-skeleton';
+import LoadingProgress from '@/demos/en/loading-progress';
+import LoadingSteps from '@/demos/en/loading-steps';
+import LoadingLoader from '@/demos/en/loading-loader';
+import LoadingImage from '@/demos/en/loading-image';
+
+## Skeleton
+
+`CrSkeleton` draws the shape of the expected content and gently pulses (1.6s). `shape` is `line` (a line of text, default), `block` (image, card) or `circle` (avatar); `width` and `height` take any CSS value.
+
+<Preview>
+  <LoadingSkeleton />
+</Preview>
+
+<include>../../../demos/en/loading-skeleton.tsx</include>
+
+## Progress bar
+
+Without `value`, `CrProgress` is indeterminate: a segment glides along the track, growing mid-way (1.5s). With `value` (0 to 100), the bar fills up; `showValue` also shows a big percentage that counts up to each new value.
+
+<Preview>
+  <LoadingProgress />
+</Preview>
+
+<include>../../../demos/en/loading-progress.tsx</include>
+
+## Processing steps
+
+`CrProgressSteps` shows what is happening during a long wait: past steps are checked, the current step has a spinner, the next ones only appear in turn. `current` is the current step; it equals the number of steps once everything is done.
+
+<Preview>
+  <LoadingSteps />
+</Preview>
+
+<include>../../../demos/en/loading-steps.tsx</include>
+
+## Indicator
+
+`CrLoader` signals a wait of unknown length: a spinning circle (default) or, with `variant="bounce"`, a ball that bounces, squashes on landing, and whose shadow shrinks as it rises. Its size follows `font-size`.
+
+<Preview>
+  <LoadingLoader />
+</Preview>
+
+<include>../../../demos/en/loading-loader.tsx</include>
+
+## Blur-up image
+
+`CrImage` shows the image blurred (18px) and slightly zoomed in, then sharpens it over 2s once loaded. Give the component a size (`width`, `height` or `aspect-ratio`): the image fills it and stays cropped.
+
+<Preview>
+  <LoadingImage />
+</Preview>
+
+<include>../../../demos/en/loading-image.tsx</include>
+
+<Callout>
+  If the user asked their system to reduce motion, the skeleton stops pulsing, the indeterminate bar and the ball gently fade instead of moving, the circle spins slowly, and numbers and the image appear without transition.
+</Callout>
+
+## Accessibility
+
+- `CrSkeleton` is hidden from screen readers: signal loading on the container (`aria-busy="true"`) or with a `CrLoader`.
+- `CrProgress` is a progress bar (`role="progressbar"`) named by `label` ("Progress" by default); with `value`, its value is read. The big percentage is hidden so it is not read twice.
+- `CrLoader` is a status region that reads `label` ("Loading…" by default).
+- `CrProgressSteps` is an ordered list: the current step has `aria-current="step"`, each step is read with its state ("current", "completed") and new steps are announced.
+- `alt` is required on `CrImage`; leave it empty (`alt=""`) for a decorative image.
+- These animations loop: only show them while loading, and remove them as soon as it is done.
+
+## CrSkeleton API
+
+<ApiReference tag="cr-skeleton" />
+
+## CrProgress API
+
+<ApiReference tag="cr-progress" />
+
+## CrProgressSteps API
+
+<ApiReference tag="cr-progress-steps" />
+
+## CrLoader API
+
+<ApiReference tag="cr-loader" />
+
+## CrImage API
+
+<ApiReference tag="cr-image" />

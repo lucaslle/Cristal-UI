@@ -52,6 +52,7 @@ export const fr: Messages = {
   closeAll: 'Tout fermer',
 
   progress: 'Progression',
+  loading: 'Chargement…',
   stepStatus: { done: 'terminée', current: 'en cours', todo: 'à venir' },
   stepSuffix: { done: ' (terminée)', current: ' (en cours)' },
   allStepsDone: 'Toutes les étapes sont terminées.',
