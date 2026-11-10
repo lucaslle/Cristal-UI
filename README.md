@@ -63,6 +63,27 @@ Dans un composant client (`'use client'`), importer depuis `@cristal/react`.
 
 Icônes : `slot="start"` (avant le texte) et `slot="end"` (après le texte).
 
+### `cr-icon-button`
+
+Bouton réduit à une icône (slot par défaut, avec `aria-hidden="true"`). `label` est obligatoire : il nomme le bouton et s'affiche en infobulle au survol et au focus clavier (Échap la masque).
+
+| Propriété | Valeurs | Défaut |
+|---|---|---|
+| `label` | texte (obligatoire) | |
+| `variant` | `ghost`, `primary`, `secondary`, `outline` | `ghost` |
+| `size` | `xs` (30px), `s` (36px), `m` (40px), `l` (48px) | `m` |
+| `shape` | `square`, `round` | `square` |
+| `toggle`, `pressed` | bascule annoncée enfoncée ou non, `onCrToggle` | `false` |
+| `badge` | pastille ajoutée au nom lu : « Notifications (3) » | |
+| `tooltip`, `tooltipPlacement` | infobulle ; `top`, `bottom`, `start`, `end` | `true`, `top` |
+| `type`, `disabled`, `loading` | comme `cr-button` | |
+
+```tsx
+<CrIconButton label="Ajouter aux favoris" toggle pressed={liked} onCrToggle={(e) => setLiked(e.detail)}>
+  <Heart aria-hidden="true" />
+</CrIconButton>
+```
+
 ### Champs de formulaire : `cr-input`, `cr-select`, `cr-checkbox`
 
 Ils participent au `<form>` parent comme des champs natifs (valeur envoyée, validation, réinitialisation). Le libellé est obligatoire et rendu par le composant. Les erreurs de saisie (champ obligatoire vide, e-mail mal formé…) s'affichent automatiquement en français ; `error` remplace le message automatique.
