@@ -21,6 +21,16 @@ Une seule fois, à la racine de l'application : `app/layout.tsx` avec Next.js, `
 import '@cristal/tokens/tokens.css';
 ```
 
+## Choisir la langue
+
+Les textes intégrés aux composants (messages d'erreur, boutons, annonces pour les lecteurs d'écran) sont en anglais par défaut. Ils passent en français quand le composant ou un de ses parents porte `lang="fr"` : le plus simple est de le mettre sur la page.
+
+```tsx title="app/layout.tsx"
+<html lang="fr">
+```
+
+`lang` se pose aussi sur une seule zone (`<section lang="en">`) ou sur un composant. Les textes que vous fournissez (`label`, `hint`, `error`, options…) restent les vôtres.
+
 ## Utiliser un composant
 
 ### React

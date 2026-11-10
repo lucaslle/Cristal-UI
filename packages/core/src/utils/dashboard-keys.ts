@@ -1,3 +1,4 @@
+import type { Messages } from './i18n';
 import { GridItem, moveItem, resizeItem } from './grid-layout';
 
 const STEPS: Record<string, [number, number]> = { ArrowLeft: [-1, 0], ArrowRight: [1, 0], ArrowUp: [0, -1], ArrowDown: [0, 1] };
@@ -11,8 +12,8 @@ export const keyLayout = (event: KeyboardEvent, layout: GridItem[], id: string, 
   return event.shiftKey ? { resize: true, next: resizeItem(layout, id, item.w + dx, item.h + dy, columns) } : { resize: false, next: moveItem(layout, id, item.x + dx, item.y + dy, columns) };
 };
 
-export const describe = (item: GridItem, label: string, resize: boolean) =>
-  resize ? `${label} : ${item.w} colonnes sur ${item.h} lignes.` : `${label} : colonne ${item.x + 1}, ligne ${item.y + 1}.`;
+export const describe = (item: GridItem, label: string, resize: boolean, m: Messages) =>
+  resize ? m.widgetResized(label, item.w, item.h) : m.widgetMoved(label, item.x + 1, item.y + 1);
 
 export interface DashboardItem {
   id: string;

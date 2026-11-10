@@ -1,4 +1,5 @@
 import { h } from '@stencil/core';
+import type { Messages } from './i18n';
 import { cardLength, groupCard } from './card';
 
 export type CardBrand = 'visa' | 'mastercard' | 'amex' | '';
@@ -43,10 +44,11 @@ interface CardVisualProps {
   cvc: string;
   holder?: string;
   flipped: boolean;
+  m: Messages;
 }
 
 /** Carte bancaire dessinée : se remplit pendant la frappe et se retourne pour le cryptogramme. Décorative. */
-export const CardVisual = ({ digits, expiry, cvc, holder, flipped }: CardVisualProps) => {
+export const CardVisual = ({ digits, expiry, cvc, holder, flipped, m }: CardVisualProps) => {
   const brand = brandOf(digits);
   return (
     <div class={{ visual: true, flipped }} data-brand={brand || 'default'} aria-hidden="true">
@@ -67,14 +69,14 @@ export const CardVisual = ({ digits, expiry, cvc, holder, flipped }: CardVisualP
         </div>
         <div class="valid">
           <span class="caption">
-            VALABLE
+            {m.validThru[0]}
             <br />
-            JUSQU'À
+            {m.validThru[1]}
           </span>
-          <span class="expiry">{expiry || 'MM/AA'}</span>
+          <span class="expiry">{expiry || m.monthYear}</span>
         </div>
         <div class="row end">
-          <span class={{ holder: true, empty: !holder }}>{holder?.trim().toUpperCase() || 'NOM DU TITULAIRE'}</span>
+          <span class={{ holder: true, empty: !holder }}>{holder?.trim().toUpperCase() || m.holderOnCard}</span>
           <Brand brand={brand} />
         </div>
       </div>
@@ -85,7 +87,7 @@ export const CardVisual = ({ digits, expiry, cvc, holder, flipped }: CardVisualP
           <span class="lines" />
           <span class="cvc">{cvc || '•••'}</span>
         </div>
-        <p class="fine">Cette carte est strictement personnelle. En cas de perte ou de vol, faites-la opposer sans attendre.</p>
+        <p class="fine">{m.cardLegal}</p>
         <div class="row end">
           <span class="hologram" />
           <Brand brand={brand} />

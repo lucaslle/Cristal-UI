@@ -1,5 +1,6 @@
 import { h } from '@stencil/core';
 import { CellValue } from './table-cells';
+import type { Messages } from './i18n';
 import type { ColumnState, TableColumn } from './table-layout';
 
 /** Lignes ajoutées à chaque fois : un grand tableau s'affiche vite et se complète pendant le défilement. */
@@ -24,10 +25,10 @@ export const Rows = ({ rows, limit, visible, cell, meta }: RowsProps) =>
     </tr>
   ));
 
-export const More = ({ shown, total, moreRef }: { shown: number; total: number; moreRef: (el?: HTMLElement) => void }) =>
+export const More = ({ shown, total, moreRef, m }: { shown: number; total: number; moreRef: (el?: HTMLElement) => void; m: Messages }) =>
   shown < total ? (
     <p ref={moreRef} class="more">
-      {shown.toLocaleString('fr-FR')} lignes sur {total.toLocaleString('fr-FR')} : la suite s'affiche en défilant.
+      {m.moreRows(shown.toLocaleString(m.locale), total.toLocaleString(m.locale))}
     </p>
   ) : null;
 

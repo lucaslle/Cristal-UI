@@ -1,9 +1,11 @@
 import { h } from '@stencil/core';
+import type { Messages } from './i18n';
 import { ballPosition, stepState } from './stepper';
 
 interface ViewProps {
   labels: string[];
   current: number;
+  m: Messages;
 }
 
 const Tick = ({ size }: { size: number }) => (
@@ -33,7 +35,7 @@ export const LineView = ({ labels, current }: ViewProps) => {
 };
 
 /** Big Number : un grand numéro qui bascule comme un panneau à volets, le nom de l'étape arrive en roulant. */
-export const NumberView = ({ labels, current }: ViewProps) => {
+export const NumberView = ({ labels, current, m }: ViewProps) => {
   const n = labels.length;
   const done = current >= n;
   return (
@@ -45,11 +47,11 @@ export const NumberView = ({ labels, current }: ViewProps) => {
       </div>
       <div class="info">
         <span class="kicker">
-          Étape {Math.min(current + 1, n)} sur {n}
+          {m.stepOf(Math.min(current + 1, n), n)}
         </span>
         <span class="roll">
           <span key={`name-${current}`} class="name">
-            {done ? 'Terminé' : labels[current]}
+            {done ? m.done : labels[current]}
           </span>
         </span>
         <span class="dashes">

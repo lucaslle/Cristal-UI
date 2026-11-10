@@ -28,6 +28,16 @@ Une ligne suffit pour donner votre couleur à toute l'application ; les nuances 
 
 Pour un thème limité à une zone : classe `cr-theme` sur le conteneur et `--cr-color-primary` redéfinie dessus. Un générateur avec vérification des contrastes est disponible sur la page « Thème » de la documentation.
 
+## Langue
+
+Les textes intégrés aux composants (messages d'erreur, boutons « Next », annonces pour les lecteurs d'écran…) sont en **anglais par défaut**. Ils passent en français dès que le composant ou un de ses parents porte `lang="fr"`, en général la page entière :
+
+```html
+<html lang="fr">
+```
+
+`lang` peut aussi être posé sur une seule zone (`<section lang="en">`) ou un seul composant.
+
 ## Utilisation
 
 ### React
@@ -150,7 +160,7 @@ Basés sur l'élément natif `<dialog>` : focus piégé dans la fenêtre, fermet
 |---|---|
 | `open` | ouvert ou fermé |
 | `label` | titre affiché, et nom de la fenêtre pour les lecteurs d'écran (obligatoire) |
-| `closeLabel` | libellé du bouton de fermeture, `Fermer` par défaut |
+| `closeLabel` | libellé du bouton de fermeture, « Close » par défaut (« Fermer » en français) |
 | `placement` | `cr-drawer` seulement : `end` (droite, par défaut) ou `start` (gauche) |
 
 Contenu dans le slot par défaut, boutons d'action dans `slot="footer"`. L'événement `onCrClose` est émis à chaque fermeture (Échap, bouton Fermer, `open` à `false`). Largeur du drawer : variable CSS `--cr-drawer-width` (400px par défaut).

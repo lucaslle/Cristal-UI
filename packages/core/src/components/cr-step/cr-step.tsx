@@ -1,4 +1,5 @@
 import { Component, Element, Host, Prop, Watch, forceUpdate, h } from '@stencil/core';
+import { t } from '../../utils/i18n';
 import { StepperVariant, stepState } from '../../utils/stepper';
 
 /**
@@ -57,7 +58,7 @@ export class CrStep {
           {timeline && (
             <div class="title" role="heading" aria-level={3}>
               {this.label}
-              {state !== 'todo' && <span class="sr-only">{state === 'done' ? ' (terminée)' : ' (en cours)'}</span>}
+              {state !== 'todo' && <span class="sr-only">{t(this.el).stepSuffix[state]}</span>}
             </div>
           )}
           {state === 'current' && (

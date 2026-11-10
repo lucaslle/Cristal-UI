@@ -1,4 +1,5 @@
 import { Component, Element, Listen, Prop, State, Watch, forceUpdate, h } from '@stencil/core';
+import { t } from '../../utils/i18n';
 import { AccordionAnimation, AccordionVariant } from '../../utils/accordion';
 import { reducedMotion } from '../../utils/popup';
 
@@ -101,7 +102,7 @@ export class CrAccordion {
       this.toggleAll && (
         <div class="toolbar">
           <button class="toggle-all" part="toggle-all" type="button" onClick={() => this.setAll(!this.allOpen)}>
-            {this.allOpen ? 'Tout fermer' : 'Tout ouvrir'}
+            {this.allOpen ? t(this.el).closeAll : t(this.el).openAll}
           </button>
         </div>
       ),

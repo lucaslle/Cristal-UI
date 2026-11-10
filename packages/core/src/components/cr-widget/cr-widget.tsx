@@ -1,4 +1,5 @@
 import { Component, Element, Event, EventEmitter, Host, Prop, State, Watch, h } from '@stencil/core';
+import { t } from '../../utils/i18n';
 
 /**
  * Carte d'un cr-dashboard. Se déplace par sa poignée et se redimensionne par son coin.
@@ -84,7 +85,7 @@ export class CrWidget {
       <Host role="group" aria-label={this.label}>
         <div class="card">
           <div class="head">
-            <button class="handle" part="handle" type="button" aria-label={`Déplacer ${this.label}`} aria-description="Flèches : déplacer. Maj + flèches : changer la taille.">
+            <button class="handle" part="handle" type="button" aria-label={t(this.el).widgetMove(this.label)} aria-description={t(this.el).widgetHelp}>
               <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
                 <circle cx="9" cy="6" r="1.6" />
                 <circle cx="15" cy="6" r="1.6" />
@@ -99,7 +100,7 @@ export class CrWidget {
             </span>
             <slot name="actions" />
             {this.removable && (
-              <button class="remove" type="button" aria-label={`Retirer ${this.label}`} onClick={() => this.crRemove.emit()}>
+              <button class="remove" type="button" aria-label={t(this.el).widgetRemove(this.label)} onClick={() => this.crRemove.emit()}>
                 <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true">
                   <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" />
                 </svg>

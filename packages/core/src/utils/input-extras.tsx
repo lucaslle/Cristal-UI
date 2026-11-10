@@ -1,6 +1,5 @@
 import { h } from '@stencil/core';
-
-const LEVELS = ['Très faible', 'Faible', 'Moyen', 'Bon', 'Fort'];
+import type { Messages } from './i18n';
 
 /** Note de 0 à 4 : longueur, majuscules et minuscules, chiffres, symboles. */
 export const passwordScore = (password: string) => {
@@ -10,7 +9,7 @@ export const passwordScore = (password: string) => {
 };
 
 /** Jauge en 4 segments qui se remplissent et changent de couleur, avec le niveau écrit. */
-export const StrengthMeter = ({ id, password }: { id: string; password: string }) => {
+export const StrengthMeter = ({ id, password, m }: { id: string; password: string; m: Messages }) => {
   const score = passwordScore(password);
   return (
     <div class={`strength level-${score}`}>
@@ -20,7 +19,7 @@ export const StrengthMeter = ({ id, password }: { id: string; password: string }
         ))}
       </div>
       <span id={id} class="strength-text" aria-live="polite">
-        {password ? `Sécurité : ${LEVELS[score]}` : ''}
+        {password ? m.strength(score) : ''}
       </span>
     </div>
   );

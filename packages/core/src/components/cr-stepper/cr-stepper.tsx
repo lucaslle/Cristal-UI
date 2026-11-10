@@ -1,10 +1,9 @@
 import { Component, Element, Event, EventEmitter, Host, Method, Prop, State, Watch, forceUpdate, h } from '@stencil/core';
+import { t } from '../../utils/i18n';
 import { EASE } from '../../utils/accordion';
 import { reducedMotion } from '../../utils/popup';
 import { StepperVariant, ballPosition, stepState } from '../../utils/stepper';
 import { BlocksView, GaugeView, LineView, NumberView, PathView } from '../../utils/stepper-views';
-
-const STATUS = { done: 'terminée', current: 'en cours', todo: 'à venir' };
 
 /**
  * Progression en étapes. Les étapes sont des éléments cr-step enfants.
@@ -25,8 +24,8 @@ export class CrStepper {
   @Prop({ reflect: true }) variant: StepperVariant = 'line';
   /** Ajoute les boutons « Précédent » et « Suivant » (« Terminer » à la dernière étape). */
   @Prop() navigation = false;
-  /** Nom de la progression, lu par les lecteurs d'écran. */
-  @Prop() label = 'Progression';
+  /** Nom de la progression, lu par les lecteurs d'écran (« Progress », ou « Progression » en français, par défaut). */
+  @Prop() label?: string;
 
   /** Émis à chaque changement d'étape ; detail : l'index de la nouvelle étape. */
   @Event() crStepChange: EventEmitter<number>;
@@ -47,7 +46,8 @@ export class CrStepper {
     this.el.dataset.direction = next < previous ? 'back' : 'forward';
     this.focusState = { step: this.steps().find((step) => step.contains(document.activeElement)), nav: !!this.el.shadowRoot?.activeElement };
     this.hop = { from: previous, to: next };
-    this.announce = next >= labels.length ? 'Toutes les étapes sont terminées.' : `Étape ${next + 1} sur ${labels.length} : ${labels[next]}`;
+    const m = t(this.el);
+    this.announce = next >= labels.length ? m.allStepsDone : m.stepAnnounce(next + 1, labels.length, labels[next]);
     this.refresh();
     this.crStepChange.emit(next);
     if (next >= labels.length) this.crComplete.emit();
@@ -98,7 +98,7 @@ export class CrStepper {
   }
 
   private view(labels: string[], current: number) {
-    const props = { labels, current };
+    const props = { labels, current, m: t(this.el) };
     if (this.variant === 'number') return <NumberView {...props} />;
     if (this.variant === 'path') return <PathView {...props} />;
     if (this.variant === 'blocks') return <BlocksView {...props} ballRef={(el) => (this.ball = el)} />;
@@ -111,15 +111,16 @@ export class CrStepper {
     const labels = this.steps().map((step) => step.label ?? step.getAttribute('label') ?? '');
     const count = labels.length;
     const current = Math.min(this.current, count);
+    const m = t(this.el);
     const titled = this.navigation && !['number', 'timeline'].includes(this.variant);
     return (
       <Host tabIndex={-1}>
-        <div class="stepper" role="group" aria-label={this.label}>
+        <div class="stepper" role="group" aria-label={this.label ?? m.progress}>
           {this.variant !== 'timeline' && (
             <ol class="sr-only">
               {labels.map((label, i) => (
                 <li aria-current={i === current ? 'step' : undefined}>
-                  {label} : {STATUS[stepState(i, current)]}
+                  {label} : {m.stepStatus[stepState(i, current)]}
                 </li>
               ))}
             </ol>
@@ -127,10 +128,8 @@ export class CrStepper {
           {this.view(labels, current)}
           {titled && (
             <div key={`title-${current}`} class="title" aria-hidden="true">
-              <strong>{labels[current] ?? 'Terminé'}</strong>
-              <span>
-                Étape {Math.min(current + 1, count)} sur {count}
-              </span>
+              <strong>{labels[current] ?? m.done}</strong>
+              <span>{m.stepOf(Math.min(current + 1, count), count)}</span>
             </div>
           )}
           <p class="sr-only" aria-live="polite">
@@ -140,9 +139,9 @@ export class CrStepper {
           {this.navigation && (
             <div class="nav" part="nav">
               <cr-button variant="secondary" disabled={current === 0} onClick={() => this.previous()}>
-                Précédent
+                {m.previous}
               </cr-button>
-              {current < count && <cr-button onClick={() => this.next()}>{current === count - 1 ? 'Terminer' : 'Suivant'}</cr-button>}
+              {current < count && <cr-button onClick={() => this.next()}>{current === count - 1 ? m.finish : m.next}</cr-button>}
             </div>
           )}
         </div>

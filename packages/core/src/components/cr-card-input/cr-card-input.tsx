@@ -4,6 +4,7 @@ import { CardVisual } from '../../utils/card-visual';
 import { cardError, cardLength, caretAfter, digitsOf, expiryError, formatExpiry, groupCard } from '../../utils/card';
 import { FieldHeader, describedBy } from '../../utils/field';
 import { handleInvalid } from '../../utils/validation';
+import { t } from '../../utils/i18n';
 
 export interface CardValue {
   number: string;
@@ -79,14 +80,16 @@ export class CrCardInput {
 
   /** Champ dont parle le message d'erreur courant. */
   private errorField() {
-    if (!this.digits || cardError(this.digits)) return 'number';
-    return expiryError(this.expiry) ? 'expiry' : 'cvc';
+    const m = t(this.el);
+    if (!this.digits || cardError(this.digits, m)) return 'number';
+    return expiryError(this.expiry, m) ? 'expiry' : 'cvc';
   }
 
   private message() {
+    const m = t(this.el);
     if (!this.digits && !this.required) return '';
-    if (!this.digits) return 'Ce champ est obligatoire.';
-    return cardError(this.digits) || expiryError(this.expiry) || (/^\d{3,4}$/.test(this.cvc) ? '' : 'Saisissez le cryptogramme à 3 ou 4 chiffres, au dos de la carte.');
+    if (!this.digits) return m.required;
+    return cardError(this.digits, m) || expiryError(this.expiry, m) || (/^\d{3,4}$/.test(this.cvc) ? '' : m.cvcMissing);
   }
 
   componentDidRender() {
@@ -153,12 +156,12 @@ export class CrCardInput {
     const inputs = this.inputs(describedBy({ id, hint: this.hint, error }), wrong);
     return (
       <div class="field">
-        {this.preview && this.variant !== 'card' && <CardVisual digits={this.digits} expiry={this.expiry} cvc={this.cvc} holder={this.holderName} flipped={this.cvcFocused} />}
+        {this.preview && this.variant !== 'card' && <CardVisual digits={this.digits} expiry={this.expiry} cvc={this.cvc} holder={this.holderName} flipped={this.cvcFocused} m={t(this.el)} />}
         <FieldHeader id={id} label={this.label} required={this.required} hint={this.hint} error={error} />
         {this.variant === 'card' ? (
-          <CardEditor inputs={inputs} digits={this.digits} holder={this.holder} flipped={this.cvcFocused} />
+          <CardEditor inputs={inputs} digits={this.digits} holder={this.holder} flipped={this.cvcFocused} m={t(this.el)} />
         ) : (
-          <CardFields inputs={inputs} complete={complete} holder={this.holder} />
+          <CardFields inputs={inputs} complete={complete} holder={this.holder} m={t(this.el)} />
         )}
       </div>
     );

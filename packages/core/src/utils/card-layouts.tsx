@@ -1,4 +1,5 @@
 import { h } from '@stencil/core';
+import type { Messages } from './i18n';
 import { Brand, Chip, Contactless, brandOf } from './card-visual';
 
 type InputProps = Record<string, unknown>;
@@ -18,7 +19,7 @@ const CardIcon = () => (
 );
 
 /** Champs classiques : numéro, puis titulaire, expiration et CVC qui glissent quand le numéro est complet. */
-export const CardFields = ({ inputs, complete, holder }: { inputs: CardInputs; complete: boolean; holder: boolean }) => (
+export const CardFields = ({ inputs, complete, holder, m }: { inputs: CardInputs; complete: boolean; holder: boolean; m: Messages }) => (
   <div class="card">
     <div class="number">
       <CardIcon />
@@ -28,16 +29,16 @@ export const CardFields = ({ inputs, complete, holder }: { inputs: CardInputs; c
       <div class="extra">
         {holder && (
           <label class="mini holder-field">
-            <span>Titulaire</span>
-            <input class="control" placeholder="Nom sur la carte" {...inputs.holder} />
+            <span>{m.holder}</span>
+            <input class="control" placeholder={m.holderPlaceholder} {...inputs.holder} />
           </label>
         )}
         <label class="mini">
-          <span>Expiration</span>
-          <input class="control" placeholder="MM/AA" {...inputs.expiry} />
+          <span>{m.expiry}</span>
+          <input class="control" placeholder={m.monthYear} {...inputs.expiry} />
         </label>
         <label class="mini">
-          <span>CVC</span>
+          <span>{m.cvc}</span>
           <input class="control" placeholder="123" {...inputs.cvc} />
         </label>
       </div>
@@ -46,7 +47,7 @@ export const CardFields = ({ inputs, complete, holder }: { inputs: CardInputs; c
 );
 
 /** Tout se saisit sur la carte : numéro, date et titulaire au recto, cryptogramme au verso. */
-export const CardEditor = ({ inputs, digits, holder, flipped }: { inputs: CardInputs; digits: string; holder: boolean; flipped: boolean }) => {
+export const CardEditor = ({ inputs, digits, holder, flipped, m }: { inputs: CardInputs; digits: string; holder: boolean; flipped: boolean; m: Messages }) => {
   const brand = brandOf(digits);
   return (
     <div class={{ visual: true, editor: true, flipped }} data-brand={brand || 'default'}>
@@ -59,19 +60,19 @@ export const CardEditor = ({ inputs, digits, holder, flipped }: { inputs: CardIn
         <input class="on-card digits-input" placeholder="•••• •••• •••• ••••" {...inputs.number} />
         <div class="valid">
           <label class="caption" htmlFor="expiry">
-            VALABLE
+            {m.validThru[0]}
             <br />
-            JUSQU'À
+            {m.validThru[1]}
           </label>
-          <input class="on-card expiry-input" placeholder="MM/AA" {...inputs.expiry} />
+          <input class="on-card expiry-input" placeholder={m.monthYear} {...inputs.expiry} />
         </div>
         <div class="row end">
           {holder ? (
             <span class="holder-box">
               <label class="caption" htmlFor="holder">
-                Titulaire
+                {m.holder}
               </label>
-              <input class="on-card holder-input" placeholder="NOM DU TITULAIRE" {...inputs.holder} />
+              <input class="on-card holder-input" placeholder={m.holderOnCard} {...inputs.holder} />
             </span>
           ) : (
             <span />

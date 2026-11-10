@@ -1,6 +1,7 @@
 import { AttachInternals, Component, Element, Event, EventEmitter, Listen, Prop, State, h } from '@stencil/core';
 import { FieldText, RequiredMark, describedBy } from '../../utils/field';
 import { handleInvalid, validationMessage } from '../../utils/validation';
+import { t } from '../../utils/i18n';
 
 /**
  * Case à cocher.
@@ -68,7 +69,7 @@ export class CrCheckbox {
 
   private syncForm() {
     this.internals.setFormValue(this.checked ? this.value : null);
-    if (this.input) this.internals.setValidity(this.input.validity, validationMessage(this.input.validity, 'checkbox'), this.input);
+    if (this.input) this.internals.setValidity(this.input.validity, validationMessage(this.input.validity, 'checkbox', t(this.el)), this.input);
   }
 
   private onChange = (event: Event) => {
@@ -81,7 +82,7 @@ export class CrCheckbox {
 
   render() {
     const id = 'control';
-    const error = this.error || (this.touched ? validationMessage(this.input?.validity, 'checkbox') : '');
+    const error = this.error || (this.touched ? validationMessage(this.input?.validity, 'checkbox', t(this.el)) : '');
     return (
       <div class="field">
         <div class="row">

@@ -1,4 +1,5 @@
 import { Component, Element, Event, EventEmitter, Host, Listen, Method, Prop, State, h } from '@stencil/core';
+import { t } from '../../utils/i18n';
 import { holdStill, onControl, rectsOf, settle, slide, track } from '../../utils/dashboard-drag';
 import { DashboardItem, describe, itemOf, keyLayout, loadItems, plain, saveItems } from '../../utils/dashboard-keys';
 import { GridItem, moveItem, placeAll, resizeItem, rowsOf, sameLayout } from '../../utils/grid-layout';
@@ -24,8 +25,8 @@ export class CrDashboard {
   @Prop() gap = 16;
   /** Permet de déplacer et de redimensionner les widgets. */
   @Prop() editable = true;
-  /** Nom du tableau de bord, lu par les lecteurs d'écran. */
-  @Prop() label = 'Tableau de bord';
+  /** Nom du tableau de bord, lu par les lecteurs d'écran (« Dashboard », ou « Tableau de bord » en français, par défaut). */
+  @Prop() label?: string;
   /** Largeur (px) sous laquelle les widgets s'empilent sur toute la largeur, sans poignées. */
   @Prop() stackBelow = 480;
   /** Clé localStorage : la disposition de l'utilisateur est retenue d'une visite à l'autre. */
@@ -103,7 +104,7 @@ export class CrDashboard {
   async reset() {
     if (this.initial) this.apply(this.initial);
     saveItems(this.storageKey, null);
-    this.message = 'Disposition d’origine rétablie.';
+    this.message = t(this.el).layoutReset;
     this.crLayoutChange.emit(plain(this.layout));
   }
 
@@ -161,7 +162,7 @@ export class CrDashboard {
         document.documentElement.style.userSelect = '';
         settle(widget);
         this.ghost = undefined;
-        if (moved) this.commit(describe(this.layout.find((i) => i.id === id)!, widget.label, resize));
+        if (moved) this.commit(describe(this.layout.find((i) => i.id === id)!, widget.label, resize, t(this.el)));
       },
     );
   }
@@ -176,14 +177,14 @@ export class CrDashboard {
     event.preventDefault();
     const item = change.next.find((i) => i.id === this.idOf(widget))!;
     if (!sameLayout(change.next, this.layout)) this.apply(change.next);
-    this.commit(describe(item, widget.label, change.resize));
+    this.commit(describe(item, widget.label, change.resize, t(this.el)));
   }
 
   render() {
     const rows = rowsOf(this.layout) + (this.ghost ? 2 : 0);
     return (
       <Host>
-        <div ref={(el) => (this.grid = el)} class={{ grid: true, dragging: !!this.ghost }} role="group" aria-label={this.label} style={{ '--cols': `${this.columns}`, '--row': `${this.rowHeight}px`, '--gap': `${this.gap}px` }}>
+        <div ref={(el) => (this.grid = el)} class={{ grid: true, dragging: !!this.ghost }} role="group" aria-label={this.label ?? t(this.el).dashboard} style={{ '--cols': `${this.columns}`, '--row': `${this.rowHeight}px`, '--gap': `${this.gap}px` }}>
           {this.ghost &&
             Array.from({ length: this.columns * rows }, (_, i) => <span class="cell" aria-hidden="true" style={{ gridColumn: `${(i % this.columns) + 1}`, gridRow: `${Math.floor(i / this.columns) + 1}` }} />)}
           {this.ghost && <span class="ghost" aria-hidden="true" style={{ gridColumn: `${this.ghost.x + 1} / span ${this.ghost.w}`, gridRow: `${this.ghost.y + 1} / span ${this.ghost.h}` }} />}
