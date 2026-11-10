@@ -1,0 +1,60 @@
+---
+title: Segmented control
+description: Pick one of a few options shown side by side, with a sliding thumb. Tag cr-segmented, React component CrSegmented.
+---
+
+import SegmentedBasic from '@/demos/en/segmented-basic';
+import SegmentedCounts from '@/demos/en/segmented-counts';
+import SegmentedFit from '@/demos/en/segmented-fit';
+
+## Example
+
+Options are child `option` elements, as with `CrSelect`. A thumb slides under the chosen option with a slight spring.
+
+| `variant` | Effect |
+|---|---|
+| `thumb` | Sliding Thumb: a raised thumb, the chosen label goes bold (default) |
+| `clip` | Clip Text: a coloured thumb; while it slides, text turns white only where it covers it |
+| `underline` | no track: a bar slides under the chosen label, for light tabs |
+| `outline` | bordered track, tinted thumb ringed with the primary colour |
+
+<Preview column>
+  <SegmentedBasic />
+</Preview>
+
+<include>../../../demos/en/segmented-basic.tsx</include>
+
+## Counts
+
+`data-count` on an option adds a count next to its label. When the option is picked, its count counts up to its value and pops.
+
+<Preview>
+  <SegmentedCounts />
+</Preview>
+
+<include>../../../demos/en/segmented-counts.tsx</include>
+
+## Fitted width
+
+By default, segments all have the same width. With `fit`, each one hugs its label and the thumb resizes as it slides. A `disabled` option cannot be picked.
+
+<Preview>
+  <SegmentedFit />
+</Preview>
+
+<include>../../../demos/en/segmented-fit.tsx</include>
+
+<Callout>
+  If the user asked their system to reduce motion, the thumb jumps straight to the chosen option and counts do not move.
+</Callout>
+
+## Accessibility
+
+- The control is a radio group (`role="radiogroup"`) named by `label`, which is required since there is no visible label.
+- A single Tab stop enters the group, on the chosen option; arrow keys pick the previous or next option (wrapping), Home and End the first or last one.
+- The count is read with the label ("Month (38)"); the counting number is not read.
+- With `name`, the chosen value is sent with the form.
+
+## API
+
+<ApiReference tag="cr-segmented" />

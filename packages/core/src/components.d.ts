@@ -668,6 +668,40 @@ export namespace Components {
         "steps": string[];
     }
     /**
+     * Choix d'une option parmi quelques-unes, côte à côte (Jour, Semaine, Mois…). Les options sont des éléments option enfants ;
+     * data-count sur une option ajoute un compteur, qui compte et rebondit quand on choisit l'option.
+     */
+    interface CrSegmented {
+        /**
+          * Désactive le contrôle.
+          * @default false
+         */
+        "disabled": boolean;
+        /**
+          * Segments à la largeur de leur libellé, la pastille change de largeur en glissant ; sinon largeurs égales.
+          * @default false
+         */
+        "fit": boolean;
+        /**
+          * Nom lu par les lecteurs d'écran (le contrôle n'a pas de libellé visible).
+         */
+        "label": string;
+        /**
+          * Nom envoyé avec le formulaire.
+         */
+        "name"?: string;
+        /**
+          * Valeur de l'option choisie ; la première option disponible par défaut.
+          * @default ''
+         */
+        "value": string;
+        /**
+          * Style : thumb (pastille en relief, libellé en gras), clip (pastille colorée, le texte ne devient blanc que là où elle passe), underline (trait qui glisse sous le libellé) ou outline (pastille teintée et cerclée dans un rail bordé).
+          * @default 'thumb'
+         */
+        "variant": 'thumb' | 'clip' | 'underline' | 'outline';
+    }
+    /**
      * Liste déroulante. Les options sont des éléments option enfants.
      */
     interface CrSelect {
@@ -968,6 +1002,10 @@ export interface CrMenuCustomEvent<T> extends CustomEvent<T> {
 export interface CrOtpCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLCrOtpElement;
+}
+export interface CrSegmentedCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLCrSegmentedElement;
 }
 export interface CrSelectCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -1293,6 +1331,27 @@ declare global {
         prototype: HTMLCrProgressStepsElement;
         new (): HTMLCrProgressStepsElement;
     };
+    interface HTMLCrSegmentedElementEventMap {
+        "crChange": string;
+    }
+    /**
+     * Choix d'une option parmi quelques-unes, côte à côte (Jour, Semaine, Mois…). Les options sont des éléments option enfants ;
+     * data-count sur une option ajoute un compteur, qui compte et rebondit quand on choisit l'option.
+     */
+    interface HTMLCrSegmentedElement extends Components.CrSegmented, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLCrSegmentedElementEventMap>(type: K, listener: (this: HTMLCrSegmentedElement, ev: CrSegmentedCustomEvent<HTMLCrSegmentedElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLCrSegmentedElementEventMap>(type: K, listener: (this: HTMLCrSegmentedElement, ev: CrSegmentedCustomEvent<HTMLCrSegmentedElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLCrSegmentedElement: {
+        prototype: HTMLCrSegmentedElement;
+        new (): HTMLCrSegmentedElement;
+    };
     interface HTMLCrSelectElementEventMap {
         "crChange": string | string[];
         "crSearch": string;
@@ -1434,6 +1493,7 @@ declare global {
         "cr-otp": HTMLCrOtpElement;
         "cr-progress": HTMLCrProgressElement;
         "cr-progress-steps": HTMLCrProgressStepsElement;
+        "cr-segmented": HTMLCrSegmentedElement;
         "cr-select": HTMLCrSelectElement;
         "cr-skeleton": HTMLCrSkeletonElement;
         "cr-step": HTMLCrStepElement;
@@ -2170,6 +2230,48 @@ declare namespace LocalJSX {
         "steps"?: string[];
     }
     /**
+     * Choix d'une option parmi quelques-unes, côte à côte (Jour, Semaine, Mois…). Les options sont des éléments option enfants ;
+     * data-count sur une option ajoute un compteur, qui compte et rebondit quand on choisit l'option.
+     */
+    interface CrSegmented {
+        /**
+          * Désactive le contrôle.
+          * @default false
+         */
+        "disabled"?: boolean;
+        /**
+          * Segments à la largeur de leur libellé, la pastille change de largeur en glissant ; sinon largeurs égales.
+          * @default false
+         */
+        "fit"?: boolean;
+        /**
+          * The `id` of a `<form>` element to associate this element with.
+         */
+        "form"?: string;
+        /**
+          * Nom lu par les lecteurs d'écran (le contrôle n'a pas de libellé visible).
+         */
+        "label": string;
+        /**
+          * Nom envoyé avec le formulaire.
+         */
+        "name"?: string;
+        /**
+          * Émis quand l'option choisie change ; detail : sa valeur.
+         */
+        "onCrChange"?: (event: CrSegmentedCustomEvent<string>) => void;
+        /**
+          * Valeur de l'option choisie ; la première option disponible par défaut.
+          * @default ''
+         */
+        "value"?: string;
+        /**
+          * Style : thumb (pastille en relief, libellé en gras), clip (pastille colorée, le texte ne devient blanc que là où elle passe), underline (trait qui glisse sous le libellé) ou outline (pastille teintée et cerclée dans un rail bordé).
+          * @default 'thumb'
+         */
+        "variant"?: 'thumb' | 'clip' | 'underline' | 'outline';
+    }
+    /**
      * Liste déroulante. Les options sont des éléments option enfants.
      */
     interface CrSelect {
@@ -2605,6 +2707,14 @@ declare namespace LocalJSX {
         "current": number;
         "label": string;
     }
+    interface CrSegmentedAttributes {
+        "label": string;
+        "name": string;
+        "value": string;
+        "variant": 'thumb' | 'clip' | 'underline' | 'outline';
+        "fit": boolean;
+        "disabled": boolean;
+    }
     interface CrSelectAttributes {
         "label": string;
         "name": string;
@@ -2682,6 +2792,7 @@ declare namespace LocalJSX {
         "cr-otp": Omit<CrOtp, keyof CrOtpAttributes> & { [K in keyof CrOtp & keyof CrOtpAttributes]?: CrOtp[K] } & { [K in keyof CrOtp & keyof CrOtpAttributes as `attr:${K}`]?: CrOtpAttributes[K] } & { [K in keyof CrOtp & keyof CrOtpAttributes as `prop:${K}`]?: CrOtp[K] } & OneOf<"label", CrOtp["label"], CrOtpAttributes["label"]>;
         "cr-progress": Omit<CrProgress, keyof CrProgressAttributes> & { [K in keyof CrProgress & keyof CrProgressAttributes]?: CrProgress[K] } & { [K in keyof CrProgress & keyof CrProgressAttributes as `attr:${K}`]?: CrProgressAttributes[K] } & { [K in keyof CrProgress & keyof CrProgressAttributes as `prop:${K}`]?: CrProgress[K] };
         "cr-progress-steps": Omit<CrProgressSteps, keyof CrProgressStepsAttributes> & { [K in keyof CrProgressSteps & keyof CrProgressStepsAttributes]?: CrProgressSteps[K] } & { [K in keyof CrProgressSteps & keyof CrProgressStepsAttributes as `attr:${K}`]?: CrProgressStepsAttributes[K] } & { [K in keyof CrProgressSteps & keyof CrProgressStepsAttributes as `prop:${K}`]?: CrProgressSteps[K] };
+        "cr-segmented": Omit<CrSegmented, keyof CrSegmentedAttributes> & { [K in keyof CrSegmented & keyof CrSegmentedAttributes]?: CrSegmented[K] } & { [K in keyof CrSegmented & keyof CrSegmentedAttributes as `attr:${K}`]?: CrSegmentedAttributes[K] } & { [K in keyof CrSegmented & keyof CrSegmentedAttributes as `prop:${K}`]?: CrSegmented[K] } & OneOf<"label", CrSegmented["label"], CrSegmentedAttributes["label"]>;
         "cr-select": Omit<CrSelect, keyof CrSelectAttributes> & { [K in keyof CrSelect & keyof CrSelectAttributes]?: CrSelect[K] } & { [K in keyof CrSelect & keyof CrSelectAttributes as `attr:${K}`]?: CrSelectAttributes[K] } & { [K in keyof CrSelect & keyof CrSelectAttributes as `prop:${K}`]?: CrSelect[K] } & OneOf<"label", CrSelect["label"], CrSelectAttributes["label"]>;
         "cr-skeleton": Omit<CrSkeleton, keyof CrSkeletonAttributes> & { [K in keyof CrSkeleton & keyof CrSkeletonAttributes]?: CrSkeleton[K] } & { [K in keyof CrSkeleton & keyof CrSkeletonAttributes as `attr:${K}`]?: CrSkeletonAttributes[K] } & { [K in keyof CrSkeleton & keyof CrSkeletonAttributes as `prop:${K}`]?: CrSkeleton[K] };
         "cr-step": Omit<CrStep, keyof CrStepAttributes> & { [K in keyof CrStep & keyof CrStepAttributes]?: CrStep[K] } & { [K in keyof CrStep & keyof CrStepAttributes as `attr:${K}`]?: CrStepAttributes[K] } & { [K in keyof CrStep & keyof CrStepAttributes as `prop:${K}`]?: CrStep[K] } & OneOf<"label", CrStep["label"], CrStepAttributes["label"]>;
@@ -2779,6 +2890,11 @@ declare module "@stencil/core" {
              * Chaque nouvelle étape est annoncée aux lecteurs d'écran.
              */
             "cr-progress-steps": LocalJSX.IntrinsicElements["cr-progress-steps"] & JSXBase.HTMLAttributes<HTMLCrProgressStepsElement>;
+            /**
+             * Choix d'une option parmi quelques-unes, côte à côte (Jour, Semaine, Mois…). Les options sont des éléments option enfants ;
+             * data-count sur une option ajoute un compteur, qui compte et rebondit quand on choisit l'option.
+             */
+            "cr-segmented": LocalJSX.IntrinsicElements["cr-segmented"] & JSXBase.HTMLAttributes<HTMLCrSegmentedElement>;
             /**
              * Liste déroulante. Les options sont des éléments option enfants.
              */

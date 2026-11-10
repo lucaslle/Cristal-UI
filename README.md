@@ -144,6 +144,17 @@ Grille d'éléments (pour composer un tableau de bord, par exemple) déplacés p
 | `cr-card-input` | carte bancaire : numéro groupé, puis expiration et CVC (`name`, `name-expiry`, `name-cvc`) ; `preview` ajoute une carte dessinée qui se remplit et se retourne, `holder` le champ Titulaire ; `variant="card"` fait tout saisir directement sur la carte |
 | `cr-tag-input` | étiquettes ajoutées avec Entrée ou virgule, retirées avec × (`values`, `onCrChange`) |
 
+### Contrôle segmenté : `cr-segmented`
+
+Choix d'une option parmi quelques-unes, côte à côte : options en `option` enfants (`data-count` ajoute un compteur), `label` obligatoire, `name`, `value`, `variant` (`thumb` par défaut, `clip`, `underline`, `outline`), `fit` (segments à la largeur de leur libellé), `disabled`. Événement `onCrChange`.
+
+```tsx
+<CrSegmented label="Période" value="month" onCrChange={(event) => setPeriod(event.detail)}>
+  <option value="day">Jour</option>
+  <option value="month" data-count="38">Mois</option>
+</CrSegmented>
+```
+
 ### Mise en page : `cr-box`
 
 Remplaçant de `div` : `display`, `direction`, `gap`, `padding`, `align`, `justify`, `wrap`, `columns`, `background`, `radius`, `border`, `shadow`, `maxWidth`. Les espacements acceptent les valeurs du thème (`xs`, `sm`, `lg`, `xl`, `2xl`, `3xl`) ou toute valeur CSS.

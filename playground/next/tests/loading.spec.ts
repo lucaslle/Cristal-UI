@@ -28,5 +28,7 @@ test('loader, skeleton and image', async ({ page }) => {
   await expect(page.getByRole('status').filter({ hasText: 'Chargement des messages…' })).toBeAttached();
   await expect(page.locator('cr-skeleton').first()).toHaveAttribute('aria-hidden', 'true');
   await expect(page.getByRole('img', { name: 'Aplat violet' })).toBeVisible();
+  // loading="lazy" : l'image ne se charge qu'une fois proche de l'écran.
+  await page.locator('cr-image').scrollIntoViewIfNeeded();
   await expect(page.locator('cr-image')).toHaveAttribute('data-loaded', '');
 });
