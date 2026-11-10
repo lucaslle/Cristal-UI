@@ -2,7 +2,7 @@ import { Component, Element, Event, EventEmitter, Host, Prop, State, Watch, h } 
 import { t } from '../../utils/i18n';
 
 /**
- * Carte d'un cr-dashboard. Se déplace par sa poignée et se redimensionne par son coin.
+ * Élément d'un cr-grid-layout. Se déplace par sa poignée et se redimensionne par son coin.
  * Donnez-lui un id pour retrouver sa place dans les réglages enregistrés.
  * @slot - Le contenu.
  * @slot actions - Boutons placés dans l'en-tête.
@@ -10,16 +10,16 @@ import { t } from '../../utils/i18n';
  * @part resize - La poignée de redimensionnement.
  */
 @Component({
-  tag: 'cr-widget',
-  styleUrl: 'cr-widget.css',
+  tag: 'cr-grid-item',
+  styleUrl: 'cr-grid-item.css',
   shadow: true,
 })
-export class CrWidget {
+export class CrGridItem {
   @Element() el!: HTMLElement;
 
   /** Titre affiché dans l'en-tête. */
   @Prop() label!: string;
-  /** Colonne de départ (à partir de 0) ; sans valeur, le widget prend la première place libre. */
+  /** Colonne de départ (à partir de 0) ; sans valeur, l’élément prend la première place libre. */
   @Prop() x?: number;
   /** Ligne de départ (à partir de 0). */
   @Prop() y?: number;
@@ -38,10 +38,10 @@ export class CrWidget {
   /** Ajoute un bouton × qui émet crRemove. */
   @Prop() removable = false;
 
-  /** Émis par le bouton × : retirez alors le widget de votre liste. */
+  /** Émis par le bouton × : retirez alors l’élément de votre liste. */
   @Event() crRemove: EventEmitter<void>;
-  /** Interne : prévient le tableau de bord qu'une position ou une taille a changé. */
-  @Event({ eventName: 'crWidgetUpdate' }) crWidgetUpdate: EventEmitter<void>;
+  /** Interne : prévient le grille qu'une position ou une taille a changé. */
+  @Event({ eventName: 'crGridItemUpdate' }) crGridItemUpdate: EventEmitter<void>;
 
   /** Contenu plus grand que la carte : le corps défile, et doit alors pouvoir recevoir le focus pour défiler au clavier. */
   @State() scrollable = false;
@@ -77,7 +77,7 @@ export class CrWidget {
   @Watch('h')
   @Watch('label')
   changed() {
-    this.crWidgetUpdate.emit();
+    this.crGridItemUpdate.emit();
   }
 
   render() {
@@ -85,7 +85,7 @@ export class CrWidget {
       <Host role="group" aria-label={this.label}>
         <div class="card">
           <div class="head">
-            <button class="handle" part="handle" type="button" aria-label={t(this.el).widgetMove(this.label)} aria-description={t(this.el).widgetHelp}>
+            <button class="handle" part="handle" type="button" aria-label={t(this.el).itemMove(this.label)} aria-description={t(this.el).itemHelp}>
               <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
                 <circle cx="9" cy="6" r="1.6" />
                 <circle cx="15" cy="6" r="1.6" />
@@ -100,7 +100,7 @@ export class CrWidget {
             </span>
             <slot name="actions" />
             {this.removable && (
-              <button class="remove" type="button" aria-label={t(this.el).widgetRemove(this.label)} onClick={() => this.crRemove.emit()}>
+              <button class="remove" type="button" aria-label={t(this.el).itemRemove(this.label)} onClick={() => this.crRemove.emit()}>
                 <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true">
                   <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" />
                 </svg>

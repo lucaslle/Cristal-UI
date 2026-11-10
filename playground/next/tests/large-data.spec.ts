@@ -33,7 +33,7 @@ test('new rows start again from the first 100, and a short list ends without the
 });
 
 test('a widget whose content overflows can be scrolled from the keyboard', async ({ page }) => {
-  const tasks = page.locator('cr-widget[label="Tâches"]');
+  const tasks = page.locator('cr-grid-item[label="Tâches"]');
   await expect(tasks.locator('.body')).not.toHaveAttribute('tabindex');
   await tasks.evaluate((widget) => {
     const list = document.createElement('ol');
@@ -41,7 +41,7 @@ test('a widget whose content overflows can be scrolled from the keyboard', async
     widget.append(list);
   });
   await expect(tasks.locator('.body')).toHaveAttribute('tabindex', '0');
-  const bodies = await page.locator('cr-widget').evaluateAll((widgets) =>
+  const bodies = await page.locator('cr-grid-item').evaluateAll((widgets) =>
     widgets.map((widget) => {
       const body = widget.shadowRoot!.querySelector<HTMLElement>('.body')!;
       return { overflows: body.scrollHeight > body.clientHeight + 1, tabIndex: body.getAttribute('tabindex'), name: body.getAttribute('aria-label') };

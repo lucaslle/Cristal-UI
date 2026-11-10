@@ -112,7 +112,7 @@
   display: none;
 }
 
-/* Attrapé : le widget se soulève au-dessus des autres. */
+/* Attrapé : l’élément se soulève au-dessus des autres. */
 :host([data-lifted]) {
   z-index: 5;
 }

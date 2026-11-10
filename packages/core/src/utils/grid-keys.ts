@@ -13,9 +13,9 @@ export const keyLayout = (event: KeyboardEvent, layout: GridItem[], id: string, 
 };
 
 export const describe = (item: GridItem, label: string, resize: boolean, m: Messages) =>
-  resize ? m.widgetResized(label, item.w, item.h) : m.widgetMoved(label, item.x + 1, item.y + 1);
+  resize ? m.itemResized(label, item.w, item.h) : m.itemMoved(label, item.x + 1, item.y + 1);
 
-export interface DashboardItem {
+export interface GridLayoutItem {
   id: string;
   x: number;
   y: number;
@@ -23,7 +23,7 @@ export interface DashboardItem {
   h: number;
 }
 
-export const loadItems = (storageKey?: string): DashboardItem[] => {
+export const loadItems = (storageKey?: string): GridLayoutItem[] => {
   if (!storageKey) return [];
   try {
     return JSON.parse(localStorage.getItem(storageKey) ?? '[]');
@@ -32,7 +32,7 @@ export const loadItems = (storageKey?: string): DashboardItem[] => {
   }
 };
 
-export const saveItems = (storageKey: string | undefined, items: DashboardItem[] | null) => {
+export const saveItems = (storageKey: string | undefined, items: GridLayoutItem[] | null) => {
   if (!storageKey) return;
   try {
     if (items) localStorage.setItem(storageKey, JSON.stringify(items));
@@ -42,10 +42,10 @@ export const saveItems = (storageKey: string | undefined, items: DashboardItem[]
   }
 };
 
-export const plain = (layout: GridItem[]): DashboardItem[] => layout.map(({ id, x, y, w, h }) => ({ id, x, y, w, h }));
+export const plain = (layout: GridItem[]): GridLayoutItem[] => layout.map(({ id, x, y, w, h }) => ({ id, x, y, w, h }));
 
-/** Position et taille déclarées sur un cr-widget (x et y à -1 : première place libre). */
-export const itemOf = (widget: HTMLCrWidgetElement, id: string, columns: number): GridItem => ({
+/** Position et taille déclarées sur un cr-grid-item (x et y à -1 : première place libre). */
+export const itemOf = (widget: HTMLCrGridItemElement, id: string, columns: number): GridItem => ({
   id,
   x: widget.x ?? -1,
   y: widget.y ?? -1,

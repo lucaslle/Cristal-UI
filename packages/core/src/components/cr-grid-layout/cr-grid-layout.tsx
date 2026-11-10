@@ -1,39 +1,39 @@
 import { Component, Element, Event, EventEmitter, Host, Listen, Method, Prop, State, h } from '@stencil/core';
 import { t } from '../../utils/i18n';
-import { holdStill, onControl, rectsOf, settle, slide, track } from '../../utils/dashboard-drag';
-import { DashboardItem, describe, itemOf, keyLayout, loadItems, plain, saveItems } from '../../utils/dashboard-keys';
+import { holdStill, onControl, rectsOf, settle, slide, track } from '../../utils/grid-drag';
+import { GridLayoutItem, describe, itemOf, keyLayout, loadItems, plain, saveItems } from '../../utils/grid-keys';
 import { GridItem, moveItem, placeAll, resizeItem, rowsOf, sameLayout } from '../../utils/grid-layout';
 
 /**
- * Tableau de bord : une grille de cr-widget que l'utilisateur déplace par leur poignée et redimensionne par leur coin.
- * Les autres widgets s'écartent pendant le déplacement, puis tout se tasse vers le haut.
- * @slot - Les widgets cr-widget.
+ * Grille déplaçable : des éléments cr-grid-item que l'utilisateur déplace (poignée ou appui maintenu) et redimensionne par leur coin.
+ * Les autres éléments s'écartent pendant le déplacement, puis tout se tasse vers le haut.
+ * @slot - Les éléments cr-grid-item.
  */
 @Component({
-  tag: 'cr-dashboard',
-  styleUrl: 'cr-dashboard.css',
+  tag: 'cr-grid-layout',
+  styleUrl: 'cr-grid-layout.css',
   shadow: true,
 })
-export class CrDashboard {
+export class CrGridLayout {
   @Element() el!: HTMLElement;
 
   /** Nombre de colonnes de la grille. */
   @Prop() columns = 12;
   /** Hauteur d'une ligne, en pixels. */
   @Prop() rowHeight = 80;
-  /** Espace entre les widgets, en pixels. */
+  /** Espace entre les éléments, en pixels. */
   @Prop() gap = 16;
-  /** Permet de déplacer et de redimensionner les widgets. */
+  /** Permet de déplacer et de redimensionner les éléments. */
   @Prop() editable = true;
-  /** Nom du tableau de bord, lu par les lecteurs d'écran (« Dashboard », ou « Tableau de bord » en français, par défaut). */
+  /** Nom de la grille, lu par les lecteurs d’écran (« Grid », ou « Grille » en français, par défaut). */
   @Prop() label?: string;
-  /** Largeur (px) sous laquelle les widgets s'empilent sur toute la largeur, sans poignées. */
+  /** Largeur (px) sous laquelle les éléments s'empilent sur toute la largeur, sans poignées. */
   @Prop() stackBelow = 480;
   /** Clé localStorage : la disposition de l'utilisateur est retenue d'une visite à l'autre. */
   @Prop() storageKey?: string;
 
-  /** Émis après chaque déplacement ou redimensionnement ; detail : id, x, y, w, h de chaque widget. */
-  @Event() crLayoutChange: EventEmitter<DashboardItem[]>;
+  /** Émis après chaque déplacement ou redimensionnement ; detail : id, x, y, w, h de chaque élément. */
+  @Event() crLayoutChange: EventEmitter<GridLayoutItem[]>;
 
   @State() layout: GridItem[] = [];
   @State() ghost?: GridItem;
@@ -41,14 +41,14 @@ export class CrDashboard {
 
   private initial?: GridItem[];
 
-  private widgets = () => Array.from(this.el.children).filter((child): child is HTMLCrWidgetElement => child.tagName === 'CR-WIDGET');
-  private idOf = (widget: Element) => widget.id || `widget-${this.widgets().indexOf(widget as HTMLCrWidgetElement)}`;
+  private widgets = () => Array.from(this.el.children).filter((child): child is HTMLCrGridItemElement => child.tagName === 'CR-GRID-ITEM');
+  private idOf = (widget: Element) => widget.id || `item-${this.widgets().indexOf(widget as HTMLCrGridItemElement)}`;
 
-  private fromProps = (widget: HTMLCrWidgetElement) => itemOf(widget, this.idOf(widget), this.columns);
+  private fromProps = (widget: HTMLCrGridItemElement) => itemOf(widget, this.idOf(widget), this.columns);
 
-  /** Met la grille en accord avec les widgets présents : garde les places connues, place les nouveaux. */
+  /** Met la grille en accord avec les éléments présents : garde les places connues, place les nouveaux. */
   private sync = (fresh = false) => {
-    const known: DashboardItem[] = fresh ? loadItems(this.storageKey) : this.layout;
+    const known: GridLayoutItem[] = fresh ? loadItems(this.storageKey) : this.layout;
     const props = this.widgets().map(this.fromProps);
     if (fresh) this.initial = placeAll(props, this.columns);
     this.apply(placeAll(props.map((item) => ({ ...item, ...known.find((k) => k.id === item.id) })), this.columns), undefined, !fresh);
@@ -58,7 +58,7 @@ export class CrDashboard {
     this.sync(true);
   }
 
-  /** Applique une disposition : place chaque widget dans la grille, les autres glissent jusqu'à leur nouvelle place. */
+  /** Applique une disposition : place chaque élément dans la grille, les autres glissent jusqu'à leur nouvelle place. */
   private apply(next: GridItem[], dragged?: HTMLElement, animate = true) {
     const before = rectsOf(this.widgets());
     this.layout = next;
@@ -108,9 +108,9 @@ export class CrDashboard {
     this.crLayoutChange.emit(plain(this.layout));
   }
 
-  @Listen('crWidgetUpdate')
-  onWidgetUpdate(event: Event) {
-    const widget = event.target as HTMLCrWidgetElement;
+  @Listen('crGridItemUpdate')
+  onGridItemUpdate(event: Event) {
+    const widget = event.target as HTMLCrGridItemElement;
     if (widget.parentElement !== this.el || !this.layout.length) return;
     const props = this.fromProps(widget);
     const placed = this.layout.map((item) => (item.id === props.id ? { ...item, ...props, x: props.x < 0 ? item.x : props.x, y: props.y < 0 ? item.y : props.y } : item));
@@ -123,7 +123,7 @@ export class CrDashboard {
   @Listen('pointerdown', { passive: false })
   onPointerDown(event: PointerEvent) {
     const path = event.composedPath() as HTMLElement[];
-    const widget = path.find((el) => el.tagName === 'CR-WIDGET' && el.parentElement === this.el) as HTMLCrWidgetElement | undefined;
+    const widget = path.find((el) => el.tagName === 'CR-GRID-ITEM' && el.parentElement === this.el) as HTMLCrGridItemElement | undefined;
     if (!widget || !this.editable || this.narrow || event.button !== 0) return;
     const part = path.find((el) => el.getAttribute?.('part') === 'handle' || el.getAttribute?.('part') === 'resize');
     if (part) return this.drag(event, widget, part, part.getAttribute('part') === 'resize');
@@ -137,7 +137,7 @@ export class CrDashboard {
     });
   }
 
-  private drag(event: PointerEvent, widget: HTMLCrWidgetElement, target: HTMLElement, resize: boolean) {
+  private drag(event: PointerEvent, widget: HTMLCrGridItemElement, target: HTMLElement, resize: boolean) {
     if (!this.grid) return;
     const id = this.idOf(widget);
     const base = this.layout;
@@ -170,7 +170,7 @@ export class CrDashboard {
   @Listen('keydown')
   onKeyDown(event: KeyboardEvent) {
     const path = event.composedPath() as HTMLElement[];
-    const widget = path.find((el) => el.tagName === 'CR-WIDGET' && el.parentElement === this.el) as HTMLCrWidgetElement | undefined;
+    const widget = path.find((el) => el.tagName === 'CR-GRID-ITEM' && el.parentElement === this.el) as HTMLCrGridItemElement | undefined;
     if (!this.editable || this.narrow || !widget || path[0]?.getAttribute?.('part') !== 'handle') return;
     const change = keyLayout(event, this.layout, this.idOf(widget), this.columns);
     if (!change) return;
@@ -184,7 +184,7 @@ export class CrDashboard {
     const rows = rowsOf(this.layout) + (this.ghost ? 2 : 0);
     return (
       <Host>
-        <div ref={(el) => (this.grid = el)} class={{ grid: true, dragging: !!this.ghost }} role="group" aria-label={this.label ?? t(this.el).dashboard} style={{ '--cols': `${this.columns}`, '--row': `${this.rowHeight}px`, '--gap': `${this.gap}px` }}>
+        <div ref={(el) => (this.grid = el)} class={{ grid: true, dragging: !!this.ghost }} role="group" aria-label={this.label ?? t(this.el).grid} style={{ '--cols': `${this.columns}`, '--row': `${this.rowHeight}px`, '--gap': `${this.gap}px` }}>
           {this.ghost &&
             Array.from({ length: this.columns * rows }, (_, i) => <span class="cell" aria-hidden="true" style={{ gridColumn: `${(i % this.columns) + 1}`, gridRow: `${Math.floor(i / this.columns) + 1}` }} />)}
           {this.ghost && <span class="ghost" aria-hidden="true" style={{ gridColumn: `${this.ghost.x + 1} / span ${this.ghost.w}`, gridRow: `${this.ghost.y + 1} / span ${this.ghost.h}` }} />}

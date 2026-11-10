@@ -58,5 +58,5 @@ test('dashboard has no WCAG 2.1 AA violations detectable by axe', async ({ page 
   await page.goto('/');
   await page.getByRole('button', { name: 'Ajouter « Alertes »' }).click();
   await page.waitForTimeout(500);
-  expect((await new AxeBuilder({ page }).include('cr-dashboard').withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa']).analyze()).violations).toEqual([]);
+  expect((await new AxeBuilder({ page }).include('cr-grid-layout').withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa']).analyze()).violations).toEqual([]);
 });

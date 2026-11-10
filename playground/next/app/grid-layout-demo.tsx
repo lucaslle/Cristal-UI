@@ -1,8 +1,8 @@
 'use client';
 
 import { useRef, useState } from 'react';
-import { CrBox, CrButton, CrDashboard, CrWidget } from '@cristal/react';
-import { Activity, Conversion, Revenue, Tasks, Visits } from './dashboard-widgets';
+import { CrBox, CrButton, CrGridLayout, CrGridItem } from '@cristal/react';
+import { Activity, Conversion, Revenue, Tasks, Visits } from './grid-layout-items';
 
 const extras = [
   { id: 'latence', label: 'Latence', w: 3, h: 2 },
@@ -10,8 +10,8 @@ const extras = [
   { id: 'alertes', label: 'Alertes', w: 3, h: 2 },
 ];
 
-export function DashboardDemo() {
-  const dashboard = useRef<HTMLCrDashboardElement>(null);
+export function GridLayoutDemo() {
+  const dashboard = useRef<HTMLCrGridLayoutElement>(null);
   const [added, setAdded] = useState<typeof extras>([]);
   const [layout, setLayout] = useState('');
 
@@ -27,28 +27,28 @@ export function DashboardDemo() {
           Restaurer
         </CrButton>
       </CrBox>
-      <CrDashboard ref={dashboard} label="Panneau d'opérations" storageKey="playground-dashboard" onCrLayoutChange={(event) => setLayout(JSON.stringify(event.detail))}>
-        <CrWidget id="revenus" label="Revenus" x={0} y={0} w={4} h={2}>
+      <CrGridLayout ref={dashboard} label="Panneau d'opérations" storageKey="playground-grid" onCrLayoutChange={(event) => setLayout(JSON.stringify(event.detail))}>
+        <CrGridItem id="revenus" label="Revenus" x={0} y={0} w={4} h={2}>
           <Revenue />
-        </CrWidget>
-        <CrWidget id="conversion" label="Conversion" x={9} y={0} w={3} h={2}>
+        </CrGridItem>
+        <CrGridItem id="conversion" label="Conversion" x={9} y={0} w={3} h={2}>
           <Conversion />
-        </CrWidget>
-        <CrWidget id="visites" label="Visites par heure" x={0} y={2} w={5} h={2} minW={3}>
+        </CrGridItem>
+        <CrGridItem id="visites" label="Visites par heure" x={0} y={2} w={5} h={2} minW={3}>
           <Visits />
-        </CrWidget>
-        <CrWidget id="taches" label="Tâches" x={5} y={2} w={4} h={2}>
+        </CrGridItem>
+        <CrGridItem id="taches" label="Tâches" x={5} y={2} w={4} h={2}>
           <Tasks />
-        </CrWidget>
-        <CrWidget id="activite" label="Activité" x={0} y={4} w={5} h={2}>
+        </CrGridItem>
+        <CrGridItem id="activite" label="Activité" x={0} y={4} w={5} h={2}>
           <Activity />
-        </CrWidget>
+        </CrGridItem>
         {added.map((extra) => (
-          <CrWidget key={extra.id} id={extra.id} label={extra.label} w={extra.w} h={extra.h} removable onCrRemove={() => setAdded((list) => list.filter((a) => a.id !== extra.id))}>
+          <CrGridItem key={extra.id} id={extra.id} label={extra.label} w={extra.w} h={extra.h} removable onCrRemove={() => setAdded((list) => list.filter((a) => a.id !== extra.id))}>
             Nouveau widget « {extra.label} »
-          </CrWidget>
+          </CrGridItem>
         ))}
-      </CrDashboard>
+      </CrGridLayout>
       <p data-testid="dashboard-layout">Disposition : {layout}</p>
     </CrBox>
   );

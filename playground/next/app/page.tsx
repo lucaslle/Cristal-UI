@@ -4,7 +4,7 @@ import { AccordionDemo } from './accordion-demo';
 import { StepperDemo } from './stepper-demo';
 import { TableDemo } from './table-demo';
 import { FieldsDemo } from './fields-demo';
-import { DashboardDemo } from './dashboard-demo';
+import { GridLayoutDemo } from './grid-layout-demo';
 import { FormDemo } from './form-demo';
 import { MenuDemo } from './menu-demo';
 import { SelectDemo } from './select-demo';
@@ -100,8 +100,8 @@ export default function Page() {
       <h2>Étapes</h2>
       <StepperDemo />
 
-      <h2>Tableau de bord</h2>
-      <DashboardDemo />
+      <h2>Grille déplaçable</h2>
+      <GridLayoutDemo />
 
       <h2>Champs animés</h2>
       <FieldsDemo />
