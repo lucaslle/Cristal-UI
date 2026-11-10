@@ -303,6 +303,17 @@ Message posé dans la page : `variant` (`info` par défaut, `success`, `warning`
 <CrAlert variant="danger" heading="Envoi impossible" dismissible onCrClose={() => setErreur(false)}>Vérifiez votre connexion.</CrAlert>
 ```
 
+### État vide : `cr-empty-state`
+
+Écran sans contenu, avec de quoi en sortir : `heading` (ce qui manque), la description en contenu, les boutons dans le slot `actions`, `illustration` décorative (`none` par défaut, `search` — la loupe « aucun résultat » de `cr-search` —, `inbox`, `error`). L'illustration flotte trois fois puis s'arrête.
+
+```tsx
+<CrEmptyState heading="Aucun produit trouvé" illustration="search">
+  Essayez un autre mot ou retirez des filtres.
+  <CrButton slot="actions" variant="outline" onClick={retirerFiltres}>Retirer les filtres</CrButton>
+</CrEmptyState>
+```
+
 ### Notification : `cr-toast`, `cr-toaster`
 
 Message temporaire : `cr-toaster` est une zone fixée en bas à droite qui empile les `cr-toast`. Un toast a `open`, `variant` (`info` par défaut, `success`, `danger` lu aussitôt) et `duration` (5000 ms par défaut, `0` pour qu'il reste) ; une barre montre le temps restant, qui s'arrête sous la souris ou le focus. Il se ferme avec le bouton Fermer, Échap ou en glissant sur le côté. Événement `onCrClose`.

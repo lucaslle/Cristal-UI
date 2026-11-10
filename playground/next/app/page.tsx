@@ -13,6 +13,7 @@ import { RatingDemo } from './rating-demo';
 import { AvatarDemo } from './avatar-demo';
 import { BadgeDemo } from './badge-demo';
 import { AlertDemo } from './alert-demo';
+import { EmptyStateDemo } from './empty-state-demo';
 import { FileUploadDemo } from './file-upload-demo';
 import { LoadingDemo } from './loading-demo';
 import { TableDemo } from './table-demo';
@@ -159,6 +160,9 @@ export default function Page() {
 
       <h2>Bandeaux</h2>
       <AlertDemo />
+
+      <h2>États vides</h2>
+      <EmptyStateDemo />
 
       <h2>Notifications</h2>
       <ToastDemo />

@@ -1,0 +1,33 @@
+---
+title: État vide
+description: Ce qui s'affiche quand il n'y a rien à montrer, avec de quoi en sortir. Balise cr-empty-state, composant React CrEmptyState.
+---
+
+import EmptyStateBasic from '@/demos/empty-state-basic';
+
+## Exemple
+
+`cr-empty-state` remplace une liste, un tableau ou une recherche sans contenu : un titre `heading` qui dit ce qui manque, une description en contenu qui dit pourquoi et quoi faire, et des boutons dans le slot `actions` pour en sortir. `illustration` ajoute un petit dessin : `search` (la loupe de « aucun résultat », la même que celle de la [recherche](/docs/composants/recherche)), `inbox` (boîte vide), `error` (erreur) ou `none` (par défaut).
+
+L'illustration flotte doucement trois fois, moins de 5 secondes en tout, puis s'arrête.
+
+<Preview>
+  <EmptyStateBasic />
+</Preview>
+
+<include>../../../demos/empty-state-basic.tsx</include>
+
+<Callout>
+  Si l'utilisateur a demandé à son système de réduire les animations, l'illustration reste immobile.
+</Callout>
+
+## Accessibilité
+
+- L'illustration est décorative, cachée aux lecteurs d'écran : le titre et la description portent tout le sens.
+- Le titre est un paragraphe en gras, pas un titre de section : le composant ne connaît pas le niveau qui conviendrait dans votre page. Si l'état vide occupe toute la page, placez un vrai titre (`h1`, `h2`) au-dessus.
+- L'état vide n'est pas annoncé : s'il apparaît après une action (une recherche, un filtre), annoncez le résultat ailleurs, par exemple dans une zone `role="status"` qui dit « 0 résultat ».
+- Le mouvement s'arrête de lui-même avant 5 secondes (RGAA 13.8).
+
+## API
+
+<ApiReference tag="cr-empty-state" />

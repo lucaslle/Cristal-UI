@@ -1,0 +1,75 @@
+:host {
+  display: block;
+  font-family: var(--cr-font-family);
+  font-size: var(--cr-font-size-m);
+  color: var(--cr-color-text);
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--cr-spacing-sm);
+  padding: var(--cr-spacing-2xl) var(--cr-spacing-lg);
+  text-align: center;
+}
+
+.illustration {
+  display: grid;
+  place-items: center;
+  width: 88px;
+  height: 88px;
+  margin-bottom: var(--cr-spacing-sm);
+  color: var(--cr-color-primary-text);
+  background: var(--cr-color-primary-subtle);
+  border-radius: 50%;
+}
+
+/* Flotte trois fois (4,8 s en tout) puis s'arrête : rien ne bouge plus de 5 s sans moyen de l'arrêter. */
+.illustration svg {
+  animation: cr-empty-float 1.6s ease-in-out 3;
+}
+
+@keyframes cr-empty-float {
+  50% {
+    transform: translateY(calc(-1 * var(--cr-spacing-xs)));
+  }
+}
+
+.question {
+  font-size: 16px;
+  font-weight: var(--cr-font-weight-bold);
+}
+
+.heading {
+  margin: 0;
+  font-size: var(--cr-font-size-l);
+  font-weight: var(--cr-font-weight-bold);
+}
+
+.description {
+  max-width: 48ch;
+  color: var(--cr-color-text-muted);
+  line-height: 1.5;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--cr-spacing-sm);
+  margin-top: var(--cr-spacing-sm);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .illustration svg {
+    animation: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .illustration {
+    color: CanvasText;
+    outline: 1px solid CanvasText;
+  }
+}
