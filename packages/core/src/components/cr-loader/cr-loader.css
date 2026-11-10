@@ -1,0 +1,114 @@
+:host {
+  display: inline-flex;
+  vertical-align: middle;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.spinner {
+  box-sizing: border-box;
+  width: 1.5em;
+  height: 1.5em;
+  border: 0.2em solid var(--cr-color-disabled);
+  border-top-color: var(--cr-color-primary);
+  border-radius: 50%;
+  animation: cr-loader-spin 0.8s linear infinite;
+}
+
+@keyframes cr-loader-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.bounce {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  width: 1.5em;
+  height: 2.75em;
+}
+
+.ball {
+  width: 1em;
+  height: 1em;
+  background: radial-gradient(circle at 35% 35%, color-mix(in oklab, var(--cr-color-primary) 45%, white), var(--cr-color-primary) 70%);
+  border-radius: 50%;
+  transform-origin: 50% 100%;
+  animation: cr-loader-bounce 0.9s infinite;
+}
+
+.shadow {
+  width: 1em;
+  height: 0.25em;
+  margin-top: 0.15em;
+  background: var(--cr-color-primary);
+  border-radius: 50%;
+  animation: cr-loader-shadow 0.9s infinite;
+}
+
+/* Chute en accélérant, écrasement au contact du sol, remontée en ralentissant. */
+@keyframes cr-loader-bounce {
+  0%,
+  100% {
+    transform: translateY(-1.5em);
+    animation-timing-function: ease-in;
+  }
+  45% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(0) scale(1.25, 0.75);
+  }
+  55% {
+    transform: translateY(0);
+    animation-timing-function: ease-out;
+  }
+}
+
+@keyframes cr-loader-shadow {
+  0%,
+  100% {
+    opacity: 0.15;
+    transform: scaleX(0.5);
+  }
+  50% {
+    opacity: 0.4;
+    transform: scaleX(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spinner {
+    animation-duration: 2.4s;
+  }
+  .ball,
+  .shadow {
+    animation: cr-loader-fade 2.4s ease-in-out infinite;
+  }
+}
+
+@keyframes cr-loader-fade {
+  50% {
+    opacity: 0.35;
+  }
+}
+
+@media (forced-colors: active) {
+  .spinner {
+    border-color: GrayText;
+    border-top-color: CanvasText;
+  }
+  .ball,
+  .shadow {
+    background: CanvasText;
+  }
+}

@@ -214,6 +214,21 @@ Méthodes `next()`, `previous()`, `goTo(index)` ; événements `onCrStepChange` 
 </CrStepper>
 ```
 
+### Chargement : `cr-skeleton`, `cr-progress`, `cr-progress-steps`, `cr-loader`, `cr-image`
+
+| Composant | Rôle |
+|---|---|
+| `cr-skeleton` | forme qui pulse à la place du contenu (`shape` : `line`, `block`, `circle` ; `width`, `height`) |
+| `cr-progress` | barre de progression : indéterminée sans `value`, remplie jusqu'à `value` (0 à 100) sinon ; `showValue` affiche le pourcentage qui compte |
+| `cr-progress-steps` | étapes d'un traitement (`steps`, `current`) : passées cochées, en cours avec un indicateur qui tourne |
+| `cr-loader` | indicateur d'attente : `spinner` (par défaut) ou `bounce` ; taille selon `font-size` |
+| `cr-image` | image floue puis nette une fois chargée (`src`, `alt`) |
+
+```tsx
+<CrProgress label="Téléversement" value={40} showValue />
+<CrProgressSteps steps={['Recherche', 'Lecture', 'Rédaction']} current={1} />
+```
+
 ### Tableau : `cr-table`
 
 Chaque utilisateur règle les colonnes : ordre (glisser un en-tête ou Alt + flèches), largeur (bord droit de l'en-tête ou Maj + flèches), colonnes fixées (F) et masquées (M ou menu « Colonnes »), densité des lignes et « Réinitialiser ».

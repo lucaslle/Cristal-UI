@@ -1,0 +1,38 @@
+:host {
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  height: 0.8em;
+  background: var(--cr-color-disabled);
+  border-radius: 999px;
+  animation: cr-skeleton-pulse 1.6s ease-in-out infinite;
+}
+
+:host([shape='block']) {
+  height: 120px;
+  border-radius: var(--cr-radius-l);
+}
+
+:host([shape='circle']) {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+
+@keyframes cr-skeleton-pulse {
+  50% {
+    opacity: 0.45;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :host {
+    animation: none;
+  }
+}
+
+@media (forced-colors: active) {
+  :host {
+    border: 1px solid GrayText;
+  }
+}
