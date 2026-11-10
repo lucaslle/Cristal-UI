@@ -4,6 +4,7 @@ description: Champ de recherche animé, avec recherches récentes, texte indicat
 ---
 
 import SearchBasic from '@/demos/search-basic';
+import SearchVariants from '@/demos/search-variants';
 
 ## Exemple
 
@@ -14,6 +15,23 @@ Tapez dans le champ, choisissez une recherche récente, ou cherchez un mot absen
 </Preview>
 
 <include>../../../demos/search-basic.tsx</include>
+
+## Styles
+
+La propriété `variant` change l'allure du champ :
+
+| Valeur | Effet |
+|---|---|
+| `outline` | pilule bordée ; à l'entrée, la bordure prend la couleur principale avec un halo (par défaut) |
+| `filled` | fond teinté et trait en bas, qui s'épaissit à l'entrée |
+| `underline` | seulement un trait en bas, pour un champ discret dans un en-tête |
+| `expand` | bouton loupe rond qui s'allonge en champ quand on y entre, et se referme quand on en sort champ vide |
+
+<Preview>
+  <SearchVariants />
+</Preview>
+
+<include>../../../demos/search-variants.tsx</include>
 
 ## Ce qui bouge
 

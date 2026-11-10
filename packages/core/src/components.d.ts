@@ -707,6 +707,11 @@ export namespace Components {
           * @default ''
          */
         "value": string;
+        /**
+          * Style : outline (pilule bordée, par défaut), filled (fond teinté, trait en bas), underline (trait en bas seulement) ou expand (bouton loupe rond qui s'ouvre en champ quand on y entre).
+          * @default 'outline'
+         */
+        "variant": 'outline' | 'filled' | 'underline' | 'expand';
     }
     /**
      * Choix d'une option parmi quelques-unes, côte à côte (Jour, Semaine, Mois…). Les options sont des éléments option enfants ;
@@ -2349,6 +2354,11 @@ declare namespace LocalJSX {
           * @default ''
          */
         "value"?: string;
+        /**
+          * Style : outline (pilule bordée, par défaut), filled (fond teinté, trait en bas), underline (trait en bas seulement) ou expand (bouton loupe rond qui s'ouvre en champ quand on y entre).
+          * @default 'outline'
+         */
+        "variant"?: 'outline' | 'filled' | 'underline' | 'expand';
     }
     /**
      * Choix d'une option parmi quelques-unes, côte à côte (Jour, Semaine, Mois…). Les options sont des éléments option enfants ;
@@ -2834,6 +2844,7 @@ declare namespace LocalJSX {
         "value": string;
         "placeholder": string;
         "noResults": boolean;
+        "variant": 'outline' | 'filled' | 'underline' | 'expand';
         "disabled": boolean;
     }
     interface CrSegmentedAttributes {

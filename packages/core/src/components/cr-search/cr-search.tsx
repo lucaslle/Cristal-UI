@@ -40,6 +40,11 @@ export class CrSearch {
   @Prop() recent?: string[];
   /** Affiche l'état « aucun résultat » pour le texte recherché. */
   @Prop() noResults = false;
+  /**
+   * Style : outline (pilule bordée, par défaut), filled (fond teinté, trait en bas), underline (trait en bas seulement)
+   * ou expand (bouton loupe rond qui s'ouvre en champ quand on y entre).
+   */
+  @Prop({ reflect: true }) variant: 'outline' | 'filled' | 'underline' | 'expand' = 'outline';
   /** Désactive le champ. */
   @Prop({ reflect: true }) disabled = false;
 

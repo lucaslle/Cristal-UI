@@ -4,6 +4,7 @@ description: Animated search field, with recent searches, a rolling placeholder 
 ---
 
 import SearchBasic from '@/demos/en/search-basic';
+import SearchVariants from '@/demos/en/search-variants';
 
 ## Example
 
@@ -14,6 +15,23 @@ Type in the field, pick a recent search, or look for a word that is not in the l
 </Preview>
 
 <include>../../../demos/en/search-basic.tsx</include>
+
+## Styles
+
+The `variant` property changes how the field looks:
+
+| Value | Effect |
+|---|---|
+| `outline` | bordered pill; on entry, the border takes the primary colour with a halo (default) |
+| `filled` | tinted background and a bottom line, which thickens on entry |
+| `underline` | only a bottom line, for a discreet field in a header |
+| `expand` | a round magnifier button that stretches into a field when entered, and closes back when left empty |
+
+<Preview>
+  <SearchVariants />
+</Preview>
+
+<include>../../../demos/en/search-variants.tsx</include>
 
 ## What moves
 

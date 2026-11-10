@@ -157,7 +157,7 @@ Choix d'une option parmi quelques-unes, côte à côte : options en `option` enf
 
 ### Recherche : `cr-search`
 
-Champ de recherche dont la loupe devient une flèche « Effacer » au focus : `label` obligatoire, `name`, `value`, `placeholder`, `placeholderWords` (mots qui défilent dans le texte indicatif, au plus quatre fois), `recent` (recherches récentes en puces qui volent dans le champ), `noResults` (loupe qui secoue la tête et « ? »). Résultats dans le slot. Événements `onCrInput` et `onCrSubmit` (Entrée).
+Champ de recherche dont la loupe devient une flèche « Effacer » au focus : `label` obligatoire, `name`, `value`, `placeholder`, `variant` (`outline` par défaut, `filled`, `underline`, `expand`), `placeholderWords` (mots qui défilent dans le texte indicatif, au plus quatre fois), `recent` (recherches récentes en puces qui volent dans le champ), `noResults` (loupe qui secoue la tête et « ? »). Résultats dans le slot. Événements `onCrInput` et `onCrSubmit` (Entrée).
 
 ```tsx
 <CrSearch label="Rechercher un produit" placeholder="Rechercher" placeholderWords={['une lampe', 'une chaise']} recent={['lampe']} value={query} noResults={!found.length} onCrInput={(event) => setQuery(event.detail)}>

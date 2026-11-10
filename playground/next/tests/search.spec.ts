@@ -5,7 +5,7 @@ test.beforeEach(async ({ page }) => {
 });
 
 const field = (page: import('@playwright/test').Page) => page.getByRole('searchbox', { name: 'Rechercher un produit' });
-const host = 'cr-search';
+const host = 'cr-search[variant="outline"]';
 
 test('the magnifier becomes a clear button only inside the field', async ({ page }) => {
   const clear = page.locator(host).locator('button.icon');
@@ -48,4 +48,21 @@ test('the placeholder word rolls, then stops on the last one', async ({ page }) 
 
 test('search loader is a named status', async ({ page }) => {
   await expect(page.getByRole('status').filter({ hasText: 'Recherche en cours…' })).toBeAttached();
+});
+
+test('expand: a round button that opens into a field on entry and closes when left empty', async ({ page }) => {
+  const host = page.locator('cr-search[variant="expand"]');
+  const bar = host.locator('.bar');
+  const width = () => bar.evaluate((el) => el.getBoundingClientRect().width);
+  await page.waitForTimeout(500);
+  expect(await width()).toBeLessThan(60);
+  await page.getByRole('searchbox', { name: 'Recherche dépliable' }).focus();
+  await expect.poll(width).toBeGreaterThan(300);
+  await page.keyboard.type('vase');
+  await page.keyboard.press('Tab');
+  await page.waitForTimeout(500);
+  expect(await width()).toBeGreaterThan(300);
+  await page.getByRole('searchbox', { name: 'Recherche dépliable' }).fill('');
+  await page.keyboard.press('Tab');
+  await expect.poll(width).toBeLessThan(60);
 });

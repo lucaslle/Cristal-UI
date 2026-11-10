@@ -31,6 +31,9 @@ export function SearchDemo() {
         )}
       </CrSearch>
       <p data-testid="search-submitted">{submitted}</p>
+      <CrSearch label="Recherche teintée" variant="filled" placeholder="Rechercher" />
+      <CrSearch label="Recherche soulignée" variant="underline" placeholder="Rechercher" />
+      <CrSearch label="Recherche dépliable" variant="expand" placeholder="Rechercher" />
       <CrLoader variant="search" label="Recherche en cours…" />
     </div>
   );
