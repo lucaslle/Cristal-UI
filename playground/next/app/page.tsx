@@ -2,6 +2,7 @@ import type React from 'react';
 import { CrAccordion, CrAccordionItem, CrButton, CrIconButton, CrCard, CrCheckbox, CrInput, CrSelect } from '@cristal/react/ssr';
 import { AccordionDemo } from './accordion-demo';
 import { StepperDemo } from './stepper-demo';
+import { SegmentedDemo } from './segmented-demo';
 import { LoadingDemo } from './loading-demo';
 import { TableDemo } from './table-demo';
 import { FieldsDemo } from './fields-demo';
@@ -100,6 +101,9 @@ export default function Page() {
 
       <h2>Étapes</h2>
       <StepperDemo />
+
+      <h2>Contrôle segmenté</h2>
+      <SegmentedDemo />
 
       <h2>Chargement</h2>
       <LoadingDemo />

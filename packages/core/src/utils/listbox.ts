@@ -2,6 +2,8 @@ export interface ListOption {
   value: string;
   label: string;
   disabled: boolean;
+  /** data-count de l'option (compteur de cr-segmented). */
+  count?: string;
 }
 
 export const normalize = (text: string) =>
@@ -61,6 +63,7 @@ export const readOptions = (host: HTMLElement): ListOption[] =>
     value: option.value,
     label: option.textContent?.trim() ?? '',
     disabled: option.disabled,
+    count: option.dataset.count,
   }));
 
 export const watchOptions = (host: HTMLElement, onChange: (options: ListOption[]) => void) => {

@@ -1,0 +1,60 @@
+---
+title: Contrôle segmenté
+description: Choix d'une option parmi quelques-unes, côte à côte, avec une pastille qui glisse. Balise cr-segmented, composant React CrSegmented.
+---
+
+import SegmentedBasic from '@/demos/segmented-basic';
+import SegmentedCounts from '@/demos/segmented-counts';
+import SegmentedFit from '@/demos/segmented-fit';
+
+## Exemple
+
+Les options sont des éléments `option` enfants, comme pour `CrSelect`. Une pastille glisse sous l'option choisie avec un léger ressort.
+
+| `variant` | Effet |
+|---|---|
+| `thumb` | Sliding Thumb : pastille en relief, le libellé choisi passe en gras (par défaut) |
+| `clip` | Clip Text : pastille colorée ; pendant qu'elle glisse, le texte ne devient blanc que là où elle passe |
+| `underline` | pas de rail : un trait glisse sous le libellé choisi, pour des onglets légers |
+| `outline` | rail bordé, pastille teintée et cerclée de la couleur principale |
+
+<Preview column>
+  <SegmentedBasic />
+</Preview>
+
+<include>../../../demos/segmented-basic.tsx</include>
+
+## Compteurs
+
+`data-count` sur une option ajoute un compteur à côté du libellé. Quand on choisit l'option, son compteur compte jusqu'à sa valeur et rebondit.
+
+<Preview>
+  <SegmentedCounts />
+</Preview>
+
+<include>../../../demos/segmented-counts.tsx</include>
+
+## Largeur ajustée
+
+Par défaut, les segments ont tous la même largeur. Avec `fit`, chacun prend la largeur de son libellé et la pastille change de largeur en glissant. Une option `disabled` ne peut pas être choisie.
+
+<Preview>
+  <SegmentedFit />
+</Preview>
+
+<include>../../../demos/segmented-fit.tsx</include>
+
+<Callout>
+  Si l'utilisateur a demandé à son système de réduire les animations, la pastille saute directement sur l'option choisie et les compteurs ne bougent pas.
+</Callout>
+
+## Accessibilité
+
+- Le contrôle est un groupe de boutons radio (`role="radiogroup"`) nommé par `label`, obligatoire puisqu'il n'a pas de libellé visible.
+- Une seule tabulation entre dans le groupe, sur l'option choisie ; les flèches choisissent l'option précédente ou suivante (en bouclant), Début et Fin la première ou la dernière.
+- Le compteur est lu avec le libellé (« Mois (38) ») ; le nombre qui compte n'est pas lu.
+- Avec `name`, la valeur choisie est envoyée avec le formulaire.
+
+## API
+
+<ApiReference tag="cr-segmented" />
