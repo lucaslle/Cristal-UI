@@ -1,0 +1,41 @@
+---
+title: Tabs
+description: Several content panels in the same place, one visible at a time. Tags cr-tabs and cr-tab-panel, React components CrTabs and CrTabPanel.
+---
+
+import TabsBasic from '@/demos/en/tabs-basic';
+
+## Example
+
+Each tab is a `CrTabPanel` child: its `label` becomes the tab, its content the panel. `selected` is the index of the chosen tab (0 by default); `onCrChange` returns the new index.
+
+A bar slides under the chosen tab with a slight spring, and the content comes in from the side of the chosen tab: from the right when moving forward, from the left when moving back.
+
+<Preview>
+  <TabsBasic />
+</Preview>
+
+<include>../../../demos/en/tabs-basic.tsx</include>
+
+## Server rendering
+
+Panels that are not chosen are hidden by the component itself: imported from `@cristal/react/ssr`, tabs arrive in the right state, with no flash of the other panels.
+
+<Callout>
+  If the user asked their system to reduce motion, the bar jumps straight under the chosen tab and the content fades in without sliding.
+</Callout>
+
+## Accessibility
+
+- The component follows the W3C tabs pattern: `role="tablist"`, one `role="tab"` per tab with `aria-selected` and `aria-controls`, and a `role="tabpanel"` named by its tab (`aria-labelledby`).
+- A single Tab stop enters the tab bar, on the chosen tab; one more Tab goes into the panel.
+- Automatic activation: Right Arrow and Left Arrow pick the next or previous tab (wrapping), Home and End the first or last one.
+- The chosen tab does not rely on colour alone: the thick bar is under it.
+
+## API
+
+<ApiReference tag="cr-tabs" />
+
+## CrTabPanel API
+
+<ApiReference tag="cr-tab-panel" />

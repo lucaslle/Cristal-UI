@@ -1,0 +1,41 @@
+---
+title: Onglets
+description: Plusieurs panneaux de contenu au même endroit, un seul visible à la fois. Balises cr-tabs et cr-tab-panel, composants React CrTabs et CrTabPanel.
+---
+
+import TabsBasic from '@/demos/tabs-basic';
+
+## Exemple
+
+Chaque onglet est un enfant `CrTabPanel` : son `label` devient l'onglet, son contenu le panneau. `selected` donne l'index de l'onglet choisi (0 par défaut) ; `onCrChange` renvoie le nouvel index.
+
+Un trait glisse sous l'onglet choisi avec un léger ressort, et le contenu arrive du côté de l'onglet choisi : de la droite quand on avance, de la gauche quand on recule.
+
+<Preview>
+  <TabsBasic />
+</Preview>
+
+<include>../../../demos/tabs-basic.tsx</include>
+
+## Rendu serveur
+
+Les panneaux non choisis sont masqués par le composant lui-même : importés depuis `@cristal/react/ssr`, les onglets arrivent déjà dans le bon état, sans flash des autres panneaux.
+
+<Callout>
+  Si l'utilisateur a demandé à son système de réduire les animations, le trait saute directement sous l'onglet choisi et le contenu apparaît en fondu, sans glisser.
+</Callout>
+
+## Accessibilité
+
+- Le composant suit le modèle W3C « tabs » : `role="tablist"`, un `role="tab"` par onglet avec `aria-selected` et `aria-controls`, et un `role="tabpanel"` nommé par son onglet (`aria-labelledby`).
+- Une seule tabulation entre dans la barre, sur l'onglet choisi ; une tabulation de plus va dans le panneau.
+- Activation automatique : Flèche droite et Flèche gauche choisissent l'onglet suivant ou précédent (en bouclant), Début et Fin le premier ou le dernier.
+- L'onglet choisi ne se distingue pas que par la couleur : le trait épais est sous lui.
+
+## API
+
+<ApiReference tag="cr-tabs" />
+
+## API CrTabPanel
+
+<ApiReference tag="cr-tab-panel" />

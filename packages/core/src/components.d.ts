@@ -940,6 +940,15 @@ export namespace Components {
         "value": string;
     }
     /**
+     * Contenu d'un onglet, enfant de cr-tabs. Seul le panneau de l'onglet choisi est affiché.
+     */
+    interface CrTabPanel {
+        /**
+          * Libellé de l'onglet.
+         */
+        "label": string;
+    }
+    /**
      * Tableau dont chaque utilisateur règle les colonnes : largeur, ordre, colonnes fixées et masquées, densité des lignes.
      */
     interface CrTable {
@@ -971,6 +980,17 @@ export namespace Components {
           * @default 'default'
          */
         "variant": TableVariant;
+    }
+    /**
+     * Onglets : une barre d'onglets et le panneau de l'onglet choisi. Chaque onglet est un enfant cr-tab-panel.
+     * Un trait glisse sous l'onglet choisi, et le contenu arrive du côté de l'onglet choisi.
+     */
+    interface CrTabs {
+        /**
+          * Index de l'onglet choisi, à partir de 0.
+          * @default 0
+         */
+        "selected": number;
     }
     /**
      * Saisie d'étiquettes : chaque mot validé (Entrée ou virgule) devient une pastille, retirable avec ×.
@@ -1161,6 +1181,10 @@ export interface CrSwitchCustomEvent<T> extends CustomEvent<T> {
 export interface CrTableCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLCrTableElement;
+}
+export interface CrTabsCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLCrTabsElement;
 }
 export interface CrTagInputCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -1624,6 +1648,15 @@ declare global {
         prototype: HTMLCrSwitchElement;
         new (): HTMLCrSwitchElement;
     };
+    /**
+     * Contenu d'un onglet, enfant de cr-tabs. Seul le panneau de l'onglet choisi est affiché.
+     */
+    interface HTMLCrTabPanelElement extends Components.CrTabPanel, HTMLStencilElement {
+    }
+    var HTMLCrTabPanelElement: {
+        prototype: HTMLCrTabPanelElement;
+        new (): HTMLCrTabPanelElement;
+    };
     interface HTMLCrTableElementEventMap {
         "crLayoutChange": TableLayout;
     }
@@ -1643,6 +1676,27 @@ declare global {
     var HTMLCrTableElement: {
         prototype: HTMLCrTableElement;
         new (): HTMLCrTableElement;
+    };
+    interface HTMLCrTabsElementEventMap {
+        "crChange": number;
+    }
+    /**
+     * Onglets : une barre d'onglets et le panneau de l'onglet choisi. Chaque onglet est un enfant cr-tab-panel.
+     * Un trait glisse sous l'onglet choisi, et le contenu arrive du côté de l'onglet choisi.
+     */
+    interface HTMLCrTabsElement extends Components.CrTabs, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLCrTabsElementEventMap>(type: K, listener: (this: HTMLCrTabsElement, ev: CrTabsCustomEvent<HTMLCrTabsElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLCrTabsElementEventMap>(type: K, listener: (this: HTMLCrTabsElement, ev: CrTabsCustomEvent<HTMLCrTabsElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLCrTabsElement: {
+        prototype: HTMLCrTabsElement;
+        new (): HTMLCrTabsElement;
     };
     interface HTMLCrTagInputElementEventMap {
         "crChange": string[];
@@ -1743,7 +1797,9 @@ declare global {
         "cr-step": HTMLCrStepElement;
         "cr-stepper": HTMLCrStepperElement;
         "cr-switch": HTMLCrSwitchElement;
+        "cr-tab-panel": HTMLCrTabPanelElement;
         "cr-table": HTMLCrTableElement;
+        "cr-tabs": HTMLCrTabsElement;
         "cr-tag-input": HTMLCrTagInputElement;
         "cr-textarea": HTMLCrTextareaElement;
         "cr-toast": HTMLCrToastElement;
@@ -2793,6 +2849,15 @@ declare namespace LocalJSX {
         "value"?: string;
     }
     /**
+     * Contenu d'un onglet, enfant de cr-tabs. Seul le panneau de l'onglet choisi est affiché.
+     */
+    interface CrTabPanel {
+        /**
+          * Libellé de l'onglet.
+         */
+        "label": string;
+    }
+    /**
      * Tableau dont chaque utilisateur règle les colonnes : largeur, ordre, colonnes fixées et masquées, densité des lignes.
      */
     interface CrTable {
@@ -2828,6 +2893,21 @@ declare namespace LocalJSX {
           * @default 'default'
          */
         "variant"?: TableVariant;
+    }
+    /**
+     * Onglets : une barre d'onglets et le panneau de l'onglet choisi. Chaque onglet est un enfant cr-tab-panel.
+     * Un trait glisse sous l'onglet choisi, et le contenu arrive du côté de l'onglet choisi.
+     */
+    interface CrTabs {
+        /**
+          * Émis quand l'onglet choisi change ; detail : son index.
+         */
+        "onCrChange"?: (event: CrTabsCustomEvent<number>) => void;
+        /**
+          * Index de l'onglet choisi, à partir de 0.
+          * @default 0
+         */
+        "selected"?: number;
     }
     /**
      * Saisie d'étiquettes : chaque mot validé (Entrée ou virgule) devient une pastille, retirable avec ×.
@@ -3177,11 +3257,17 @@ declare namespace LocalJSX {
         "checked": boolean;
         "disabled": boolean;
     }
+    interface CrTabPanelAttributes {
+        "label": string;
+    }
     interface CrTableAttributes {
         "label": string;
         "variant": TableVariant;
         "density": TableDensity;
         "storageKey": string;
+    }
+    interface CrTabsAttributes {
+        "selected": number;
     }
     interface CrTagInputAttributes {
         "label": string;
@@ -3238,7 +3324,9 @@ declare namespace LocalJSX {
         "cr-step": Omit<CrStep, keyof CrStepAttributes> & { [K in keyof CrStep & keyof CrStepAttributes]?: CrStep[K] } & { [K in keyof CrStep & keyof CrStepAttributes as `attr:${K}`]?: CrStepAttributes[K] } & { [K in keyof CrStep & keyof CrStepAttributes as `prop:${K}`]?: CrStep[K] } & OneOf<"label", CrStep["label"], CrStepAttributes["label"]>;
         "cr-stepper": Omit<CrStepper, keyof CrStepperAttributes> & { [K in keyof CrStepper & keyof CrStepperAttributes]?: CrStepper[K] } & { [K in keyof CrStepper & keyof CrStepperAttributes as `attr:${K}`]?: CrStepperAttributes[K] } & { [K in keyof CrStepper & keyof CrStepperAttributes as `prop:${K}`]?: CrStepper[K] };
         "cr-switch": Omit<CrSwitch, keyof CrSwitchAttributes> & { [K in keyof CrSwitch & keyof CrSwitchAttributes]?: CrSwitch[K] } & { [K in keyof CrSwitch & keyof CrSwitchAttributes as `attr:${K}`]?: CrSwitchAttributes[K] } & { [K in keyof CrSwitch & keyof CrSwitchAttributes as `prop:${K}`]?: CrSwitch[K] } & OneOf<"label", CrSwitch["label"], CrSwitchAttributes["label"]>;
+        "cr-tab-panel": Omit<CrTabPanel, keyof CrTabPanelAttributes> & { [K in keyof CrTabPanel & keyof CrTabPanelAttributes]?: CrTabPanel[K] } & { [K in keyof CrTabPanel & keyof CrTabPanelAttributes as `attr:${K}`]?: CrTabPanelAttributes[K] } & { [K in keyof CrTabPanel & keyof CrTabPanelAttributes as `prop:${K}`]?: CrTabPanel[K] } & OneOf<"label", CrTabPanel["label"], CrTabPanelAttributes["label"]>;
         "cr-table": Omit<CrTable, keyof CrTableAttributes> & { [K in keyof CrTable & keyof CrTableAttributes]?: CrTable[K] } & { [K in keyof CrTable & keyof CrTableAttributes as `attr:${K}`]?: CrTableAttributes[K] } & { [K in keyof CrTable & keyof CrTableAttributes as `prop:${K}`]?: CrTable[K] } & OneOf<"label", CrTable["label"], CrTableAttributes["label"]>;
+        "cr-tabs": Omit<CrTabs, keyof CrTabsAttributes> & { [K in keyof CrTabs & keyof CrTabsAttributes]?: CrTabs[K] } & { [K in keyof CrTabs & keyof CrTabsAttributes as `attr:${K}`]?: CrTabsAttributes[K] } & { [K in keyof CrTabs & keyof CrTabsAttributes as `prop:${K}`]?: CrTabs[K] };
         "cr-tag-input": Omit<CrTagInput, keyof CrTagInputAttributes> & { [K in keyof CrTagInput & keyof CrTagInputAttributes]?: CrTagInput[K] } & { [K in keyof CrTagInput & keyof CrTagInputAttributes as `attr:${K}`]?: CrTagInputAttributes[K] } & { [K in keyof CrTagInput & keyof CrTagInputAttributes as `prop:${K}`]?: CrTagInput[K] } & OneOf<"label", CrTagInput["label"], CrTagInputAttributes["label"]>;
         "cr-textarea": Omit<CrTextarea, keyof CrTextareaAttributes> & { [K in keyof CrTextarea & keyof CrTextareaAttributes]?: CrTextarea[K] } & { [K in keyof CrTextarea & keyof CrTextareaAttributes as `attr:${K}`]?: CrTextareaAttributes[K] } & { [K in keyof CrTextarea & keyof CrTextareaAttributes as `prop:${K}`]?: CrTextarea[K] } & OneOf<"label", CrTextarea["label"], CrTextareaAttributes["label"]>;
         "cr-toast": Omit<CrToast, keyof CrToastAttributes> & { [K in keyof CrToast & keyof CrToastAttributes]?: CrToast[K] } & { [K in keyof CrToast & keyof CrToastAttributes as `attr:${K}`]?: CrToastAttributes[K] } & { [K in keyof CrToast & keyof CrToastAttributes as `prop:${K}`]?: CrToast[K] };
@@ -3371,9 +3459,18 @@ declare module "@stencil/core" {
              */
             "cr-switch": LocalJSX.IntrinsicElements["cr-switch"] & JSXBase.HTMLAttributes<HTMLCrSwitchElement>;
             /**
+             * Contenu d'un onglet, enfant de cr-tabs. Seul le panneau de l'onglet choisi est affiché.
+             */
+            "cr-tab-panel": LocalJSX.IntrinsicElements["cr-tab-panel"] & JSXBase.HTMLAttributes<HTMLCrTabPanelElement>;
+            /**
              * Tableau dont chaque utilisateur règle les colonnes : largeur, ordre, colonnes fixées et masquées, densité des lignes.
              */
             "cr-table": LocalJSX.IntrinsicElements["cr-table"] & JSXBase.HTMLAttributes<HTMLCrTableElement>;
+            /**
+             * Onglets : une barre d'onglets et le panneau de l'onglet choisi. Chaque onglet est un enfant cr-tab-panel.
+             * Un trait glisse sous l'onglet choisi, et le contenu arrive du côté de l'onglet choisi.
+             */
+            "cr-tabs": LocalJSX.IntrinsicElements["cr-tabs"] & JSXBase.HTMLAttributes<HTMLCrTabsElement>;
             /**
              * Saisie d'étiquettes : chaque mot validé (Entrée ou virgule) devient une pastille, retirable avec ×.
              */

@@ -1,5 +1,5 @@
 import type React from 'react';
-import { CrAccordion, CrAccordionItem, CrButton, CrIconButton, CrCard, CrCheckbox, CrInput, CrSelect } from '@cristal/react/ssr';
+import { CrAccordion, CrAccordionItem, CrButton, CrIconButton, CrCard, CrCheckbox, CrInput, CrSelect, CrTabPanel, CrTabs } from '@cristal/react/ssr';
 import { AccordionDemo } from './accordion-demo';
 import { StepperDemo } from './stepper-demo';
 import { SearchDemo } from './search-demo';
@@ -7,6 +7,7 @@ import { SegmentedDemo } from './segmented-demo';
 import { ToastDemo } from './toast-demo';
 import { SwitchDemo } from './switch-demo';
 import { RadioGroupDemo } from './radio-group-demo';
+import { TabsDemo } from './tabs-demo';
 import { LoadingDemo } from './loading-demo';
 import { TableDemo } from './table-demo';
 import { FieldsDemo } from './fields-demo';
@@ -117,6 +118,13 @@ export default function Page() {
 
       <h2>Boutons radio</h2>
       <RadioGroupDemo />
+
+      <h2>Onglets</h2>
+      <TabsDemo />
+      <CrTabs data-testid="ssr-tabs" selected={1}>
+        <CrTabPanel label="Livraison">Livraison offerte dès 50 €.</CrTabPanel>
+        <CrTabPanel label="Retours">Retour gratuit sous 30 jours.</CrTabPanel>
+      </CrTabs>
 
       <h2>Notifications</h2>
       <ToastDemo />

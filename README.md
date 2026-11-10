@@ -248,6 +248,17 @@ Contenu de la section dans le slot par défaut, valeur à droite du titre dans `
 </CrAccordion>
 ```
 
+### Onglets : `cr-tabs`, `cr-tab-panel`
+
+Un onglet par enfant `cr-tab-panel` (son `label` devient l'onglet) ; `selected` donne l'index de l'onglet choisi. Modèle W3C à activation automatique (flèches, Début, Fin). Un trait glisse sous l'onglet choisi et le contenu arrive du côté du changement. Les autres panneaux sont masqués dès le rendu serveur. Événement `onCrChange` (index).
+
+```tsx
+<CrTabs selected={tab} onCrChange={(event) => setTab(event.detail)}>
+  <CrTabPanel label="Description">…</CrTabPanel>
+  <CrTabPanel label="Avis">…</CrTabPanel>
+</CrTabs>
+```
+
 ### Étapes : `cr-stepper`, `cr-step`
 
 | Propriété | Composant | Description |
