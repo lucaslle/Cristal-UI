@@ -4,6 +4,8 @@ export interface ListOption {
   disabled: boolean;
   /** data-count de l'option (compteur de cr-segmented). */
   count?: string;
+  /** data-group de l'option (groupe de cr-command-palette). */
+  group?: string;
 }
 
 export const normalize = (text: string) =>
@@ -64,6 +66,7 @@ export const readOptions = (host: HTMLElement): ListOption[] =>
     label: option.textContent?.trim() ?? '',
     disabled: option.disabled,
     count: option.dataset.count,
+    group: option.dataset.group,
   }));
 
 export const watchOptions = (host: HTMLElement, onChange: (options: ListOption[]) => void, read = readOptions) => {

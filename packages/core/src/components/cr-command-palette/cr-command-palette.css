@@ -1,0 +1,159 @@
+:host {
+  --cr-palette-spring: 0.45s cubic-bezier(0.3, 1.35, 0.5, 1);
+  font-size: var(--cr-font-size-m);
+}
+
+/* En haut de l'écran, comme une barre de recherche : la liste s'allonge vers le bas sans faire sauter le champ. */
+.dialog {
+  width: min(600px, calc(100% - 2 * var(--cr-spacing-lg)));
+  max-height: min(480px, calc(100% - 2 * var(--cr-spacing-3xl)));
+  margin: 12vh auto auto;
+  overflow: hidden;
+  border-radius: var(--cr-radius-l);
+}
+
+/* Arrivée : la fenêtre tombe et rebondit, sans fondu du texte. */
+.dialog[open] {
+  animation: cr-palette-drop var(--cr-palette-spring);
+}
+
+.dialog[open]::backdrop {
+  animation: cr-palette-backdrop 0.2s ease-out;
+}
+
+@keyframes cr-palette-drop {
+  from {
+    transform: translateY(calc(-1 * var(--cr-spacing-2xl))) scale(0.96);
+  }
+}
+
+@keyframes cr-palette-backdrop {
+  from {
+    opacity: 0;
+  }
+}
+
+.search {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: var(--cr-spacing-sm);
+  padding: 0 var(--cr-spacing-lg);
+  border-bottom: 1px solid var(--cr-color-border);
+}
+
+.search-icon {
+  flex: none;
+  color: var(--cr-color-text-muted);
+}
+
+input {
+  flex: 1;
+  min-width: 0;
+  min-height: var(--cr-control-l);
+  padding: 0;
+  font: inherit;
+  font-size: var(--cr-font-size-l);
+  color: inherit;
+  background: none;
+  border: 0;
+  outline: none;
+}
+
+input::placeholder {
+  color: var(--cr-color-text-muted);
+  opacity: 1;
+}
+
+/* Le champ n'a pas de cadre propre : c'est le bandeau de recherche qui montre le focus. */
+.search:has(input:focus-visible) {
+  box-shadow: inset 0 -2px 0 var(--cr-color-focus);
+}
+
+.list {
+  position: relative;
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--cr-spacing-sm);
+}
+
+.list[hidden] {
+  display: none;
+}
+
+.group + .group,
+.option + .group,
+.group + .option {
+  margin-top: var(--cr-spacing-sm);
+}
+
+.group-title {
+  padding: var(--cr-spacing-xs) var(--cr-spacing-sm);
+  font-size: var(--cr-font-size-s);
+  font-weight: var(--cr-font-weight-bold);
+  color: var(--cr-color-text-muted);
+}
+
+.option {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-height: var(--cr-control-m);
+  padding: 0 var(--cr-spacing-sm);
+  border-radius: var(--cr-radius-m);
+  cursor: pointer;
+}
+
+.option[aria-disabled] {
+  color: var(--cr-color-on-disabled);
+  cursor: not-allowed;
+}
+
+/* Surlignage de la commande active : glisse d'une ligne à l'autre ; le texte reste foncé, donc lisible pendant le glissement. */
+.thumb {
+  position: absolute;
+  top: 0;
+  right: var(--cr-spacing-sm);
+  left: var(--cr-spacing-sm);
+  background: var(--cr-color-primary-subtle);
+  border-radius: var(--cr-radius-m);
+  box-shadow: inset 3px 0 0 var(--cr-color-primary-text);
+}
+
+.thumb[hidden] {
+  display: none;
+}
+
+.list[data-ready] .thumb {
+  transition:
+    transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1),
+    height 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.option[data-active] {
+  font-weight: var(--cr-font-weight-medium);
+  color: var(--cr-color-primary-text);
+}
+
+.empty::part(heading) {
+  font-size: var(--cr-font-size-m);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dialog[open],
+  .dialog[open]::backdrop {
+    animation: none;
+  }
+  .list[data-ready] .thumb {
+    transition: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .thumb {
+    outline: 2px solid Highlight;
+  }
+  .search:has(input:focus-visible) {
+    outline: 2px solid Highlight;
+  }
+}

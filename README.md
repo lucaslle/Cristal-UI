@@ -265,6 +265,16 @@ Contenu dans le slot par défaut, boutons d'action dans `slot="footer"`. L'évé
 </CrDialog>
 ```
 
+### Palette de commandes : `cr-command-palette`
+
+Fenêtre modale ouverte par Ctrl+K (⌘K sur Mac) : un champ (motif combobox) qui filtre, sans tenir compte des accents, des commandes données en éléments `option` enfants, rangées par `data-group`. `open`, `label` obligatoire, `placeholder`, `shortcut` (raccourci actif par défaut). Haut, Bas, Entrée, Échap ; « Aucun résultat » reprend l'état vide de `cr-empty-state`. Le focus revient à son point de départ à la fermeture. La fenêtre tombe avec un ressort, le surlignage glisse d'une ligne à l'autre. Événements `onCrSelect` (la valeur) et `onCrClose`.
+
+```tsx
+<CrCommandPalette label="Palette de commandes" open={ouverte} onCrSelect={(event) => lancer(event.detail)} onCrClose={() => setOuverte(false)}>
+  <option value="facture" data-group="Actions">Créer une facture</option>
+</CrCommandPalette>
+```
+
 ### Fenêtre contextuelle : `cr-popover`
 
 Petit panneau non modal (`role="dialog"`) ancré sous un bouton, pour du contenu interactif. `label` obligatoire (le bouton, qui nomme aussi le panneau), `open`, `disabled`. Le focus entre dans le panneau à l'ouverture ; Échap le ferme et rend le focus au bouton, un clic à l'extérieur ou Tab le ferment aussi. Il grandit depuis le bouton avec un ressort. Événement `onCrToggle`.

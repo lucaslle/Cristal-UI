@@ -27,6 +27,7 @@ import { MenuDemo } from './menu-demo';
 import { SelectDemo } from './select-demo';
 import { RemoteSelectDemo } from './remote-select-demo';
 import { OverlayDemo } from './overlay-demo';
+import { CommandPaletteDemo } from './command-palette-demo';
 import { EnglishDemo } from './english-demo';
 import { IconButtonDemo } from './icon-button-demo';
 import { TooltipDemo } from './tooltip-demo';
@@ -196,6 +197,9 @@ export default function Page() {
 
       <h2>Modale et drawer</h2>
       <OverlayDemo />
+
+      <h2>Palette de commandes</h2>
+      <CommandPaletteDemo />
 
       <h2 lang="en">In English</h2>
       <EnglishDemo />

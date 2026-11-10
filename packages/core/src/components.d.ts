@@ -378,6 +378,32 @@ export namespace Components {
         "value": string;
     }
     /**
+     * Palette de commandes : une fenêtre modale avec un champ qui filtre une liste de commandes (motif combobox).
+     * Les commandes sont des éléments option enfants ; data-group les range sous un titre de groupe.
+     * Ctrl+K (⌘K sur Mac) l'ouvre de n'importe où dans la page. Haut et Bas parcourent les commandes, Entrée choisit, Échap ferme.
+     * La fenêtre tombe en place avec un ressort, et le surlignage de la commande active glisse d'une ligne à l'autre.
+     */
+    interface CrCommandPalette {
+        /**
+          * Nom de la fenêtre et du champ pour les lecteurs d'écran (« Palette de commandes »).
+         */
+        "label": string;
+        /**
+          * Ouvre ou ferme la palette.
+          * @default false
+         */
+        "open": boolean;
+        /**
+          * Texte indicatif du champ (« Rechercher… » par défaut).
+         */
+        "placeholder"?: string;
+        /**
+          * Ouvre la palette avec Ctrl+K (⌘K sur Mac), où que soit le focus dans la page.
+          * @default true
+         */
+        "shortcut": boolean;
+    }
+    /**
      * Champ de date : saisie au clavier dans le format de la langue (JJ/MM/AAAA en français, MM/DD/YYYY en anglais),
      * ou choix dans un calendrier ouvert par le bouton voisin. Le calendrier suit le motif Date Picker Dialog de l'APG ;
      * les mois glissent du côté de la navigation et le jour choisi s'affiche avec un petit rebond.
@@ -1464,6 +1490,10 @@ export interface CrCheckboxCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLCrCheckboxElement;
 }
+export interface CrCommandPaletteCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLCrCommandPaletteElement;
+}
 export interface CrDatePickerCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLCrDatePickerElement;
@@ -1721,6 +1751,30 @@ declare global {
     var HTMLCrCheckboxElement: {
         prototype: HTMLCrCheckboxElement;
         new (): HTMLCrCheckboxElement;
+    };
+    interface HTMLCrCommandPaletteElementEventMap {
+        "crSelect": string;
+        "crClose": void;
+    }
+    /**
+     * Palette de commandes : une fenêtre modale avec un champ qui filtre une liste de commandes (motif combobox).
+     * Les commandes sont des éléments option enfants ; data-group les range sous un titre de groupe.
+     * Ctrl+K (⌘K sur Mac) l'ouvre de n'importe où dans la page. Haut et Bas parcourent les commandes, Entrée choisit, Échap ferme.
+     * La fenêtre tombe en place avec un ressort, et le surlignage de la commande active glisse d'une ligne à l'autre.
+     */
+    interface HTMLCrCommandPaletteElement extends Components.CrCommandPalette, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLCrCommandPaletteElementEventMap>(type: K, listener: (this: HTMLCrCommandPaletteElement, ev: CrCommandPaletteCustomEvent<HTMLCrCommandPaletteElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLCrCommandPaletteElementEventMap>(type: K, listener: (this: HTMLCrCommandPaletteElement, ev: CrCommandPaletteCustomEvent<HTMLCrCommandPaletteElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLCrCommandPaletteElement: {
+        prototype: HTMLCrCommandPaletteElement;
+        new (): HTMLCrCommandPaletteElement;
     };
     interface HTMLCrDatePickerElementEventMap {
         "crChange": string;
@@ -2348,6 +2402,7 @@ declare global {
         "cr-card": HTMLCrCardElement;
         "cr-card-input": HTMLCrCardInputElement;
         "cr-checkbox": HTMLCrCheckboxElement;
+        "cr-command-palette": HTMLCrCommandPaletteElement;
         "cr-date-picker": HTMLCrDatePickerElement;
         "cr-dialog": HTMLCrDialogElement;
         "cr-drawer": HTMLCrDrawerElement;
@@ -2762,6 +2817,40 @@ declare namespace LocalJSX {
           * @default 'on'
          */
         "value"?: string;
+    }
+    /**
+     * Palette de commandes : une fenêtre modale avec un champ qui filtre une liste de commandes (motif combobox).
+     * Les commandes sont des éléments option enfants ; data-group les range sous un titre de groupe.
+     * Ctrl+K (⌘K sur Mac) l'ouvre de n'importe où dans la page. Haut et Bas parcourent les commandes, Entrée choisit, Échap ferme.
+     * La fenêtre tombe en place avec un ressort, et le surlignage de la commande active glisse d'une ligne à l'autre.
+     */
+    interface CrCommandPalette {
+        /**
+          * Nom de la fenêtre et du champ pour les lecteurs d'écran (« Palette de commandes »).
+         */
+        "label": string;
+        /**
+          * Émis à chaque fermeture : Échap, choix d'une commande, clic hors de la fenêtre ou open à false.
+         */
+        "onCrClose"?: (event: CrCommandPaletteCustomEvent<void>) => void;
+        /**
+          * Émis au choix d'une commande, juste avant la fermeture ; detail : sa valeur.
+         */
+        "onCrSelect"?: (event: CrCommandPaletteCustomEvent<string>) => void;
+        /**
+          * Ouvre ou ferme la palette.
+          * @default false
+         */
+        "open"?: boolean;
+        /**
+          * Texte indicatif du champ (« Rechercher… » par défaut).
+         */
+        "placeholder"?: string;
+        /**
+          * Ouvre la palette avec Ctrl+K (⌘K sur Mac), où que soit le focus dans la page.
+          * @default true
+         */
+        "shortcut"?: boolean;
     }
     /**
      * Champ de date : saisie au clavier dans le format de la langue (JJ/MM/AAAA en français, MM/DD/YYYY en anglais),
@@ -4084,6 +4173,12 @@ declare namespace LocalJSX {
         "required": boolean;
         "disabled": boolean;
     }
+    interface CrCommandPaletteAttributes {
+        "open": boolean;
+        "label": string;
+        "placeholder": string;
+        "shortcut": boolean;
+    }
     interface CrDatePickerAttributes {
         "label": string;
         "name": string;
@@ -4344,6 +4439,7 @@ declare namespace LocalJSX {
         "cr-card": CrCard;
         "cr-card-input": Omit<CrCardInput, keyof CrCardInputAttributes> & { [K in keyof CrCardInput & keyof CrCardInputAttributes]?: CrCardInput[K] } & { [K in keyof CrCardInput & keyof CrCardInputAttributes as `attr:${K}`]?: CrCardInputAttributes[K] } & { [K in keyof CrCardInput & keyof CrCardInputAttributes as `prop:${K}`]?: CrCardInput[K] } & OneOf<"label", CrCardInput["label"], CrCardInputAttributes["label"]>;
         "cr-checkbox": Omit<CrCheckbox, keyof CrCheckboxAttributes> & { [K in keyof CrCheckbox & keyof CrCheckboxAttributes]?: CrCheckbox[K] } & { [K in keyof CrCheckbox & keyof CrCheckboxAttributes as `attr:${K}`]?: CrCheckboxAttributes[K] } & { [K in keyof CrCheckbox & keyof CrCheckboxAttributes as `prop:${K}`]?: CrCheckbox[K] } & OneOf<"label", CrCheckbox["label"], CrCheckboxAttributes["label"]>;
+        "cr-command-palette": Omit<CrCommandPalette, keyof CrCommandPaletteAttributes> & { [K in keyof CrCommandPalette & keyof CrCommandPaletteAttributes]?: CrCommandPalette[K] } & { [K in keyof CrCommandPalette & keyof CrCommandPaletteAttributes as `attr:${K}`]?: CrCommandPaletteAttributes[K] } & { [K in keyof CrCommandPalette & keyof CrCommandPaletteAttributes as `prop:${K}`]?: CrCommandPalette[K] } & OneOf<"label", CrCommandPalette["label"], CrCommandPaletteAttributes["label"]>;
         "cr-date-picker": Omit<CrDatePicker, keyof CrDatePickerAttributes> & { [K in keyof CrDatePicker & keyof CrDatePickerAttributes]?: CrDatePicker[K] } & { [K in keyof CrDatePicker & keyof CrDatePickerAttributes as `attr:${K}`]?: CrDatePickerAttributes[K] } & { [K in keyof CrDatePicker & keyof CrDatePickerAttributes as `prop:${K}`]?: CrDatePicker[K] } & OneOf<"label", CrDatePicker["label"], CrDatePickerAttributes["label"]>;
         "cr-dialog": Omit<CrDialog, keyof CrDialogAttributes> & { [K in keyof CrDialog & keyof CrDialogAttributes]?: CrDialog[K] } & { [K in keyof CrDialog & keyof CrDialogAttributes as `attr:${K}`]?: CrDialogAttributes[K] } & { [K in keyof CrDialog & keyof CrDialogAttributes as `prop:${K}`]?: CrDialog[K] } & OneOf<"label", CrDialog["label"], CrDialogAttributes["label"]>;
         "cr-drawer": Omit<CrDrawer, keyof CrDrawerAttributes> & { [K in keyof CrDrawer & keyof CrDrawerAttributes]?: CrDrawer[K] } & { [K in keyof CrDrawer & keyof CrDrawerAttributes as `attr:${K}`]?: CrDrawerAttributes[K] } & { [K in keyof CrDrawer & keyof CrDrawerAttributes as `prop:${K}`]?: CrDrawer[K] } & OneOf<"label", CrDrawer["label"], CrDrawerAttributes["label"]>;
@@ -4442,6 +4538,13 @@ declare module "@stencil/core" {
              * Case à cocher.
              */
             "cr-checkbox": LocalJSX.IntrinsicElements["cr-checkbox"] & JSXBase.HTMLAttributes<HTMLCrCheckboxElement>;
+            /**
+             * Palette de commandes : une fenêtre modale avec un champ qui filtre une liste de commandes (motif combobox).
+             * Les commandes sont des éléments option enfants ; data-group les range sous un titre de groupe.
+             * Ctrl+K (⌘K sur Mac) l'ouvre de n'importe où dans la page. Haut et Bas parcourent les commandes, Entrée choisit, Échap ferme.
+             * La fenêtre tombe en place avec un ressort, et le surlignage de la commande active glisse d'une ligne à l'autre.
+             */
+            "cr-command-palette": LocalJSX.IntrinsicElements["cr-command-palette"] & JSXBase.HTMLAttributes<HTMLCrCommandPaletteElement>;
             /**
              * Champ de date : saisie au clavier dans le format de la langue (JJ/MM/AAAA en français, MM/DD/YYYY en anglais),
              * ou choix dans un calendrier ouvert par le bouton voisin. Le calendrier suit le motif Date Picker Dialog de l'APG ;

@@ -1,0 +1,42 @@
+---
+title: Palette de commandes
+description: Fenêtre ouverte par Ctrl+K pour trouver une commande en tapant. Balise cr-command-palette, composant React CrCommandPalette.
+---
+
+import CommandPaletteBasic from '@/demos/command-palette-basic';
+
+## Exemple
+
+`cr-command-palette` est une fenêtre modale avec un champ qui filtre une liste de commandes. Les commandes sont des éléments `option` enfants (`value` et libellé) ; `data-group` les range sous un titre de groupe, dans l'ordre où les groupes apparaissent. Une option `disabled` est affichée mais ne peut pas être choisie.
+
+Ctrl+K (⌘K sur Mac) l'ouvre de n'importe où dans la page ; `shortcut={false}` désactive ce raccourci, si votre page l'utilise déjà ou s'il y a plusieurs palettes. Vous pouvez aussi la piloter avec `open`. `onCrSelect` donne la valeur choisie, puis la palette se ferme ; remettez votre état à `false` dans `onCrClose`.
+
+La recherche ignore les accents et la casse (« parametres » trouve « Paramètres »). Sans résultat, la palette affiche l'[état vide](/docs/composants/etat-vide) « Aucun résultat ».
+
+La fenêtre tombe en place avec un léger rebond, et le surlignage de la commande active glisse d'une ligne à l'autre.
+
+<Preview>
+  <CommandPaletteBasic />
+</Preview>
+
+<include>../../../demos/command-palette-basic.tsx</include>
+
+Sur ce site, Ctrl+K ouvre déjà la recherche de la documentation : la démo désactive donc son raccourci avec `shortcut={false}`.
+
+<Callout>
+  Si l'utilisateur a demandé à son système de réduire les animations, la fenêtre apparaît sans tomber et le surlignage passe directement d'une ligne à l'autre.
+</Callout>
+
+## Accessibilité
+
+- La palette est une fenêtre modale (`dialog` natif) nommée par `label` : le reste de la page est inerte tant qu'elle est ouverte.
+- Le champ suit le motif « combobox » : `role="combobox"`, liste `role="listbox"` reliée par `aria-controls`, commande active désignée par `aria-activedescendant` ; le focus reste dans le champ pendant qu'on parcourt la liste.
+- Haut et Bas parcourent les commandes en sautant celles qui sont désactivées, Entrée choisit, Échap ferme. Un clic hors de la fenêtre la ferme aussi.
+- Les groupes sont des `role="group"` nommés par leur titre.
+- « Aucun résultat » est annoncé par une zone d'état ; le champ passe alors à `aria-expanded="false"`.
+- À la fermeture, le focus revient sur l'élément qui l'avait avant l'ouverture.
+- La commande active se distingue aussi sans couleur : un trait à gauche et un texte plus épais.
+
+## API
+
+<ApiReference tag="cr-command-palette" />

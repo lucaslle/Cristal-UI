@@ -72,3 +72,4 @@ export const CrEmptyState = withAttributes(generated.CrEmptyState, elements.CrEm
 export const CrSparkline = withAttributes(generated.CrSparkline, elements.CrSparkline);
 export const CrPagination = withAttributes(generated.CrPagination, elements.CrPagination);
 export const CrBreadcrumb = withAttributes(generated.CrBreadcrumb, elements.CrBreadcrumb);
+export const CrCommandPalette = withAttributes(generated.CrCommandPalette, elements.CrCommandPalette);
