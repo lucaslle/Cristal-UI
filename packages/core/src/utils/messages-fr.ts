@@ -4,6 +4,7 @@ import type { Messages } from './messages-en';
 export const fr: Messages = {
   locale: 'fr-FR',
   close: 'Fermer',
+  pauseAnimation: "Mettre en pause l'animation",
   required: 'Ce champ est obligatoire.',
   checkbox: 'Cochez cette case pour continuer.',
   select: 'Choisissez une option dans la liste.',

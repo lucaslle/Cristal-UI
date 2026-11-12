@@ -1,0 +1,81 @@
+---
+title: Fond animé
+description: Fond animé décoratif derrière un contenu (aurore, dégradé, grille, points, vagues, particules), aux couleurs du thème. Balise cr-background, composant React CrBackground.
+---
+
+import BackgroundGallery from '@/demos/background-gallery';
+import BackgroundColors from '@/demos/background-colors';
+
+## Exemple
+
+`CrBackground` est un conteneur : son contenu s'affiche par-dessus un fond qui bouge doucement, et reste du contenu normal de la page, lisible et cliquable. `variant` choisit l'effet ; c'est tout ce qu'il faut régler.
+
+```tsx
+<CrBackground variant="aurora">
+  <h1>Vos factures, sans effort</h1>
+</CrBackground>
+```
+
+<Preview column>
+  <BackgroundGallery />
+</Preview>
+
+<include>../../../demos/background-gallery.tsx</include>
+
+| `variant` | Effet |
+|---|---|
+| `aurora` | grands halos de couleur qui dérivent lentement (par défaut) |
+| `gradient` | dégradé qui glisse d'un bout à l'autre, croisé par un reflet clair |
+| `grid` | sol quadrillé qui avance vers l'horizon |
+| `dots` | grille de points traversée par une vague de points plus gros et plus vifs |
+| `waves` | trois vagues superposées qui ondulent en bas |
+| `particles` | points qui dérivent, reliés à leurs voisins proches (dessinés dans un canvas) |
+
+Le fond prend la taille de son contenu : réglez `padding`, `min-height` ou `border-radius` comme sur une `div`. Laissez un peu de marge en bas à droite pour le bouton pause.
+
+## Couleurs
+
+Les couleurs viennent du thème : la couleur principale et deux teintes voisines, sur la surface à peine teintée. Changer `--cr-color-primary` suffit donc à tout accorder. Pour choisir d'autres couleurs, donnez ces propriétés CSS sur le fond ou sur un parent :
+
+| Propriété CSS | Par défaut |
+|---|---|
+| `--cr-background-base` | la surface, teintée de 4 % de couleur principale |
+| `--cr-background-color-1` | la couleur principale |
+| `--cr-background-color-2` | la couleur principale, teinte décalée de −70° |
+| `--cr-background-color-3` | la couleur principale, teinte décalée de +60° |
+
+Donnez des couleurs franches : chaque effet les éclaircit lui-même pour que le texte reste lisible.
+
+<Preview>
+  <BackgroundColors />
+</Preview>
+
+<include>../../../demos/background-colors.tsx</include>
+
+## Pause et animations réduites
+
+Une animation qui démarre seule et dure plus de 5 secondes doit pouvoir être arrêtée : un petit bouton pause est donc affiché dans le coin en bas à droite. Le fond s'arrête aussi de lui-même quand il sort de l'écran ou que l'onglet est caché, et repart quand il revient, sauf s'il est en pause.
+
+Si votre application a déjà sa propre commande pour arrêter les animations, masquez le bouton avec `controls={false}` et pilotez la pause avec `paused` :
+
+```tsx
+<CrBackground variant="waves" controls={false} paused={!animations}>
+  …
+</CrBackground>
+```
+
+<Callout>
+  Si l'utilisateur a demandé à son système de réduire les animations, le fond démarre en pause sur une image fixe ; le bouton permet quand même de le lancer. Avant le chargement du script, la page affiche déjà cette image fixe.
+</Callout>
+
+## Accessibilité
+
+- Le fond est décoratif : il est masqué aux lecteurs d'écran (`aria-hidden`) et ne contient rien de focalisable. Le contenu reste dans la page, lu et utilisé normalement.
+- Le bouton pause est un vrai bouton, nommé « Mettre en pause l'animation » (« Pause the animation » en anglais), annoncé enfoncé quand l'animation est arrêtée ; son icône passe de pause à lecture. Il a un fond plein et une bordure à plus de 3:1, une cible de 30 × 30 pixels et un contour de focus visible.
+- Chaque effet reste assez discret pour que le texte en `--cr-color-text` garde un contraste d'au moins 4,5:1 sur son point le plus foncé, avec les couleurs par défaut. Si vous changez les couleurs, vérifiez le contraste.
+- En mode contrastes élevés, le fond et son bouton disparaissent.
+- En pause, hors de l'écran ou dans un onglet caché, le fond ne calcule plus rien : les animations CSS sont suspendues, le canvas ne dessine plus.
+
+## API
+
+<ApiReference tag="cr-background" />

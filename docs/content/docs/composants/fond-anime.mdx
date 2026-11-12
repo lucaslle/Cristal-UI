@@ -1,0 +1,81 @@
+---
+title: Animated background
+description: Decorative animated background behind content (aurora, gradient, grid, dots, waves, particles), in the theme colours. Tag cr-background, React component CrBackground.
+---
+
+import BackgroundGallery from '@/demos/en/background-gallery';
+import BackgroundColors from '@/demos/en/background-colors';
+
+## Example
+
+`CrBackground` is a container: its content shows on top of a gently moving background, and stays ordinary page content, readable and clickable. `variant` picks the effect; that is all there is to set.
+
+```tsx
+<CrBackground variant="aurora">
+  <h1>Invoices, without the effort</h1>
+</CrBackground>
+```
+
+<Preview column>
+  <BackgroundGallery />
+</Preview>
+
+<include>../../../demos/en/background-gallery.tsx</include>
+
+| `variant` | Effect |
+|---|---|
+| `aurora` | large colour glows drifting slowly (default) |
+| `gradient` | a gradient sliding from end to end, crossed by a light sheen |
+| `grid` | a grid floor moving toward the horizon |
+| `dots` | a dot grid crossed by a wave of bigger, brighter dots |
+| `waves` | three layered waves rippling at the bottom |
+| `particles` | drifting points linked to their close neighbours (drawn in a canvas) |
+
+The background takes the size of its content: set `padding`, `min-height` or `border-radius` as on a `div`. Leave some room at the bottom right for the pause button.
+
+## Colours
+
+The colours come from the theme: the primary colour and two neighbouring hues, on the barely tinted surface. Changing `--cr-color-primary` is therefore enough to match everything. To pick other colours, set these CSS properties on the background or on a parent:
+
+| CSS property | Default |
+|---|---|
+| `--cr-background-base` | the surface, tinted with 4% of the primary colour |
+| `--cr-background-color-1` | the primary colour |
+| `--cr-background-color-2` | the primary colour, hue shifted by −70° |
+| `--cr-background-color-3` | the primary colour, hue shifted by +60° |
+
+Give strong colours: each effect lightens them itself so the text stays readable.
+
+<Preview>
+  <BackgroundColors />
+</Preview>
+
+<include>../../../demos/en/background-colors.tsx</include>
+
+## Pause and reduced motion
+
+An animation that starts by itself and lasts more than 5 seconds must be stoppable: a small pause button is therefore shown in the bottom right corner. The background also stops by itself when it leaves the screen or the tab is hidden, and starts again when it comes back, unless it is paused.
+
+If your application already has its own control to stop animations, hide the button with `controls={false}` and drive the pause with `paused`:
+
+```tsx
+<CrBackground variant="waves" controls={false} paused={!animations}>
+  …
+</CrBackground>
+```
+
+<Callout>
+  If the user asked their system to reduce motion, the background starts paused on a still frame; the button still lets them start it. Before the script loads, the page already shows this still frame.
+</Callout>
+
+## Accessibility
+
+- The background is decorative: it is hidden from screen readers (`aria-hidden`) and holds nothing focusable. The content stays in the page, read and used normally.
+- The pause button is a real button, named "Pause the animation" ("Mettre en pause l'animation" in French), announced as pressed when the animation is stopped; its icon switches from pause to play. It has a solid background and a border above 3:1, a 30 × 30 pixel target and a visible focus outline.
+- Each effect stays subtle enough for text in `--cr-color-text` to keep a contrast of at least 4.5:1 over its darkest point, with the default colours. If you change the colours, check the contrast.
+- In high contrast mode, the background and its button disappear.
+- When paused, off screen or in a hidden tab, the background computes nothing: CSS animations are suspended and the canvas stops drawing.
+
+## API
+
+<ApiReference tag="cr-background" />

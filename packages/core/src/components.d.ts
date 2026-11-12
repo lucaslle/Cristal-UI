@@ -7,6 +7,7 @@
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 import { AccordionAnimation, AccordionVariant } from "./utils/accordion";
 import { AvatarStatus } from "./components/cr-avatar/cr-avatar";
+import { BackgroundVariant } from "./components/cr-background/cr-background";
 import { BadgeVariant } from "./components/cr-badge/cr-badge";
 import { BoxDisplay } from "./components/cr-box/cr-box";
 import { ButtonSize, ButtonType, ButtonVariant } from "./components/cr-button/cr-button";
@@ -21,6 +22,7 @@ import { TableColumn, TableDensity, TableLayout, TableVariant } from "./utils/ta
 import { TooltipPlacement as TooltipPlacement1 } from "./components/cr-icon-button/cr-icon-button";
 export { AccordionAnimation, AccordionVariant } from "./utils/accordion";
 export { AvatarStatus } from "./components/cr-avatar/cr-avatar";
+export { BackgroundVariant } from "./components/cr-background/cr-background";
 export { BadgeVariant } from "./components/cr-badge/cr-badge";
 export { BoxDisplay } from "./components/cr-box/cr-box";
 export { ButtonSize, ButtonType, ButtonVariant } from "./components/cr-button/cr-button";
@@ -153,6 +155,28 @@ export namespace Components {
           * Nombre maximal d'avatars affichés ; les autres sont résumés par « +N ». Tous par défaut.
          */
         "max"?: number;
+    }
+    /**
+     * Fond animé décoratif derrière un contenu (bandeau d'accueil, section, carte) : le contenu reste dans la page, lisible et cliquable.
+     * Les couleurs viennent du thème. Un bouton dans le coin met l'animation en pause ; elle démarre en pause quand l'utilisateur
+     * a demandé à réduire les animations, et s'arrête d'elle-même hors de l'écran ou quand l'onglet est caché.
+     */
+    interface CrBackground {
+        /**
+          * Affiche le bouton pause dans le coin. À false seulement si l'application a sa propre commande pour arrêter les animations.
+          * @default true
+         */
+        "controls": boolean;
+        /**
+          * Met l'animation en pause ; le bouton pause l'inverse. Passe à true au chargement si l'utilisateur a demandé à réduire les animations.
+          * @default false
+         */
+        "paused": boolean;
+        /**
+          * Effet : aurora (halos de couleur qui dérivent, par défaut), gradient (dégradé qui glisse), grid (grille en perspective), dots (points traversés par une vague), waves (vagues) ou particles (points reliés, dessinés dans un canvas).
+          * @default 'aurora'
+         */
+        "variant": BackgroundVariant;
     }
     /**
      * Pastille : court statut ou compteur (« Payée », « Non lus 3 »). Le texte porte le sens, la couleur ne fait que l'appuyer.
@@ -1662,6 +1686,17 @@ declare global {
         new (): HTMLCrAvatarGroupElement;
     };
     /**
+     * Fond animé décoratif derrière un contenu (bandeau d'accueil, section, carte) : le contenu reste dans la page, lisible et cliquable.
+     * Les couleurs viennent du thème. Un bouton dans le coin met l'animation en pause ; elle démarre en pause quand l'utilisateur
+     * a demandé à réduire les animations, et s'arrête d'elle-même hors de l'écran ou quand l'onglet est caché.
+     */
+    interface HTMLCrBackgroundElement extends Components.CrBackground, HTMLStencilElement {
+    }
+    var HTMLCrBackgroundElement: {
+        prototype: HTMLCrBackgroundElement;
+        new (): HTMLCrBackgroundElement;
+    };
+    /**
      * Pastille : court statut ou compteur (« Payée », « Non lus 3 »). Le texte porte le sens, la couleur ne fait que l'appuyer.
      * Quand count change, le nombre défile jusqu'à sa nouvelle valeur, comme un compteur kilométrique.
      */
@@ -2373,6 +2408,7 @@ declare global {
         "cr-alert": HTMLCrAlertElement;
         "cr-avatar": HTMLCrAvatarElement;
         "cr-avatar-group": HTMLCrAvatarGroupElement;
+        "cr-background": HTMLCrBackgroundElement;
         "cr-badge": HTMLCrBadgeElement;
         "cr-box": HTMLCrBoxElement;
         "cr-breadcrumb": HTMLCrBreadcrumbElement;
@@ -2547,6 +2583,28 @@ declare namespace LocalJSX {
           * Nombre maximal d'avatars affichés ; les autres sont résumés par « +N ». Tous par défaut.
          */
         "max"?: number;
+    }
+    /**
+     * Fond animé décoratif derrière un contenu (bandeau d'accueil, section, carte) : le contenu reste dans la page, lisible et cliquable.
+     * Les couleurs viennent du thème. Un bouton dans le coin met l'animation en pause ; elle démarre en pause quand l'utilisateur
+     * a demandé à réduire les animations, et s'arrête d'elle-même hors de l'écran ou quand l'onglet est caché.
+     */
+    interface CrBackground {
+        /**
+          * Affiche le bouton pause dans le coin. À false seulement si l'application a sa propre commande pour arrêter les animations.
+          * @default true
+         */
+        "controls"?: boolean;
+        /**
+          * Met l'animation en pause ; le bouton pause l'inverse. Passe à true au chargement si l'utilisateur a demandé à réduire les animations.
+          * @default false
+         */
+        "paused"?: boolean;
+        /**
+          * Effet : aurora (halos de couleur qui dérivent, par défaut), gradient (dégradé qui glisse), grid (grille en perspective), dots (points traversés par une vague), waves (vagues) ou particles (points reliés, dessinés dans un canvas).
+          * @default 'aurora'
+         */
+        "variant"?: BackgroundVariant;
     }
     /**
      * Pastille : court statut ou compteur (« Payée », « Non lus 3 »). Le texte porte le sens, la couleur ne fait que l'appuyer.
@@ -4094,6 +4152,11 @@ declare namespace LocalJSX {
     interface CrAvatarGroupAttributes {
         "max": number;
     }
+    interface CrBackgroundAttributes {
+        "variant": BackgroundVariant;
+        "controls": boolean;
+        "paused": boolean;
+    }
     interface CrBadgeAttributes {
         "variant": BadgeVariant;
         "count": number;
@@ -4405,6 +4468,7 @@ declare namespace LocalJSX {
         "cr-alert": Omit<CrAlert, keyof CrAlertAttributes> & { [K in keyof CrAlert & keyof CrAlertAttributes]?: CrAlert[K] } & { [K in keyof CrAlert & keyof CrAlertAttributes as `attr:${K}`]?: CrAlertAttributes[K] } & { [K in keyof CrAlert & keyof CrAlertAttributes as `prop:${K}`]?: CrAlert[K] };
         "cr-avatar": Omit<CrAvatar, keyof CrAvatarAttributes> & { [K in keyof CrAvatar & keyof CrAvatarAttributes]?: CrAvatar[K] } & { [K in keyof CrAvatar & keyof CrAvatarAttributes as `attr:${K}`]?: CrAvatarAttributes[K] } & { [K in keyof CrAvatar & keyof CrAvatarAttributes as `prop:${K}`]?: CrAvatar[K] } & OneOf<"name", CrAvatar["name"], CrAvatarAttributes["name"]>;
         "cr-avatar-group": Omit<CrAvatarGroup, keyof CrAvatarGroupAttributes> & { [K in keyof CrAvatarGroup & keyof CrAvatarGroupAttributes]?: CrAvatarGroup[K] } & { [K in keyof CrAvatarGroup & keyof CrAvatarGroupAttributes as `attr:${K}`]?: CrAvatarGroupAttributes[K] } & { [K in keyof CrAvatarGroup & keyof CrAvatarGroupAttributes as `prop:${K}`]?: CrAvatarGroup[K] };
+        "cr-background": Omit<CrBackground, keyof CrBackgroundAttributes> & { [K in keyof CrBackground & keyof CrBackgroundAttributes]?: CrBackground[K] } & { [K in keyof CrBackground & keyof CrBackgroundAttributes as `attr:${K}`]?: CrBackgroundAttributes[K] } & { [K in keyof CrBackground & keyof CrBackgroundAttributes as `prop:${K}`]?: CrBackground[K] };
         "cr-badge": Omit<CrBadge, keyof CrBadgeAttributes> & { [K in keyof CrBadge & keyof CrBadgeAttributes]?: CrBadge[K] } & { [K in keyof CrBadge & keyof CrBadgeAttributes as `attr:${K}`]?: CrBadgeAttributes[K] } & { [K in keyof CrBadge & keyof CrBadgeAttributes as `prop:${K}`]?: CrBadge[K] };
         "cr-box": Omit<CrBox, keyof CrBoxAttributes> & { [K in keyof CrBox & keyof CrBoxAttributes]?: CrBox[K] } & { [K in keyof CrBox & keyof CrBoxAttributes as `attr:${K}`]?: CrBoxAttributes[K] } & { [K in keyof CrBox & keyof CrBoxAttributes as `prop:${K}`]?: CrBox[K] };
         "cr-breadcrumb": Omit<CrBreadcrumb, keyof CrBreadcrumbAttributes> & { [K in keyof CrBreadcrumb & keyof CrBreadcrumbAttributes]?: CrBreadcrumb[K] } & { [K in keyof CrBreadcrumb & keyof CrBreadcrumbAttributes as `attr:${K}`]?: CrBreadcrumbAttributes[K] } & { [K in keyof CrBreadcrumb & keyof CrBreadcrumbAttributes as `prop:${K}`]?: CrBreadcrumb[K] };
@@ -4479,6 +4543,12 @@ declare module "@stencil/core" {
              * Au-delà de max, les avatars restants sont résumés par une pastille « +N », nommée « N autres personnes ».
              */
             "cr-avatar-group": LocalJSX.IntrinsicElements["cr-avatar-group"] & JSXBase.HTMLAttributes<HTMLCrAvatarGroupElement>;
+            /**
+             * Fond animé décoratif derrière un contenu (bandeau d'accueil, section, carte) : le contenu reste dans la page, lisible et cliquable.
+             * Les couleurs viennent du thème. Un bouton dans le coin met l'animation en pause ; elle démarre en pause quand l'utilisateur
+             * a demandé à réduire les animations, et s'arrête d'elle-même hors de l'écran ou quand l'onglet est caché.
+             */
+            "cr-background": LocalJSX.IntrinsicElements["cr-background"] & JSXBase.HTMLAttributes<HTMLCrBackgroundElement>;
             /**
              * Pastille : court statut ou compteur (« Payée », « Non lus 3 »). Le texte porte le sens, la couleur ne fait que l'appuyer.
              * Quand count change, le nombre défile jusqu'à sa nouvelle valeur, comme un compteur kilométrique.

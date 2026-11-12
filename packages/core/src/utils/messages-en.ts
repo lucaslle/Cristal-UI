@@ -2,6 +2,7 @@
 export const en = {
   locale: 'en-US',
   close: 'Close',
+  pauseAnimation: 'Pause the animation',
   required: 'This field is required.',
   checkbox: 'Check this box to continue.',
   select: 'Choose an option from the list.',

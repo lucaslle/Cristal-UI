@@ -11,6 +11,7 @@ import { DatePickerDemo } from './date-picker-demo';
 import { RatingDemo } from './rating-demo';
 import { AvatarDemo } from './avatar-demo';
 import { BadgeDemo } from './badge-demo';
+import { BackgroundDemo } from './background-demo';
 import { PaginationDemo } from './pagination-demo';
 import { BreadcrumbDemo } from './breadcrumb-demo';
 import { SparklineDemo } from './sparkline-demo';
@@ -160,6 +161,9 @@ export default function Page() {
 
       <h2>Pastilles</h2>
       <BadgeDemo />
+
+      <h2>Fonds animés</h2>
+      <BackgroundDemo />
 
       <h2>Fil d'Ariane</h2>
       <BreadcrumbDemo />
