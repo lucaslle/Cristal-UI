@@ -1,5 +1,5 @@
 import { AttachInternals, Build, Component, Element, Event, EventEmitter, Listen, Prop, State, h } from '@stencil/core';
-import { FieldText, RequiredMark } from '../../utils/field';
+import { FieldText, RequiredMark, ErrorAnimation } from '../../utils/field';
 import { t } from '../../utils/i18n';
 import { ListOption, readOptions, watchOptions } from '../../utils/listbox';
 import { handleInvalid } from '../../utils/validation';
@@ -13,7 +13,7 @@ import { handleInvalid } from '../../utils/validation';
  */
 @Component({
   tag: 'cr-radio-group',
-  styleUrls: ['../../global/field.css', 'cr-radio-group.css'],
+  styleUrls: ['../../global/field.css', '../../global/field-error.css', '../../global/field-error-motion.css', 'cr-radio-group.css'],
   shadow: { delegatesFocus: true },
   formAssociated: true,
 })
@@ -31,6 +31,8 @@ export class CrRadioGroup {
   @Prop({ reflect: true }) required = false;
   /** Désactive le groupe. */
   @Prop({ reflect: true }) disabled = false;
+  /** Animation de l'erreur quand elle apparaît et à chaque envoi refusé : none (par défaut), zigzag, pop, drop, echo, jitter ou wobble. */
+  @Prop({ reflect: true }) errorAnimation: ErrorAnimation = 'none';
 
   /** Émis quand l'option choisie change ; detail : sa valeur. */
   @Event() crChange: EventEmitter<string>;
@@ -136,7 +138,7 @@ export class CrRadioGroup {
           <RequiredMark required={this.required} />
         </span>
         <div
-          class="group"
+          class="group error-frame"
           role="radiogroup"
           aria-labelledby="label"
           aria-required={this.required ? 'true' : undefined}
@@ -163,7 +165,7 @@ export class CrRadioGroup {
             </button>
           ))}
         </div>
-        <FieldText id="group" error={error} />
+        <FieldText id="group" error={error} animation={this.errorAnimation} />
       </div>
     );
   }

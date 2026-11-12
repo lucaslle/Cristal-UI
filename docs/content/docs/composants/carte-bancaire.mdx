@@ -35,6 +35,8 @@ With `variant="card"`, everything is typed directly on the card: the number in t
 - The form receives `name` (the number without spaces), `name-expiry` and `name-cvc`, plus `name-holder` with `holder`. `onCrInput` gives the three values on every keystroke.
 - The number is checked with the Luhn checksum, which catches most typos; the date must not be in the past; the security code has 3 or 4 digits. The error message is shown below the label, and only the affected field gets a red border.
 
+`error-animation` animates the error when it appears and on every rejected submit (zigzag, badge, echo…): see [Animated error](/docs/composants/champ-texte#animated-error).
+
 ## Accessibility
 
 - Each field has its visible label and the browser autofill hint (`cc-number`, `cc-exp`, `cc-csc`, `cc-name`); the numeric keyboard opens on mobile.

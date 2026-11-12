@@ -38,6 +38,8 @@ The boxes fill one by one while typing; when the code is complete, they turn gre
 
 A pasted code arrives as a quick cascade, digit after digit; deleting a digit undoes the complete state. When the user asks for less motion (`prefers-reduced-motion`), nothing moves: digits and colours change instantly.
 
+`error-animation` animates the error when it appears and on every rejected submit (zigzag, badge, echo…): see [Animated error](/docs/composants/champ-texte#animated-error).
+
 ## Accessibility
 
 - A single real field, invisible and laid over the boxes: one label for screen readers, and both pasting ("123 456") and autofill of the code received by SMS (`autocomplete="one-time-code"`) work.

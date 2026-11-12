@@ -20,7 +20,7 @@ const CardIcon = () => (
 
 /** Champs classiques : numéro, puis titulaire, expiration et CVC qui glissent quand le numéro est complet. */
 export const CardFields = ({ inputs, complete, holder, m }: { inputs: CardInputs; complete: boolean; holder: boolean; m: Messages }) => (
-  <div class="card">
+  <div class="card error-frame">
     <div class="number">
       <CardIcon />
       <input class="control" placeholder="1234 5678 9012 3456" {...inputs.number} />
@@ -50,7 +50,7 @@ export const CardFields = ({ inputs, complete, holder, m }: { inputs: CardInputs
 export const CardEditor = ({ inputs, digits, holder, flipped, m }: { inputs: CardInputs; digits: string; holder: boolean; flipped: boolean; m: Messages }) => {
   const brand = brandOf(digits);
   return (
-    <div class={{ visual: true, editor: true, flipped }} data-brand={brand || 'default'}>
+    <div class={{ visual: true, editor: true, 'error-frame': true, flipped }} data-brand={brand || 'default'}>
       <div class="face front">
         <span key={`skin-${brand}`} class="skin" aria-hidden="true" />
         <div class="row" aria-hidden="true">

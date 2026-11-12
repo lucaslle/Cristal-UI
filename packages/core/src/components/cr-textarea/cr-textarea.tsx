@@ -1,5 +1,5 @@
 import { AttachInternals, Component, Element, Event, EventEmitter, Listen, Prop, State, h } from '@stencil/core';
-import { FieldHeader, describedBy } from '../../utils/field';
+import { FieldHeader, describedBy, ErrorAnimation } from '../../utils/field';
 import { handleInvalid, validationMessage } from '../../utils/validation';
 import { t } from '../../utils/i18n';
 
@@ -11,7 +11,7 @@ import { t } from '../../utils/i18n';
  */
 @Component({
   tag: 'cr-textarea',
-  styleUrls: ['../../global/field.css', 'cr-textarea.css'],
+  styleUrls: ['../../global/field.css', '../../global/field-error.css', '../../global/field-error-motion.css', 'cr-textarea.css'],
   shadow: { delegatesFocus: true },
   formAssociated: true,
 })
@@ -39,6 +39,8 @@ export class CrTextarea {
   @Prop({ reflect: true }) required = false;
   /** Désactive le champ. */
   @Prop({ reflect: true }) disabled = false;
+  /** Animation de l'erreur quand elle apparaît et à chaque envoi refusé : none (par défaut), zigzag, pop, drop, echo, jitter ou wobble. */
+  @Prop({ reflect: true }) errorAnimation: ErrorAnimation = 'none';
 
   /** Émis à chaque frappe ; detail : le texte. */
   @Event() crInput: EventEmitter<string>;
@@ -96,8 +98,8 @@ export class CrTextarea {
     const error = this.error || (this.touched ? validationMessage(this.textarea?.validity, 'text', t(this.el)) : '');
     return (
       <div class="field">
-        <FieldHeader id={id} label={this.label} required={this.required} hint={this.hint} error={error} />
-        <div class={{ grow: true, 'has-end': this.hasEnd }} style={{ '--lines': `${Math.max(this.lines, this.rows)}` }}>
+        <FieldHeader id={id} label={this.label} required={this.required} hint={this.hint} error={error} animation={this.errorAnimation} />
+        <div class={{ grow: true, 'error-frame': true, 'has-end': this.hasEnd }} style={{ '--lines': `${Math.max(this.lines, this.rows)}` }}>
           <div ref={(el) => (this.mirror = el)} class="mirror" aria-hidden="true">
             {`${this.value} `}
           </div>

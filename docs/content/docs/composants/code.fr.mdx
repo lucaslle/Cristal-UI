@@ -38,6 +38,8 @@ Les cases se remplissent une à une pendant la frappe ; quand le code est comple
 
 Un code collé d'un coup arrive en cascade, chiffre après chiffre ; effacer un chiffre défait l'état complet. Quand l'utilisateur demande moins d'animations (`prefers-reduced-motion`), rien ne bouge : les chiffres et les couleurs changent instantanément.
 
+`error-animation` anime l'erreur quand elle apparaît et à chaque envoi refusé (zigzag, pastille, écho…) : voir [Erreur animée](/docs/composants/champ-texte#erreur-animée).
+
 ## Accessibilité
 
 - Un seul vrai champ, invisible et posé sur les cases : un seul libellé pour les lecteurs d'écran, et le collage (« 123 456 ») comme le remplissage automatique du code reçu par SMS (`autocomplete="one-time-code"`) fonctionnent.

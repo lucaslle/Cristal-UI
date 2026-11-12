@@ -1,5 +1,13 @@
+/* Pastille de l'erreur animée (pop) après le libellé. */
+:host {
+  --error-top: 50%;
+  --error-end: -28px;
+}
+
+/* Ajustée au contenu : le zigzag et les échos de l'erreur animée suivent la case et son libellé. */
 .row {
   display: flex;
+  width: fit-content;
   align-items: center;
   gap: var(--cr-spacing-sm);
 }

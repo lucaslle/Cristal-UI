@@ -35,6 +35,8 @@ Avec `variant="card"`, tout s'écrit directement sur la carte : le numéro au ce
 - Le formulaire reçoit `name` (le numéro sans espaces), `name-expiry` et `name-cvc`, plus `name-holder` avec `holder`. `onCrInput` donne les trois valeurs à chaque frappe.
 - Le numéro est vérifié avec la clé de Luhn, qui repère la plupart des fautes de frappe ; la date ne doit pas être passée ; le cryptogramme a 3 ou 4 chiffres. Le message d'erreur s'affiche sous le libellé, et seul le champ concerné est bordé de rouge.
 
+`error-animation` anime l'erreur quand elle apparaît et à chaque envoi refusé (zigzag, pastille, écho…) : voir [Erreur animée](/docs/composants/champ-texte#erreur-animée).
+
 ## Accessibilité
 
 - Chaque champ a son libellé visible et l'indication de remplissage automatique du navigateur (`cc-number`, `cc-exp`, `cc-csc`, `cc-name`) ; le clavier numérique s'ouvre sur mobile.

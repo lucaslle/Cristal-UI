@@ -1,5 +1,5 @@
 import { AttachInternals, Build, Component, Element, Event, EventEmitter, Listen, Prop, State, h } from '@stencil/core';
-import { FieldHeader, describedBy } from '../../utils/field';
+import { FieldHeader, describedBy, ErrorAnimation } from '../../utils/field';
 import { ListOption, readOptions, revealInList, watchOptions } from '../../utils/listbox';
 import { firstEnabled, formValue, summary, toggle, visibleIndices } from '../../utils/selection';
 import { selectKeyboard } from '../../utils/select-keyboard';
@@ -22,7 +22,7 @@ import { t } from '../../utils/i18n';
  */
 @Component({
   tag: 'cr-select',
-  styleUrls: ['../../global/field.css', '../../global/popup.css', 'cr-select.css'],
+  styleUrls: ['../../global/field.css', '../../global/popup.css', '../../global/field-error.css', '../../global/field-error-motion.css', 'cr-select.css'],
   shadow: { delegatesFocus: true },
   formAssociated: true,
 })
@@ -56,6 +56,8 @@ export class CrSelect {
   @Prop({ reflect: true }) required = false;
   /** Désactive la liste. */
   @Prop({ reflect: true }) disabled = false;
+  /** Animation de l'erreur quand elle apparaît et à chaque envoi refusé : none (par défaut), zigzag, pop, drop, echo, jitter ou wobble. */
+  @Prop({ reflect: true }) errorAnimation: ErrorAnimation = 'none';
   /** Animation d'ouverture et de fermeture de la liste. */
   @Prop() animation: PopupAnimation = 'fade';
 
@@ -161,7 +163,7 @@ export class CrSelect {
     const error = this.error || (this.touched && this.required && !selection.length ? missingMessage(this.kind(), t(this.el)) : '');
     return (
       <div class="field">
-        <FieldHeader id={id} labelId="label" label={this.label} required={this.required} hint={this.hint} error={error} />
+        <FieldHeader id={id} labelId="label" label={this.label} required={this.required} hint={this.hint} error={error} animation={this.errorAnimation} />
         <ComboTrigger
           ref={(el) => (this.trigger = el)}
           open={this.open}

@@ -98,7 +98,7 @@ export const ComboTrigger = (props: ComboTriggerProps) => (
   <button
     ref={props.ref}
     id="control"
-    class="control trigger"
+    class="control trigger error-frame"
     part="control"
     type="button"
     role="combobox"

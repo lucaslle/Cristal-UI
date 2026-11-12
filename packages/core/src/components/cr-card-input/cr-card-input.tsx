@@ -2,7 +2,7 @@ import { AttachInternals, Component, Element, Event, EventEmitter, Listen, Prop,
 import { CardEditor, CardFields, CardInputs } from '../../utils/card-layouts';
 import { CardVisual } from '../../utils/card-visual';
 import { cardError, cardLength, caretAfter, digitsOf, expiryError, formatExpiry, groupCard } from '../../utils/card';
-import { FieldHeader, describedBy } from '../../utils/field';
+import { FieldHeader, describedBy, ErrorAnimation } from '../../utils/field';
 import { handleInvalid } from '../../utils/validation';
 import { t } from '../../utils/i18n';
 
@@ -21,7 +21,7 @@ export interface CardValue {
  */
 @Component({
   tag: 'cr-card-input',
-  styleUrls: ['../../global/field.css', 'cr-card-input.css', 'card-visual.css', 'card-editor.css'],
+  styleUrls: ['../../global/field.css', '../../global/field-error.css', '../../global/field-error-motion.css', 'cr-card-input.css', 'card-visual.css', 'card-editor.css'],
   shadow: { delegatesFocus: true },
   formAssociated: true,
 })
@@ -41,6 +41,8 @@ export class CrCardInput {
   @Prop({ reflect: true }) required = false;
   /** Désactive les champs. */
   @Prop({ reflect: true }) disabled = false;
+  /** Animation de l'erreur quand elle apparaît et à chaque envoi refusé : none (par défaut), zigzag, pop, drop, echo, jitter ou wobble. */
+  @Prop({ reflect: true }) errorAnimation: ErrorAnimation = 'none';
   /** Affiche une carte dessinée qui se remplit pendant la frappe et se retourne pour le cryptogramme. */
   @Prop() preview = false;
   /** Ajoute le champ « Titulaire » (nom inscrit sur la carte), envoyé sous name-holder. */
@@ -157,7 +159,7 @@ export class CrCardInput {
     return (
       <div class="field">
         {this.preview && this.variant !== 'card' && <CardVisual digits={this.digits} expiry={this.expiry} cvc={this.cvc} holder={this.holderName} flipped={this.cvcFocused} m={t(this.el)} />}
-        <FieldHeader id={id} label={this.label} required={this.required} hint={this.hint} error={error} />
+        <FieldHeader id={id} label={this.label} required={this.required} hint={this.hint} error={error} animation={this.errorAnimation} />
         {this.variant === 'card' ? (
           <CardEditor inputs={inputs} digits={this.digits} holder={this.holder} flipped={this.cvcFocused} m={t(this.el)} />
         ) : (

@@ -6,6 +6,7 @@ description: Saisie de texte, e-mail, mot de passe ou nombre. Balise cr-input, c
 import InputBasic from '@/demos/input-basic';
 import FormComplete from '@/demos/form-complete';
 import InputExtras from '@/demos/input-extras';
+import InputErrorAnimation from '@/demos/input-error-animation';
 
 ## Exemples
 
@@ -29,6 +30,30 @@ Les erreurs de saisie s'affichent toutes seules, en français sur une page en `l
 | `type="number"` non numérique | Saisissez un nombre. |
 
 À l'envoi, le focus va sur le **premier champ en erreur**, et son message est lu par les lecteurs d'écran. Pour une erreur venant du serveur (« cette adresse est déjà utilisée »), passez votre propre message avec `error` : il remplace le message automatique.
+
+## Erreur animée
+
+`error-animation` (`errorAnimation` en React) anime l'erreur quand elle apparaît, puis de nouveau à **chaque envoi refusé**, même si le message n'a pas changé. Choisissez une animation, puis cliquez sur Continuer avec le champ vide ou une adresse incomplète.
+
+<Preview column>
+  <InputErrorAnimation />
+</Preview>
+
+<include>../../../demos/input-error-animation.tsx</include>
+
+| `error-animation` | Effet |
+|---|---|
+| `none` | aucune animation (par défaut) |
+| `zigzag` | le bas du champ devient un trait rouge en zigzag qui vibre, puis se remet à plat |
+| `pop` | une pastille rouge « ! » surgit au bout du champ avec un ressort et quelques étincelles, puis reste |
+| `drop` | le message tombe et se balance, accroché par son coin haut gauche comme une pancarte |
+| `echo` | la bordure clignote deux fois en rouge et envoie deux échos qui s'élargissent |
+| `jitter` | les lettres du message sautent et frémissent l'une après l'autre |
+| `wobble` | le champ tangue comme de la gelée, puis se stabilise |
+
+La même propriété existe sur la [zone de texte](/docs/composants/zone-de-texte), le [code à usage unique](/docs/composants/code), la [liste déroulante](/docs/composants/liste-deroulante), les [étiquettes](/docs/composants/etiquettes), la [carte bancaire](/docs/composants/carte-bancaire), la [case à cocher](/docs/composants/case-a-cocher), les [boutons radio](/docs/composants/boutons-radio), le [sélecteur de date](/docs/composants/selecteur-de-date) et le [dépôt de fichiers](/docs/composants/depot-de-fichiers). Sur la case à cocher et les boutons radio, le zigzag passe sous la case et son libellé, la pastille se pose après eux et c'est tout le bloc qui tangue ; sur le code, la pastille suit la dernière case et les échos entourent toutes les cases ; sur le dépôt de fichiers, l'animation joue à chaque fichier refusé.
+
+Le message reste une seule phrase pour les lecteurs d'écran (avec `jitter`, les lettres qui sautent sont une copie masquée) et reste lisible à chaque instant : il bouge, mais ne part jamais de la transparence. Quand l'utilisateur réduit les animations (`prefers-reduced-motion`), rien ne bouge : la bordure rouge et le message s'affichent directement, sans étincelles ni échos. En couleurs forcées, le champ en erreur reçoit un contour aux couleurs du système.
 
 ## Sécurité du mot de passe et complétion
 

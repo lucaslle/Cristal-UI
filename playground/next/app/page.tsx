@@ -23,6 +23,7 @@ import { LoadingDemo } from './loading-demo';
 import { TableDemo } from './table-demo';
 import { FieldsDemo } from './fields-demo';
 import { OtpDemo } from './otp-demo';
+import { FieldErrorDemo } from './field-error-demo';
 import { GridLayoutDemo } from './grid-layout-demo';
 import { FormDemo } from './form-demo';
 import { MenuDemo } from './menu-demo';
@@ -194,6 +195,9 @@ export default function Page() {
       <h2>Champs animés</h2>
       <FieldsDemo />
       <OtpDemo />
+
+      <h2>Erreurs animées</h2>
+      <FieldErrorDemo />
 
       <h2>Tableau</h2>
       <TableDemo />

@@ -1,5 +1,5 @@
 import { AttachInternals, Component, Element, Event, EventEmitter, Listen, Prop, State, h } from '@stencil/core';
-import { FieldText, RequiredMark, describedBy } from '../../utils/field';
+import { FieldText, RequiredMark, describedBy, ErrorAnimation } from '../../utils/field';
 import { handleInvalid, validationMessage } from '../../utils/validation';
 import { t } from '../../utils/i18n';
 
@@ -12,7 +12,7 @@ import { t } from '../../utils/i18n';
  */
 @Component({
   tag: 'cr-checkbox',
-  styleUrls: ['../../global/field.css', 'cr-checkbox.css'],
+  styleUrls: ['../../global/field.css', '../../global/field-error.css', '../../global/field-error-motion.css', 'cr-checkbox.css'],
   shadow: { delegatesFocus: true },
   formAssociated: true,
 })
@@ -38,6 +38,8 @@ export class CrCheckbox {
   @Prop({ reflect: true }) required = false;
   /** Désactive la case. */
   @Prop({ reflect: true }) disabled = false;
+  /** Animation de l'erreur quand elle apparaît et à chaque envoi refusé : none (par défaut), zigzag, pop, drop, echo, jitter ou wobble. */
+  @Prop({ reflect: true }) errorAnimation: ErrorAnimation = 'none';
 
   /** Émis quand la case change ; detail : l'état coché. */
   @Event() crChange: EventEmitter<boolean>;
@@ -85,7 +87,7 @@ export class CrCheckbox {
     const error = this.error || (this.touched ? validationMessage(this.input?.validity, 'checkbox', t(this.el)) : '');
     return (
       <div class="field">
-        <div class="row">
+        <div class="row error-frame">
           <input
             ref={(el) => (this.input = el)}
             id={id}
@@ -104,7 +106,7 @@ export class CrCheckbox {
             <RequiredMark required={this.required} />
           </label>
         </div>
-        <FieldText id={id} hint={this.hint} error={error} />
+        <FieldText id={id} hint={this.hint} error={error} animation={this.errorAnimation} />
       </div>
     );
   }

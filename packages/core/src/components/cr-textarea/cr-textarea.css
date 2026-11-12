@@ -4,6 +4,12 @@
   position: relative;
 }
 
+/* Pastille de l'erreur animée (pop) avant le bouton du slot end.
+   shortcut: suppose un seul bouton icône dans end ; à mesurer si le slot reçoit plus large. */
+.grow.has-end {
+  --error-end: calc(var(--cr-control-m) + var(--cr-spacing-sm));
+}
+
 .control,
 .mirror {
   box-sizing: border-box;

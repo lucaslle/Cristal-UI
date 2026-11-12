@@ -1,4 +1,5 @@
 import type { Messages } from './i18n';
+import { replayError } from './field-error';
 
 export type FieldKind = 'text' | 'email' | 'url' | 'number' | 'checkbox' | 'select' | 'select-multiple';
 
@@ -18,6 +19,7 @@ export const kindOf = (type: string): FieldKind =>
 
 export const handleInvalid = (event: Event, host: HTMLElement, focusTarget?: HTMLElement) => {
   event.preventDefault();
+  replayError(host);
   const form = host.closest('form');
   if (form?.querySelector(':invalid') === host) focusTarget?.focus();
 };

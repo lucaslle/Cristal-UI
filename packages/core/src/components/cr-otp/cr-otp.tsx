@@ -1,6 +1,6 @@
 import { AttachInternals, Component, Element, Event, EventEmitter, Listen, Prop, State, Watch, h } from '@stencil/core';
 import { t } from '../../utils/i18n';
-import { FieldHeader, describedBy } from '../../utils/field';
+import { FieldHeader, describedBy, ErrorAnimation } from '../../utils/field';
 import { handleInvalid } from '../../utils/validation';
 
 /**
@@ -10,7 +10,7 @@ import { handleInvalid } from '../../utils/validation';
  */
 @Component({
   tag: 'cr-otp',
-  styleUrls: ['../../global/field.css', 'cr-otp.css', 'cr-otp-motion.css', 'cr-otp-morph.css'],
+  styleUrls: ['../../global/field.css', '../../global/field-error.css', '../../global/field-error-motion.css', 'cr-otp.css', 'cr-otp-motion.css', 'cr-otp-morph.css'],
   shadow: { delegatesFocus: true },
   formAssociated: true,
 })
@@ -34,6 +34,8 @@ export class CrOtp {
   @Prop({ reflect: true }) required = false;
   /** Désactive le champ. */
   @Prop({ reflect: true }) disabled = false;
+  /** Animation de l'erreur quand elle apparaît et à chaque envoi refusé : none (par défaut), zigzag, pop, drop, echo, jitter ou wobble. */
+  @Prop({ reflect: true }) errorAnimation: ErrorAnimation = 'none';
   /**
    * Animation de la saisie : pop (le chiffre apparaît, vague verte à la fin, par défaut), bounce (le chiffre tombe, la case s'écrase et rebondit),
    * stretch (un seul anneau de focus s'étire de case en case, puis entoure tout le code), spin (les chiffres défilent comme une machine à sous),
@@ -103,8 +105,8 @@ export class CrOtp {
     const spin = this.animation === 'spin';
     return (
       <div class="field">
-        <FieldHeader id={id} label={this.label} required={this.required} hint={this.hint} error={error} />
-        <div class={{ otp: true, complete, invalid: !!error, back: this.value.length < this.from }} style={{ '--n': `${this.length}` }}>
+        <FieldHeader id={id} label={this.label} required={this.required} hint={this.hint} error={error} animation={this.errorAnimation} />
+        <div class={{ otp: true, 'error-frame': true, complete, invalid: !!error, back: this.value.length < this.from }} style={{ '--n': `${this.length}` }}>
           <input
             ref={(el) => (this.input = el)}
             id={id}

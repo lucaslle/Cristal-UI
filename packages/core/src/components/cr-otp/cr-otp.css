@@ -1,3 +1,9 @@
+/* Pastille de l'erreur animée (pop) après la dernière case. */
+:host {
+  --error-top: 26px;
+  --error-end: -32px;
+}
+
 .otp {
   position: relative;
   display: flex;

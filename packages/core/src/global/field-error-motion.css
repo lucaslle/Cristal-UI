@@ -1,0 +1,176 @@
+/* Animations de l'erreur animée ; rien ne bouge quand l'utilisateur réduit les animations. */
+@media (prefers-reduced-motion: no-preference) {
+  :host([error-animation='zigzag']) .field:has(> .error) .error-frame::before {
+    animation: cr-err-zigzag 0.7s ease-out;
+  }
+
+  :host([error-animation='pop']) .field:has(> .error) .error-frame::after {
+    animation:
+      cr-err-pop 0.55s cubic-bezier(0.3, 1.6, 0.5, 1),
+      cr-err-sparks 0.6s 0.08s ease-out;
+  }
+
+  :host([error-animation='drop']) .field > .error {
+    animation: cr-err-drop 0.9s;
+  }
+
+  :host([error-animation='echo']) .field:has(> .error) .error-frame {
+    animation: cr-err-flash 0.6s linear;
+  }
+
+  /* Deux échos, un par éclair ; ils n'existent que pendant l'animation. */
+  :host([error-animation='echo']) .field:has(> .error) .error-frame::before,
+  :host([error-animation='echo']) .field:has(> .error) .error-frame::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    outline: 2px solid var(--cr-color-danger);
+    opacity: 0;
+    pointer-events: none;
+    animation: cr-err-ring 0.6s ease-out;
+  }
+
+  :host([error-animation='echo']) .field:has(> .error) .error-frame::after {
+    animation-delay: 0.3s;
+  }
+
+  :host([error-animation='jitter']) .field > .error .letter {
+    animation: cr-err-hop 0.45s calc(min(var(--i) * 15ms, 0.45s)) ease-out;
+  }
+
+  :host([error-animation='wobble']) .field:has(> .error) .error-frame {
+    animation: cr-err-wobble 0.75s ease-in-out;
+  }
+}
+
+@keyframes cr-err-zigzag {
+  from {
+    height: 2px;
+    mask-image: var(--zigzag);
+  }
+  10%,
+  60% {
+    height: 10px;
+  }
+  85% {
+    height: 3px;
+    mask-image: var(--zigzag);
+  }
+  20%,
+  40% {
+    mask-position: -3px 0;
+    translate: 0 calc(50% - 1px);
+  }
+  30%,
+  50% {
+    mask-position: 3px 0;
+    translate: 0 calc(50% + 1px);
+  }
+}
+
+@keyframes cr-err-pop {
+  from {
+    scale: 0;
+  }
+}
+
+@keyframes cr-err-sparks {
+  from {
+    box-shadow:
+      0 0 0 -6px var(--cr-color-danger),
+      0 0 0 -6px var(--cr-color-danger),
+      0 0 0 -6px var(--cr-color-danger),
+      0 0 0 -6px var(--cr-color-danger),
+      0 0 0 -6px var(--cr-color-danger),
+      0 0 0 -6px var(--cr-color-danger);
+  }
+  to {
+    box-shadow:
+      0 -22px 0 -10px var(--cr-color-danger),
+      19px -11px 0 -10px var(--cr-color-danger),
+      19px 11px 0 -10px var(--cr-color-danger),
+      0 22px 0 -10px var(--cr-color-danger),
+      -19px 11px 0 -10px var(--cr-color-danger),
+      -19px -11px 0 -10px var(--cr-color-danger);
+  }
+}
+
+@keyframes cr-err-drop {
+  from {
+    translate: 0 -6px;
+    animation-timing-function: cubic-bezier(0.5, 0, 1, 0.6);
+  }
+  20% {
+    translate: 0 0;
+    rotate: 2.5deg;
+  }
+  40% {
+    rotate: -1.6deg;
+  }
+  58% {
+    rotate: 0.9deg;
+  }
+  76% {
+    rotate: -0.4deg;
+  }
+}
+
+@keyframes cr-err-flash {
+  12%,
+  25%,
+  62%,
+  75% {
+    box-shadow: 0 0 0 2px var(--cr-color-danger);
+  }
+  0%,
+  45%,
+  100% {
+    box-shadow: 0 0 0 0 transparent;
+  }
+}
+
+@keyframes cr-err-ring {
+  from {
+    opacity: 1;
+    outline-offset: 0;
+  }
+  to {
+    opacity: 0;
+    outline-offset: 10px;
+  }
+}
+
+@keyframes cr-err-hop {
+  25% {
+    top: -5px;
+  }
+  45% {
+    top: 0;
+    left: 1px;
+  }
+  65% {
+    left: -1px;
+  }
+  85% {
+    left: 0.5px;
+  }
+}
+
+@keyframes cr-err-wobble {
+  15% {
+    transform: rotate(-2deg) skewX(8deg) scale(1.02, 0.97);
+  }
+  32% {
+    transform: rotate(1.5deg) skewX(-6deg) scale(0.99, 1.02);
+  }
+  49% {
+    transform: rotate(-1deg) skewX(3.5deg);
+  }
+  66% {
+    transform: rotate(0.5deg) skewX(-1.5deg);
+  }
+  83% {
+    transform: rotate(-0.2deg) skewX(0.5deg);
+  }
+}

@@ -135,6 +135,7 @@ Ils participent au `<form>` parent comme des champs natifs (valeur envoyée, val
 | `hint` | tous | texte d'aide, lu par les lecteurs d'écran |
 | `error` | tous | message d'erreur : bordure rouge, `aria-invalid`, lu par les lecteurs d'écran |
 | `required`, `disabled` | tous | comme les champs natifs |
+| `error-animation` | tous, et `cr-textarea`, `cr-otp`, `cr-tag-input`, `cr-card-input`, `cr-radio-group`, `cr-date-picker`, `cr-file-upload` | anime l'erreur quand elle apparaît et à chaque envoi refusé : `none` (par défaut), `zigzag`, `pop`, `drop`, `echo`, `jitter` ou `wobble` ; immobile quand l'utilisateur réduit les animations |
 | `type` | `cr-input` | `text`, `email`, `password`, `number`, `tel`, `url`, `search` |
 | `placeholder` | `cr-input`, `cr-select` | texte indicatif / texte affiché tant qu'aucune option n'est choisie |
 | `autocomplete` | `cr-input` | comme le champ natif |

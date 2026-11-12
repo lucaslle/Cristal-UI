@@ -11,6 +11,7 @@ import { BackgroundVariant } from "./components/cr-background/cr-background";
 import { BadgeVariant } from "./components/cr-badge/cr-badge";
 import { BoxDisplay } from "./components/cr-box/cr-box";
 import { ButtonSize, ButtonType, ButtonVariant } from "./components/cr-button/cr-button";
+import { ErrorAnimation } from "./utils/field";
 import { CardValue } from "./components/cr-card-input/cr-card-input";
 import { GridLayoutItem } from "./utils/grid-keys";
 import { IconButtonVariant, TooltipPlacement } from "./components/cr-icon-button/cr-icon-button";
@@ -27,6 +28,7 @@ export { BackgroundVariant } from "./components/cr-background/cr-background";
 export { BadgeVariant } from "./components/cr-badge/cr-badge";
 export { BoxDisplay } from "./components/cr-box/cr-box";
 export { ButtonSize, ButtonType, ButtonVariant } from "./components/cr-button/cr-button";
+export { ErrorAnimation } from "./utils/field";
 export { CardValue } from "./components/cr-card-input/cr-card-input";
 export { GridLayoutItem } from "./utils/grid-keys";
 export { IconButtonVariant, TooltipPlacement } from "./components/cr-icon-button/cr-icon-button";
@@ -343,6 +345,11 @@ export namespace Components {
          */
         "error"?: string;
         /**
+          * Animation de l'erreur quand elle apparaît et à chaque envoi refusé : none (par défaut), zigzag, pop, drop, echo, jitter ou wobble.
+          * @default 'none'
+         */
+        "errorAnimation": ErrorAnimation;
+        /**
           * Texte d'aide, lu par les lecteurs d'écran.
          */
         "hint"?: string;
@@ -393,6 +400,11 @@ export namespace Components {
           * Message d'erreur ; remplace le message automatique de validation.
          */
         "error"?: string;
+        /**
+          * Animation de l'erreur quand elle apparaît et à chaque envoi refusé : none (par défaut), zigzag, pop, drop, echo, jitter ou wobble.
+          * @default 'none'
+         */
+        "errorAnimation": ErrorAnimation;
         /**
           * Texte d'aide, lu par les lecteurs d'écran.
          */
@@ -458,6 +470,11 @@ export namespace Components {
           * @default false
          */
         "disabled": boolean;
+        /**
+          * Animation de l'erreur quand elle apparaît et à chaque envoi refusé : none (par défaut), zigzag, pop, drop, echo, jitter ou wobble.
+          * @default 'none'
+         */
+        "errorAnimation": ErrorAnimation;
         /**
           * Libellé affiché au-dessus du champ (obligatoire).
          */
@@ -565,6 +582,11 @@ export namespace Components {
           * @default false
          */
         "disabled": boolean;
+        /**
+          * Animation de l'erreur quand elle apparaît et à chaque envoi refusé : none (par défaut), zigzag, pop, drop, echo, jitter ou wobble.
+          * @default 'none'
+         */
+        "errorAnimation": ErrorAnimation;
         /**
           * Texte d'aide (formats, taille), lu par les lecteurs d'écran.
          */
@@ -786,6 +808,11 @@ export namespace Components {
          */
         "error"?: string;
         /**
+          * Animation de l'erreur quand elle apparaît et à chaque envoi refusé : none (par défaut), zigzag, pop, drop, echo, jitter ou wobble.
+          * @default 'none'
+         */
+        "errorAnimation": ErrorAnimation;
+        /**
           * Texte d'aide, lu par les lecteurs d'écran.
          */
         "hint"?: string;
@@ -899,6 +926,11 @@ export namespace Components {
           * Message d'erreur ; remplace le message automatique.
          */
         "error"?: string;
+        /**
+          * Animation de l'erreur quand elle apparaît et à chaque envoi refusé : none (par défaut), zigzag, pop, drop, echo, jitter ou wobble.
+          * @default 'none'
+         */
+        "errorAnimation": ErrorAnimation;
         /**
           * Texte d'aide, lu par les lecteurs d'écran.
          */
@@ -1017,6 +1049,11 @@ export namespace Components {
           * @default false
          */
         "disabled": boolean;
+        /**
+          * Animation de l'erreur quand elle apparaît et à chaque envoi refusé : none (par défaut), zigzag, pop, drop, echo, jitter ou wobble.
+          * @default 'none'
+         */
+        "errorAnimation": ErrorAnimation;
         /**
           * Titre affiché au-dessus des options, et nom du groupe pour les lecteurs d'écran.
          */
@@ -1171,6 +1208,11 @@ export namespace Components {
           * Message d'erreur ; remplace le message automatique de validation.
          */
         "error"?: string;
+        /**
+          * Animation de l'erreur quand elle apparaît et à chaque envoi refusé : none (par défaut), zigzag, pop, drop, echo, jitter ou wobble.
+          * @default 'none'
+         */
+        "errorAnimation": ErrorAnimation;
         /**
           * Texte d'aide, lu par les lecteurs d'écran.
          */
@@ -1436,6 +1478,11 @@ export namespace Components {
          */
         "error"?: string;
         /**
+          * Animation de l'erreur quand elle apparaît et à chaque envoi refusé : none (par défaut), zigzag, pop, drop, echo, jitter ou wobble.
+          * @default 'none'
+         */
+        "errorAnimation": ErrorAnimation;
+        /**
           * Texte d'aide, lu par les lecteurs d'écran.
          */
         "hint"?: string;
@@ -1475,6 +1522,11 @@ export namespace Components {
           * Message d'erreur ; remplace le message automatique.
          */
         "error"?: string;
+        /**
+          * Animation de l'erreur quand elle apparaît et à chaque envoi refusé : none (par défaut), zigzag, pop, drop, echo, jitter ou wobble.
+          * @default 'none'
+         */
+        "errorAnimation": ErrorAnimation;
         /**
           * Texte d'aide, lu par les lecteurs d'écran.
          */
@@ -2823,6 +2875,11 @@ declare namespace LocalJSX {
          */
         "error"?: string;
         /**
+          * Animation de l'erreur quand elle apparaît et à chaque envoi refusé : none (par défaut), zigzag, pop, drop, echo, jitter ou wobble.
+          * @default 'none'
+         */
+        "errorAnimation"?: ErrorAnimation;
+        /**
           * The `id` of a `<form>` element to associate this element with.
          */
         "form"?: string;
@@ -2881,6 +2938,11 @@ declare namespace LocalJSX {
           * Message d'erreur ; remplace le message automatique de validation.
          */
         "error"?: string;
+        /**
+          * Animation de l'erreur quand elle apparaît et à chaque envoi refusé : none (par défaut), zigzag, pop, drop, echo, jitter ou wobble.
+          * @default 'none'
+         */
+        "errorAnimation"?: ErrorAnimation;
         /**
           * The `id` of a `<form>` element to associate this element with.
          */
@@ -2962,6 +3024,11 @@ declare namespace LocalJSX {
           * @default false
          */
         "disabled"?: boolean;
+        /**
+          * Animation de l'erreur quand elle apparaît et à chaque envoi refusé : none (par défaut), zigzag, pop, drop, echo, jitter ou wobble.
+          * @default 'none'
+         */
+        "errorAnimation"?: ErrorAnimation;
         /**
           * The `id` of a `<form>` element to associate this element with.
          */
@@ -3085,6 +3152,11 @@ declare namespace LocalJSX {
           * @default false
          */
         "disabled"?: boolean;
+        /**
+          * Animation de l'erreur quand elle apparaît et à chaque envoi refusé : none (par défaut), zigzag, pop, drop, echo, jitter ou wobble.
+          * @default 'none'
+         */
+        "errorAnimation"?: ErrorAnimation;
         /**
           * The `id` of a `<form>` element to associate this element with.
          */
@@ -3334,6 +3406,11 @@ declare namespace LocalJSX {
          */
         "error"?: string;
         /**
+          * Animation de l'erreur quand elle apparaît et à chaque envoi refusé : none (par défaut), zigzag, pop, drop, echo, jitter ou wobble.
+          * @default 'none'
+         */
+        "errorAnimation"?: ErrorAnimation;
+        /**
           * The `id` of a `<form>` element to associate this element with.
          */
         "form"?: string;
@@ -3463,6 +3540,11 @@ declare namespace LocalJSX {
           * Message d'erreur ; remplace le message automatique.
          */
         "error"?: string;
+        /**
+          * Animation de l'erreur quand elle apparaît et à chaque envoi refusé : none (par défaut), zigzag, pop, drop, echo, jitter ou wobble.
+          * @default 'none'
+         */
+        "errorAnimation"?: ErrorAnimation;
         /**
           * The `id` of a `<form>` element to associate this element with.
          */
@@ -3601,6 +3683,11 @@ declare namespace LocalJSX {
           * @default false
          */
         "disabled"?: boolean;
+        /**
+          * Animation de l'erreur quand elle apparaît et à chaque envoi refusé : none (par défaut), zigzag, pop, drop, echo, jitter ou wobble.
+          * @default 'none'
+         */
+        "errorAnimation"?: ErrorAnimation;
         /**
           * The `id` of a `<form>` element to associate this element with.
          */
@@ -3791,6 +3878,11 @@ declare namespace LocalJSX {
           * Message d'erreur ; remplace le message automatique de validation.
          */
         "error"?: string;
+        /**
+          * Animation de l'erreur quand elle apparaît et à chaque envoi refusé : none (par défaut), zigzag, pop, drop, echo, jitter ou wobble.
+          * @default 'none'
+         */
+        "errorAnimation"?: ErrorAnimation;
         /**
           * The `id` of a `<form>` element to associate this element with.
          */
@@ -4088,6 +4180,11 @@ declare namespace LocalJSX {
          */
         "error"?: string;
         /**
+          * Animation de l'erreur quand elle apparaît et à chaque envoi refusé : none (par défaut), zigzag, pop, drop, echo, jitter ou wobble.
+          * @default 'none'
+         */
+        "errorAnimation"?: ErrorAnimation;
+        /**
           * The `id` of a `<form>` element to associate this element with.
          */
         "form"?: string;
@@ -4135,6 +4232,11 @@ declare namespace LocalJSX {
           * Message d'erreur ; remplace le message automatique.
          */
         "error"?: string;
+        /**
+          * Animation de l'erreur quand elle apparaît et à chaque envoi refusé : none (par défaut), zigzag, pop, drop, echo, jitter ou wobble.
+          * @default 'none'
+         */
+        "errorAnimation"?: ErrorAnimation;
         /**
           * The `id` of a `<form>` element to associate this element with.
          */
@@ -4276,6 +4378,7 @@ declare namespace LocalJSX {
         "error": string;
         "required": boolean;
         "disabled": boolean;
+        "errorAnimation": ErrorAnimation;
         "preview": boolean;
         "holder": boolean;
         "variant": 'fields' | 'card';
@@ -4290,6 +4393,7 @@ declare namespace LocalJSX {
         "error": string;
         "required": boolean;
         "disabled": boolean;
+        "errorAnimation": ErrorAnimation;
     }
     interface CrCommandPaletteAttributes {
         "open": boolean;
@@ -4305,6 +4409,7 @@ declare namespace LocalJSX {
         "max": string;
         "required": boolean;
         "disabled": boolean;
+        "errorAnimation": ErrorAnimation;
     }
     interface CrDialogAttributes {
         "open": boolean;
@@ -4330,6 +4435,7 @@ declare namespace LocalJSX {
         "accept": string;
         "multiple": boolean;
         "disabled": boolean;
+        "errorAnimation": ErrorAnimation;
     }
     interface CrGridItemAttributes {
         "label": string;
@@ -4383,6 +4489,7 @@ declare namespace LocalJSX {
         "autocomplete": string;
         "required": boolean;
         "disabled": boolean;
+        "errorAnimation": ErrorAnimation;
         "strength": boolean;
     }
     interface CrLoaderAttributes {
@@ -4409,6 +4516,7 @@ declare namespace LocalJSX {
         "error": string;
         "required": boolean;
         "disabled": boolean;
+        "errorAnimation": ErrorAnimation;
         "animation": 'pop' | 'bounce' | 'stretch' | 'spin' | 'merge' | 'zoom' | 'tint';
     }
     interface CrPaginationAttributes {
@@ -4436,6 +4544,7 @@ declare namespace LocalJSX {
         "value": string;
         "required": boolean;
         "disabled": boolean;
+        "errorAnimation": ErrorAnimation;
     }
     interface CrRatingAttributes {
         "label": string;
@@ -4475,6 +4584,7 @@ declare namespace LocalJSX {
         "error": string;
         "required": boolean;
         "disabled": boolean;
+        "errorAnimation": ErrorAnimation;
         "animation": PopupAnimation;
     }
     interface CrSkeletonAttributes {
@@ -4529,6 +4639,7 @@ declare namespace LocalJSX {
         "error": string;
         "required": boolean;
         "disabled": boolean;
+        "errorAnimation": ErrorAnimation;
     }
     interface CrTextareaAttributes {
         "label": string;
@@ -4541,6 +4652,7 @@ declare namespace LocalJSX {
         "placeholder": string;
         "required": boolean;
         "disabled": boolean;
+        "errorAnimation": ErrorAnimation;
     }
     interface CrTooltipAttributes {
         "text": string;
