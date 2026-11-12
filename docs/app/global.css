@@ -243,7 +243,7 @@ html > body[data-scroll-locked] {
 .docs-title {
   font-family: var(--font-display);
   letter-spacing: -0.03em;
-  background: linear-gradient(100deg, #4c1d95, #86198f);
+  background: linear-gradient(100deg, #4c1d95, #7e22ce 45%, #be185d);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -253,11 +253,199 @@ html > body[data-scroll-locked] {
   background-image: linear-gradient(100deg, #e9d5ff, #f0abfc 55%, #a5f3fc);
 }
 
+/* ---------- Pages de doc : l'identité du prisme de l'accueil ---------- */
+
+/* Deux halos discrets en haut de l'écran, qui restent en place pendant le défilement. */
+body {
+  background-image:
+    radial-gradient(56rem 26rem at 88% -10rem, rgb(217 70 239 / 0.1), transparent 70%),
+    radial-gradient(48rem 24rem at 28% -12rem, rgb(124 58 237 / 0.12), transparent 70%);
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+.dark body {
+  background-image:
+    radial-gradient(56rem 26rem at 88% -10rem, rgb(217 70 239 / 0.14), transparent 70%),
+    radial-gradient(48rem 24rem at 28% -12rem, rgb(124 58 237 / 0.2), transparent 70%);
+}
+
+.docs-hero {
+  padding-bottom: 1.75rem;
+  margin-bottom: 0.5rem;
+  border-bottom: 1px solid var(--color-fd-border);
+}
+
+.docs-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin: 0 0 0.9rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-fd-primary);
+}
+
+.docs-eyebrow::before {
+  content: '';
+  width: 1.75rem;
+  height: 2px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--glow-violet), var(--glow-pink), var(--glow-cyan));
+}
+
+#nd-page .docs-title {
+  margin-bottom: 0.9rem;
+  font-size: clamp(2.25rem, 4vw, 3.1rem);
+  font-weight: 700;
+  line-height: 1.08;
+}
+
+#nd-page .docs-lead {
+  max-width: 44rem;
+  margin-bottom: 0;
+  font-size: 1.15rem;
+  line-height: 1.6;
+}
+
+.docs-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 1.1rem 0 0;
+}
+
+.docs-tags code {
+  padding: 0.3rem 0.7rem;
+  font-size: 0.8rem;
+  color: var(--color-fd-accent-foreground);
+  background: color-mix(in oklab, var(--color-fd-primary) 9%, transparent);
+  border: 1px solid color-mix(in oklab, var(--color-fd-primary) 24%, transparent);
+  border-radius: 999px;
+}
+
+.docs-tags code[data-kind='react'] {
+  color: var(--color-fd-foreground);
+  background: var(--color-fd-card);
+  border-color: var(--color-fd-border);
+}
+
+/* La première section suit l'en-tête de près. */
+#nd-page .prose > h2:first-child {
+  margin-top: 0.75em;
+}
+
+/* Titres de section : police d'affichage et un trait du prisme. */
+#nd-page .prose h2 {
+  margin-top: 2.75em;
+  font-family: var(--font-display);
+  letter-spacing: -0.02em;
+}
+
+#nd-page .prose h2::before {
+  content: '';
+  flex: none;
+  align-self: stretch;
+  width: 4px;
+  margin: 0.15em 0.5rem 0.15em 0;
+  border-radius: 4px;
+  background: linear-gradient(180deg, var(--glow-violet), var(--glow-pink));
+}
+
+#nd-page .prose h3 {
+  font-family: var(--font-display);
+  letter-spacing: -0.015em;
+}
+
+#nd-page .prose :not(pre) > code {
+  color: var(--color-fd-accent-foreground);
+  background: color-mix(in oklab, var(--color-fd-primary) 9%, transparent);
+  border-color: color-mix(in oklab, var(--color-fd-primary) 22%, transparent);
+}
+
+/* Blocs de code : un liseré du prisme en haut, une ombre teintée. */
+#nd-page figure.shiki {
+  border-radius: 16px;
+  box-shadow: 0 18px 44px -32px rgb(76 29 149 / 0.5);
+}
+
+#nd-page figure.shiki::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto;
+  z-index: 1;
+  height: 2px;
+  background: linear-gradient(90deg, var(--glow-violet), var(--glow-pink), var(--glow-cyan));
+  opacity: 0.75;
+}
+
+.dark .preview-frame {
+  box-shadow: 0 24px 60px -28px rgb(168 85 247 / 0.5);
+}
+
+/* Menu latéral : rubriques en petites capitales, lien actif marqué d'un trait. */
+#nd-sidebar p {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+#nd-sidebar a[data-active='true'] {
+  font-weight: 600;
+  box-shadow: inset 3px 0 0 var(--color-fd-primary);
+}
+
+/* Cartes de liens : relief au survol et flèche qui glisse. */
+.doc-card {
+  position: relative;
+  border-radius: 16px;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s,
+    border-color 0.2s;
+}
+
+.doc-card h3 {
+  font-family: var(--font-display);
+}
+
+.doc-card::after {
+  content: '→' / '';
+  position: absolute;
+  top: 50%;
+  right: 1.1rem;
+  color: var(--color-fd-primary);
+  opacity: 0;
+  translate: -6px -50%;
+  transition:
+    opacity 0.2s,
+    translate 0.2s;
+}
+
+.doc-card:hover {
+  border-color: color-mix(in oklab, var(--color-fd-primary) 45%, transparent);
+  box-shadow: 0 16px 36px -24px rgb(109 40 217 / 0.55);
+  transform: translateY(-2px);
+}
+
+.doc-card:hover::after {
+  opacity: 1;
+  translate: 0 -50%;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .tilt,
   .btn-glow,
-  .btn-ghost {
+  .btn-ghost,
+  .doc-card,
+  .doc-card::after {
     transition: none;
+  }
+  .doc-card:hover {
+    transform: none;
   }
   .tilt-left,
   .tilt-right {
