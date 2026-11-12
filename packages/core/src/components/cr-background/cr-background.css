@@ -1,0 +1,192 @@
+/* Couleurs tirées du thème : la principale et deux teintes voisines, posées sur la surface à peine teintée. */
+:host {
+  --_base: var(--cr-background-base, color-mix(in oklab, var(--cr-color-primary) 4%, var(--cr-color-surface)));
+  --_c1: var(--cr-background-color-1, var(--cr-color-primary));
+  --_c2: var(--cr-background-color-2, oklch(from var(--cr-color-primary) l c calc(h - 70)));
+  --_c3: var(--cr-background-color-3, oklch(from var(--cr-color-primary) l c calc(h + 60)));
+  display: block;
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  font-family: var(--cr-font-family);
+  color: var(--cr-color-text);
+  background: var(--_base);
+}
+
+.layer {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.layer > *,
+.spark {
+  position: absolute;
+}
+
+/* À l'arrêt (pause, hors de l'écran, onglet caché, ou avant le chargement du script), chaque effet garde une image fixe. */
+.layer:not([data-running]) *,
+.layer:not([data-running]) *::before {
+  animation-play-state: paused !important;
+}
+
+/* aurora : grands halos doux qui se croisent et dérivent lentement. */
+:host([variant='aurora']) .piece {
+  background: radial-gradient(closest-side, color-mix(in oklab, var(--_color) 36%, transparent), color-mix(in oklab, var(--_color) 10%, transparent) 60%, transparent);
+  animation: cr-background-drift var(--_time) ease-in-out infinite alternate;
+}
+
+:host([variant='aurora']) .piece:nth-child(1) { --_color: var(--_c1); --_time: 19s; --_x: 45%; --_y: 10%; left: -20%; top: -45%; width: 70%; height: 110%; }
+:host([variant='aurora']) .piece:nth-child(2) { --_color: var(--_c2); --_time: 23s; --_x: -40%; --_y: 5%; right: -20%; top: -40%; width: 70%; height: 110%; }
+:host([variant='aurora']) .piece:nth-child(3) { --_color: var(--_c3); --_time: 27s; --_x: 40%; --_y: -10%; left: -15%; bottom: -55%; width: 70%; height: 110%; }
+:host([variant='aurora']) .piece:nth-child(4) { --_color: var(--_c1); --_time: 31s; --_x: -45%; --_y: -5%; right: -20%; bottom: -55%; width: 60%; height: 100%; }
+
+@keyframes cr-background-drift {
+  to {
+    transform: translate(var(--_x), var(--_y)) scale(1.15) rotate(15deg);
+  }
+}
+
+/* gradient : un large dégradé qui glisse d'un bout à l'autre, et un reflet clair qui le croise. */
+:host([variant='gradient']) .piece:first-child {
+  inset: 0 auto 0 0;
+  width: 300%;
+  background: linear-gradient(110deg, var(--_c2), var(--_c1), var(--_c3), var(--_c2), var(--_c1));
+  opacity: 0.22;
+  --_shift: -66.667%;
+  animation: cr-background-slide 28s ease-in-out infinite alternate;
+}
+
+:host([variant='gradient']) .piece:last-child {
+  inset: -50% auto -50% -50%;
+  width: 100%;
+  background: radial-gradient(closest-side, color-mix(in oklab, var(--cr-color-surface) 70%, transparent), transparent);
+  --_shift: 100%;
+  animation: cr-background-slide 17s ease-in-out infinite alternate;
+}
+
+/* Glissement horizontal commun à plusieurs effets, sur la distance --_shift. */
+@keyframes cr-background-slide {
+  to {
+    transform: translateX(var(--_shift));
+  }
+}
+
+/* grid : un sol quadrillé qui avance vers l'horizon et s'y efface. */
+:host([variant='grid']) .layer {
+  perspective: 200px;
+  perspective-origin: 50% 60%;
+  background: radial-gradient(70% 30% at 50% 40%, color-mix(in oklab, var(--_c3) 16%, transparent), transparent);
+}
+
+:host([variant='grid']) .piece {
+  bottom: 0;
+  left: -150%;
+  width: 400%;
+  height: 250%;
+  transform-origin: 50% 100%;
+  background:
+    linear-gradient(to right, color-mix(in oklab, var(--_c1) 45%, transparent) 1px, transparent 1px) 0 0 / 48px 48px,
+    linear-gradient(to bottom, color-mix(in oklab, var(--_c1) 45%, transparent) 1px, transparent 1px) 0 0 / 48px 48px;
+  mask-image: linear-gradient(to top, #000, transparent 45%);
+  animation: cr-background-forward 2.4s linear infinite;
+}
+
+/* Le sol avance d'une case puis repart : la boucle ne se voit pas. */
+@keyframes cr-background-forward {
+  from {
+    transform: rotateX(72deg);
+  }
+  to {
+    transform: rotateX(72deg) translateY(48px);
+  }
+}
+
+/* dots : une grille de points ; une vague de points plus gros et plus vifs la traverse. Une période fait 24 points de 22px. */
+:host([variant='dots']) .layer {
+  background: radial-gradient(circle, color-mix(in oklab, var(--_c1) 25%, transparent) 1px, transparent 1.6px) 0 0 / 22px 22px;
+}
+
+.band {
+  inset: 0 auto 0 -528px;
+  width: calc(100% + 528px);
+  mask: linear-gradient(90deg, transparent 15%, #000 50%, transparent 85%) 0 0 / 528px 100% repeat-x;
+  --_shift: 528px;
+  animation: cr-background-slide 9s linear infinite;
+}
+
+/* Le reflet glisse dans un sens, les points dans l'autre : ils restent en place, seule la vague avance. */
+.spark {
+  inset: 0;
+  background: radial-gradient(circle, color-mix(in oklab, var(--_c1) 55%, transparent) 2.2px, transparent 2.8px) 0 0 / 22px 22px;
+  --_shift: -528px;
+  animation: cr-background-slide 9s linear infinite;
+}
+
+/* waves : trois vagues superposées qui glissent à des vitesses différentes. */
+:host([variant='waves']) .layer > svg {
+  bottom: 0;
+  left: 0;
+  width: 200%;
+  height: 46%;
+  fill: var(--_c2);
+  opacity: 0.16;
+  --_shift: -50%;
+  animation: cr-background-slide 26s linear infinite;
+}
+
+:host([variant='waves']) .layer > svg:nth-child(2) { height: 36%; fill: var(--_c1); opacity: 0.14; animation-duration: 19s; animation-direction: reverse; }
+:host([variant='waves']) .layer > svg:nth-child(3) { height: 26%; fill: var(--_c3); opacity: 0.12; animation-duration: 14s; }
+
+canvas {
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  color: var(--_c1);
+  border-color: var(--_c2);
+}
+
+.toggle {
+  position: absolute;
+  z-index: 1;
+  inset-block-end: var(--cr-spacing-sm);
+  inset-inline-end: var(--cr-spacing-sm);
+  display: grid;
+  place-items: center;
+  width: var(--cr-control-xs);
+  height: var(--cr-control-xs);
+  padding: 0;
+  color: var(--cr-color-text);
+  background: var(--cr-color-surface);
+  border: 1px solid var(--cr-color-border);
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.toggle:hover {
+  background: var(--cr-color-primary-subtle);
+}
+
+.toggle:focus-visible {
+  outline: 2px solid var(--cr-color-focus);
+  outline-offset: 2px;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* Contrastes élevés : le fond décoratif disparaît, et son bouton avec. */
+@media (forced-colors: active) {
+  .layer,
+  .toggle {
+    display: none;
+  }
+}

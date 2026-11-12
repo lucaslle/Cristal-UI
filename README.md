@@ -244,6 +244,16 @@ Remplaçant de `div` : `display`, `direction`, `gap`, `padding`, `align`, `justi
 <CrBox display="grid" columns="220px" gap="lg" padding="xl">…</CrBox>
 ```
 
+### Fond animé : `cr-background`
+
+Conteneur dont le contenu s'affiche par-dessus un fond décoratif animé, aux couleurs du thème : `variant` (`aurora` par défaut, `gradient`, `grid`, `dots`, `waves`, `particles` : les points s'écartent du curseur et s'y relient, sauf avec `interactive={false}`). Le contenu reste dans la page, lisible et cliquable. Un bouton pause s'affiche dans le coin (`controls={false}` le masque si l'application a sa propre commande), `paused` arrête l'animation ; elle démarre en pause quand l'utilisateur réduit les animations, et s'arrête hors de l'écran ou quand l'onglet est caché. Couleurs à changer en CSS : `--cr-background-color-1`, `-2`, `-3` et `--cr-background-base`.
+
+```tsx
+<CrBackground variant="aurora">
+  <h1>Vos factures, sans effort</h1>
+</CrBackground>
+```
+
 ### Modale et panneau latéral : `cr-dialog`, `cr-drawer`
 
 Basés sur l'élément natif `<dialog>` : focus piégé dans la fenêtre, fermeture avec Échap, focus rendu au bouton d'ouverture, défilement de la page bloqué.
