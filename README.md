@@ -7,14 +7,32 @@ Documentation : https://lucaslle.github.io/Cristal-UI/
 ## Installation
 
 ```bash
-npm install @cristal/react @cristal/tokens
+npm install @cristal/react
 ```
 
-Importer les tokens une seule fois, à la racine de l'application (`app/layout.tsx` avec Next, `main.tsx` avec React) :
+Un seul paquet : il apporte les composants (`@cristal/core`) et les tokens. Importer les tokens une seule fois, à la racine de l'application (`app/layout.tsx` avec Next, `main.tsx` avec React) :
 
 ```tsx
-import '@cristal/tokens/tokens.css';
+import '@cristal/react/tokens.css';
 ```
+
+Sans React, installer `@cristal/core` et importer `@cristal/tokens/tokens.css`.
+
+### Avant la publication sur npm
+
+Générer les archives (`pnpm --filter @cristal/react --filter @cristal/core --filter @cristal/tokens exec pnpm pack`), les copier dans le projet, puis déclarer `@cristal/react` et dire à npm où trouver ses dépendances encore non publiées :
+
+```json
+{
+  "dependencies": { "@cristal/react": "file:vendor/cristal-react-0.0.0.tgz" },
+  "overrides": {
+    "@cristal/core": "file:vendor/cristal-core-0.0.0.tgz",
+    "@cristal/tokens": "file:vendor/cristal-tokens-0.0.0.tgz"
+  }
+}
+```
+
+Une fois Cristal publié, le bloc `overrides` disparaît.
 
 ## Thème
 

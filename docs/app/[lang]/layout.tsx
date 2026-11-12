@@ -1,6 +1,6 @@
 import { Inter, Sora } from 'next/font/google';
 import { Provider } from '@/components/provider';
-import '@cristal/tokens/tokens.css';
+import '@cristal/react/tokens.css';
 import '../global.css';
 import { i18n, type Lang } from '@/lib/i18n';
 
