@@ -48,15 +48,15 @@ button.star:disabled {
 }
 
 .on .icon {
-  --fill: var(--cr-color-primary);
-  --stroke: var(--cr-color-primary);
+  --fill: var(--cr-color-primary-indicator);
+  --stroke: var(--cr-color-primary-indicator);
 }
 
 /* Survol : prévisualise la note jusqu'à l'étoile pointée, sans attendre la vague. */
 @media (hover: hover) {
   .group:hover button.star:not(:disabled) .icon {
-    --fill: var(--cr-color-primary);
-    --stroke: var(--cr-color-primary);
+    --fill: var(--cr-color-primary-indicator);
+    --stroke: var(--cr-color-primary-indicator);
   }
   .group:hover button.star:not(:disabled):hover ~ .star .icon {
     --fill: transparent;

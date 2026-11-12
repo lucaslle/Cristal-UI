@@ -52,7 +52,7 @@
 }
 
 [aria-checked='true'] .circle {
-  border-color: var(--cr-color-primary);
+  border-color: var(--cr-color-primary-indicator);
 }
 
 .option:disabled .circle {
@@ -65,7 +65,7 @@
   position: absolute;
   width: 10px;
   border-radius: 5px;
-  background: var(--cr-color-primary);
+  background: var(--cr-color-primary-indicator);
   opacity: 0;
   transform: scale(0);
   transition:
@@ -94,7 +94,7 @@
 
 /* Avant l'hydratation (rendu serveur), le point est dessiné dans le cercle choisi. */
 :host(:not([data-ready])) [aria-checked='true'] .circle {
-  background: radial-gradient(var(--cr-color-primary) 0 4px, transparent 5px);
+  background: radial-gradient(var(--cr-color-primary-indicator) 0 4px, transparent 5px);
 }
 
 .error {

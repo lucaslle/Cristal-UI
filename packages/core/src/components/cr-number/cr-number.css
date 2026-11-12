@@ -125,11 +125,11 @@
 
 /* count : teinte foncée de la couleur de succès ou de danger, pour garder 4.5:1 sur la surface. */
 .trend-up {
-  color: oklch(from var(--cr-color-success) min(l, 0.45) c h);
+  color: oklch(from var(--cr-color-success) clamp(var(--cr-text-lightness-min), l, var(--cr-text-lightness-max)) c h);
 }
 
 .trend-down {
-  color: oklch(from var(--cr-color-danger) min(l, 0.45) c h);
+  color: oklch(from var(--cr-color-danger) clamp(var(--cr-text-lightness-min), l, var(--cr-text-lightness-max)) c h);
 }
 
 /* Flèche dessinée (pas un caractère) : elle s'ouvre, puis se replie et s'efface. */

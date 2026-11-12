@@ -38,7 +38,7 @@
   --slow: 0.6s 0.1s cubic-bezier(0.3, 1.25, 0.5, 1);
   /* Il s'écarte de 4px pour entourer les cases sans les toucher. */
   margin: -4px;
-  border-color: oklch(from var(--cr-color-success) min(l, 0.45) c h);
+  border-color: oklch(from var(--cr-color-success) clamp(var(--cr-text-lightness-min), l, var(--cr-text-lightness-max)) c h);
   border-radius: calc(var(--cr-radius-m) + 4px);
   box-shadow: none;
 }

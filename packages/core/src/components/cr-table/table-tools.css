@@ -103,7 +103,7 @@
   width: 18px;
   height: 18px;
   margin: 0;
-  accent-color: var(--cr-color-primary);
+  accent-color: var(--cr-color-primary-indicator);
 }
 
 .badge {

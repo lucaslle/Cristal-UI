@@ -12,7 +12,9 @@ export default function BackgroundColors() {
           <p>Les couleurs suivent la couleur principale du thème.</p>
         </CrBackground>
       </div>
+      {/* Fond clair choisi à la main : cr-theme garde le texte du thème clair, même quand la page est sombre. */}
       <CrBackground
+        className="cr-theme"
         variant="waves"
         style={
           {

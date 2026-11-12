@@ -69,7 +69,7 @@
 
 /* Toutes les cases remplies : elles passent au vert l'une après l'autre, en vague. */
 .complete .box {
-  --mint: oklch(from var(--cr-color-success) min(l, 0.45) c h);
+  --mint: oklch(from var(--cr-color-success) clamp(var(--cr-text-lightness-min), l, var(--cr-text-lightness-max)) c h);
   color: var(--mint);
   background: color-mix(in oklab, var(--cr-color-success) 12%, var(--cr-color-surface));
   border-color: var(--mint);

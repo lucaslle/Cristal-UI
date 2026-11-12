@@ -1,10 +1,14 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 
-const css = readFileSync(join(process.cwd(), 'node_modules/@cristal/react/dist/tokens.css'), 'utf8');
-const tokens = [...css.matchAll(/(--cr-[\w-]+):\s*([^;]+);/g)].map(([, name, value]) => ({ name, value }));
+const read = (file: string) => {
+  const css = readFileSync(join(process.cwd(), 'node_modules/@cristal/react/dist', file), 'utf8');
+  return [...css.matchAll(/(--cr-[\w-]+):\s*([^;]+);/g)].map(([, name, value]) => ({ name, value }));
+};
+const files = { light: read('tokens.css'), dark: read('tokens-dark.css') };
 
-export function TokenTable({ prefix, lang = 'en' }: { prefix: string; lang?: string }) {
+export function TokenTable({ prefix, lang = 'en', theme = 'light' }: { prefix: string; lang?: string; theme?: 'light' | 'dark' }) {
+  const tokens = files[theme];
   return (
     <table>
       <thead>
@@ -23,7 +27,7 @@ export function TokenTable({ prefix, lang = 'en' }: { prefix: string; lang?: str
               </td>
               <td>
                 <span className="inline-flex items-center gap-2">
-                  {prefix === '--cr-color' && (
+                  {token.name.startsWith('--cr-color') && (
                     <span aria-hidden="true" className="inline-block size-4 rounded border" style={{ background: token.value }} />
                   )}
                   <code>{token.value}</code>

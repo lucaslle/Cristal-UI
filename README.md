@@ -16,7 +16,7 @@ Un seul paquet : il apporte les composants (`@cristal/core`) et les tokens. Impo
 import '@cristal/react/tokens.css';
 ```
 
-Sans React, installer `@cristal/core` et importer `@cristal/tokens/tokens.css`.
+Sans React, installer `@cristal/core` et importer `@cristal/react/tokens.css`.
 
 ### Avant la publication sur npm
 
@@ -45,6 +45,15 @@ Une ligne suffit pour donner votre couleur à toute l'application ; les nuances 
 ```
 
 Pour un thème limité à une zone : classe `cr-theme` sur le conteneur et `--cr-color-primary` redéfinie dessus. Un générateur avec vérification des contrastes est disponible sur la page « Thème » de la documentation.
+
+### Thème sombre
+
+Optionnel : importer `@cristal/react/tokens-dark.css` après `tokens.css`, puis poser `data-theme="dark"` sur `<html>` (ou la classe `cr-theme-dark` sur un conteneur). Sans l'attribut, rien ne change, même si le système est en mode sombre. La couleur principale reste celle de votre marque ; le texte, le focus et les indicateurs passent à une nuance claire de cette couleur, avec les mêmes contrastes que le thème clair (4,5:1 pour le texte, 3:1 pour les bordures et le focus).
+
+```ts
+import '@cristal/react/tokens.css';
+import '@cristal/react/tokens-dark.css';
+```
 
 ## Langue
 

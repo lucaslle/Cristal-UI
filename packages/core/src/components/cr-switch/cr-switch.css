@@ -35,7 +35,7 @@
 }
 
 .input:checked + .track {
-  background: var(--cr-color-primary);
+  background: var(--cr-color-primary-indicator);
 }
 
 .input:focus-visible + .track {

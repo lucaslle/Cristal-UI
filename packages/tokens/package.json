@@ -4,10 +4,11 @@
   "type": "module",
   "files": ["build"],
   "exports": {
-    "./tokens.css": "./build/tokens.css"
+    "./tokens.css": "./build/tokens.css",
+    "./tokens-dark.css": "./build/tokens-dark.css"
   },
   "scripts": {
-    "build": "style-dictionary build --config config.json"
+    "build": "style-dictionary build --config config.json && style-dictionary build --config config-dark.js"
   },
   "devDependencies": {
     "style-dictionary": "^5.8.0"

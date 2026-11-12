@@ -42,6 +42,33 @@ Add the `cr-theme` class to a container and redefine the color on that container
   The builder checks the contrasts of your color. Mid-range colors (neither really light nor really dark) can stay below the 4.5:1 threshold: the builder then says so.
 </Callout>
 
+## Dark theme
+
+The dark theme is **opt-in**: import its stylesheet after the tokens, then set `data-theme="dark"` on `<html>`. Without that attribute nothing changes, even when the user's system is in dark mode: you decide when to turn it on.
+
+```tsx title="app/layout.tsx"
+import '@cristal/react/tokens.css';
+import '@cristal/react/tokens-dark.css';
+
+<html lang="en" data-theme="dark">
+```
+
+- Surface, text, borders, disabled states, danger, success, overlay and shadow take dark values, and `color-scheme: dark` adapts native controls and scrollbars.
+- **Your primary color does not change**: filled buttons keep your brand. Its derived shades adapt: text, focus outline and indicators (stars, slider, switch, checked box) switch to a light shade of your color, and the background of secondary buttons mixes with the dark surface instead of white.
+- Contrasts stay those of the light theme: at least 4.5:1 for text, 3:1 for borders, focus and indicators.
+
+The values that change in dark (the others stay those of the light theme):
+
+<TokenTable prefix="--cr-" theme="dark" />
+
+For a single area, the `cr-theme-dark` class applies the dark theme to a container; `cr-theme` brings back the light theme there. In a dark page, give your local color with `cr-theme-dark`:
+
+```tsx
+<section className="cr-theme-dark" style={{ '--cr-color-primary': '#0f766e' }}>
+  <CrButton>Teal button, dark version</CrButton>
+</section>
+```
+
 ## Going further: all variables
 
 Every value is a CSS variable prefixed with `--cr-` that you can redefine. Derived colors show the formula that computes them.

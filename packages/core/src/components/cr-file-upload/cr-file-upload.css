@@ -39,7 +39,7 @@
 
 .zone:hover,
 .zone[data-over] {
-  border-color: var(--cr-color-primary);
+  border-color: var(--cr-color-primary-indicator);
 }
 
 .zone:has(.input:focus-visible) {

@@ -45,9 +45,10 @@ const i18nUI = defineI18nUI(i18n, {
   fr: { displayName: 'Français', ...translations },
 });
 
+// data-theme en plus de la classe dark : les composants Cristal des exemples suivent le thème de la doc.
 export function Provider({ lang, children }: { lang: string; children: ReactNode }) {
   return (
-    <RootProvider search={{ SearchDialog }} i18n={i18nUI.provider(lang)}>
+    <RootProvider search={{ SearchDialog }} i18n={i18nUI.provider(lang)} theme={{ attribute: ['class', 'data-theme'] }}>
       {children}
     </RootProvider>
   );

@@ -34,7 +34,7 @@ export function ThemePlay({ lang }: { lang: string }) {
           {'}'}
         </pre>
       </div>
-      <div className="glass flex flex-col gap-5 p-8" style={{ '--cr-color-primary': color } as CSSProperties}>
+      <div className="cr-theme glass flex flex-col gap-5 p-8" style={{ '--cr-color-primary': color } as CSSProperties}>
         <CrStepper label={p.stepper} variant="path" current={1}>
           {p.steps.map(([label, text]) => (
             <CrStep key={label} label={label}>

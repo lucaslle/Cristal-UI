@@ -1,0 +1,68 @@
+{
+  "color": {
+    "primary-text": {
+      "$value": "oklch(from var(--cr-color-primary) max(l, 0.8) c h)"
+    },
+    "primary-subtle": {
+      "$value": "color-mix(in oklab, var(--cr-color-primary) 22%, {color.surface})"
+    },
+    "primary-subtle-hover": {
+      "$value": "color-mix(in oklab, var(--cr-color-primary) 32%, {color.surface})"
+    },
+    "primary-indicator": {
+      "$value": "oklch(from var(--cr-color-primary) max(l, 0.68) c h)"
+    },
+    "focus": {
+      "$value": "{color.primary-text}"
+    },
+    "text": {
+      "$value": "#f3f4f6",
+      "$type": "color"
+    },
+    "surface": {
+      "$value": "#111827",
+      "$type": "color"
+    },
+    "disabled": {
+      "$value": "#2a3341",
+      "$type": "color"
+    },
+    "on-disabled": {
+      "$value": "#9ca3af",
+      "$type": "color"
+    },
+    "danger": {
+      "$value": "#f87171",
+      "$type": "color"
+    },
+    "success": {
+      "$value": "#4ade80",
+      "$type": "color"
+    },
+    "border": {
+      "$value": "#8b93a1",
+      "$type": "color"
+    },
+    "text-muted": {
+      "$value": "#b4bbc6",
+      "$type": "color"
+    },
+    "overlay": {
+      "$value": "rgba(0, 0, 0, 0.6)",
+      "$type": "color"
+    }
+  },
+  "shadow": {
+    "m": {
+      "$value": "0 8px 24px rgba(0, 0, 0, 0.5)"
+    }
+  },
+  "text-lightness": {
+    "min": {
+      "$value": "0.8"
+    },
+    "max": {
+      "$value": "1"
+    }
+  }
+}

@@ -42,6 +42,33 @@ Ajoutez la classe `cr-theme` à un conteneur et redéfinissez la couleur sur ce 
   Le générateur vérifie les contrastes de votre couleur. Les couleurs de milieu de gamme (ni vraiment claires, ni vraiment foncées) peuvent rester sous le seuil de 4,5:1 : le générateur l'indique alors.
 </Callout>
 
+## Thème sombre
+
+Le thème sombre est **optionnel** : importez sa feuille après celle des jetons, puis posez `data-theme="dark"` sur `<html>`. Sans cet attribut, rien ne change, même si le système de l'utilisateur est en mode sombre : c'est vous qui décidez quand l'activer.
+
+```tsx title="app/layout.tsx"
+import '@cristal/react/tokens.css';
+import '@cristal/react/tokens-dark.css';
+
+<html lang="fr" data-theme="dark">
+```
+
+- La surface, le texte, les bordures, les états désactivés, le danger, le succès, le voile et l'ombre prennent des valeurs sombres, et `color-scheme: dark` adapte les contrôles natifs et les barres de défilement.
+- **Votre couleur principale ne change pas** : les boutons pleins gardent votre marque. Ses dérivées s'adaptent : le texte, le contour de focus et les indicateurs (étoiles, curseur, interrupteur, case cochée) passent à une nuance claire de votre couleur, et le fond des boutons secondaires se mélange à la surface sombre au lieu du blanc.
+- Les contrastes restent ceux du thème clair : 4,5:1 au moins pour le texte, 3:1 pour les bordures, le focus et les indicateurs.
+
+Les valeurs qui changent en sombre (les autres restent celles du thème clair) :
+
+<TokenTable prefix="--cr-" theme="dark" lang="fr" />
+
+Pour une seule zone, la classe `cr-theme-dark` applique le thème sombre à un conteneur ; `cr-theme` y remet le thème clair. Dans une page sombre, donnez donc votre couleur locale avec `cr-theme-dark` :
+
+```tsx
+<section className="cr-theme-dark" style={{ '--cr-color-primary': '#0f766e' }}>
+  <CrButton>Bouton sarcelle, version sombre</CrButton>
+</section>
+```
+
 ## Aller plus loin : toutes les variables
 
 Chaque valeur est une variable CSS préfixée par `--cr-`, que vous pouvez redéfinir. Les couleurs dérivées affichent la formule qui les calcule.

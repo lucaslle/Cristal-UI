@@ -40,7 +40,7 @@
 
 .filled-hint {
   font-size: var(--cr-font-size-s);
-  color: oklch(from var(--cr-color-success) min(l, 0.45) c h);
+  color: oklch(from var(--cr-color-success) clamp(var(--cr-text-lightness-min), l, var(--cr-text-lightness-max)) c h);
   animation: cr-ghost-in 0.3s ease-out;
 }
 
@@ -109,7 +109,7 @@
   min-height: 1.2em;
   font-size: var(--cr-font-size-s);
   font-weight: var(--cr-font-weight-bold);
-  color: oklch(from var(--level) min(l, 0.45) c h);
+  color: oklch(from var(--level) clamp(var(--cr-text-lightness-min), l, var(--cr-text-lightness-max)) c h);
 }
 
 .sr-only {
