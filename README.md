@@ -342,6 +342,14 @@ Petite courbe sans axes : `values` (tableau de nombres, en propriété), `label`
 <CrSparkline label="Ventes du mois" values={ventes} variant="area" />
 ```
 
+### Nombre animé : `cr-number`
+
+Nombre qui s'anime quand sa valeur change : `value`, `decimals` (0 par défaut), `animation` — `roll` (compteur kilométrique, par défaut), `flap` (tableau d'aéroport), `blur` (le nombre glisse, flouté), `stagger` (les chiffres changent un à un, avec rebond), `decode` (les chiffres défilent au hasard puis se figent), `count` (il compte jusqu'à la nouvelle valeur, teinté en vert ou en rouge selon le sens). Formaté dans la langue (`6 482` en français, `6,482` en anglais) ; il prend la taille, la graisse et la couleur du texte autour. Rien ne bouge au premier affichage, ni quand l'utilisateur réduit les animations ; les lecteurs d'écran lisent toujours la valeur finale (placez-le dans une zone `role="status"` si le changement doit être annoncé).
+
+```tsx
+<CrNumber value={pas} animation="flap" style={{ fontSize: 56, fontWeight: 800 }} /> pas
+```
+
 ### Bandeau et notification : `cr-alert`, `cr-toaster`
 
 Message : `variant` (`info` par défaut, `success`, `warning`, `danger` lu aussitôt), `heading` (titre facultatif), le message en contenu, `open` (`true` par défaut, remis à `false` à chaque fermeture). Une icône propre à chaque type, qui se trace, et un préfixe lu par les lecteurs d'écran (« Erreur : »). Événement `onCrClose` à chaque fermeture. Son emplacement décide de son comportement :

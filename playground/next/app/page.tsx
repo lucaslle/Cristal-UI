@@ -15,6 +15,7 @@ import { BackgroundDemo } from './background-demo';
 import { PaginationDemo } from './pagination-demo';
 import { BreadcrumbDemo } from './breadcrumb-demo';
 import { SparklineDemo } from './sparkline-demo';
+import { NumberDemo } from './number-demo';
 import { AlertDemo } from './alert-demo';
 import { EmptyStateDemo } from './empty-state-demo';
 import { FileUploadDemo } from './file-upload-demo';
@@ -173,6 +174,9 @@ export default function Page() {
 
       <h2>Mini-graphiques</h2>
       <SparklineDemo />
+
+      <h2>Nombres animés</h2>
+      <NumberDemo />
 
       <h2>Bandeaux et notifications</h2>
       <AlertDemo />

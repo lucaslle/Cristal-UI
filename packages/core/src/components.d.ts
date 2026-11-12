@@ -17,6 +17,7 @@ import { IconButtonVariant, TooltipPlacement } from "./components/cr-icon-button
 import { ButtonSize as ButtonSize1, ButtonType as ButtonType1 } from "./components/cr-button/cr-button";
 import { InputType } from "./components/cr-input/cr-input";
 import { PopupAnimation } from "./utils/popup";
+import { NumberAnimation } from "./utils/number-views";
 import { StepperVariant } from "./utils/stepper";
 import { TableColumn, TableDensity, TableLayout, TableVariant } from "./utils/table-layout";
 import { TooltipPlacement as TooltipPlacement1 } from "./components/cr-icon-button/cr-icon-button";
@@ -32,6 +33,7 @@ export { IconButtonVariant, TooltipPlacement } from "./components/cr-icon-button
 export { ButtonSize as ButtonSize1, ButtonType as ButtonType1 } from "./components/cr-button/cr-button";
 export { InputType } from "./components/cr-input/cr-input";
 export { PopupAnimation } from "./utils/popup";
+export { NumberAnimation } from "./utils/number-views";
 export { StepperVariant } from "./utils/stepper";
 export { TableColumn, TableDensity, TableLayout, TableVariant } from "./utils/table-layout";
 export { TooltipPlacement as TooltipPlacement1 } from "./components/cr-icon-button/cr-icon-button";
@@ -856,6 +858,28 @@ export namespace Components {
           * Libellé du bouton qui ouvre le menu.
          */
         "label": string;
+    }
+    /**
+     * Nombre animé : quand value change, les chiffres passent à la nouvelle valeur en s'animant, au choix (animation).
+     * Il prend la taille, la graisse et la couleur du texte autour ; les chiffres ont tous la même largeur.
+     * Le nombre est formaté dans la langue de la page ; les lecteurs d'écran et le copier-coller lisent directement la valeur finale.
+     */
+    interface CrNumber {
+        /**
+          * Animation quand value change : roll (compteur kilométrique, par défaut), flap (tableau d'aéroport), blur (le nombre glisse, flouté), stagger (les chiffres changent un à un, avec rebond), decode (les chiffres défilent au hasard puis se figent), count (le nombre compte jusqu'à la nouvelle valeur).
+          * @default 'roll'
+         */
+        "animation": NumberAnimation;
+        /**
+          * Nombre de décimales affichées (le nombre est arrondi).
+          * @default 0
+         */
+        "decimals": number;
+        /**
+          * Le nombre affiché.
+          * @default 0
+         */
+        "value": number;
     }
     /**
      * Code à usage unique (reçu par SMS ou e-mail), une case par chiffre.
@@ -2032,6 +2056,17 @@ declare global {
         prototype: HTMLCrMenuElement;
         new (): HTMLCrMenuElement;
     };
+    /**
+     * Nombre animé : quand value change, les chiffres passent à la nouvelle valeur en s'animant, au choix (animation).
+     * Il prend la taille, la graisse et la couleur du texte autour ; les chiffres ont tous la même largeur.
+     * Le nombre est formaté dans la langue de la page ; les lecteurs d'écran et le copier-coller lisent directement la valeur finale.
+     */
+    interface HTMLCrNumberElement extends Components.CrNumber, HTMLStencilElement {
+    }
+    var HTMLCrNumberElement: {
+        prototype: HTMLCrNumberElement;
+        new (): HTMLCrNumberElement;
+    };
     interface HTMLCrOtpElementEventMap {
         "crInput": string;
         "crComplete": string;
@@ -2434,6 +2469,7 @@ declare global {
         "cr-input": HTMLCrInputElement;
         "cr-loader": HTMLCrLoaderElement;
         "cr-menu": HTMLCrMenuElement;
+        "cr-number": HTMLCrNumberElement;
         "cr-otp": HTMLCrOtpElement;
         "cr-pagination": HTMLCrPaginationElement;
         "cr-popover": HTMLCrPopoverElement;
@@ -3383,6 +3419,28 @@ declare namespace LocalJSX {
         "onCrSelect"?: (event: CrMenuCustomEvent<string>) => void;
     }
     /**
+     * Nombre animé : quand value change, les chiffres passent à la nouvelle valeur en s'animant, au choix (animation).
+     * Il prend la taille, la graisse et la couleur du texte autour ; les chiffres ont tous la même largeur.
+     * Le nombre est formaté dans la langue de la page ; les lecteurs d'écran et le copier-coller lisent directement la valeur finale.
+     */
+    interface CrNumber {
+        /**
+          * Animation quand value change : roll (compteur kilométrique, par défaut), flap (tableau d'aéroport), blur (le nombre glisse, flouté), stagger (les chiffres changent un à un, avec rebond), decode (les chiffres défilent au hasard puis se figent), count (le nombre compte jusqu'à la nouvelle valeur).
+          * @default 'roll'
+         */
+        "animation"?: NumberAnimation;
+        /**
+          * Nombre de décimales affichées (le nombre est arrondi).
+          * @default 0
+         */
+        "decimals"?: number;
+        /**
+          * Le nombre affiché.
+          * @default 0
+         */
+        "value"?: number;
+    }
+    /**
      * Code à usage unique (reçu par SMS ou e-mail), une case par chiffre.
      */
     interface CrOtp {
@@ -4327,6 +4385,11 @@ declare namespace LocalJSX {
         "animation": PopupAnimation;
         "disabled": boolean;
     }
+    interface CrNumberAttributes {
+        "value": number;
+        "decimals": number;
+        "animation": NumberAnimation;
+    }
     interface CrOtpAttributes {
         "label": string;
         "name": string;
@@ -4500,6 +4563,7 @@ declare namespace LocalJSX {
         "cr-input": Omit<CrInput, keyof CrInputAttributes> & { [K in keyof CrInput & keyof CrInputAttributes]?: CrInput[K] } & { [K in keyof CrInput & keyof CrInputAttributes as `attr:${K}`]?: CrInputAttributes[K] } & { [K in keyof CrInput & keyof CrInputAttributes as `prop:${K}`]?: CrInput[K] } & OneOf<"label", CrInput["label"], CrInputAttributes["label"]>;
         "cr-loader": Omit<CrLoader, keyof CrLoaderAttributes> & { [K in keyof CrLoader & keyof CrLoaderAttributes]?: CrLoader[K] } & { [K in keyof CrLoader & keyof CrLoaderAttributes as `attr:${K}`]?: CrLoaderAttributes[K] } & { [K in keyof CrLoader & keyof CrLoaderAttributes as `prop:${K}`]?: CrLoader[K] };
         "cr-menu": Omit<CrMenu, keyof CrMenuAttributes> & { [K in keyof CrMenu & keyof CrMenuAttributes]?: CrMenu[K] } & { [K in keyof CrMenu & keyof CrMenuAttributes as `attr:${K}`]?: CrMenuAttributes[K] } & { [K in keyof CrMenu & keyof CrMenuAttributes as `prop:${K}`]?: CrMenu[K] } & OneOf<"label", CrMenu["label"], CrMenuAttributes["label"]>;
+        "cr-number": Omit<CrNumber, keyof CrNumberAttributes> & { [K in keyof CrNumber & keyof CrNumberAttributes]?: CrNumber[K] } & { [K in keyof CrNumber & keyof CrNumberAttributes as `attr:${K}`]?: CrNumberAttributes[K] } & { [K in keyof CrNumber & keyof CrNumberAttributes as `prop:${K}`]?: CrNumber[K] };
         "cr-otp": Omit<CrOtp, keyof CrOtpAttributes> & { [K in keyof CrOtp & keyof CrOtpAttributes]?: CrOtp[K] } & { [K in keyof CrOtp & keyof CrOtpAttributes as `attr:${K}`]?: CrOtpAttributes[K] } & { [K in keyof CrOtp & keyof CrOtpAttributes as `prop:${K}`]?: CrOtp[K] } & OneOf<"label", CrOtp["label"], CrOtpAttributes["label"]>;
         "cr-pagination": Omit<CrPagination, keyof CrPaginationAttributes> & { [K in keyof CrPagination & keyof CrPaginationAttributes]?: CrPagination[K] } & { [K in keyof CrPagination & keyof CrPaginationAttributes as `attr:${K}`]?: CrPaginationAttributes[K] } & { [K in keyof CrPagination & keyof CrPaginationAttributes as `prop:${K}`]?: CrPagination[K] };
         "cr-popover": Omit<CrPopover, keyof CrPopoverAttributes> & { [K in keyof CrPopover & keyof CrPopoverAttributes]?: CrPopover[K] } & { [K in keyof CrPopover & keyof CrPopoverAttributes as `attr:${K}`]?: CrPopoverAttributes[K] } & { [K in keyof CrPopover & keyof CrPopoverAttributes as `prop:${K}`]?: CrPopover[K] } & OneOf<"label", CrPopover["label"], CrPopoverAttributes["label"]>;
@@ -4656,6 +4720,12 @@ declare module "@stencil/core" {
              * Menu d'actions. Les actions sont des éléments option enfants.
              */
             "cr-menu": LocalJSX.IntrinsicElements["cr-menu"] & JSXBase.HTMLAttributes<HTMLCrMenuElement>;
+            /**
+             * Nombre animé : quand value change, les chiffres passent à la nouvelle valeur en s'animant, au choix (animation).
+             * Il prend la taille, la graisse et la couleur du texte autour ; les chiffres ont tous la même largeur.
+             * Le nombre est formaté dans la langue de la page ; les lecteurs d'écran et le copier-coller lisent directement la valeur finale.
+             */
+            "cr-number": LocalJSX.IntrinsicElements["cr-number"] & JSXBase.HTMLAttributes<HTMLCrNumberElement>;
             /**
              * Code à usage unique (reçu par SMS ou e-mail), une case par chiffre.
              */
