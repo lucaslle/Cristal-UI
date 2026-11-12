@@ -6,6 +6,7 @@ import { ApiReference } from '@/components/api-reference';
 import { TokenTable } from '@/components/token-table';
 import type { Metadata } from 'next';
 import { createRelativeLink } from 'fumadocs-ui/mdx';
+import { sectionOf, splitTags } from '@/lib/section';
 
 export default async function Page(props: PageProps<'/[lang]/docs/[[...slug]]'>) {
   const params = await props.params;
@@ -14,11 +15,25 @@ export default async function Page(props: PageProps<'/[lang]/docs/[[...slug]]'>)
 
   const MDX = page.data.body;
   const RelativeLink = createRelativeLink(source, page);
+  const section = sectionOf(source.getPageTree(params.lang), page.url);
+  const { lead, names } = splitTags(page.data.description);
 
   return (
     <DocsPage toc={page.data.toc} full={page.data.full}>
-      <DocsTitle className="docs-title">{page.data.title}</DocsTitle>
-      <DocsDescription>{page.data.description}</DocsDescription>
+      <header className="docs-hero">
+        {section && <p className="docs-eyebrow">{section}</p>}
+        <DocsTitle className="docs-title">{page.data.title}</DocsTitle>
+        <DocsDescription className="docs-lead">{lead}</DocsDescription>
+        {names.length > 0 && (
+          <p className="docs-tags">
+            {names.map((name) => (
+              <code key={name} data-kind={name.startsWith('cr-') ? 'tag' : 'react'}>
+                {name.startsWith('cr-') ? `<${name}>` : name}
+              </code>
+            ))}
+          </p>
+        )}
+      </header>
       <DocsBody>
         <MDX
           components={getMDXComponents({
