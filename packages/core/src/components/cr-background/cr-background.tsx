@@ -1,5 +1,5 @@
 import { Build, Component, Element, Host, Prop, State, h } from '@stencil/core';
-import { t } from '../../utils/i18n';
+import { PauseToggle } from '../../utils/pause-toggle';
 import { Particles } from '../../utils/background-particles';
 
 export type BackgroundVariant = 'aurora' | 'gradient' | 'grid' | 'dots' | 'waves' | 'particles';
@@ -18,7 +18,7 @@ const wave = 'M0 50 Q180 14 360 50 T720 50 T1080 50 T1440 50 V100 H0 Z';
  */
 @Component({
   tag: 'cr-background',
-  styleUrl: 'cr-background.css',
+  styleUrls: ['cr-background.css', '../../global/pause-toggle.css'],
   shadow: true,
 })
 export class CrBackground {
@@ -109,14 +109,7 @@ export class CrBackground {
           {this.renderEffect()}
         </div>
         <slot />
-        {this.controls && (
-          <button type="button" class="toggle" part="toggle" aria-pressed={String(this.paused)} onClick={() => (this.paused = !this.paused)}>
-            <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true">
-              <path d={this.paused ? 'M8 5.5v13l10.5-6.5z' : 'M7 5h3.5v14H7zM13.5 5H17v14h-3.5z'} fill="currentColor" />
-            </svg>
-            <span class="sr-only">{t(this.el).pauseAnimation}</span>
-          </button>
-        )}
+        {this.controls && <PauseToggle host={this.el} paused={this.paused} onToggle={() => (this.paused = !this.paused)} />}
       </Host>
     );
   }

@@ -67,6 +67,7 @@ export const CrAvatar = withAttributes(generated.CrAvatar, elements.CrAvatar);
 export const CrAvatarGroup = withAttributes(generated.CrAvatarGroup, elements.CrAvatarGroup);
 export const CrBadge = withAttributes(generated.CrBadge, elements.CrBadge);
 export const CrBackground = withAttributes(generated.CrBackground, elements.CrBackground);
+export const CrWeather = withAttributes(generated.CrWeather, elements.CrWeather);
 export const CrThemeToggle = withAttributes(generated.CrThemeToggle, elements.CrThemeToggle);
 export const CrAlert = withAttributes(generated.CrAlert, elements.CrAlert);
 export const CrEmptyState = withAttributes(generated.CrEmptyState, elements.CrEmptyState);

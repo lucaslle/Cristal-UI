@@ -26,6 +26,7 @@ import { Theme, ThemeToggleVariant } from "./components/cr-theme-toggle/cr-theme
 import { ThemeTransition } from "./utils/theme-transitions";
 import { ThemeToggleIcon } from "./utils/theme-toggle-views";
 import { TooltipPlacement as TooltipPlacement1 } from "./components/cr-icon-button/cr-icon-button";
+import { WeatherCondition } from "./utils/weather-engine";
 export { AccordionAnimation, AccordionVariant } from "./utils/accordion";
 export { AvatarStatus } from "./components/cr-avatar/cr-avatar";
 export { BackgroundVariant } from "./components/cr-background/cr-background";
@@ -47,6 +48,7 @@ export { Theme, ThemeToggleVariant } from "./components/cr-theme-toggle/cr-theme
 export { ThemeTransition } from "./utils/theme-transitions";
 export { ThemeToggleIcon } from "./utils/theme-toggle-views";
 export { TooltipPlacement as TooltipPlacement1 } from "./components/cr-icon-button/cr-icon-button";
+export { WeatherCondition } from "./utils/weather-engine";
 export namespace Components {
     /**
      * Accordéon : sections cr-accordion-item qui s'ouvrent et se ferment.
@@ -1679,6 +1681,29 @@ export namespace Components {
          */
         "text": string;
     }
+    /**
+     * Carte de verre dépoli dont le temps qu'il fait se voit sur le verre : gouttes qui perlent et coulent, buée, givre, chaleur, vent.
+     * Le contenu (ville, température, détails) est celui de l'application, dans la page, lisible et cliquable ; l'effet est décoratif,
+     * derrière lui. Un bouton dans le coin met l'animation en pause ; elle démarre en pause, sur une image fixe, quand l'utilisateur
+     * a demandé à réduire les animations, et s'arrête d'elle-même hors de l'écran ou quand l'onglet est caché.
+     */
+    interface CrWeather {
+        /**
+          * Temps sur le verre : clear (dégagé, reflets de soleil, par défaut), rain (pluie fine, gouttes qui perlent et coulent), storm (forte pluie), fog (buée que le pointeur essuie), frost (givre qui pousse depuis les bords), heat (chaleur qui monte et fait onduler les reflets) ou wind (vent, filets d'air et feuilles). Un changement passe d'un effet à l'autre en fondu.
+          * @default 'clear'
+         */
+        "condition": WeatherCondition;
+        /**
+          * Affiche le bouton pause dans le coin. À false seulement si l'application a sa propre commande pour arrêter les animations.
+          * @default true
+         */
+        "controls": boolean;
+        /**
+          * Met l'animation en pause ; le bouton pause l'inverse. Passe à true au chargement si l'utilisateur a demandé à réduire les animations.
+          * @default false
+         */
+        "paused": boolean;
+    }
 }
 export interface CrAccordionItemCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -2646,6 +2671,18 @@ declare global {
         prototype: HTMLCrTooltipElement;
         new (): HTMLCrTooltipElement;
     };
+    /**
+     * Carte de verre dépoli dont le temps qu'il fait se voit sur le verre : gouttes qui perlent et coulent, buée, givre, chaleur, vent.
+     * Le contenu (ville, température, détails) est celui de l'application, dans la page, lisible et cliquable ; l'effet est décoratif,
+     * derrière lui. Un bouton dans le coin met l'animation en pause ; elle démarre en pause, sur une image fixe, quand l'utilisateur
+     * a demandé à réduire les animations, et s'arrête d'elle-même hors de l'écran ou quand l'onglet est caché.
+     */
+    interface HTMLCrWeatherElement extends Components.CrWeather, HTMLStencilElement {
+    }
+    var HTMLCrWeatherElement: {
+        prototype: HTMLCrWeatherElement;
+        new (): HTMLCrWeatherElement;
+    };
     interface HTMLElementTagNameMap {
         "cr-accordion": HTMLCrAccordionElement;
         "cr-accordion-item": HTMLCrAccordionItemElement;
@@ -2698,6 +2735,7 @@ declare global {
         "cr-theme-toggle": HTMLCrThemeToggleElement;
         "cr-toaster": HTMLCrToasterElement;
         "cr-tooltip": HTMLCrTooltipElement;
+        "cr-weather": HTMLCrWeatherElement;
     }
 }
 declare namespace LocalJSX {
@@ -4554,6 +4592,29 @@ declare namespace LocalJSX {
          */
         "text": string;
     }
+    /**
+     * Carte de verre dépoli dont le temps qu'il fait se voit sur le verre : gouttes qui perlent et coulent, buée, givre, chaleur, vent.
+     * Le contenu (ville, température, détails) est celui de l'application, dans la page, lisible et cliquable ; l'effet est décoratif,
+     * derrière lui. Un bouton dans le coin met l'animation en pause ; elle démarre en pause, sur une image fixe, quand l'utilisateur
+     * a demandé à réduire les animations, et s'arrête d'elle-même hors de l'écran ou quand l'onglet est caché.
+     */
+    interface CrWeather {
+        /**
+          * Temps sur le verre : clear (dégagé, reflets de soleil, par défaut), rain (pluie fine, gouttes qui perlent et coulent), storm (forte pluie), fog (buée que le pointeur essuie), frost (givre qui pousse depuis les bords), heat (chaleur qui monte et fait onduler les reflets) ou wind (vent, filets d'air et feuilles). Un changement passe d'un effet à l'autre en fondu.
+          * @default 'clear'
+         */
+        "condition"?: WeatherCondition;
+        /**
+          * Affiche le bouton pause dans le coin. À false seulement si l'application a sa propre commande pour arrêter les animations.
+          * @default true
+         */
+        "controls"?: boolean;
+        /**
+          * Met l'animation en pause ; le bouton pause l'inverse. Passe à true au chargement si l'utilisateur a demandé à réduire les animations.
+          * @default false
+         */
+        "paused"?: boolean;
+    }
 
     interface CrAccordionAttributes {
         "multiple": boolean;
@@ -4930,6 +4991,11 @@ declare namespace LocalJSX {
         "text": string;
         "placement": TooltipPlacement;
     }
+    interface CrWeatherAttributes {
+        "condition": WeatherCondition;
+        "controls": boolean;
+        "paused": boolean;
+    }
 
     interface IntrinsicElements {
         "cr-accordion": Omit<CrAccordion, keyof CrAccordionAttributes> & { [K in keyof CrAccordion & keyof CrAccordionAttributes]?: CrAccordion[K] } & { [K in keyof CrAccordion & keyof CrAccordionAttributes as `attr:${K}`]?: CrAccordionAttributes[K] } & { [K in keyof CrAccordion & keyof CrAccordionAttributes as `prop:${K}`]?: CrAccordion[K] };
@@ -4983,6 +5049,7 @@ declare namespace LocalJSX {
         "cr-theme-toggle": Omit<CrThemeToggle, keyof CrThemeToggleAttributes> & { [K in keyof CrThemeToggle & keyof CrThemeToggleAttributes]?: CrThemeToggle[K] } & { [K in keyof CrThemeToggle & keyof CrThemeToggleAttributes as `attr:${K}`]?: CrThemeToggleAttributes[K] } & { [K in keyof CrThemeToggle & keyof CrThemeToggleAttributes as `prop:${K}`]?: CrThemeToggle[K] };
         "cr-toaster": CrToaster;
         "cr-tooltip": Omit<CrTooltip, keyof CrTooltipAttributes> & { [K in keyof CrTooltip & keyof CrTooltipAttributes]?: CrTooltip[K] } & { [K in keyof CrTooltip & keyof CrTooltipAttributes as `attr:${K}`]?: CrTooltipAttributes[K] } & { [K in keyof CrTooltip & keyof CrTooltipAttributes as `prop:${K}`]?: CrTooltip[K] } & OneOf<"text", CrTooltip["text"], CrTooltipAttributes["text"]>;
+        "cr-weather": Omit<CrWeather, keyof CrWeatherAttributes> & { [K in keyof CrWeather & keyof CrWeatherAttributes]?: CrWeather[K] } & { [K in keyof CrWeather & keyof CrWeatherAttributes as `attr:${K}`]?: CrWeatherAttributes[K] } & { [K in keyof CrWeather & keyof CrWeatherAttributes as `prop:${K}`]?: CrWeather[K] };
     }
 }
 export { LocalJSX as JSX };
@@ -5240,6 +5307,13 @@ declare module "@stencil/core" {
              * Le texte décrit aussi cet élément pour les lecteurs d'écran. Échap la masque ; on peut la survoler sans qu'elle disparaisse.
              */
             "cr-tooltip": LocalJSX.IntrinsicElements["cr-tooltip"] & JSXBase.HTMLAttributes<HTMLCrTooltipElement>;
+            /**
+             * Carte de verre dépoli dont le temps qu'il fait se voit sur le verre : gouttes qui perlent et coulent, buée, givre, chaleur, vent.
+             * Le contenu (ville, température, détails) est celui de l'application, dans la page, lisible et cliquable ; l'effet est décoratif,
+             * derrière lui. Un bouton dans le coin met l'animation en pause ; elle démarre en pause, sur une image fixe, quand l'utilisateur
+             * a demandé à réduire les animations, et s'arrête d'elle-même hors de l'écran ou quand l'onglet est caché.
+             */
+            "cr-weather": LocalJSX.IntrinsicElements["cr-weather"] & JSXBase.HTMLAttributes<HTMLCrWeatherElement>;
         }
     }
 }

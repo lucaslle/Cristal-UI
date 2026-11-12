@@ -12,6 +12,7 @@ import { RatingDemo } from './rating-demo';
 import { AvatarDemo } from './avatar-demo';
 import { BadgeDemo } from './badge-demo';
 import { BackgroundDemo } from './background-demo';
+import { WeatherDemo } from './weather-demo';
 import { PaginationDemo } from './pagination-demo';
 import { BreadcrumbDemo } from './breadcrumb-demo';
 import { SparklineDemo } from './sparkline-demo';
@@ -172,6 +173,9 @@ export default function Page() {
 
       <h2>Fonds animés</h2>
       <BackgroundDemo />
+
+      <h2 id="meteo">Cartes météo</h2>
+      <WeatherDemo />
 
       <h2>Fil d'Ariane</h2>
       <BreadcrumbDemo />

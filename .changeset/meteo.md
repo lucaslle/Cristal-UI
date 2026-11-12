@@ -1,0 +1,6 @@
+---
+"@cristal/core": minor
+"@cristal/react": minor
+---
+
+Add cr-weather (React CrWeather), a frosted glass card where the weather happens on the glass, behind the application's content: condition is clear (default, a soft sun and a glint sweeping the glass), rain (drops bead, merge and run down leaving trails), storm (heavy rain, no lightning), fog (condensation the pointer wipes away, which slowly fogs over again), frost (ice crystals growing in from the edges), heat (a rising warm glow and shimmering highlights) or wind (streaks, specks and leaves blown across); changing it cross-fades between effects. Everything is drawn in one canvas, only while the card is on screen, the tab visible and the animation not paused. The glass is opaque enough, and its backdrop filter narrows what is behind it, for text in --cr-color-text to keep 4.5:1 on every frame, in the light and dark themes; colours can be changed with --cr-weather-glass, --cr-weather-tint and --cr-weather-warm. The weather layer is hidden from screen readers; the same pause button as cr-background (now shared) and the paused prop stop it, it starts paused on a still frame when less motion is requested, and in forced colours the glass becomes a plain Canvas panel without the effect.

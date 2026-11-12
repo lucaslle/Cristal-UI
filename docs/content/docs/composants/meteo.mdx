@@ -1,0 +1,85 @@
+---
+title: Weather card
+description: Frosted glass card where the weather shows on the glass, rain drops, fog, frost, heat or wind, behind your content. Tag cr-weather, React component CrWeather.
+---
+
+import WeatherCard from '@/demos/en/weather-card';
+
+## Example
+
+`CrWeather` is a frosted glass card: the blur lets the colours behind it through, and the weather is drawn on the glass, behind the content. The content is yours (city, temperature, details): it stays in the page, readable and clickable. `condition` picks the weather; changing it cross-fades from one effect to the next.
+
+```tsx
+<CrWeather condition="rain">
+  <h3>Lyon</h3>
+  <p>14°</p>
+  <p>Light rain</p>
+</CrWeather>
+```
+
+<Preview column>
+  <WeatherCard />
+</Preview>
+
+<include>../../../demos/en/weather-card.tsx</include>
+
+| `condition` | On the glass |
+|---|---|
+| `clear` | a soft sun in the corner, its flares, a glint slowly sweeping the glass and a few sparkles (default) |
+| `rain` | drops land, grow as they merge, then run down leaving a trail and small droplets |
+| `storm` | heavy rain: many more drops, fast rain streaks, drops streaming down; no lightning |
+| `fog` | condensation drifting on the glass; the pointer wipes it like a finger on a misted window, and it slowly comes back |
+| `frost` | ice crystals grow in from the edges and corners, then stay with a faint sparkle |
+| `heat` | a warm glow rising from the bottom, and the glass highlights shimmering as in scorching air |
+| `wind` | fine streaks of air, specks and a few leaves blown across in gusts |
+
+The card takes the size of its content: set `padding`, `width` or `border-radius` as on a `div`. Leave a little room at the bottom right for the pause button. Put it on a colourful backdrop (a photo, an [animated background](/docs/composants/fond-anime)): that is what gives the glass its colour.
+
+## Colours
+
+The glass and the weather follow the theme, light or dark. To change them, set these CSS properties on the card or a parent:
+
+| CSS property | Default |
+|---|---|
+| `--cr-weather-glass` | the surface, at 58% opacity in the light theme, 70% in the dark one |
+| `--cr-weather-tint` | white in the light theme, light grey at 28% opacity in the dark one: highlights, fog, frost, wind streaks |
+| `--cr-weather-warm` | amber, darker in the dark theme: sun, heat, leaves |
+
+```css
+cr-weather {
+  --cr-weather-glass: rgb(255 255 255 / 0.7);
+  --cr-weather-tint: #e0f2fe;
+}
+```
+
+Behind the glass, the backdrop is blurred, its contrast narrowed, then lightened in the light theme and darkened in the dark one: this is what lets the glass stay translucent while keeping the text readable whatever the backdrop. If you make the glass more transparent or the weather brighter, check the contrast.
+
+## Pause and reduced motion
+
+An animation that starts on its own and lasts more than 5 seconds must be stoppable: a small pause button is shown in the bottom right corner, as on the [animated background](/docs/composants/fond-anime). The weather also stops on its own when the card leaves the screen or the tab is hidden, and starts again when it comes back, unless it is paused.
+
+If your application already has its own control to stop animations, hide the button with `controls={false}` and drive the pause with `paused`:
+
+```tsx
+<CrWeather condition="frost" controls={false} paused={!animations}>
+  …
+</CrWeather>
+```
+
+<Callout>
+  If the user asked their system to reduce motion, the card starts paused on a still frame that is already set: drops on the glass, frost grown, fog on the glass. The button still lets them start the animation.
+</Callout>
+
+## Accessibility
+
+- The weather is decorative: its layer is hidden from screen readers (`aria-hidden`) and holds nothing focusable. Say the weather in the content ("Light rain"): that is what carries the information.
+- Text in `--cr-color-text` keeps a contrast of at least 4.5:1 on every frame, for every condition, in the light and dark themes: the glass is opaque enough and the weather subtle enough. Keep the card text in `--cr-color-text`; `--cr-color-text-muted` is not guaranteed on the glass.
+- No lightning with `storm`: nothing flashes.
+- Wiping the fog with the pointer is decoration: no information depends on it, nothing happens with the keyboard.
+- The pause button is a real button, named "Pause the animation" ("Mettre en pause l'animation" in French), announced as pressed when the animation is stopped.
+- In forced colours mode, the weather and its button disappear; the glass becomes a panel in the system colours, with a border.
+- Paused, off screen or in a hidden tab, the card computes nothing.
+
+## API
+
+<ApiReference tag="cr-weather" />

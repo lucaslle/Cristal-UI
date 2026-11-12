@@ -1,0 +1,64 @@
+/*
+ * Verre dépoli. Le filtre resserre ce qu'il y a derrière (contrast) puis l'éclaircit en thème clair, l'assombrit en sombre
+ * (--cr-text-lightness-min vaut 0 en clair, 0,8 en sombre) : même sur du noir ou du blanc pur, le verre garde le texte
+ * en --cr-color-text à 4,5:1 sans être opaque, et les couleurs de derrière passent.
+ */
+:host {
+  --_glass: var(--cr-weather-glass, color-mix(in oklab, var(--cr-color-surface) calc(60% + var(--cr-text-lightness-min) * 17.5%), transparent));
+  --_tint: var(--cr-weather-tint, oklch(calc(1 - var(--cr-text-lightness-min) * 0.2) 0.015 240 / calc(1 - var(--cr-text-lightness-min) * 0.9)));
+  --_warm: var(--cr-weather-warm, oklch(calc(0.82 - var(--cr-text-lightness-min) * 0.4) 0.15 70));
+  display: block;
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  font-family: var(--cr-font-family);
+  color: var(--cr-color-text);
+  background: var(--_glass);
+  --_filter: blur(24px) saturate(1.8) contrast(0.75) brightness(calc(1.25 - var(--cr-text-lightness-min) * 0.7));
+  -webkit-backdrop-filter: var(--_filter);
+  backdrop-filter: var(--_filter);
+  border: 1px solid color-mix(in oklab, var(--_tint) 70%, transparent);
+  border-radius: var(--cr-radius-l);
+  box-shadow:
+    var(--cr-shadow-m),
+    inset 0 1px 0 color-mix(in oklab, var(--_tint) 60%, transparent);
+}
+
+/* Sans flou d'arrière-plan, rien ne retient ce qu'il y a derrière : le verre devient presque plein. */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  :host {
+    --_glass: var(--cr-weather-glass, color-mix(in oklab, var(--cr-color-surface) 90%, transparent));
+  }
+}
+
+.layer {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/* Les couleurs de la météo, lues par le script sur le canvas : reflets, ombres (celles du voile des modales), lumière chaude. */
+canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  color: var(--_tint);
+  border-color: var(--cr-color-overlay);
+  outline-color: var(--_warm);
+}
+
+/* Contrastes élevés : le verre devient un panneau aux couleurs du système, sans effet (son bouton disparaît aussi). */
+@media (forced-colors: active) {
+  :host {
+    background: Canvas;
+    border-color: CanvasText;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+
+  .layer {
+    display: none;
+  }
+}

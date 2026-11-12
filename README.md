@@ -298,6 +298,18 @@ Conteneur dont le contenu s'affiche par-dessus un fond décoratif animé, aux co
 </CrBackground>
 ```
 
+### Carte météo : `cr-weather`
+
+Carte en verre dépoli (flou d'arrière-plan, bord clair, ombre douce) dont le temps se voit sur le verre, derrière le contenu de l'application : `condition` vaut `clear` (par défaut, soleil doux et reflets qui balaient le verre), `rain` (gouttes qui perlent, fusionnent et coulent), `storm` (forte pluie, sans éclair), `fog` (buée que le pointeur essuie, et qui revient), `frost` (givre qui pousse depuis les bords), `heat` (lueur chaude et reflets qui ondulent) ou `wind` (filets d'air, feuilles). Un changement passe d'un effet à l'autre en fondu. Le contenu reste dans la page, lisible et cliquable ; le texte en `--cr-color-text` garde 4,5:1 sur le verre. Bouton pause dans le coin (`controls={false}` le masque), `paused` arrête l'animation ; elle démarre en pause sur une image fixe quand l'utilisateur réduit les animations, et s'arrête hors de l'écran ou quand l'onglet est caché. Couleurs à changer en CSS : `--cr-weather-glass`, `--cr-weather-tint` et `--cr-weather-warm`.
+
+```tsx
+<CrWeather condition="rain">
+  <h3>Lyon</h3>
+  <p>14°</p>
+  <p>Pluie fine</p>
+</CrWeather>
+```
+
 ### Modale et panneau latéral : `cr-dialog`, `cr-drawer`
 
 Basés sur l'élément natif `<dialog>` : focus piégé dans la fenêtre, fermeture avec Échap, focus rendu au bouton d'ouverture, défilement de la page bloqué.
