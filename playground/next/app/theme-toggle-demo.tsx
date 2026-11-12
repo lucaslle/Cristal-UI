@@ -4,6 +4,14 @@ import { useState } from 'react';
 import { CrAvatar, CrSegmented, CrSwitch, CrThemeToggle } from '@cristal/react';
 
 const transitions = ['circle', 'curtain', 'blinds', 'flip', 'eclipse', 'sweep', 'none'] as const;
+const icons = [
+  ['morph', 'Morphose'],
+  ['rotate', 'Rotation'],
+  ['rise', 'Horizon'],
+  ['flip', 'Pièce'],
+  ['eclipse', 'Éclipse'],
+] as const;
+const variants = ['icon', 'switch', 'label'] as const;
 const card = {
   position: 'relative',
   display: 'grid',
@@ -20,6 +28,7 @@ const card = {
 export function ThemeToggleDemo() {
   const [index, setIndex] = useState(0);
   const [theme, setTheme] = useState('');
+  const [icon, setIcon] = useState(0);
 
   return (
     <div style={{ display: 'grid', gap: 'var(--cr-spacing-lg)', justifyItems: 'start' }}>
@@ -44,6 +53,18 @@ export function ThemeToggleDemo() {
         </p>
         <CrSwitch label="Notifications" checked />
       </section>
+      <CrSegmented label="Animation de l'icône" value={String(icon)} onCrChange={(event) => setIcon(Number(event.detail))}>
+        {icons.map(([value, label], position) => (
+          <option key={value} value={position}>
+            {label}
+          </option>
+        ))}
+      </CrSegmented>
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--cr-spacing-xl)', alignItems: 'center' }}>
+        {variants.map((variant) => (
+          <CrThemeToggle key={variant} data-testid={`theme-toggle-${variant}`} variant={variant} icon={icons[icon][0]} transition={transitions[index]} onCrChange={(event) => setTheme(event.detail)} />
+        ))}
+      </div>
       <p data-testid="theme-event">{theme}</p>
     </div>
   );

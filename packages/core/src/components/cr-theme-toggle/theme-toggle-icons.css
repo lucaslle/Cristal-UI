@@ -1,0 +1,113 @@
+/* Clair par défaut, sombre sous :host([theme='dark']) ; la transition d'une règle est celle jouée pour y arriver. */
+
+/* morph : petit disque et rayons sortis, puis le disque grandit, les rayons rentrent et un disque masqué glisse dessus pour creuser le croissant. */
+.morph {
+  overflow: visible;
+  /* Les huit rayons sont identiques tous les 45° : le soleil tourné d'un huitième ne change pas, la lune finit droite. */
+  rotate: 45deg;
+  transition:
+    rotate 0.5s cubic-bezier(0.3, 1.4, 0.5, 1),
+    scale 0.15s;
+}
+
+.disc {
+  transform-box: fill-box;
+  transform-origin: center;
+  transform: scale(0.6);
+  transition: transform 0.5s cubic-bezier(0.3, 1.4, 0.5, 1);
+}
+
+.bite {
+  transform: translate(14px, -14px);
+  transition: transform 0.45s cubic-bezier(0.5, 0, 0.3, 1);
+}
+
+.rays,
+.rotate .sun,
+.rotate .moon {
+  transform-box: view-box;
+  transform-origin: 12px 12px;
+}
+
+.morph .rays {
+  transition:
+    transform 0.45s cubic-bezier(0.3, 1.4, 0.5, 1) 0.1s,
+    opacity 0.3s 0.1s;
+}
+
+:host([theme='dark']) .morph {
+  rotate: 0deg;
+}
+
+:host([theme='dark']) .disc {
+  transform: scale(1);
+}
+
+:host([theme='dark']) .bite {
+  transform: translate(5px, -5px);
+  transition-delay: 0.1s;
+}
+
+:host([theme='dark']) .morph .rays {
+  transform: rotate(-90deg) scale(0.4);
+  opacity: 0;
+  transition-delay: 0s;
+}
+
+/* rotate : le soleil part en tournant et rapetisse pendant que la lune arrive en tournant. */
+.rotate {
+  overflow: visible;
+}
+
+.rotate .sun,
+.rotate .moon {
+  transition:
+    transform 0.55s cubic-bezier(0.3, 1.3, 0.5, 1),
+    opacity 0.3s;
+}
+
+.rotate .moon,
+:host([theme='dark']) .rotate .sun {
+  transform: rotate(-200deg) scale(0.2);
+  opacity: 0;
+}
+
+:host([theme='dark']) .rotate .sun {
+  transform: rotate(200deg) scale(0.2);
+}
+
+:host([theme='dark']) .rotate .moon {
+  transform: none;
+  opacity: 1;
+}
+
+/* rise : l'astre qui part se couche sous l'horizon, puis l'autre se lève ; le ciel coupe ce qui passe sous la ligne. */
+.rise .sun,
+:host([theme='dark']) .rise .moon {
+  translate: 0 0;
+  transition: translate 0.45s cubic-bezier(0.2, 1.2, 0.4, 1) 0.18s;
+}
+
+.rise .moon,
+:host([theme='dark']) .rise .sun {
+  translate: 0 16px;
+  transition: translate 0.3s cubic-bezier(0.6, 0, 0.9, 0.5);
+}
+
+.horizon {
+  transform-box: fill-box;
+  transform-origin: center;
+  transition: scale 0.3s 0.15s;
+}
+
+.button:active .horizon {
+  scale: 0.8 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* !important : les règles de l'état sombre remettent des délais, qui suffiraient à décaler le changement. */
+  .icon,
+  .icon * {
+    transition: none !important;
+  }
+}

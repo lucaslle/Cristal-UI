@@ -1,7 +1,31 @@
 import { expect, test, type Page } from '@playwright/test';
 
 const transitions = ['circle', 'curtain', 'blinds', 'flip', 'eclipse', 'sweep', 'none'];
-const toggle = (page: Page) => page.getByRole('button', { name: 'Thème sombre' });
+const toggle = (page: Page) => page.getByTestId('theme-toggle').getByRole('button', { name: 'Thème sombre' });
+const variants = ['icon', 'switch', 'label'];
+const icons = [
+  ['morph', 'Morphose'],
+  ['rotate', 'Rotation'],
+  ['rise', 'Horizon'],
+  ['flip', 'Pièce'],
+  ['eclipse', 'Éclipse'],
+];
+const noTransition = (page: Page) => page.getByRole('radio', { name: 'none', exact: true }).click();
+// Clique la bascule puis compte, dès que son attribut theme change, les animations de l'icône, de la pastille et du rail.
+const iconAnimationsOnClick = (page: Page, variant: string) =>
+  page.getByTestId(`theme-toggle-${variant}`).evaluate(
+    (el) =>
+      new Promise<number>((resolve) => {
+        const root = el.shadowRoot!;
+        new MutationObserver((_, observer) => {
+          observer.disconnect();
+          root.querySelectorAll('*').forEach((node) => getComputedStyle(node).transform);
+          const effects = root.getAnimations().map((animation) => animation.effect as KeyframeEffect);
+          resolve(effects.filter((effect) => effect.pseudoElement || (effect.target as Element).closest('.icon, .thumb')).length);
+        }).observe(el, { attributeFilter: ['theme'] });
+        root.querySelector('button')!.click();
+      }),
+  );
 const theme = (page: Page) => page.evaluate(() => document.documentElement.dataset.theme);
 const errorsOf = (page: Page) => {
   const errors: string[] = [];
@@ -65,7 +89,7 @@ for (const transition of transitions) {
     await countViewTransitions(page);
     await page.goto('/');
     await page.getByRole('radio', { name: transition, exact: true }).click();
-    await expect(page.locator('cr-theme-toggle')).toHaveAttribute('transition', transition);
+    await expect(page.getByTestId('theme-toggle')).toHaveAttribute('transition', transition);
     await toggle(page).click();
     await expect.poll(() => theme(page)).toBe('dark');
     await page.waitForTimeout(1400);
@@ -86,7 +110,7 @@ test('reduced motion switches instantly, without a view transition', async ({ pa
   await toggle(page).click();
   await expect.poll(() => theme(page)).toBe('dark');
   expect((await counts(page)).started ?? 0).toBe(0);
-  const morph = await page.locator('cr-theme-toggle').evaluate((el) => getComputedStyle(el.shadowRoot!.querySelector('.disc')!).transitionDuration);
+  const morph = await page.getByTestId('theme-toggle').evaluate((el) => getComputedStyle(el.shadowRoot!.querySelector('.disc')!).transitionDuration);
   expect(morph).toBe('0s');
 });
 
@@ -108,7 +132,7 @@ test('without data-theme, the initial state follows the system preference', asyn
   await page.emulateMedia({ colorScheme: 'dark' });
   await page.goto('/');
   await expect(toggle(page)).toHaveAttribute('aria-pressed', 'true');
-  await expect(page.locator('cr-theme-toggle')).toHaveAttribute('theme', 'dark');
+  await expect(page.getByTestId('theme-toggle')).toHaveAttribute('theme', 'dark');
   await page.getByRole('radio', { name: 'none', exact: true }).click();
   await toggle(page).click();
   await expect.poll(() => theme(page)).toBe('light');
@@ -117,11 +141,14 @@ test('without data-theme, the initial state follows the system preference', asyn
 test('Enter and Space toggle the theme from the keyboard, with a visible focus', async ({ page }) => {
   await page.goto('/');
   await page.getByRole('radio', { name: 'none', exact: true }).click();
-  await toggle(page).focus();
-  await page.keyboard.press('Shift+Tab');
-  await page.keyboard.press('Tab');
-  await expect(toggle(page)).toBeFocused();
-  const outline = await page.locator('cr-theme-toggle').evaluate((el) => getComputedStyle(el.shadowRoot!.querySelector('button')!).outlineStyle);
+  // Rejoué tant que l'hydratation peut encore déplacer le focus.
+  await expect(async () => {
+    await toggle(page).focus();
+    await page.keyboard.press('Shift+Tab');
+    await page.keyboard.press('Tab');
+    await expect(toggle(page)).toBeFocused({ timeout: 1000 });
+  }).toPass();
+  const outline = await page.getByTestId('theme-toggle').evaluate((el) => getComputedStyle(el.shadowRoot!.querySelector('button')!).outlineStyle);
   expect(outline).toBe('solid');
   await page.keyboard.press('Enter');
   await expect.poll(() => theme(page)).toBe('dark');
@@ -130,3 +157,73 @@ test('Enter and Space toggle the theme from the keyboard, with a visible focus',
   const size = await toggle(page).boundingBox();
   expect(size!.width).toBeGreaterThanOrEqual(40);
 });
+
+test('the switch variant is a switch with aria-checked, toggled by click, Space and Enter', async ({ page }) => {
+  const errors = errorsOf(page);
+  await page.goto('/');
+  await noTransition(page);
+  const control = page.getByTestId('theme-toggle-switch').getByRole('switch', { name: 'Thème sombre' });
+  await expect(control).toHaveAttribute('aria-checked', 'false');
+  await expect(control).not.toHaveAttribute('aria-pressed');
+  await control.click();
+  await expect.poll(() => theme(page)).toBe('dark');
+  await expect(control).toHaveAttribute('aria-checked', 'true');
+  await control.focus();
+  await page.keyboard.press('Space');
+  await expect.poll(() => theme(page)).toBe('light');
+  await expect(control).toHaveAttribute('aria-checked', 'false');
+  await page.keyboard.press('Enter');
+  await expect(control).toHaveAttribute('aria-checked', 'true');
+  const size = await control.boundingBox();
+  expect(size!.width).toBeGreaterThanOrEqual(52);
+  expect(size!.height).toBeGreaterThanOrEqual(28);
+  expect(errors).toEqual([]);
+});
+
+test('the label variant has its visible text in its accessible name', async ({ page }) => {
+  await page.goto('/');
+  const button = page.getByTestId('theme-toggle-label').getByRole('button');
+  const visible = (await button.innerText()).trim();
+  expect(visible).toBe('Thème sombre');
+  await expect(button).toHaveAccessibleName(new RegExp(visible));
+  await expect(button).toHaveAttribute('aria-pressed', 'false');
+});
+
+for (const variant of variants) {
+  test(`the ${variant} variant sets data-theme and emits crChange`, async ({ page }) => {
+    const errors = errorsOf(page);
+    await page.goto('/');
+    await noTransition(page);
+    const button = page.getByTestId(`theme-toggle-${variant}`).getByRole(variant === 'switch' ? 'switch' : 'button');
+    await button.click();
+    await expect.poll(() => theme(page)).toBe('dark');
+    await expect(page.getByTestId('theme-event')).toHaveText('dark');
+    await expect(toggle(page)).toHaveAttribute('aria-pressed', 'true');
+    await button.click();
+    await expect.poll(() => theme(page)).toBe('light');
+    await expect(page.getByTestId('theme-event')).toHaveText('light');
+    expect(errors).toEqual([]);
+  });
+}
+
+for (const [icon, label] of icons) {
+  test(`icon ${icon} animates in every variant, and not with reduced motion`, async ({ page }) => {
+    const errors = errorsOf(page);
+    await page.goto('/');
+    await noTransition(page);
+    await page.getByRole('radio', { name: label, exact: true }).click();
+    for (const variant of variants) {
+      await expect(page.getByTestId(`theme-toggle-${variant}`)).toHaveAttribute('icon', icon);
+      expect(await iconAnimationsOnClick(page, variant)).toBeGreaterThan(0);
+      await expect.poll(() => theme(page)).toBe('dark');
+      await page.evaluate(() => document.documentElement.removeAttribute('data-theme'));
+    }
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    for (const variant of variants) {
+      await expect(page.getByTestId(`theme-toggle-${variant}`)).toHaveAttribute('theme', 'light');
+      expect(await iconAnimationsOnClick(page, variant)).toBe(0);
+      await page.evaluate(() => document.documentElement.removeAttribute('data-theme'));
+    }
+    expect(errors).toEqual([]);
+  });
+}

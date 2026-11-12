@@ -25,78 +25,59 @@
   background: var(--cr-color-primary-subtle);
 }
 
-.button:focus-visible {
+.button:focus-visible,
+.switch:focus-visible {
   outline: 2px solid var(--cr-color-focus);
   outline-offset: 2px;
 }
 
-.button:active .icon {
+.icon {
+  flex: none;
+  width: 22px;
+  height: 22px;
+  transition: scale 0.15s;
+}
+
+.button:active .icon,
+.switch:active .thumb {
   scale: 0.88;
 }
 
-/* Soleil : petit disque et rayons sortis. Lune : le disque grandit, les rayons rentrent et un disque masqué glisse dessus pour creuser le croissant. */
-.icon {
-  overflow: visible;
-  /* Les huit rayons sont identiques tous les 45° : le soleil tourné d'un huitième ne change pas, la lune finit droite. */
-  rotate: 45deg;
-  transition: rotate 0.5s cubic-bezier(0.3, 1.4, 0.5, 1), scale 0.15s;
+/* Bouton avec libellé : l'icône puis le texte, dans une pilule. */
+.pill {
+  display: inline-flex;
+  gap: var(--cr-spacing-sm);
+  width: auto;
+  padding: 0 var(--cr-spacing-lg) 0 var(--cr-spacing-sm);
+  font: inherit;
+  font-size: var(--cr-font-size-m);
+  font-weight: var(--cr-font-weight-medium);
+  border-radius: 999px;
 }
 
-.disc {
-  transform-box: fill-box;
-  transform-origin: center;
-  transform: scale(0.6);
-  transition: transform 0.5s cubic-bezier(0.3, 1.4, 0.5, 1);
+.pill .icon {
+  width: 20px;
+  height: 20px;
 }
 
-.bite {
-  transform: translate(14px, -14px);
-  transition: transform 0.45s cubic-bezier(0.5, 0, 0.3, 1);
-}
-
-.rays {
-  transform-box: view-box;
-  transform-origin: 12px 12px;
-  transition:
-    transform 0.45s cubic-bezier(0.3, 1.4, 0.5, 1) 0.1s,
-    opacity 0.3s 0.1s;
-}
-
-:host([theme='dark']) .icon {
-  rotate: 0deg;
-}
-
-:host([theme='dark']) .disc {
-  transform: scale(1);
-}
-
-:host([theme='dark']) .bite {
-  transform: translate(5px, -5px);
-  transition-delay: 0.1s;
-}
-
-:host([theme='dark']) .rays {
-  transform: rotate(-90deg) scale(0.4);
-  opacity: 0;
-  transition-delay: 0s;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .icon,
-  .disc,
-  .bite,
-  .rays {
-    transition: none;
-  }
+.text {
+  color: var(--cr-color-text);
+  white-space: nowrap;
 }
 
 @media (forced-colors: active) {
-  .button {
+  .button,
+  .switch {
     color: ButtonText;
     border-color: ButtonText;
   }
 
-  .button:focus-visible {
+  .text {
+    color: ButtonText;
+  }
+
+  .button:focus-visible,
+  .switch:focus-visible {
     outline-color: Highlight;
   }
 }

@@ -1,0 +1,142 @@
+/* Interrupteur : rail de jour clair (lueur de soleil derrière la pastille), rail de nuit sombre (quelques étoiles). Couleurs fixes, tirées de --cr-color-primary : la pastille reste à 3:1 sur son rail dans les deux thèmes de page ; le bord du rail fait le 3:1 avec la page. */
+:host {
+  --cr-theme-toggle-ease: cubic-bezier(0.5, 1.35, 0.45, 1);
+  --cr-theme-toggle-day: color-mix(in oklab, var(--cr-color-primary) 12%, white);
+  --cr-theme-toggle-night: color-mix(in oklab, var(--cr-color-primary) 30%, #0a0d1f);
+  --cr-theme-toggle-sun: oklch(from var(--cr-color-primary) min(l, 0.45) c h);
+  --cr-theme-toggle-moon: color-mix(in oklab, var(--cr-color-primary) 10%, white);
+}
+
+.switch {
+  position: relative;
+  box-sizing: border-box;
+  width: 60px;
+  height: 32px;
+  padding: 0;
+  overflow: hidden;
+  background: var(--cr-theme-toggle-day);
+  border: 1px solid var(--cr-color-border);
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.switch::before,
+.switch::after {
+  position: absolute;
+  inset: 0;
+  content: '';
+  pointer-events: none;
+  transition:
+    opacity 0.25s,
+    transform 0.4s var(--cr-theme-toggle-ease);
+}
+
+/* Lueur chaude autour du soleil, qui s'éteint en se resserrant. */
+.switch::before {
+  transform-origin: 15px 50%;
+  background: radial-gradient(circle at 15px 50%, rgb(253 224 71 / 0.75) 0 9px, rgb(253 224 71 / 0.25) 15px, transparent 26px);
+}
+
+/* Quatre étoiles côté gauche, là où la pastille n'est plus la nuit. */
+.switch::after {
+  background:
+    radial-gradient(circle at 10px 9px, white 0 1px, transparent 1.6px),
+    radial-gradient(circle at 19px 19px, white 0 1.3px, transparent 1.9px),
+    radial-gradient(circle at 27px 8px, rgb(255 255 255 / 0.8) 0 0.8px, transparent 1.4px),
+    radial-gradient(circle at 8px 21px, rgb(255 255 255 / 0.7) 0 0.7px, transparent 1.3px);
+  opacity: 0;
+  transform: translateY(6px) scale(0.6);
+}
+
+.thumb {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  color: #fde68a;
+  background: var(--cr-theme-toggle-sun);
+  border-radius: 50%;
+  box-shadow: 0 1px 3px rgb(0 0 0 / 0.3);
+  /* L'icône change de couleur d'un coup à mi-chemin du fond : en fondu, les deux couleurs se croiseraient et l'icône disparaîtrait. */
+  transition:
+    transform 0.45s var(--cr-theme-toggle-ease),
+    background-color 0.3s linear,
+    color 0s 0.15s,
+    scale 0.15s;
+}
+
+.thumb .icon {
+  width: 18px;
+  height: 18px;
+}
+
+:host([theme='dark']) .switch {
+  background: var(--cr-theme-toggle-night);
+}
+
+:host([theme='dark']) .switch::before {
+  opacity: 0;
+  transform: scale(0.3);
+}
+
+:host([theme='dark']) .switch::after {
+  opacity: 1;
+  transform: none;
+  transition-delay: 0.15s;
+}
+
+:host([theme='dark']) .thumb {
+  color: var(--cr-theme-toggle-sun);
+  background: var(--cr-theme-toggle-moon);
+  transform: translateX(28px);
+}
+
+.switch:hover .thumb {
+  box-shadow:
+    0 1px 3px rgb(0 0 0 / 0.3),
+    0 0 0 4px rgb(255 255 255 / 0.35);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .switch,
+  .switch::before,
+  .switch::after,
+  .thumb {
+    transition: none !important;
+  }
+}
+
+/* Contrastes élevés : rail Canvas cerclé, pastille pleine ; activé, rail Highlight. La position de la pastille et l'icône portent l'état. */
+@media (forced-colors: active) {
+  .switch {
+    forced-color-adjust: none;
+    background: Canvas;
+    border-color: CanvasText;
+  }
+
+  .switch::before,
+  .switch::after {
+    display: none;
+  }
+
+  .thumb {
+    color: Canvas;
+    background: CanvasText;
+    box-shadow: none;
+  }
+
+  :host([theme='dark']) .switch {
+    background: Highlight;
+    border-color: Highlight;
+  }
+
+  :host([theme='dark']) .thumb {
+    color: Highlight;
+    background: HighlightText;
+  }
+}

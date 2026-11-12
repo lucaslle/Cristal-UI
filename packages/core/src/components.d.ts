@@ -21,8 +21,9 @@ import { PopupAnimation } from "./utils/popup";
 import { NumberAnimation } from "./utils/number-views";
 import { StepperVariant } from "./utils/stepper";
 import { TableColumn, TableDensity, TableLayout, TableVariant } from "./utils/table-layout";
-import { Theme } from "./components/cr-theme-toggle/cr-theme-toggle";
+import { Theme, ThemeToggleVariant } from "./components/cr-theme-toggle/cr-theme-toggle";
 import { ThemeTransition } from "./utils/theme-transitions";
+import { ThemeToggleIcon } from "./utils/theme-toggle-views";
 import { TooltipPlacement as TooltipPlacement1 } from "./components/cr-icon-button/cr-icon-button";
 export { AccordionAnimation, AccordionVariant } from "./utils/accordion";
 export { AvatarStatus } from "./components/cr-avatar/cr-avatar";
@@ -40,8 +41,9 @@ export { PopupAnimation } from "./utils/popup";
 export { NumberAnimation } from "./utils/number-views";
 export { StepperVariant } from "./utils/stepper";
 export { TableColumn, TableDensity, TableLayout, TableVariant } from "./utils/table-layout";
-export { Theme } from "./components/cr-theme-toggle/cr-theme-toggle";
+export { Theme, ThemeToggleVariant } from "./components/cr-theme-toggle/cr-theme-toggle";
 export { ThemeTransition } from "./utils/theme-transitions";
+export { ThemeToggleIcon } from "./utils/theme-toggle-views";
 export { TooltipPlacement as TooltipPlacement1 } from "./components/cr-icon-button/cr-icon-button";
 export namespace Components {
     /**
@@ -1569,12 +1571,17 @@ export namespace Components {
         "value": string;
     }
     /**
-     * Bascule entre thème clair et thème sombre : un bouton rond dont le soleil devient une lune.
+     * Bascule entre thème clair et thème sombre : un bouton rond, un interrupteur ou un bouton avec libellé, dont le soleil devient une lune.
      * Pose data-theme sur <html> (le thème sombre de
      * @cristal /tokens/tokens-dark.css), avec une transition animée sur toute la page.
      * Suit aussi les changements de data-theme faits ailleurs (sélecteur de thème de l'application). Garder le choix est laissé à l'application.
      */
     interface CrThemeToggle {
+        /**
+          * Animation de l'icône : morph (le soleil devient une lune, par défaut), rotate (le soleil tourne et rapetisse, la lune arrive en tournant), rise (le soleil se couche sous l'horizon, la lune se lève), flip (pièce qui se retourne) ou eclipse (un disque passe devant le soleil, les rayons deviennent des étoiles).
+          * @default 'morph'
+         */
+        "icon": ThemeToggleIcon;
         /**
           * Thème affiché ; au chargement, celui de data-theme sur <html>, sinon la préférence du système. Pour en changer depuis l'application, posez data-theme sur <html> : la bascule suit.
           * @default 'light'
@@ -1585,6 +1592,11 @@ export namespace Components {
           * @default 'circle'
          */
         "transition": ThemeTransition;
+        /**
+          * Forme de la bascule : icon (bouton rond, par défaut), switch (interrupteur dont la pastille glisse, rôle switch) ou label (bouton avec l'icône et le libellé « Thème sombre » visible).
+          * @default 'icon'
+         */
+        "variant": ThemeToggleVariant;
     }
     /**
      * Zone fixe en bas à droite de l'écran qui empile les cr-alert en notifications, la plus récente en bas.
@@ -2510,7 +2522,7 @@ declare global {
         "crChange": Theme;
     }
     /**
-     * Bascule entre thème clair et thème sombre : un bouton rond dont le soleil devient une lune.
+     * Bascule entre thème clair et thème sombre : un bouton rond, un interrupteur ou un bouton avec libellé, dont le soleil devient une lune.
      * Pose data-theme sur <html> (le thème sombre de
      * @cristal /tokens/tokens-dark.css), avec une transition animée sur toute la page.
      * Suit aussi les changements de data-theme faits ailleurs (sélecteur de thème de l'application). Garder le choix est laissé à l'application.
@@ -4333,12 +4345,17 @@ declare namespace LocalJSX {
         "value"?: string;
     }
     /**
-     * Bascule entre thème clair et thème sombre : un bouton rond dont le soleil devient une lune.
+     * Bascule entre thème clair et thème sombre : un bouton rond, un interrupteur ou un bouton avec libellé, dont le soleil devient une lune.
      * Pose data-theme sur <html> (le thème sombre de
      * @cristal /tokens/tokens-dark.css), avec une transition animée sur toute la page.
      * Suit aussi les changements de data-theme faits ailleurs (sélecteur de thème de l'application). Garder le choix est laissé à l'application.
      */
     interface CrThemeToggle {
+        /**
+          * Animation de l'icône : morph (le soleil devient une lune, par défaut), rotate (le soleil tourne et rapetisse, la lune arrive en tournant), rise (le soleil se couche sous l'horizon, la lune se lève), flip (pièce qui se retourne) ou eclipse (un disque passe devant le soleil, les rayons deviennent des étoiles).
+          * @default 'morph'
+         */
+        "icon"?: ThemeToggleIcon;
         /**
           * Émis après chaque changement de thème par la bascule, une fois data-theme posé ; detail : le nouveau thème.
          */
@@ -4353,6 +4370,11 @@ declare namespace LocalJSX {
           * @default 'circle'
          */
         "transition"?: ThemeTransition;
+        /**
+          * Forme de la bascule : icon (bouton rond, par défaut), switch (interrupteur dont la pastille glisse, rôle switch) ou label (bouton avec l'icône et le libellé « Thème sombre » visible).
+          * @default 'icon'
+         */
+        "variant"?: ThemeToggleVariant;
     }
     /**
      * Zone fixe en bas à droite de l'écran qui empile les cr-alert en notifications, la plus récente en bas.
@@ -4729,6 +4751,8 @@ declare namespace LocalJSX {
     interface CrThemeToggleAttributes {
         "theme": Theme;
         "transition": ThemeTransition;
+        "variant": ThemeToggleVariant;
+        "icon": ThemeToggleIcon;
     }
     interface CrTooltipAttributes {
         "text": string;
@@ -5024,7 +5048,7 @@ declare module "@stencil/core" {
              */
             "cr-textarea": LocalJSX.IntrinsicElements["cr-textarea"] & JSXBase.HTMLAttributes<HTMLCrTextareaElement>;
             /**
-             * Bascule entre thème clair et thème sombre : un bouton rond dont le soleil devient une lune.
+             * Bascule entre thème clair et thème sombre : un bouton rond, un interrupteur ou un bouton avec libellé, dont le soleil devient une lune.
              * Pose data-theme sur <html> (le thème sombre de
              * @cristal /tokens/tokens-dark.css), avec une transition animée sur toute la page.
              * Suit aussi les changements de data-theme faits ailleurs (sélecteur de thème de l'application). Garder le choix est laissé à l'application.

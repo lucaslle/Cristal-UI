@@ -4,6 +4,8 @@ description: Passe la page du thème clair au thème sombre, d'un clic, avec une
 ---
 
 import ThemeToggleProfile from '@/demos/theme-toggle-profile';
+import ThemeToggleVariants from '@/demos/theme-toggle-variants';
+import ThemeToggleIcons from '@/demos/theme-toggle-icons';
 
 ## Exemple
 
@@ -19,9 +21,41 @@ Un bouton rond dont le soleil devient une lune : ses rayons rentrent et un disqu
   Le thème sombre vient de `@cristal/react/tokens-dark.css` : importez-le après `tokens.css`, sinon la bascule change l'attribut sans que les composants changent de couleur.
 </Callout>
 
+## Variantes
+
+`variant` choisit la forme de la bascule :
+
+- `icon` (par défaut) : un bouton rond, sans texte ;
+- `switch` : un vrai interrupteur ; la pastille glisse en portant le soleil ou la lune, et le rail passe du jour (clair, une lueur de soleil) à la nuit (sombre, quelques étoiles) ;
+- `label` : un bouton en pilule, l'icône et le libellé « Thème sombre » visibles.
+
+<Preview>
+  <ThemeToggleVariants />
+</Preview>
+
+<include>../../../demos/theme-toggle-variants.tsx</include>
+
+`icon` et `label` sont des boutons à bascule (`aria-pressed`) : « Thème sombre, bouton bascule, activé ». `switch` est un interrupteur (`role="switch"` et `aria-checked`) : « Thème sombre, interrupteur, activé ». Même nom, même effet ; seule la façon de l'annoncer change, selon ce que l'utilisateur voit.
+
+## Animation de l'icône
+
+`icon` choisit l'animation du soleil et de la lune, dans les trois variantes (dans la pastille pour `switch`) :
+
+- `morph` (par défaut) : les rayons rentrent et un disque creuse le croissant ;
+- `rotate` : le soleil part en tournant et rapetisse, la lune arrive en tournant ;
+- `rise` : le soleil se couche sous une ligne d'horizon, puis la lune se lève ;
+- `flip` : une pièce qui se retourne en 3D, le soleil d'un côté, la lune de l'autre ;
+- `eclipse` : un disque glisse devant le soleil, ses rayons s'éteignent et des étoiles s'allument.
+
+<Preview>
+  <ThemeToggleIcons />
+</Preview>
+
+<include>../../../demos/theme-toggle-icons.tsx</include>
+
 ## Transitions
 
-`transition` choisit comment le nouveau thème remplace l'ancien, sur toute la page :
+`transition` choisit comment le nouveau thème remplace l'ancien, sur toute la page, quelle que soit la variante (le cercle et l'éclipse partent du centre du bouton, ou de la pastille de l'interrupteur) :
 
 - `circle` (par défaut) : un cercle qui grandit depuis le bouton ;
 - `curtain` : le nouveau thème tombe du haut comme un rideau ;
@@ -31,7 +65,7 @@ Un bouton rond dont le soleil devient une lune : ses rayons rentrent et un disqu
 - `sweep` : le nouveau thème balaie l'écran comme une aiguille d'horloge ;
 - `none` : changement immédiat.
 
-Les transitions utilisent l'API View Transitions. Là où elle manque, et toujours quand l'utilisateur a demandé à réduire les animations, le thème change d'un coup, sans transition ni morphose de l'icône.
+Les transitions utilisent l'API View Transitions. Là où elle manque, et toujours quand l'utilisateur a demandé à réduire les animations, le thème change d'un coup, sans transition ni animation de l'icône.
 
 ## Thème de départ et changements extérieurs
 
@@ -61,10 +95,12 @@ Pour éviter un éclair du mauvais thème au rechargement, posez l'attribut avan
 ## Accessibilité
 
 - Un vrai `<button>` avec `aria-pressed` : annoncé « Thème sombre, bouton bascule, activé / désactivé », activé par clic, Entrée ou Espace. Le nom suit la langue de la page.
+- `switch` : le même `<button>` avec `role="switch"` et `aria-checked`, activé par clic, Espace ou Entrée ; une cible de 60 × 32 px. La pastille reste à au moins 3:1 sur son rail, et le bord du rail à au moins 3:1 sur la page, dans les deux thèmes. En contrastes élevés, rail et pastille prennent les couleurs du système ; l'état se lit aussi à la position de la pastille et à l'icône, pas seulement à la couleur.
+- `label` : le libellé visible « Thème sombre » ne change jamais et forme à lui seul le nom accessible (le nom contient toujours le texte affiché, critère « label in name ») ; l'état passe par `aria-pressed` et par l'icône.
 - L'icône est décorative (`aria-hidden`) ; l'état est donné par `aria-pressed`, pas seulement par le soleil ou la lune.
 - Une cible de 40 × 40 px, un contour de focus visible, et une icône et une bordure à au moins 3:1 dans les deux thèmes ; en contrastes élevés, icône, bordure et focus prennent les couleurs du système.
 - Les transitions ne font jamais apparaître de texte en fondu depuis une opacité nulle : seules des formes (cercle, bandes, disque, aiguille) découvrent le nouveau thème, déjà lisible.
-- Avec la réduction des animations demandée, aucune transition ni morphose : le thème et l'icône changent d'un coup.
+- Avec la réduction des animations demandée, ni transition, ni animation de l'icône, ni glissement de la pastille : le thème, l'icône et l'interrupteur changent d'un coup.
 
 ## API
 
