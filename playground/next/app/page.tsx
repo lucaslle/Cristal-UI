@@ -35,6 +35,7 @@ import { EnglishDemo } from './english-demo';
 import { IconButtonDemo } from './icon-button-demo';
 import { TooltipDemo } from './tooltip-demo';
 import { PopoverDemo } from './popover-demo';
+import { ThemeToggleDemo } from './theme-toggle-demo';
 
 const row = { display: 'flex', gap: 'var(--cr-spacing-sm)', alignItems: 'center', marginBottom: 'var(--cr-spacing-lg)' };
 const grid = { display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))', gap: 'var(--cr-spacing-lg)' };
@@ -84,6 +85,9 @@ export default function Page() {
         <CrButton>Thème rose</CrButton>
         <CrButton variant="secondary">Secondaire rose</CrButton>
       </div>
+
+      <h2>Bascule de thème</h2>
+      <ThemeToggleDemo />
 
       <h2>États des champs</h2>
       <div style={grid}>

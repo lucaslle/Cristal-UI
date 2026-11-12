@@ -272,6 +272,14 @@ Remplaçant de `div` : `display`, `direction`, `gap`, `padding`, `align`, `justi
 <CrBox display="grid" columns="220px" gap="lg" padding="xl">…</CrBox>
 ```
 
+### Bascule de thème : `cr-theme-toggle`
+
+Bouton rond dont le soleil devient une lune ; un clic pose `data-theme="dark"` ou `"light"` sur `<html>` (thème sombre de `tokens-dark.css`), puis émet `crChange` avec le nouveau thème. Au chargement, il prend `data-theme`, sinon la préférence du système, et suit ensuite tout changement de l'attribut. `transition` anime le passage sur toute la page avec l'API View Transitions : `circle` (par défaut, cercle depuis le bouton), `curtain` (rideau), `blinds` (bandes de haut en bas), `flip` (retournement 3D), `eclipse` (disque qui glisse), `sweep` (aiguille d'horloge) ou `none`. Changement immédiat si l'API manque ou si l'utilisateur réduit les animations. Vrai bouton avec `aria-pressed`, nommé « Thème sombre » / « Dark theme ». Garder le choix est laissé à l'application :
+
+```tsx
+<CrThemeToggle onCrChange={(event) => localStorage.setItem('theme', event.detail)} />
+```
+
 ### Fond animé : `cr-background`
 
 Conteneur dont le contenu s'affiche par-dessus un fond décoratif animé, aux couleurs du thème : `variant` (`aurora` par défaut, `gradient`, `grid`, `dots`, `waves`, `particles` : les points s'écartent du curseur et s'y relient, sauf avec `interactive={false}`). Le contenu reste dans la page, lisible et cliquable. Un bouton pause s'affiche dans le coin (`controls={false}` le masque si l'application a sa propre commande), `paused` arrête l'animation ; elle démarre en pause quand l'utilisateur réduit les animations, et s'arrête hors de l'écran ou quand l'onglet est caché. Couleurs à changer en CSS : `--cr-background-color-1`, `-2`, `-3` et `--cr-background-base`.

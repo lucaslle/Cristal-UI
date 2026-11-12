@@ -1,0 +1,71 @@
+---
+title: Bascule de thème
+description: Passe la page du thème clair au thème sombre, d'un clic, avec une transition animée. Balise cr-theme-toggle, composant React CrThemeToggle.
+---
+
+import ThemeToggleProfile from '@/demos/theme-toggle-profile';
+
+## Exemple
+
+Un bouton rond dont le soleil devient une lune : ses rayons rentrent et un disque glisse dessus pour creuser le croissant. Un clic pose `data-theme="dark"` (ou `"light"`) sur `<html>`, ce qui active le [thème sombre](/docs/theme#thème-sombre) de toute la page, puis émet `crChange` avec le nouveau thème. Essayez-le : il change le thème de toute cette documentation.
+
+<Preview>
+  <ThemeToggleProfile />
+</Preview>
+
+<include>../../../demos/theme-toggle-profile.tsx</include>
+
+<Callout>
+  Le thème sombre vient de `@cristal/react/tokens-dark.css` : importez-le après `tokens.css`, sinon la bascule change l'attribut sans que les composants changent de couleur.
+</Callout>
+
+## Transitions
+
+`transition` choisit comment le nouveau thème remplace l'ancien, sur toute la page :
+
+- `circle` (par défaut) : un cercle qui grandit depuis le bouton ;
+- `curtain` : le nouveau thème tombe du haut comme un rideau ;
+- `blinds` : des bandes horizontales basculent l'une après l'autre, de haut en bas ;
+- `flip` : la page se retourne en 3D, son dos est l'autre thème ;
+- `eclipse` : un disque immense au bord flou glisse à travers l'écran ;
+- `sweep` : le nouveau thème balaie l'écran comme une aiguille d'horloge ;
+- `none` : changement immédiat.
+
+Les transitions utilisent l'API View Transitions. Là où elle manque, et toujours quand l'utilisateur a demandé à réduire les animations, le thème change d'un coup, sans transition ni morphose de l'icône.
+
+## Thème de départ et changements extérieurs
+
+Au chargement, la bascule prend le thème de `data-theme` sur `<html>`, sinon la préférence du système. Elle suit ensuite tout changement de `data-theme`, d'où qu'il vienne : pour changer de thème depuis l'application, posez l'attribut, la bascule se met à jour.
+
+Cette documentation s'en sert avec next-themes : elle pose `data-theme` en plus de la classe `dark`, et sur `crChange` elle transmet le choix à next-themes (`setTheme`), qui le garde. La bascule et le sélecteur de thème de la doc restent ainsi d'accord, dans les deux sens.
+
+## Garder le choix
+
+La bascule ne retient rien : c'est à l'application de garder le choix, par exemple dans `localStorage`.
+
+```tsx
+<CrThemeToggle onCrChange={(event) => localStorage.setItem('theme', event.detail)} />
+```
+
+Pour éviter un éclair du mauvais thème au rechargement, posez l'attribut avant le premier affichage, avec un script en ligne dans `<head>`. `suppressHydrationWarning` sur `<html>` évite l'avertissement de React pour cet attribut ajouté avant l'hydratation.
+
+```tsx title="app/layout.tsx"
+<html lang="fr" suppressHydrationWarning>
+  <head>
+    <script dangerouslySetInnerHTML={{ __html: "const t = localStorage.getItem('theme'); if (t) document.documentElement.dataset.theme = t;" }} />
+  </head>
+  <body>{children}</body>
+</html>
+```
+
+## Accessibilité
+
+- Un vrai `<button>` avec `aria-pressed` : annoncé « Thème sombre, bouton bascule, activé / désactivé », activé par clic, Entrée ou Espace. Le nom suit la langue de la page.
+- L'icône est décorative (`aria-hidden`) ; l'état est donné par `aria-pressed`, pas seulement par le soleil ou la lune.
+- Une cible de 40 × 40 px, un contour de focus visible, et une icône et une bordure à au moins 3:1 dans les deux thèmes ; en contrastes élevés, icône, bordure et focus prennent les couleurs du système.
+- Les transitions ne font jamais apparaître de texte en fondu depuis une opacité nulle : seules des formes (cercle, bandes, disque, aiguille) découvrent le nouveau thème, déjà lisible.
+- Avec la réduction des animations demandée, aucune transition ni morphose : le thème et l'icône changent d'un coup.
+
+## API
+
+<ApiReference tag="cr-theme-toggle" />

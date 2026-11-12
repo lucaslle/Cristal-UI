@@ -1,0 +1,102 @@
+:host {
+  display: inline-flex;
+  vertical-align: middle;
+}
+
+:host([hidden]) {
+  display: none;
+}
+
+.button {
+  display: inline-grid;
+  place-items: center;
+  width: var(--cr-control-m);
+  height: var(--cr-control-m);
+  padding: 0;
+  color: var(--cr-color-primary-text);
+  background: transparent;
+  border: 1px solid var(--cr-color-border);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.button:hover {
+  background: var(--cr-color-primary-subtle);
+}
+
+.button:focus-visible {
+  outline: 2px solid var(--cr-color-focus);
+  outline-offset: 2px;
+}
+
+.button:active .icon {
+  scale: 0.88;
+}
+
+/* Soleil : petit disque et rayons sortis. Lune : le disque grandit, les rayons rentrent et un disque masqué glisse dessus pour creuser le croissant. */
+.icon {
+  overflow: visible;
+  /* Les huit rayons sont identiques tous les 45° : le soleil tourné d'un huitième ne change pas, la lune finit droite. */
+  rotate: 45deg;
+  transition: rotate 0.5s cubic-bezier(0.3, 1.4, 0.5, 1), scale 0.15s;
+}
+
+.disc {
+  transform-box: fill-box;
+  transform-origin: center;
+  transform: scale(0.6);
+  transition: transform 0.5s cubic-bezier(0.3, 1.4, 0.5, 1);
+}
+
+.bite {
+  transform: translate(14px, -14px);
+  transition: transform 0.45s cubic-bezier(0.5, 0, 0.3, 1);
+}
+
+.rays {
+  transform-box: view-box;
+  transform-origin: 12px 12px;
+  transition:
+    transform 0.45s cubic-bezier(0.3, 1.4, 0.5, 1) 0.1s,
+    opacity 0.3s 0.1s;
+}
+
+:host([theme='dark']) .icon {
+  rotate: 0deg;
+}
+
+:host([theme='dark']) .disc {
+  transform: scale(1);
+}
+
+:host([theme='dark']) .bite {
+  transform: translate(5px, -5px);
+  transition-delay: 0.1s;
+}
+
+:host([theme='dark']) .rays {
+  transform: rotate(-90deg) scale(0.4);
+  opacity: 0;
+  transition-delay: 0s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .icon,
+  .disc,
+  .bite,
+  .rays {
+    transition: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .button {
+    color: ButtonText;
+    border-color: ButtonText;
+  }
+
+  .button:focus-visible {
+    outline-color: Highlight;
+  }
+}

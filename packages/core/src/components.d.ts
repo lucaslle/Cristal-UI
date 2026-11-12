@@ -21,6 +21,8 @@ import { PopupAnimation } from "./utils/popup";
 import { NumberAnimation } from "./utils/number-views";
 import { StepperVariant } from "./utils/stepper";
 import { TableColumn, TableDensity, TableLayout, TableVariant } from "./utils/table-layout";
+import { Theme } from "./components/cr-theme-toggle/cr-theme-toggle";
+import { ThemeTransition } from "./utils/theme-transitions";
 import { TooltipPlacement as TooltipPlacement1 } from "./components/cr-icon-button/cr-icon-button";
 export { AccordionAnimation, AccordionVariant } from "./utils/accordion";
 export { AvatarStatus } from "./components/cr-avatar/cr-avatar";
@@ -38,6 +40,8 @@ export { PopupAnimation } from "./utils/popup";
 export { NumberAnimation } from "./utils/number-views";
 export { StepperVariant } from "./utils/stepper";
 export { TableColumn, TableDensity, TableLayout, TableVariant } from "./utils/table-layout";
+export { Theme } from "./components/cr-theme-toggle/cr-theme-toggle";
+export { ThemeTransition } from "./utils/theme-transitions";
 export { TooltipPlacement as TooltipPlacement1 } from "./components/cr-icon-button/cr-icon-button";
 export namespace Components {
     /**
@@ -1565,6 +1569,24 @@ export namespace Components {
         "value": string;
     }
     /**
+     * Bascule entre thème clair et thème sombre : un bouton rond dont le soleil devient une lune.
+     * Pose data-theme sur <html> (le thème sombre de
+     * @cristal /tokens/tokens-dark.css), avec une transition animée sur toute la page.
+     * Suit aussi les changements de data-theme faits ailleurs (sélecteur de thème de l'application). Garder le choix est laissé à l'application.
+     */
+    interface CrThemeToggle {
+        /**
+          * Thème affiché ; au chargement, celui de data-theme sur <html>, sinon la préférence du système. Pour en changer depuis l'application, posez data-theme sur <html> : la bascule suit.
+          * @default 'light'
+         */
+        "theme": Theme;
+        /**
+          * Passage d'un thème à l'autre : circle (cercle depuis le bouton, par défaut), curtain (rideau qui tombe), blinds (bandes de haut en bas), flip (la page se retourne), eclipse (disque qui glisse), sweep (aiguille d'horloge) ou none. Instantané si l'utilisateur réduit les animations ou si le navigateur ne connaît pas les transitions de vue.
+          * @default 'circle'
+         */
+        "transition": ThemeTransition;
+    }
+    /**
      * Zone fixe en bas à droite de l'écran qui empile les cr-alert en notifications, la plus récente en bas.
      */
     interface CrToaster {
@@ -1696,6 +1718,10 @@ export interface CrTagInputCustomEvent<T> extends CustomEvent<T> {
 export interface CrTextareaCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLCrTextareaElement;
+}
+export interface CrThemeToggleCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLCrThemeToggleElement;
 }
 declare global {
     /**
@@ -2480,6 +2506,29 @@ declare global {
         prototype: HTMLCrTextareaElement;
         new (): HTMLCrTextareaElement;
     };
+    interface HTMLCrThemeToggleElementEventMap {
+        "crChange": Theme;
+    }
+    /**
+     * Bascule entre thème clair et thème sombre : un bouton rond dont le soleil devient une lune.
+     * Pose data-theme sur <html> (le thème sombre de
+     * @cristal /tokens/tokens-dark.css), avec une transition animée sur toute la page.
+     * Suit aussi les changements de data-theme faits ailleurs (sélecteur de thème de l'application). Garder le choix est laissé à l'application.
+     */
+    interface HTMLCrThemeToggleElement extends Components.CrThemeToggle, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLCrThemeToggleElementEventMap>(type: K, listener: (this: HTMLCrThemeToggleElement, ev: CrThemeToggleCustomEvent<HTMLCrThemeToggleElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLCrThemeToggleElementEventMap>(type: K, listener: (this: HTMLCrThemeToggleElement, ev: CrThemeToggleCustomEvent<HTMLCrThemeToggleElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLCrThemeToggleElement: {
+        prototype: HTMLCrThemeToggleElement;
+        new (): HTMLCrThemeToggleElement;
+    };
     /**
      * Zone fixe en bas à droite de l'écran qui empile les cr-alert en notifications, la plus récente en bas.
      */
@@ -2547,6 +2596,7 @@ declare global {
         "cr-table": HTMLCrTableElement;
         "cr-tag-input": HTMLCrTagInputElement;
         "cr-textarea": HTMLCrTextareaElement;
+        "cr-theme-toggle": HTMLCrThemeToggleElement;
         "cr-toaster": HTMLCrToasterElement;
         "cr-tooltip": HTMLCrTooltipElement;
     }
@@ -4283,6 +4333,28 @@ declare namespace LocalJSX {
         "value"?: string;
     }
     /**
+     * Bascule entre thème clair et thème sombre : un bouton rond dont le soleil devient une lune.
+     * Pose data-theme sur <html> (le thème sombre de
+     * @cristal /tokens/tokens-dark.css), avec une transition animée sur toute la page.
+     * Suit aussi les changements de data-theme faits ailleurs (sélecteur de thème de l'application). Garder le choix est laissé à l'application.
+     */
+    interface CrThemeToggle {
+        /**
+          * Émis après chaque changement de thème par la bascule, une fois data-theme posé ; detail : le nouveau thème.
+         */
+        "onCrChange"?: (event: CrThemeToggleCustomEvent<Theme>) => void;
+        /**
+          * Thème affiché ; au chargement, celui de data-theme sur <html>, sinon la préférence du système. Pour en changer depuis l'application, posez data-theme sur <html> : la bascule suit.
+          * @default 'light'
+         */
+        "theme"?: Theme;
+        /**
+          * Passage d'un thème à l'autre : circle (cercle depuis le bouton, par défaut), curtain (rideau qui tombe), blinds (bandes de haut en bas), flip (la page se retourne), eclipse (disque qui glisse), sweep (aiguille d'horloge) ou none. Instantané si l'utilisateur réduit les animations ou si le navigateur ne connaît pas les transitions de vue.
+          * @default 'circle'
+         */
+        "transition"?: ThemeTransition;
+    }
+    /**
      * Zone fixe en bas à droite de l'écran qui empile les cr-alert en notifications, la plus récente en bas.
      */
     interface CrToaster {
@@ -4654,6 +4726,10 @@ declare namespace LocalJSX {
         "disabled": boolean;
         "errorAnimation": ErrorAnimation;
     }
+    interface CrThemeToggleAttributes {
+        "theme": Theme;
+        "transition": ThemeTransition;
+    }
     interface CrTooltipAttributes {
         "text": string;
         "placement": TooltipPlacement;
@@ -4707,6 +4783,7 @@ declare namespace LocalJSX {
         "cr-table": Omit<CrTable, keyof CrTableAttributes> & { [K in keyof CrTable & keyof CrTableAttributes]?: CrTable[K] } & { [K in keyof CrTable & keyof CrTableAttributes as `attr:${K}`]?: CrTableAttributes[K] } & { [K in keyof CrTable & keyof CrTableAttributes as `prop:${K}`]?: CrTable[K] } & OneOf<"label", CrTable["label"], CrTableAttributes["label"]>;
         "cr-tag-input": Omit<CrTagInput, keyof CrTagInputAttributes> & { [K in keyof CrTagInput & keyof CrTagInputAttributes]?: CrTagInput[K] } & { [K in keyof CrTagInput & keyof CrTagInputAttributes as `attr:${K}`]?: CrTagInputAttributes[K] } & { [K in keyof CrTagInput & keyof CrTagInputAttributes as `prop:${K}`]?: CrTagInput[K] } & OneOf<"label", CrTagInput["label"], CrTagInputAttributes["label"]>;
         "cr-textarea": Omit<CrTextarea, keyof CrTextareaAttributes> & { [K in keyof CrTextarea & keyof CrTextareaAttributes]?: CrTextarea[K] } & { [K in keyof CrTextarea & keyof CrTextareaAttributes as `attr:${K}`]?: CrTextareaAttributes[K] } & { [K in keyof CrTextarea & keyof CrTextareaAttributes as `prop:${K}`]?: CrTextarea[K] } & OneOf<"label", CrTextarea["label"], CrTextareaAttributes["label"]>;
+        "cr-theme-toggle": Omit<CrThemeToggle, keyof CrThemeToggleAttributes> & { [K in keyof CrThemeToggle & keyof CrThemeToggleAttributes]?: CrThemeToggle[K] } & { [K in keyof CrThemeToggle & keyof CrThemeToggleAttributes as `attr:${K}`]?: CrThemeToggleAttributes[K] } & { [K in keyof CrThemeToggle & keyof CrThemeToggleAttributes as `prop:${K}`]?: CrThemeToggle[K] };
         "cr-toaster": CrToaster;
         "cr-tooltip": Omit<CrTooltip, keyof CrTooltipAttributes> & { [K in keyof CrTooltip & keyof CrTooltipAttributes]?: CrTooltip[K] } & { [K in keyof CrTooltip & keyof CrTooltipAttributes as `attr:${K}`]?: CrTooltipAttributes[K] } & { [K in keyof CrTooltip & keyof CrTooltipAttributes as `prop:${K}`]?: CrTooltip[K] } & OneOf<"text", CrTooltip["text"], CrTooltipAttributes["text"]>;
     }
@@ -4946,6 +5023,13 @@ declare module "@stencil/core" {
              * Zone de texte sur plusieurs lignes qui grandit d'une ligne à la fois, avec un léger rebond.
              */
             "cr-textarea": LocalJSX.IntrinsicElements["cr-textarea"] & JSXBase.HTMLAttributes<HTMLCrTextareaElement>;
+            /**
+             * Bascule entre thème clair et thème sombre : un bouton rond dont le soleil devient une lune.
+             * Pose data-theme sur <html> (le thème sombre de
+             * @cristal /tokens/tokens-dark.css), avec une transition animée sur toute la page.
+             * Suit aussi les changements de data-theme faits ailleurs (sélecteur de thème de l'application). Garder le choix est laissé à l'application.
+             */
+            "cr-theme-toggle": LocalJSX.IntrinsicElements["cr-theme-toggle"] & JSXBase.HTMLAttributes<HTMLCrThemeToggleElement>;
             /**
              * Zone fixe en bas à droite de l'écran qui empile les cr-alert en notifications, la plus récente en bas.
              */
