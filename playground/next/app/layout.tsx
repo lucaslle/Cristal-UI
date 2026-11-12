@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import '@cristal/tokens/tokens.css';
+import '@cristal/react/tokens.css';
 
 export const metadata = { title: 'Cristal — playground Next' };
 

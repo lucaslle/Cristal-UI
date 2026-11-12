@@ -6,7 +6,7 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsc -p tsconfig.json"
+    "build": "tsc -p tsconfig.json && node -e \"require('node:fs').copyFileSync('../tokens/build/tokens.css', 'dist/tokens.css')\""
   },
   "dependencies": {
     "@cristal/core": "workspace:*",
@@ -29,6 +29,7 @@
     "./ssr": {
       "types": "./dist/generated/components.server.d.ts",
       "import": "./dist/generated/components.server.js"
-    }
+    },
+    "./tokens.css": "./dist/tokens.css"
   }
 }

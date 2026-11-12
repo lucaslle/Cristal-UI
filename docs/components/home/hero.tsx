@@ -27,7 +27,7 @@ export function Hero({ lang }: { lang: string }) {
               {c.browse}
             </Link>
           </div>
-          <CopyCommand command="npm install @cristal/react @cristal/tokens" label={c.copyCommand} done={c.copied} />
+          <CopyCommand command="npm install @cristal/react" label={c.copyCommand} done={c.copied} />
         </div>
         <HeroStage lang={lang} />
       </div>

@@ -6,8 +6,10 @@ description: Ajouter Cristal à un projet React ou Next.js.
 ## Installer les paquets
 
 ```bash
-npm install @cristal/react @cristal/tokens
+npm install @cristal/react
 ```
+
+Un seul paquet suffit : il apporte les composants (`@cristal/core`) et les tokens.
 
 <Callout type="warn">
   Cristal n'est pas encore publié sur npm. En attendant, les paquets s'installent depuis les archives générées par `pnpm pack` (voir le README du dépôt).
@@ -18,7 +20,7 @@ npm install @cristal/react @cristal/tokens
 Une seule fois, à la racine de l'application : `app/layout.tsx` avec Next.js, `main.tsx` avec React.
 
 ```tsx
-import '@cristal/tokens/tokens.css';
+import '@cristal/react/tokens.css';
 ```
 
 ## Choisir la langue
