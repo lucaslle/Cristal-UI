@@ -169,7 +169,7 @@ Grille d'éléments (pour composer un tableau de bord, par exemple) déplacés p
 | Composant | Rôle |
 |---|---|
 | `cr-textarea` | texte sur plusieurs lignes qui grandit d'une ligne à la fois (`rows`, `maxRows`, slot `end`) |
-| `cr-otp` | code à usage unique, une case par chiffre (`length`, `onCrComplete`) |
+| `cr-otp` | code à usage unique, une case par chiffre (`length`, `onCrComplete`) ; `animation` choisit l'effet : `pop` (par défaut), `bounce`, `stretch`, `spin`, `merge`, `zoom` ou `tint` |
 | `cr-card-input` | carte bancaire : numéro groupé, puis expiration et CVC (`name`, `name-expiry`, `name-cvc`) ; `preview` ajoute une carte dessinée qui se remplit et se retourne, `holder` le champ Titulaire ; `variant="card"` fait tout saisir directement sur la carte |
 | `cr-tag-input` | étiquettes ajoutées avec Entrée ou virgule, retirées avec × (`values`, `onCrChange`) |
 

@@ -886,6 +886,11 @@ export namespace Components {
      */
     interface CrOtp {
         /**
+          * Animation de la saisie : pop (le chiffre apparaît, vague verte à la fin, par défaut), bounce (le chiffre tombe, la case s'écrase et rebondit), stretch (un seul anneau de focus s'étire de case en case, puis entoure tout le code), spin (les chiffres défilent comme une machine à sous), merge (à la fin, les cases se rejoignent en une seule barre), zoom (le chiffre arrive en grand, un reflet balaie le code complet) ou tint (la case se remplit de couleur par le bas, verte à la fin).
+          * @default 'pop'
+         */
+        "animation": 'pop' | 'bounce' | 'stretch' | 'spin' | 'merge' | 'zoom' | 'tint';
+        /**
           * Désactive le champ.
           * @default false
          */
@@ -3445,6 +3450,11 @@ declare namespace LocalJSX {
      */
     interface CrOtp {
         /**
+          * Animation de la saisie : pop (le chiffre apparaît, vague verte à la fin, par défaut), bounce (le chiffre tombe, la case s'écrase et rebondit), stretch (un seul anneau de focus s'étire de case en case, puis entoure tout le code), spin (les chiffres défilent comme une machine à sous), merge (à la fin, les cases se rejoignent en une seule barre), zoom (le chiffre arrive en grand, un reflet balaie le code complet) ou tint (la case se remplit de couleur par le bas, verte à la fin).
+          * @default 'pop'
+         */
+        "animation"?: 'pop' | 'bounce' | 'stretch' | 'spin' | 'merge' | 'zoom' | 'tint';
+        /**
           * Désactive le champ.
           * @default false
          */
@@ -4399,6 +4409,7 @@ declare namespace LocalJSX {
         "error": string;
         "required": boolean;
         "disabled": boolean;
+        "animation": 'pop' | 'bounce' | 'stretch' | 'spin' | 'merge' | 'zoom' | 'tint';
     }
     interface CrPaginationAttributes {
         "page": number;

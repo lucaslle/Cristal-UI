@@ -4,6 +4,7 @@ description: A code received by SMS or email, one box per digit. Tag cr-otp, Rea
 ---
 
 import OtpBasic from '@/demos/en/otp-basic';
+import OtpAnimations from '@/demos/en/otp-animations';
 
 ## Example
 
@@ -15,11 +16,34 @@ The boxes fill one by one while typing; when the code is complete, they turn gre
 
 <include>../../../demos/en/otp-basic.tsx</include>
 
+## Animations
+
+`animation` picks the effect for typing and for the complete code.
+
+<Preview column>
+  <OtpAnimations />
+</Preview>
+
+<include>../../../demos/en/otp-animations.tsx</include>
+
+| `animation` | Effect |
+|---|---|
+| `pop` | the digit grows in; when complete, the boxes turn green in a wave (default) |
+| `bounce` | the digit drops into its box, which squashes and bounces back; when complete, the boxes hop one after another |
+| `stretch` | a single focus ring stretches from box to box while typing (the leading edge moves first); when complete, it wraps the whole code, in green |
+| `spin` | digits roll like a slot-machine reel before stopping; when complete, every digit spins once more, in a wave |
+| `merge` | when complete, the boxes slide together into a single rounded green bar |
+| `zoom` | the digit zooms in big and lands; when complete, a shine sweeps across the boxes as they turn green |
+| `tint` | the box fills with colour from the bottom as its digit lands; when complete, the fill turns green, starting from the last box |
+
+A pasted code arrives as a quick cascade, digit after digit; deleting a digit undoes the complete state. When the user asks for less motion (`prefers-reduced-motion`), nothing moves: digits and colours change instantly.
+
 ## Accessibility
 
 - A single real field, invisible and laid over the boxes: one label for screen readers, and both pasting ("123 456") and autofill of the code received by SMS (`autocomplete="one-time-code"`) work.
 - Only digits are kept; the numeric keyboard opens on mobile.
 - An incomplete code blocks form submission: "Enter the 6 digits of the code.".
+- Animations only touch the drawn boxes, hidden from screen readers: whatever `animation` is, the field that is read stays the same. With `stretch`, the ring following the active box is the focus indicator; in forced colours it takes the system highlight colour, and a complete code gets a thicker border.
 
 ## API
 

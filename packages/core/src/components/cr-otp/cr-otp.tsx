@@ -1,4 +1,4 @@
-import { AttachInternals, Component, Element, Event, EventEmitter, Listen, Prop, State, h } from '@stencil/core';
+import { AttachInternals, Component, Element, Event, EventEmitter, Listen, Prop, State, Watch, h } from '@stencil/core';
 import { t } from '../../utils/i18n';
 import { FieldHeader, describedBy } from '../../utils/field';
 import { handleInvalid } from '../../utils/validation';
@@ -10,7 +10,7 @@ import { handleInvalid } from '../../utils/validation';
  */
 @Component({
   tag: 'cr-otp',
-  styleUrls: ['../../global/field.css', 'cr-otp.css'],
+  styleUrls: ['../../global/field.css', 'cr-otp.css', 'cr-otp-motion.css', 'cr-otp-morph.css'],
   shadow: { delegatesFocus: true },
   formAssociated: true,
 })
@@ -34,6 +34,13 @@ export class CrOtp {
   @Prop({ reflect: true }) required = false;
   /** Désactive le champ. */
   @Prop({ reflect: true }) disabled = false;
+  /**
+   * Animation de la saisie : pop (le chiffre apparaît, vague verte à la fin, par défaut), bounce (le chiffre tombe, la case s'écrase et rebondit),
+   * stretch (un seul anneau de focus s'étire de case en case, puis entoure tout le code), spin (les chiffres défilent comme une machine à sous),
+   * merge (à la fin, les cases se rejoignent en une seule barre), zoom (le chiffre arrive en grand, un reflet balaie le code complet)
+   * ou tint (la case se remplit de couleur par le bas, verte à la fin).
+   */
+  @Prop({ reflect: true }) animation: 'pop' | 'bounce' | 'stretch' | 'spin' | 'merge' | 'zoom' | 'tint' = 'pop';
 
   /** Émis à chaque chiffre ; detail : le code. */
   @Event() crInput: EventEmitter<string>;
@@ -44,6 +51,13 @@ export class CrOtp {
   @State() touched = false;
 
   private input?: HTMLInputElement;
+  /** Longueur du code avant le dernier changement : les chiffres collés d'un coup arrivent en cascade, l'anneau sait dans quel sens aller. */
+  private from = 0;
+
+  @Watch('value')
+  valueChanged(_next: string, previous: string) {
+    this.from = previous?.length ?? 0;
+  }
 
   @Listen('invalid')
   onInvalid(event: Event) {
@@ -86,10 +100,11 @@ export class CrOtp {
     const complete = this.value.length === this.length;
     const error = this.error || (this.touched ? this.message() : '');
     const active = Math.min(this.value.length, this.length - 1);
+    const spin = this.animation === 'spin';
     return (
       <div class="field">
         <FieldHeader id={id} label={this.label} required={this.required} hint={this.hint} error={error} />
-        <div class={{ otp: true, complete, invalid: !!error }} style={{ '--n': `${this.length}` }}>
+        <div class={{ otp: true, complete, invalid: !!error, back: this.value.length < this.from }} style={{ '--n': `${this.length}` }}>
           <input
             ref={(el) => (this.input = el)}
             id={id}
@@ -111,12 +126,26 @@ export class CrOtp {
             }}
           />
           {Array.from({ length: this.length }, (_, i) => (
-            <span class={{ box: true, filled: i < this.value.length, active: this.focused && !complete && i === active }} part="box" style={{ '--i': `${i}` }} aria-hidden="true">
-              {this.value[i] && <span class="digit">{this.value[i]}</span>}
+            <span
+              class={{ box: true, filled: i < this.value.length, active: this.focused && !complete && i === active }}
+              part="box"
+              style={{ '--i': `${i}`, '--j': `${Math.max(0, i - this.from)}` }}
+              aria-hidden="true"
+            >
+              {this.value[i] && (
+                // spin : la bande des chiffres qui défilent avant celui-ci, dessinée par ::after (le contenu généré n'est pas du texte lu).
+                <span class="digit" data-reel={spin ? reel(Number(this.value[i])) : undefined}>
+                  {this.value[i]}
+                </span>
+              )}
             </span>
           ))}
+          {this.animation === 'stretch' && <span class={{ ring: true, on: this.focused }} style={{ '--a': `${complete ? 0 : active}`, '--b': `${active}` }} aria-hidden="true" />}
         </div>
       </div>
     );
   }
 }
+
+// Les 15 chiffres sous le chiffre d, du plus proche au plus loin : d-1, d-2… (le 10e redonne d, pour boucler sans saut).
+const reel = (d: number) => Array.from({ length: 15 }, (_, j) => (d + 19 - j) % 10).join('');
