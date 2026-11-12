@@ -32,6 +32,11 @@ export const fr: Messages = {
 
   otpDigits: (count) => `Saisissez les ${count} chiffres du code.`,
 
+  quantityRange: (min, max) => (max === undefined ? `Choisissez ${min} ou plus.` : `Choisissez une valeur entre ${min} et ${max}.`),
+  quantityStep: (lower, upper, step) => `Choisissez ${upper === undefined ? lower : `${lower} ou ${upper}`} (par pas de ${step}).`,
+  quantityDecrease: (label) => `Diminuer ${label}`,
+  quantityIncrease: (label) => `Augmenter ${label}`,
+
   cardDigits: (count) => `Saisissez les ${count} chiffres de la carte.`,
   cardInvalid: 'Ce numéro de carte n’est pas valide. Vérifiez les chiffres.',
   expiryFormat: 'Saisissez la date d’expiration au format MM/AA.',

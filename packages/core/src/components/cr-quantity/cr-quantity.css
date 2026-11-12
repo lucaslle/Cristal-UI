@@ -1,0 +1,167 @@
+:host {
+  --size: var(--cr-control-m);
+  --pad: var(--cr-spacing-xs);
+  /* Remplissage des boutons : la couleur primaire, éclaircie en thème sombre pour rester visible sur la pastille ; le signe passe en noir ou blanc. */
+  --fill: var(--cr-color-primary-indicator);
+  --on-fill: oklch(from var(--fill) clamp(0, (0.62 - l) * 1000, 1) 0 0);
+  /* Pastille de l'erreur animée (pop) juste après la pastille. */
+  --error-top: calc(var(--size) / 2 + var(--pad) + 1px);
+  --error-end: -32px;
+}
+
+.frame {
+  align-self: flex-start;
+  border-radius: 999px;
+}
+
+/* La pastille est dessinée par ::before : stretch l'étire sans déformer les boutons ni le nombre. */
+.pill {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  align-items: center;
+  gap: var(--pad);
+  padding: var(--pad);
+  border-radius: 999px;
+  touch-action: manipulation;
+  user-select: none;
+}
+
+.pill::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--cr-color-surface);
+  border: 1px solid var(--cr-color-border);
+  border-radius: inherit;
+}
+
+.invalid .pill::before {
+  border-color: var(--cr-color-danger);
+}
+
+.disabled .pill::before {
+  background: var(--cr-color-disabled);
+}
+
+.btn {
+  position: relative;
+  z-index: 3;
+  display: grid;
+  place-items: center;
+  box-sizing: border-box;
+  width: var(--size);
+  height: var(--size);
+  padding: 0;
+  color: var(--on-fill);
+  background: var(--fill);
+  /* Transparente d'habitude, la bordure dessine le bouton en couleurs forcées. */
+  border: 1px solid transparent;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.btn:hover:not(:disabled, [aria-disabled='true']) {
+  background: color-mix(in oklab, var(--fill) 85%, var(--on-fill));
+}
+
+.btn:focus-visible {
+  outline: 2px solid var(--cr-color-focus);
+  outline-offset: 2px;
+}
+
+.btn:is(:disabled, [aria-disabled='true']) {
+  color: var(--cr-color-on-disabled);
+  background: var(--cr-color-disabled);
+  cursor: not-allowed;
+}
+
+.glyph {
+  display: block;
+}
+
+.number {
+  position: relative;
+  display: grid;
+  place-items: center;
+  height: var(--size);
+  border-radius: var(--cr-radius-m);
+}
+
+.number:focus-within {
+  outline: 2px solid var(--cr-color-focus);
+}
+
+.spin,
+.ghost {
+  grid-area: 1 / 1;
+  box-sizing: border-box;
+  width: calc(var(--chars) * 1ch + var(--cr-spacing-lg));
+  font-family: inherit;
+  font-size: calc(var(--cr-font-size-l) * 1.375);
+  font-weight: var(--cr-font-weight-bold);
+  font-variant-numeric: tabular-nums;
+  line-height: var(--size);
+  text-align: center;
+}
+
+.spin {
+  position: relative;
+  z-index: 2;
+  height: var(--size);
+  padding: 0;
+  color: var(--cr-color-text);
+  background: transparent;
+  border: 0;
+  outline: none;
+}
+
+.spin:disabled {
+  color: var(--cr-color-on-disabled);
+  cursor: not-allowed;
+}
+
+/* L'ancien nombre, sous le nouveau, le temps que slide, ripple ou spin le fassent partir ; caché le reste du temps. */
+.ghost {
+  position: relative;
+  z-index: 0;
+  color: var(--cr-color-text);
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.fx {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* zigzag : le trait suit le bas droit de la pastille, entre ses deux arrondis. */
+:host([error-animation='zigzag']) .field:has(> .error) .error-frame::before {
+  right: calc(var(--size) / 2);
+  left: calc(var(--size) / 2);
+}
+
+@media (forced-colors: active) {
+  .btn:focus-visible,
+  .number:focus-within {
+    outline-color: Highlight;
+  }
+
+  .btn:is(:disabled, [aria-disabled='true']) {
+    color: GrayText;
+    border-color: GrayText;
+  }
+}

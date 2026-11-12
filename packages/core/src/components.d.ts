@@ -19,6 +19,7 @@ import { ButtonSize as ButtonSize1, ButtonType as ButtonType1 } from "./componen
 import { InputType } from "./components/cr-input/cr-input";
 import { PopupAnimation } from "./utils/popup";
 import { NumberAnimation } from "./utils/number-views";
+import { QuantityAnimation } from "./utils/quantity";
 import { StepperVariant } from "./utils/stepper";
 import { TableColumn, TableDensity, TableLayout, TableVariant } from "./utils/table-layout";
 import { Theme, ThemeToggleVariant } from "./components/cr-theme-toggle/cr-theme-toggle";
@@ -39,6 +40,7 @@ export { ButtonSize as ButtonSize1, ButtonType as ButtonType1 } from "./componen
 export { InputType } from "./components/cr-input/cr-input";
 export { PopupAnimation } from "./utils/popup";
 export { NumberAnimation } from "./utils/number-views";
+export { QuantityAnimation } from "./utils/quantity";
 export { StepperVariant } from "./utils/stepper";
 export { TableColumn, TableDensity, TableLayout, TableVariant } from "./utils/table-layout";
 export { Theme, ThemeToggleVariant } from "./components/cr-theme-toggle/cr-theme-toggle";
@@ -1046,6 +1048,65 @@ export namespace Components {
         "steps": string[];
     }
     /**
+     * Sélecteur de quantité (motif spinbutton de l'APG) : un nombre, qui peut aussi être tapé, entre un bouton − et un bouton +, dans une pastille.
+     */
+    interface CrQuantity {
+        /**
+          * Animation d'un pas (bouton ou flèches) : press (le bouton s'écrase, le nombre surgit en grandissant, par défaut), slide (le nombre arrive du côté du bouton), ripple (une onde part du bouton et dévoile le nombre), stretch (la pastille s'étire, le nombre tangue), spin (le signe tourne, le nombre bascule) ou halo (un anneau jaillit, le nombre descend).
+          * @default 'press'
+         */
+        "animation": QuantityAnimation;
+        /**
+          * Désactive le sélecteur.
+          * @default false
+         */
+        "disabled": boolean;
+        /**
+          * Message d'erreur ; remplace le message automatique de validation.
+         */
+        "error"?: string;
+        /**
+          * Animation de l'erreur quand elle apparaît et à chaque envoi refusé : none (par défaut), zigzag, pop, drop, echo, jitter ou wobble.
+          * @default 'none'
+         */
+        "errorAnimation": ErrorAnimation;
+        /**
+          * Texte d'aide, lu par les lecteurs d'écran.
+         */
+        "hint"?: string;
+        /**
+          * Libellé affiché au-dessus du sélecteur ; il nomme aussi les boutons (« Augmenter Quantité »).
+         */
+        "label": string;
+        /**
+          * Valeur maximale ; aucune par défaut.
+         */
+        "max"?: number;
+        /**
+          * Valeur minimale ; les pas partent d'elle.
+          * @default 0
+         */
+        "min": number;
+        /**
+          * Nom envoyé avec le formulaire.
+         */
+        "name"?: string;
+        /**
+          * Rend la saisie obligatoire (le champ ne peut pas rester vide).
+          * @default false
+         */
+        "required": boolean;
+        /**
+          * Écart entre deux valeurs permises ; ses décimales donnent celles du nombre affiché.
+          * @default 1
+         */
+        "step": number;
+        /**
+          * Quantité choisie ; undefined quand l'utilisateur a vidé le champ. Par défaut : 0 ramené entre min et max.
+         */
+        "value"?: number;
+    }
+    /**
      * Choix d'une seule option dans une liste de boutons radio empilés, sous un titre visible.
      * Les options sont des éléments option enfants. Le point du bouton choisi coule jusqu'au nouveau choix.
      */
@@ -1687,6 +1748,10 @@ export interface CrPopoverCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLCrPopoverElement;
 }
+export interface CrQuantityCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLCrQuantityElement;
+}
 export interface CrRadioGroupCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLCrRadioGroupElement;
@@ -2246,6 +2311,27 @@ declare global {
         prototype: HTMLCrProgressStepsElement;
         new (): HTMLCrProgressStepsElement;
     };
+    interface HTMLCrQuantityElementEventMap {
+        "crInput": number | undefined;
+        "crChange": number | undefined;
+    }
+    /**
+     * Sélecteur de quantité (motif spinbutton de l'APG) : un nombre, qui peut aussi être tapé, entre un bouton − et un bouton +, dans une pastille.
+     */
+    interface HTMLCrQuantityElement extends Components.CrQuantity, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLCrQuantityElementEventMap>(type: K, listener: (this: HTMLCrQuantityElement, ev: CrQuantityCustomEvent<HTMLCrQuantityElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLCrQuantityElementEventMap>(type: K, listener: (this: HTMLCrQuantityElement, ev: CrQuantityCustomEvent<HTMLCrQuantityElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLCrQuantityElement: {
+        prototype: HTMLCrQuantityElement;
+        new (): HTMLCrQuantityElement;
+    };
     interface HTMLCrRadioGroupElementEventMap {
         "crChange": string;
     }
@@ -2593,6 +2679,7 @@ declare global {
         "cr-popover": HTMLCrPopoverElement;
         "cr-progress": HTMLCrProgressElement;
         "cr-progress-steps": HTMLCrProgressStepsElement;
+        "cr-quantity": HTMLCrQuantityElement;
         "cr-radio-group": HTMLCrRadioGroupElement;
         "cr-rating": HTMLCrRatingElement;
         "cr-search": HTMLCrSearchElement;
@@ -3736,6 +3823,77 @@ declare namespace LocalJSX {
         "steps"?: string[];
     }
     /**
+     * Sélecteur de quantité (motif spinbutton de l'APG) : un nombre, qui peut aussi être tapé, entre un bouton − et un bouton +, dans une pastille.
+     */
+    interface CrQuantity {
+        /**
+          * Animation d'un pas (bouton ou flèches) : press (le bouton s'écrase, le nombre surgit en grandissant, par défaut), slide (le nombre arrive du côté du bouton), ripple (une onde part du bouton et dévoile le nombre), stretch (la pastille s'étire, le nombre tangue), spin (le signe tourne, le nombre bascule) ou halo (un anneau jaillit, le nombre descend).
+          * @default 'press'
+         */
+        "animation"?: QuantityAnimation;
+        /**
+          * Désactive le sélecteur.
+          * @default false
+         */
+        "disabled"?: boolean;
+        /**
+          * Message d'erreur ; remplace le message automatique de validation.
+         */
+        "error"?: string;
+        /**
+          * Animation de l'erreur quand elle apparaît et à chaque envoi refusé : none (par défaut), zigzag, pop, drop, echo, jitter ou wobble.
+          * @default 'none'
+         */
+        "errorAnimation"?: ErrorAnimation;
+        /**
+          * The `id` of a `<form>` element to associate this element with.
+         */
+        "form"?: string;
+        /**
+          * Texte d'aide, lu par les lecteurs d'écran.
+         */
+        "hint"?: string;
+        /**
+          * Libellé affiché au-dessus du sélecteur ; il nomme aussi les boutons (« Augmenter Quantité »).
+         */
+        "label": string;
+        /**
+          * Valeur maximale ; aucune par défaut.
+         */
+        "max"?: number;
+        /**
+          * Valeur minimale ; les pas partent d'elle.
+          * @default 0
+         */
+        "min"?: number;
+        /**
+          * Nom envoyé avec le formulaire.
+         */
+        "name"?: string;
+        /**
+          * Émis quand une valeur est validée : chaque pas, ou la frappe validée par Entrée ou en quittant le champ ; detail : la quantité.
+         */
+        "onCrChange"?: (event: CrQuantityCustomEvent<number | undefined>) => void;
+        /**
+          * Émis à chaque nouvelle valeur : chaque pas, et pendant la frappe ; detail : la quantité (undefined si le champ est vide).
+         */
+        "onCrInput"?: (event: CrQuantityCustomEvent<number | undefined>) => void;
+        /**
+          * Rend la saisie obligatoire (le champ ne peut pas rester vide).
+          * @default false
+         */
+        "required"?: boolean;
+        /**
+          * Écart entre deux valeurs permises ; ses décimales donnent celles du nombre affiché.
+          * @default 1
+         */
+        "step"?: number;
+        /**
+          * Quantité choisie ; undefined quand l'utilisateur a vidé le champ. Par défaut : 0 ramené entre min et max.
+         */
+        "value"?: number;
+    }
+    /**
      * Choix d'une seule option dans une liste de boutons radio empilés, sous un titre visible.
      * Les options sont des éléments option enfants. Le point du bouton choisi coule jusqu'au nouveau choix.
      */
@@ -4632,6 +4790,20 @@ declare namespace LocalJSX {
         "current": number;
         "label": string;
     }
+    interface CrQuantityAttributes {
+        "label": string;
+        "name": string;
+        "value": number;
+        "min": number;
+        "max": number;
+        "step": number;
+        "hint": string;
+        "error": string;
+        "required": boolean;
+        "disabled": boolean;
+        "errorAnimation": ErrorAnimation;
+        "animation": QuantityAnimation;
+    }
     interface CrRadioGroupAttributes {
         "label": string;
         "name": string;
@@ -4792,6 +4964,7 @@ declare namespace LocalJSX {
         "cr-popover": Omit<CrPopover, keyof CrPopoverAttributes> & { [K in keyof CrPopover & keyof CrPopoverAttributes]?: CrPopover[K] } & { [K in keyof CrPopover & keyof CrPopoverAttributes as `attr:${K}`]?: CrPopoverAttributes[K] } & { [K in keyof CrPopover & keyof CrPopoverAttributes as `prop:${K}`]?: CrPopover[K] } & OneOf<"label", CrPopover["label"], CrPopoverAttributes["label"]>;
         "cr-progress": Omit<CrProgress, keyof CrProgressAttributes> & { [K in keyof CrProgress & keyof CrProgressAttributes]?: CrProgress[K] } & { [K in keyof CrProgress & keyof CrProgressAttributes as `attr:${K}`]?: CrProgressAttributes[K] } & { [K in keyof CrProgress & keyof CrProgressAttributes as `prop:${K}`]?: CrProgress[K] };
         "cr-progress-steps": Omit<CrProgressSteps, keyof CrProgressStepsAttributes> & { [K in keyof CrProgressSteps & keyof CrProgressStepsAttributes]?: CrProgressSteps[K] } & { [K in keyof CrProgressSteps & keyof CrProgressStepsAttributes as `attr:${K}`]?: CrProgressStepsAttributes[K] } & { [K in keyof CrProgressSteps & keyof CrProgressStepsAttributes as `prop:${K}`]?: CrProgressSteps[K] };
+        "cr-quantity": Omit<CrQuantity, keyof CrQuantityAttributes> & { [K in keyof CrQuantity & keyof CrQuantityAttributes]?: CrQuantity[K] } & { [K in keyof CrQuantity & keyof CrQuantityAttributes as `attr:${K}`]?: CrQuantityAttributes[K] } & { [K in keyof CrQuantity & keyof CrQuantityAttributes as `prop:${K}`]?: CrQuantity[K] } & OneOf<"label", CrQuantity["label"], CrQuantityAttributes["label"]>;
         "cr-radio-group": Omit<CrRadioGroup, keyof CrRadioGroupAttributes> & { [K in keyof CrRadioGroup & keyof CrRadioGroupAttributes]?: CrRadioGroup[K] } & { [K in keyof CrRadioGroup & keyof CrRadioGroupAttributes as `attr:${K}`]?: CrRadioGroupAttributes[K] } & { [K in keyof CrRadioGroup & keyof CrRadioGroupAttributes as `prop:${K}`]?: CrRadioGroup[K] } & OneOf<"label", CrRadioGroup["label"], CrRadioGroupAttributes["label"]>;
         "cr-rating": Omit<CrRating, keyof CrRatingAttributes> & { [K in keyof CrRating & keyof CrRatingAttributes]?: CrRating[K] } & { [K in keyof CrRating & keyof CrRatingAttributes as `attr:${K}`]?: CrRatingAttributes[K] } & { [K in keyof CrRating & keyof CrRatingAttributes as `prop:${K}`]?: CrRating[K] } & OneOf<"label", CrRating["label"], CrRatingAttributes["label"]>;
         "cr-search": Omit<CrSearch, keyof CrSearchAttributes> & { [K in keyof CrSearch & keyof CrSearchAttributes]?: CrSearch[K] } & { [K in keyof CrSearch & keyof CrSearchAttributes as `attr:${K}`]?: CrSearchAttributes[K] } & { [K in keyof CrSearch & keyof CrSearchAttributes as `prop:${K}`]?: CrSearch[K] } & OneOf<"label", CrSearch["label"], CrSearchAttributes["label"]>;
@@ -4975,6 +5148,10 @@ declare module "@stencil/core" {
              * Chaque nouvelle étape est annoncée aux lecteurs d'écran.
              */
             "cr-progress-steps": LocalJSX.IntrinsicElements["cr-progress-steps"] & JSXBase.HTMLAttributes<HTMLCrProgressStepsElement>;
+            /**
+             * Sélecteur de quantité (motif spinbutton de l'APG) : un nombre, qui peut aussi être tapé, entre un bouton − et un bouton +, dans une pastille.
+             */
+            "cr-quantity": LocalJSX.IntrinsicElements["cr-quantity"] & JSXBase.HTMLAttributes<HTMLCrQuantityElement>;
             /**
              * Choix d'une seule option dans une liste de boutons radio empilés, sous un titre visible.
              * Les options sont des éléments option enfants. Le point du bouton choisi coule jusqu'au nouveau choix.
