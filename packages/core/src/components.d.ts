@@ -11,14 +11,19 @@ import { BackgroundVariant } from "./components/cr-background/cr-background";
 import { BadgeVariant } from "./components/cr-badge/cr-badge";
 import { BoxDisplay } from "./components/cr-box/cr-box";
 import { ButtonSize, ButtonType, ButtonVariant } from "./components/cr-button/cr-button";
+import { ErrorAnimation } from "./utils/field";
 import { CardValue } from "./components/cr-card-input/cr-card-input";
 import { GridLayoutItem } from "./utils/grid-keys";
 import { IconButtonVariant, TooltipPlacement } from "./components/cr-icon-button/cr-icon-button";
 import { ButtonSize as ButtonSize1, ButtonType as ButtonType1 } from "./components/cr-button/cr-button";
 import { InputType } from "./components/cr-input/cr-input";
 import { PopupAnimation } from "./utils/popup";
+import { NumberAnimation } from "./utils/number-views";
 import { StepperVariant } from "./utils/stepper";
 import { TableColumn, TableDensity, TableLayout, TableVariant } from "./utils/table-layout";
+import { Theme, ThemeToggleVariant } from "./components/cr-theme-toggle/cr-theme-toggle";
+import { ThemeTransition } from "./utils/theme-transitions";
+import { ThemeToggleIcon } from "./utils/theme-toggle-views";
 import { TooltipPlacement as TooltipPlacement1 } from "./components/cr-icon-button/cr-icon-button";
 export { AccordionAnimation, AccordionVariant } from "./utils/accordion";
 export { AvatarStatus } from "./components/cr-avatar/cr-avatar";
@@ -26,14 +31,19 @@ export { BackgroundVariant } from "./components/cr-background/cr-background";
 export { BadgeVariant } from "./components/cr-badge/cr-badge";
 export { BoxDisplay } from "./components/cr-box/cr-box";
 export { ButtonSize, ButtonType, ButtonVariant } from "./components/cr-button/cr-button";
+export { ErrorAnimation } from "./utils/field";
 export { CardValue } from "./components/cr-card-input/cr-card-input";
 export { GridLayoutItem } from "./utils/grid-keys";
 export { IconButtonVariant, TooltipPlacement } from "./components/cr-icon-button/cr-icon-button";
 export { ButtonSize as ButtonSize1, ButtonType as ButtonType1 } from "./components/cr-button/cr-button";
 export { InputType } from "./components/cr-input/cr-input";
 export { PopupAnimation } from "./utils/popup";
+export { NumberAnimation } from "./utils/number-views";
 export { StepperVariant } from "./utils/stepper";
 export { TableColumn, TableDensity, TableLayout, TableVariant } from "./utils/table-layout";
+export { Theme, ThemeToggleVariant } from "./components/cr-theme-toggle/cr-theme-toggle";
+export { ThemeTransition } from "./utils/theme-transitions";
+export { ThemeToggleIcon } from "./utils/theme-toggle-views";
 export { TooltipPlacement as TooltipPlacement1 } from "./components/cr-icon-button/cr-icon-button";
 export namespace Components {
     /**
@@ -341,6 +351,11 @@ export namespace Components {
          */
         "error"?: string;
         /**
+          * Animation de l'erreur quand elle apparaît et à chaque envoi refusé : none (par défaut), zigzag, pop, drop, echo, jitter ou wobble.
+          * @default 'none'
+         */
+        "errorAnimation": ErrorAnimation;
+        /**
           * Texte d'aide, lu par les lecteurs d'écran.
          */
         "hint"?: string;
@@ -391,6 +406,11 @@ export namespace Components {
           * Message d'erreur ; remplace le message automatique de validation.
          */
         "error"?: string;
+        /**
+          * Animation de l'erreur quand elle apparaît et à chaque envoi refusé : none (par défaut), zigzag, pop, drop, echo, jitter ou wobble.
+          * @default 'none'
+         */
+        "errorAnimation": ErrorAnimation;
         /**
           * Texte d'aide, lu par les lecteurs d'écran.
          */
@@ -456,6 +476,11 @@ export namespace Components {
           * @default false
          */
         "disabled": boolean;
+        /**
+          * Animation de l'erreur quand elle apparaît et à chaque envoi refusé : none (par défaut), zigzag, pop, drop, echo, jitter ou wobble.
+          * @default 'none'
+         */
+        "errorAnimation": ErrorAnimation;
         /**
           * Libellé affiché au-dessus du champ (obligatoire).
          */
@@ -563,6 +588,11 @@ export namespace Components {
           * @default false
          */
         "disabled": boolean;
+        /**
+          * Animation de l'erreur quand elle apparaît et à chaque envoi refusé : none (par défaut), zigzag, pop, drop, echo, jitter ou wobble.
+          * @default 'none'
+         */
+        "errorAnimation": ErrorAnimation;
         /**
           * Texte d'aide (formats, taille), lu par les lecteurs d'écran.
          */
@@ -784,6 +814,11 @@ export namespace Components {
          */
         "error"?: string;
         /**
+          * Animation de l'erreur quand elle apparaît et à chaque envoi refusé : none (par défaut), zigzag, pop, drop, echo, jitter ou wobble.
+          * @default 'none'
+         */
+        "errorAnimation": ErrorAnimation;
+        /**
           * Texte d'aide, lu par les lecteurs d'écran.
          */
         "hint"?: string;
@@ -858,9 +893,36 @@ export namespace Components {
         "label": string;
     }
     /**
+     * Nombre animé : quand value change, les chiffres passent à la nouvelle valeur en s'animant, au choix (animation).
+     * Il prend la taille, la graisse et la couleur du texte autour ; les chiffres ont tous la même largeur.
+     * Le nombre est formaté dans la langue de la page ; les lecteurs d'écran et le copier-coller lisent directement la valeur finale.
+     */
+    interface CrNumber {
+        /**
+          * Animation quand value change : roll (compteur kilométrique, par défaut), flap (tableau d'aéroport), blur (le nombre glisse, flouté), stagger (les chiffres changent un à un, avec rebond), decode (les chiffres défilent au hasard puis se figent), count (le nombre compte jusqu'à la nouvelle valeur).
+          * @default 'roll'
+         */
+        "animation": NumberAnimation;
+        /**
+          * Nombre de décimales affichées (le nombre est arrondi).
+          * @default 0
+         */
+        "decimals": number;
+        /**
+          * Le nombre affiché.
+          * @default 0
+         */
+        "value": number;
+    }
+    /**
      * Code à usage unique (reçu par SMS ou e-mail), une case par chiffre.
      */
     interface CrOtp {
+        /**
+          * Animation de la saisie : pop (le chiffre apparaît, vague verte à la fin, par défaut), bounce (le chiffre tombe, la case s'écrase et rebondit), stretch (un seul anneau de focus s'étire de case en case, puis entoure tout le code), spin (les chiffres défilent comme une machine à sous), merge (à la fin, les cases se rejoignent en une seule barre), zoom (le chiffre arrive en grand, un reflet balaie le code complet) ou tint (la case se remplit de couleur par le bas, verte à la fin).
+          * @default 'pop'
+         */
+        "animation": 'pop' | 'bounce' | 'stretch' | 'spin' | 'merge' | 'zoom' | 'tint';
         /**
           * Désactive le champ.
           * @default false
@@ -870,6 +932,11 @@ export namespace Components {
           * Message d'erreur ; remplace le message automatique.
          */
         "error"?: string;
+        /**
+          * Animation de l'erreur quand elle apparaît et à chaque envoi refusé : none (par défaut), zigzag, pop, drop, echo, jitter ou wobble.
+          * @default 'none'
+         */
+        "errorAnimation": ErrorAnimation;
         /**
           * Texte d'aide, lu par les lecteurs d'écran.
          */
@@ -988,6 +1055,11 @@ export namespace Components {
           * @default false
          */
         "disabled": boolean;
+        /**
+          * Animation de l'erreur quand elle apparaît et à chaque envoi refusé : none (par défaut), zigzag, pop, drop, echo, jitter ou wobble.
+          * @default 'none'
+         */
+        "errorAnimation": ErrorAnimation;
         /**
           * Titre affiché au-dessus des options, et nom du groupe pour les lecteurs d'écran.
          */
@@ -1142,6 +1214,11 @@ export namespace Components {
           * Message d'erreur ; remplace le message automatique de validation.
          */
         "error"?: string;
+        /**
+          * Animation de l'erreur quand elle apparaît et à chaque envoi refusé : none (par défaut), zigzag, pop, drop, echo, jitter ou wobble.
+          * @default 'none'
+         */
+        "errorAnimation": ErrorAnimation;
         /**
           * Texte d'aide, lu par les lecteurs d'écran.
          */
@@ -1407,6 +1484,11 @@ export namespace Components {
          */
         "error"?: string;
         /**
+          * Animation de l'erreur quand elle apparaît et à chaque envoi refusé : none (par défaut), zigzag, pop, drop, echo, jitter ou wobble.
+          * @default 'none'
+         */
+        "errorAnimation": ErrorAnimation;
+        /**
           * Texte d'aide, lu par les lecteurs d'écran.
          */
         "hint"?: string;
@@ -1447,6 +1529,11 @@ export namespace Components {
          */
         "error"?: string;
         /**
+          * Animation de l'erreur quand elle apparaît et à chaque envoi refusé : none (par défaut), zigzag, pop, drop, echo, jitter ou wobble.
+          * @default 'none'
+         */
+        "errorAnimation": ErrorAnimation;
+        /**
           * Texte d'aide, lu par les lecteurs d'écran.
          */
         "hint"?: string;
@@ -1482,6 +1569,34 @@ export namespace Components {
           * @default ''
          */
         "value": string;
+    }
+    /**
+     * Bascule entre thème clair et thème sombre : un bouton rond, un interrupteur ou un bouton avec libellé, dont le soleil devient une lune.
+     * Pose data-theme sur <html> (le thème sombre de
+     * @cristal /tokens/tokens-dark.css), avec une transition animée sur toute la page.
+     * Suit aussi les changements de data-theme faits ailleurs (sélecteur de thème de l'application). Garder le choix est laissé à l'application.
+     */
+    interface CrThemeToggle {
+        /**
+          * Animation de l'icône : morph (le soleil devient une lune, par défaut), rotate (le soleil tourne et rapetisse, la lune arrive en tournant), rise (le soleil se couche sous l'horizon, la lune se lève), flip (pièce qui se retourne) ou eclipse (un disque passe devant le soleil, les rayons deviennent des étoiles).
+          * @default 'morph'
+         */
+        "icon": ThemeToggleIcon;
+        /**
+          * Thème affiché ; au chargement, celui de data-theme sur <html>, sinon la préférence du système. Pour en changer depuis l'application, posez data-theme sur <html> : la bascule suit.
+          * @default 'light'
+         */
+        "theme": Theme;
+        /**
+          * Passage d'un thème à l'autre : circle (cercle depuis le bouton, par défaut), curtain (rideau qui tombe), blinds (bandes de haut en bas), flip (la page se retourne), eclipse (disque qui glisse), sweep (aiguille d'horloge) ou none. Instantané si l'utilisateur réduit les animations ou si le navigateur ne connaît pas les transitions de vue.
+          * @default 'circle'
+         */
+        "transition": ThemeTransition;
+        /**
+          * Forme de la bascule : icon (bouton rond, par défaut), switch (interrupteur dont la pastille glisse, rôle switch) ou label (bouton avec l'icône et le libellé « Thème sombre » visible).
+          * @default 'icon'
+         */
+        "variant": ThemeToggleVariant;
     }
     /**
      * Zone fixe en bas à droite de l'écran qui empile les cr-alert en notifications, la plus récente en bas.
@@ -1615,6 +1730,10 @@ export interface CrTagInputCustomEvent<T> extends CustomEvent<T> {
 export interface CrTextareaCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLCrTextareaElement;
+}
+export interface CrThemeToggleCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLCrThemeToggleElement;
 }
 declare global {
     /**
@@ -2032,6 +2151,17 @@ declare global {
         prototype: HTMLCrMenuElement;
         new (): HTMLCrMenuElement;
     };
+    /**
+     * Nombre animé : quand value change, les chiffres passent à la nouvelle valeur en s'animant, au choix (animation).
+     * Il prend la taille, la graisse et la couleur du texte autour ; les chiffres ont tous la même largeur.
+     * Le nombre est formaté dans la langue de la page ; les lecteurs d'écran et le copier-coller lisent directement la valeur finale.
+     */
+    interface HTMLCrNumberElement extends Components.CrNumber, HTMLStencilElement {
+    }
+    var HTMLCrNumberElement: {
+        prototype: HTMLCrNumberElement;
+        new (): HTMLCrNumberElement;
+    };
     interface HTMLCrOtpElementEventMap {
         "crInput": string;
         "crComplete": string;
@@ -2388,6 +2518,29 @@ declare global {
         prototype: HTMLCrTextareaElement;
         new (): HTMLCrTextareaElement;
     };
+    interface HTMLCrThemeToggleElementEventMap {
+        "crChange": Theme;
+    }
+    /**
+     * Bascule entre thème clair et thème sombre : un bouton rond, un interrupteur ou un bouton avec libellé, dont le soleil devient une lune.
+     * Pose data-theme sur <html> (le thème sombre de
+     * @cristal /tokens/tokens-dark.css), avec une transition animée sur toute la page.
+     * Suit aussi les changements de data-theme faits ailleurs (sélecteur de thème de l'application). Garder le choix est laissé à l'application.
+     */
+    interface HTMLCrThemeToggleElement extends Components.CrThemeToggle, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLCrThemeToggleElementEventMap>(type: K, listener: (this: HTMLCrThemeToggleElement, ev: CrThemeToggleCustomEvent<HTMLCrThemeToggleElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLCrThemeToggleElementEventMap>(type: K, listener: (this: HTMLCrThemeToggleElement, ev: CrThemeToggleCustomEvent<HTMLCrThemeToggleElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLCrThemeToggleElement: {
+        prototype: HTMLCrThemeToggleElement;
+        new (): HTMLCrThemeToggleElement;
+    };
     /**
      * Zone fixe en bas à droite de l'écran qui empile les cr-alert en notifications, la plus récente en bas.
      */
@@ -2434,6 +2587,7 @@ declare global {
         "cr-input": HTMLCrInputElement;
         "cr-loader": HTMLCrLoaderElement;
         "cr-menu": HTMLCrMenuElement;
+        "cr-number": HTMLCrNumberElement;
         "cr-otp": HTMLCrOtpElement;
         "cr-pagination": HTMLCrPaginationElement;
         "cr-popover": HTMLCrPopoverElement;
@@ -2454,6 +2608,7 @@ declare global {
         "cr-table": HTMLCrTableElement;
         "cr-tag-input": HTMLCrTagInputElement;
         "cr-textarea": HTMLCrTextareaElement;
+        "cr-theme-toggle": HTMLCrThemeToggleElement;
         "cr-toaster": HTMLCrToasterElement;
         "cr-tooltip": HTMLCrTooltipElement;
     }
@@ -2782,6 +2937,11 @@ declare namespace LocalJSX {
          */
         "error"?: string;
         /**
+          * Animation de l'erreur quand elle apparaît et à chaque envoi refusé : none (par défaut), zigzag, pop, drop, echo, jitter ou wobble.
+          * @default 'none'
+         */
+        "errorAnimation"?: ErrorAnimation;
+        /**
           * The `id` of a `<form>` element to associate this element with.
          */
         "form"?: string;
@@ -2840,6 +3000,11 @@ declare namespace LocalJSX {
           * Message d'erreur ; remplace le message automatique de validation.
          */
         "error"?: string;
+        /**
+          * Animation de l'erreur quand elle apparaît et à chaque envoi refusé : none (par défaut), zigzag, pop, drop, echo, jitter ou wobble.
+          * @default 'none'
+         */
+        "errorAnimation"?: ErrorAnimation;
         /**
           * The `id` of a `<form>` element to associate this element with.
          */
@@ -2921,6 +3086,11 @@ declare namespace LocalJSX {
           * @default false
          */
         "disabled"?: boolean;
+        /**
+          * Animation de l'erreur quand elle apparaît et à chaque envoi refusé : none (par défaut), zigzag, pop, drop, echo, jitter ou wobble.
+          * @default 'none'
+         */
+        "errorAnimation"?: ErrorAnimation;
         /**
           * The `id` of a `<form>` element to associate this element with.
          */
@@ -3044,6 +3214,11 @@ declare namespace LocalJSX {
           * @default false
          */
         "disabled"?: boolean;
+        /**
+          * Animation de l'erreur quand elle apparaît et à chaque envoi refusé : none (par défaut), zigzag, pop, drop, echo, jitter ou wobble.
+          * @default 'none'
+         */
+        "errorAnimation"?: ErrorAnimation;
         /**
           * The `id` of a `<form>` element to associate this element with.
          */
@@ -3293,6 +3468,11 @@ declare namespace LocalJSX {
          */
         "error"?: string;
         /**
+          * Animation de l'erreur quand elle apparaît et à chaque envoi refusé : none (par défaut), zigzag, pop, drop, echo, jitter ou wobble.
+          * @default 'none'
+         */
+        "errorAnimation"?: ErrorAnimation;
+        /**
           * The `id` of a `<form>` element to associate this element with.
          */
         "form"?: string;
@@ -3383,9 +3563,36 @@ declare namespace LocalJSX {
         "onCrSelect"?: (event: CrMenuCustomEvent<string>) => void;
     }
     /**
+     * Nombre animé : quand value change, les chiffres passent à la nouvelle valeur en s'animant, au choix (animation).
+     * Il prend la taille, la graisse et la couleur du texte autour ; les chiffres ont tous la même largeur.
+     * Le nombre est formaté dans la langue de la page ; les lecteurs d'écran et le copier-coller lisent directement la valeur finale.
+     */
+    interface CrNumber {
+        /**
+          * Animation quand value change : roll (compteur kilométrique, par défaut), flap (tableau d'aéroport), blur (le nombre glisse, flouté), stagger (les chiffres changent un à un, avec rebond), decode (les chiffres défilent au hasard puis se figent), count (le nombre compte jusqu'à la nouvelle valeur).
+          * @default 'roll'
+         */
+        "animation"?: NumberAnimation;
+        /**
+          * Nombre de décimales affichées (le nombre est arrondi).
+          * @default 0
+         */
+        "decimals"?: number;
+        /**
+          * Le nombre affiché.
+          * @default 0
+         */
+        "value"?: number;
+    }
+    /**
      * Code à usage unique (reçu par SMS ou e-mail), une case par chiffre.
      */
     interface CrOtp {
+        /**
+          * Animation de la saisie : pop (le chiffre apparaît, vague verte à la fin, par défaut), bounce (le chiffre tombe, la case s'écrase et rebondit), stretch (un seul anneau de focus s'étire de case en case, puis entoure tout le code), spin (les chiffres défilent comme une machine à sous), merge (à la fin, les cases se rejoignent en une seule barre), zoom (le chiffre arrive en grand, un reflet balaie le code complet) ou tint (la case se remplit de couleur par le bas, verte à la fin).
+          * @default 'pop'
+         */
+        "animation"?: 'pop' | 'bounce' | 'stretch' | 'spin' | 'merge' | 'zoom' | 'tint';
         /**
           * Désactive le champ.
           * @default false
@@ -3395,6 +3602,11 @@ declare namespace LocalJSX {
           * Message d'erreur ; remplace le message automatique.
          */
         "error"?: string;
+        /**
+          * Animation de l'erreur quand elle apparaît et à chaque envoi refusé : none (par défaut), zigzag, pop, drop, echo, jitter ou wobble.
+          * @default 'none'
+         */
+        "errorAnimation"?: ErrorAnimation;
         /**
           * The `id` of a `<form>` element to associate this element with.
          */
@@ -3533,6 +3745,11 @@ declare namespace LocalJSX {
           * @default false
          */
         "disabled"?: boolean;
+        /**
+          * Animation de l'erreur quand elle apparaît et à chaque envoi refusé : none (par défaut), zigzag, pop, drop, echo, jitter ou wobble.
+          * @default 'none'
+         */
+        "errorAnimation"?: ErrorAnimation;
         /**
           * The `id` of a `<form>` element to associate this element with.
          */
@@ -3723,6 +3940,11 @@ declare namespace LocalJSX {
           * Message d'erreur ; remplace le message automatique de validation.
          */
         "error"?: string;
+        /**
+          * Animation de l'erreur quand elle apparaît et à chaque envoi refusé : none (par défaut), zigzag, pop, drop, echo, jitter ou wobble.
+          * @default 'none'
+         */
+        "errorAnimation"?: ErrorAnimation;
         /**
           * The `id` of a `<form>` element to associate this element with.
          */
@@ -4020,6 +4242,11 @@ declare namespace LocalJSX {
          */
         "error"?: string;
         /**
+          * Animation de l'erreur quand elle apparaît et à chaque envoi refusé : none (par défaut), zigzag, pop, drop, echo, jitter ou wobble.
+          * @default 'none'
+         */
+        "errorAnimation"?: ErrorAnimation;
+        /**
           * The `id` of a `<form>` element to associate this element with.
          */
         "form"?: string;
@@ -4068,6 +4295,11 @@ declare namespace LocalJSX {
          */
         "error"?: string;
         /**
+          * Animation de l'erreur quand elle apparaît et à chaque envoi refusé : none (par défaut), zigzag, pop, drop, echo, jitter ou wobble.
+          * @default 'none'
+         */
+        "errorAnimation"?: ErrorAnimation;
+        /**
           * The `id` of a `<form>` element to associate this element with.
          */
         "form"?: string;
@@ -4111,6 +4343,38 @@ declare namespace LocalJSX {
           * @default ''
          */
         "value"?: string;
+    }
+    /**
+     * Bascule entre thème clair et thème sombre : un bouton rond, un interrupteur ou un bouton avec libellé, dont le soleil devient une lune.
+     * Pose data-theme sur <html> (le thème sombre de
+     * @cristal /tokens/tokens-dark.css), avec une transition animée sur toute la page.
+     * Suit aussi les changements de data-theme faits ailleurs (sélecteur de thème de l'application). Garder le choix est laissé à l'application.
+     */
+    interface CrThemeToggle {
+        /**
+          * Animation de l'icône : morph (le soleil devient une lune, par défaut), rotate (le soleil tourne et rapetisse, la lune arrive en tournant), rise (le soleil se couche sous l'horizon, la lune se lève), flip (pièce qui se retourne) ou eclipse (un disque passe devant le soleil, les rayons deviennent des étoiles).
+          * @default 'morph'
+         */
+        "icon"?: ThemeToggleIcon;
+        /**
+          * Émis après chaque changement de thème par la bascule, une fois data-theme posé ; detail : le nouveau thème.
+         */
+        "onCrChange"?: (event: CrThemeToggleCustomEvent<Theme>) => void;
+        /**
+          * Thème affiché ; au chargement, celui de data-theme sur <html>, sinon la préférence du système. Pour en changer depuis l'application, posez data-theme sur <html> : la bascule suit.
+          * @default 'light'
+         */
+        "theme"?: Theme;
+        /**
+          * Passage d'un thème à l'autre : circle (cercle depuis le bouton, par défaut), curtain (rideau qui tombe), blinds (bandes de haut en bas), flip (la page se retourne), eclipse (disque qui glisse), sweep (aiguille d'horloge) ou none. Instantané si l'utilisateur réduit les animations ou si le navigateur ne connaît pas les transitions de vue.
+          * @default 'circle'
+         */
+        "transition"?: ThemeTransition;
+        /**
+          * Forme de la bascule : icon (bouton rond, par défaut), switch (interrupteur dont la pastille glisse, rôle switch) ou label (bouton avec l'icône et le libellé « Thème sombre » visible).
+          * @default 'icon'
+         */
+        "variant"?: ThemeToggleVariant;
     }
     /**
      * Zone fixe en bas à droite de l'écran qui empile les cr-alert en notifications, la plus récente en bas.
@@ -4208,6 +4472,7 @@ declare namespace LocalJSX {
         "error": string;
         "required": boolean;
         "disabled": boolean;
+        "errorAnimation": ErrorAnimation;
         "preview": boolean;
         "holder": boolean;
         "variant": 'fields' | 'card';
@@ -4222,6 +4487,7 @@ declare namespace LocalJSX {
         "error": string;
         "required": boolean;
         "disabled": boolean;
+        "errorAnimation": ErrorAnimation;
     }
     interface CrCommandPaletteAttributes {
         "open": boolean;
@@ -4237,6 +4503,7 @@ declare namespace LocalJSX {
         "max": string;
         "required": boolean;
         "disabled": boolean;
+        "errorAnimation": ErrorAnimation;
     }
     interface CrDialogAttributes {
         "open": boolean;
@@ -4262,6 +4529,7 @@ declare namespace LocalJSX {
         "accept": string;
         "multiple": boolean;
         "disabled": boolean;
+        "errorAnimation": ErrorAnimation;
     }
     interface CrGridItemAttributes {
         "label": string;
@@ -4315,6 +4583,7 @@ declare namespace LocalJSX {
         "autocomplete": string;
         "required": boolean;
         "disabled": boolean;
+        "errorAnimation": ErrorAnimation;
         "strength": boolean;
     }
     interface CrLoaderAttributes {
@@ -4327,6 +4596,11 @@ declare namespace LocalJSX {
         "animation": PopupAnimation;
         "disabled": boolean;
     }
+    interface CrNumberAttributes {
+        "value": number;
+        "decimals": number;
+        "animation": NumberAnimation;
+    }
     interface CrOtpAttributes {
         "label": string;
         "name": string;
@@ -4336,6 +4610,8 @@ declare namespace LocalJSX {
         "error": string;
         "required": boolean;
         "disabled": boolean;
+        "errorAnimation": ErrorAnimation;
+        "animation": 'pop' | 'bounce' | 'stretch' | 'spin' | 'merge' | 'zoom' | 'tint';
     }
     interface CrPaginationAttributes {
         "page": number;
@@ -4362,6 +4638,7 @@ declare namespace LocalJSX {
         "value": string;
         "required": boolean;
         "disabled": boolean;
+        "errorAnimation": ErrorAnimation;
     }
     interface CrRatingAttributes {
         "label": string;
@@ -4401,6 +4678,7 @@ declare namespace LocalJSX {
         "error": string;
         "required": boolean;
         "disabled": boolean;
+        "errorAnimation": ErrorAnimation;
         "animation": PopupAnimation;
     }
     interface CrSkeletonAttributes {
@@ -4455,6 +4733,7 @@ declare namespace LocalJSX {
         "error": string;
         "required": boolean;
         "disabled": boolean;
+        "errorAnimation": ErrorAnimation;
     }
     interface CrTextareaAttributes {
         "label": string;
@@ -4467,6 +4746,13 @@ declare namespace LocalJSX {
         "placeholder": string;
         "required": boolean;
         "disabled": boolean;
+        "errorAnimation": ErrorAnimation;
+    }
+    interface CrThemeToggleAttributes {
+        "theme": Theme;
+        "transition": ThemeTransition;
+        "variant": ThemeToggleVariant;
+        "icon": ThemeToggleIcon;
     }
     interface CrTooltipAttributes {
         "text": string;
@@ -4500,6 +4786,7 @@ declare namespace LocalJSX {
         "cr-input": Omit<CrInput, keyof CrInputAttributes> & { [K in keyof CrInput & keyof CrInputAttributes]?: CrInput[K] } & { [K in keyof CrInput & keyof CrInputAttributes as `attr:${K}`]?: CrInputAttributes[K] } & { [K in keyof CrInput & keyof CrInputAttributes as `prop:${K}`]?: CrInput[K] } & OneOf<"label", CrInput["label"], CrInputAttributes["label"]>;
         "cr-loader": Omit<CrLoader, keyof CrLoaderAttributes> & { [K in keyof CrLoader & keyof CrLoaderAttributes]?: CrLoader[K] } & { [K in keyof CrLoader & keyof CrLoaderAttributes as `attr:${K}`]?: CrLoaderAttributes[K] } & { [K in keyof CrLoader & keyof CrLoaderAttributes as `prop:${K}`]?: CrLoader[K] };
         "cr-menu": Omit<CrMenu, keyof CrMenuAttributes> & { [K in keyof CrMenu & keyof CrMenuAttributes]?: CrMenu[K] } & { [K in keyof CrMenu & keyof CrMenuAttributes as `attr:${K}`]?: CrMenuAttributes[K] } & { [K in keyof CrMenu & keyof CrMenuAttributes as `prop:${K}`]?: CrMenu[K] } & OneOf<"label", CrMenu["label"], CrMenuAttributes["label"]>;
+        "cr-number": Omit<CrNumber, keyof CrNumberAttributes> & { [K in keyof CrNumber & keyof CrNumberAttributes]?: CrNumber[K] } & { [K in keyof CrNumber & keyof CrNumberAttributes as `attr:${K}`]?: CrNumberAttributes[K] } & { [K in keyof CrNumber & keyof CrNumberAttributes as `prop:${K}`]?: CrNumber[K] };
         "cr-otp": Omit<CrOtp, keyof CrOtpAttributes> & { [K in keyof CrOtp & keyof CrOtpAttributes]?: CrOtp[K] } & { [K in keyof CrOtp & keyof CrOtpAttributes as `attr:${K}`]?: CrOtpAttributes[K] } & { [K in keyof CrOtp & keyof CrOtpAttributes as `prop:${K}`]?: CrOtp[K] } & OneOf<"label", CrOtp["label"], CrOtpAttributes["label"]>;
         "cr-pagination": Omit<CrPagination, keyof CrPaginationAttributes> & { [K in keyof CrPagination & keyof CrPaginationAttributes]?: CrPagination[K] } & { [K in keyof CrPagination & keyof CrPaginationAttributes as `attr:${K}`]?: CrPaginationAttributes[K] } & { [K in keyof CrPagination & keyof CrPaginationAttributes as `prop:${K}`]?: CrPagination[K] };
         "cr-popover": Omit<CrPopover, keyof CrPopoverAttributes> & { [K in keyof CrPopover & keyof CrPopoverAttributes]?: CrPopover[K] } & { [K in keyof CrPopover & keyof CrPopoverAttributes as `attr:${K}`]?: CrPopoverAttributes[K] } & { [K in keyof CrPopover & keyof CrPopoverAttributes as `prop:${K}`]?: CrPopover[K] } & OneOf<"label", CrPopover["label"], CrPopoverAttributes["label"]>;
@@ -4520,6 +4807,7 @@ declare namespace LocalJSX {
         "cr-table": Omit<CrTable, keyof CrTableAttributes> & { [K in keyof CrTable & keyof CrTableAttributes]?: CrTable[K] } & { [K in keyof CrTable & keyof CrTableAttributes as `attr:${K}`]?: CrTableAttributes[K] } & { [K in keyof CrTable & keyof CrTableAttributes as `prop:${K}`]?: CrTable[K] } & OneOf<"label", CrTable["label"], CrTableAttributes["label"]>;
         "cr-tag-input": Omit<CrTagInput, keyof CrTagInputAttributes> & { [K in keyof CrTagInput & keyof CrTagInputAttributes]?: CrTagInput[K] } & { [K in keyof CrTagInput & keyof CrTagInputAttributes as `attr:${K}`]?: CrTagInputAttributes[K] } & { [K in keyof CrTagInput & keyof CrTagInputAttributes as `prop:${K}`]?: CrTagInput[K] } & OneOf<"label", CrTagInput["label"], CrTagInputAttributes["label"]>;
         "cr-textarea": Omit<CrTextarea, keyof CrTextareaAttributes> & { [K in keyof CrTextarea & keyof CrTextareaAttributes]?: CrTextarea[K] } & { [K in keyof CrTextarea & keyof CrTextareaAttributes as `attr:${K}`]?: CrTextareaAttributes[K] } & { [K in keyof CrTextarea & keyof CrTextareaAttributes as `prop:${K}`]?: CrTextarea[K] } & OneOf<"label", CrTextarea["label"], CrTextareaAttributes["label"]>;
+        "cr-theme-toggle": Omit<CrThemeToggle, keyof CrThemeToggleAttributes> & { [K in keyof CrThemeToggle & keyof CrThemeToggleAttributes]?: CrThemeToggle[K] } & { [K in keyof CrThemeToggle & keyof CrThemeToggleAttributes as `attr:${K}`]?: CrThemeToggleAttributes[K] } & { [K in keyof CrThemeToggle & keyof CrThemeToggleAttributes as `prop:${K}`]?: CrThemeToggle[K] };
         "cr-toaster": CrToaster;
         "cr-tooltip": Omit<CrTooltip, keyof CrTooltipAttributes> & { [K in keyof CrTooltip & keyof CrTooltipAttributes]?: CrTooltip[K] } & { [K in keyof CrTooltip & keyof CrTooltipAttributes as `attr:${K}`]?: CrTooltipAttributes[K] } & { [K in keyof CrTooltip & keyof CrTooltipAttributes as `prop:${K}`]?: CrTooltip[K] } & OneOf<"text", CrTooltip["text"], CrTooltipAttributes["text"]>;
     }
@@ -4657,6 +4945,12 @@ declare module "@stencil/core" {
              */
             "cr-menu": LocalJSX.IntrinsicElements["cr-menu"] & JSXBase.HTMLAttributes<HTMLCrMenuElement>;
             /**
+             * Nombre animé : quand value change, les chiffres passent à la nouvelle valeur en s'animant, au choix (animation).
+             * Il prend la taille, la graisse et la couleur du texte autour ; les chiffres ont tous la même largeur.
+             * Le nombre est formaté dans la langue de la page ; les lecteurs d'écran et le copier-coller lisent directement la valeur finale.
+             */
+            "cr-number": LocalJSX.IntrinsicElements["cr-number"] & JSXBase.HTMLAttributes<HTMLCrNumberElement>;
+            /**
              * Code à usage unique (reçu par SMS ou e-mail), une case par chiffre.
              */
             "cr-otp": LocalJSX.IntrinsicElements["cr-otp"] & JSXBase.HTMLAttributes<HTMLCrOtpElement>;
@@ -4753,6 +5047,13 @@ declare module "@stencil/core" {
              * Zone de texte sur plusieurs lignes qui grandit d'une ligne à la fois, avec un léger rebond.
              */
             "cr-textarea": LocalJSX.IntrinsicElements["cr-textarea"] & JSXBase.HTMLAttributes<HTMLCrTextareaElement>;
+            /**
+             * Bascule entre thème clair et thème sombre : un bouton rond, un interrupteur ou un bouton avec libellé, dont le soleil devient une lune.
+             * Pose data-theme sur <html> (le thème sombre de
+             * @cristal /tokens/tokens-dark.css), avec une transition animée sur toute la page.
+             * Suit aussi les changements de data-theme faits ailleurs (sélecteur de thème de l'application). Garder le choix est laissé à l'application.
+             */
+            "cr-theme-toggle": LocalJSX.IntrinsicElements["cr-theme-toggle"] & JSXBase.HTMLAttributes<HTMLCrThemeToggleElement>;
             /**
              * Zone fixe en bas à droite de l'écran qui empile les cr-alert en notifications, la plus récente en bas.
              */

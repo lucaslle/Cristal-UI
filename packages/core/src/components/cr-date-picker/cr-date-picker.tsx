@@ -2,7 +2,7 @@ import { AttachInternals, Component, Element, Event, EventEmitter, Listen, Prop,
 import { CalendarPanel } from '../../utils/calendar-view';
 import { addMonths, clampDate, dateForKey, datePattern, dateProblem, formatDate, formatLong, fromIso, monthDirection, parseDate, toIso, today } from '../../utils/date';
 import { DateBox } from '../../utils/date-field';
-import { FieldHeader, describedBy } from '../../utils/field';
+import { FieldHeader, describedBy, ErrorAnimation } from '../../utils/field';
 import { t } from '../../utils/i18n';
 import { Popup, createPopup } from '../../utils/popup';
 import { handleInvalid } from '../../utils/validation';
@@ -20,7 +20,7 @@ import { handleInvalid } from '../../utils/validation';
  */
 @Component({
   tag: 'cr-date-picker',
-  styleUrls: ['../../global/field.css', '../../global/popup.css', 'cr-date-picker.css'],
+  styleUrls: ['../../global/field.css', '../../global/popup.css', '../../global/field-error.css', '../../global/field-error-motion.css', 'cr-date-picker.css'],
   shadow: { delegatesFocus: true },
   formAssociated: true,
 })
@@ -42,6 +42,8 @@ export class CrDatePicker {
   @Prop({ reflect: true }) required = false;
   /** Désactive le champ et le calendrier. */
   @Prop({ reflect: true }) disabled = false;
+  /** Animation de l'erreur quand elle apparaît et à chaque envoi refusé : none (par défaut), zigzag, pop, drop, echo, jitter ou wobble. */
+  @Prop({ reflect: true }) errorAnimation: ErrorAnimation = 'none';
 
   /** Émis quand la date change (choix dans le calendrier, ou champ quitté après saisie) ; detail : la date ISO, ou une chaîne vide. */
   @Event() crChange: EventEmitter<string>;
@@ -171,7 +173,7 @@ export class CrDatePicker {
     const selected = fromIso(this.value);
     return (
       <div class="field">
-        <FieldHeader id="control" label={this.label} required={this.required} hint={hint} error={error} />
+        <FieldHeader id="control" label={this.label} required={this.required} hint={hint} error={error} animation={this.errorAnimation} />
         <DateBox
           {...{ text: this.text, required: this.required, disabled: this.disabled, open: this.open, error }}
           inputRef={(el) => (this.input = el)}

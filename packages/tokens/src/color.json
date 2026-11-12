@@ -19,6 +19,9 @@
     "on-primary": {
       "$value": "oklch(from {color.primary} clamp(0, (0.62 - l) * 1000, 1) 0 0)"
     },
+    "primary-indicator": {
+      "$value": "{color.primary}"
+    },
     "focus": {
       "$value": "{color.primary-text}"
     },

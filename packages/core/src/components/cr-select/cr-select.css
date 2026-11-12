@@ -1,3 +1,8 @@
+/* Pastille de l'erreur animée (pop) avant la flèche. */
+:host {
+  --error-end: 36px;
+}
+
 .trigger {
   display: flex;
   align-items: center;

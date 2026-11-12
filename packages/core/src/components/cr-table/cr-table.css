@@ -90,7 +90,7 @@ tbody tr:hover td {
   padding: 1px 10px;
   font-size: var(--cr-font-size-s);
   font-weight: var(--cr-font-weight-medium);
-  color: oklch(from var(--tone) min(l, 0.45) c h);
+  color: oklch(from var(--tone) clamp(var(--cr-text-lightness-min), l, var(--cr-text-lightness-max)) c h);
   background: color-mix(in oklab, var(--tone) 12%, var(--cr-color-surface));
   border: 1px solid color-mix(in oklab, var(--tone) 25%, transparent);
   border-radius: 999px;
@@ -172,7 +172,7 @@ th.pinned {
 }
 
 .handle:hover::after {
-  background: var(--cr-color-primary);
+  background: var(--cr-color-primary-indicator);
 }
 
 /* La colonne attrapée vole au-dessus des autres. */
@@ -180,7 +180,7 @@ th.pinned {
   position: relative;
   z-index: 4;
   background: var(--cr-color-surface);
-  box-shadow: 0 0 0 1px var(--cr-color-primary), var(--cr-shadow-m);
+  box-shadow: 0 0 0 1px var(--cr-color-primary-indicator), var(--cr-shadow-m);
   cursor: grabbing;
 }
 
@@ -195,7 +195,7 @@ th.flying {
   z-index: 5;
   width: 3px;
   margin-left: -1px;
-  background: var(--cr-color-primary);
+  background: var(--cr-color-primary-indicator);
   border-radius: 2px;
   pointer-events: none;
 }

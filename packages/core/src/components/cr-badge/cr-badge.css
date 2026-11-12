@@ -30,12 +30,12 @@
 
 :host([variant='success']) .badge {
   --tone-bg: color-mix(in oklab, var(--cr-color-success) 12%, var(--cr-color-surface));
-  --tone-text: oklch(from var(--cr-color-success) min(l, 0.45) c h);
+  --tone-text: oklch(from var(--cr-color-success) clamp(var(--cr-text-lightness-min), l, var(--cr-text-lightness-max)) c h);
 }
 
 :host([variant='danger']) .badge {
   --tone-bg: color-mix(in oklab, var(--cr-color-danger) 12%, var(--cr-color-surface));
-  --tone-text: oklch(from var(--cr-color-danger) min(l, 0.45) c h);
+  --tone-text: oklch(from var(--cr-color-danger) clamp(var(--cr-text-lightness-min), l, var(--cr-text-lightness-max)) c h);
 }
 
 /* Fenêtre du compteur : les chiffres y entrent par le bas en montant, par le haut en descendant. */

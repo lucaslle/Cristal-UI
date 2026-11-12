@@ -49,7 +49,7 @@ export function Activity() {
   return (
     <div role="img" aria-label="Activité de la semaine" style={{ display: 'grid', gridTemplateColumns: 'repeat(14, 1fr)', gap: 3 }}>
       {Array.from({ length: 42 }, (_, i) => (
-        <span key={i} style={{ height: 10, borderRadius: 2, background: `color-mix(in oklab, var(--cr-color-primary) ${[15, 35, 60, 85][(i * 7) % 4]}%, white)` }} />
+        <span key={i} style={{ height: 10, borderRadius: 2, background: `color-mix(in oklab, var(--cr-color-primary) ${[15, 35, 60, 85][(i * 7) % 4]}%, var(--cr-color-surface))` }} />
       ))}
     </div>
   );

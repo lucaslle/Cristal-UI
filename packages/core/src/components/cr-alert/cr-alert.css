@@ -20,9 +20,9 @@
   --cr-alert-accent: var(--cr-color-success);
 }
 
-/* Pas de jeton warning dans le thème : ambre par défaut, assombri pour garder 3:1 sur le fond teinté. */
+/* Pas de jeton warning dans le thème : ambre par défaut, assombri (éclairci en sombre) pour garder 3:1 sur le fond teinté. */
 :host([variant='warning']) {
-  --cr-alert-accent: oklch(from var(--cr-color-warning, #d97706) min(l, 0.55) c h);
+  --cr-alert-accent: oklch(from var(--cr-color-warning, #d97706) clamp(var(--cr-text-lightness-min), l, 0.55) c h);
 }
 
 :host([variant='danger']) {

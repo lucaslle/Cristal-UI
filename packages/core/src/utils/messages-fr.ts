@@ -5,6 +5,7 @@ export const fr: Messages = {
   locale: 'fr-FR',
   close: 'Fermer',
   pauseAnimation: "Mettre en pause l'animation",
+  darkTheme: 'Thème sombre',
   required: 'Ce champ est obligatoire.',
   checkbox: 'Cochez cette case pour continuer.',
   select: 'Choisissez une option dans la liste.',

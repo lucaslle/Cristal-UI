@@ -1,5 +1,5 @@
 import { AttachInternals, Component, Element, Event, EventEmitter, Listen, Prop, State, h } from '@stencil/core';
-import { FieldHeader, describedBy } from '../../utils/field';
+import { FieldHeader, describedBy, ErrorAnimation } from '../../utils/field';
 import { Ghost, StrengthMeter, completionFor } from '../../utils/input-extras';
 import { handleInvalid, kindOf, validationMessage } from '../../utils/validation';
 import { t } from '../../utils/i18n';
@@ -15,7 +15,7 @@ export type InputType = 'text' | 'email' | 'password' | 'number' | 'tel' | 'url'
  */
 @Component({
   tag: 'cr-input',
-  styleUrls: ['../../global/field.css', 'cr-input.css'],
+  styleUrls: ['../../global/field.css', '../../global/field-error.css', '../../global/field-error-motion.css', 'cr-input.css'],
   shadow: { delegatesFocus: true },
   formAssociated: true,
 })
@@ -43,6 +43,8 @@ export class CrInput {
   @Prop({ reflect: true }) required = false;
   /** Désactive le champ. */
   @Prop({ reflect: true }) disabled = false;
+  /** Animation de l'erreur quand elle apparaît et à chaque envoi refusé : none (par défaut), zigzag, pop, drop, echo, jitter ou wobble. */
+  @Prop({ reflect: true }) errorAnimation: ErrorAnimation = 'none';
   /** Affiche une jauge de sécurité sous le champ (pour type="password"). */
   @Prop() strength = false;
   /** Suggestions : la suite de la première qui prolonge la saisie s'affiche en gris ; flèche droite ou clic pour l'accepter. */
@@ -119,8 +121,8 @@ export class CrInput {
     const described = [describedBy({ id, hint: this.hint, error }), extra].filter(Boolean).join(' ') || undefined;
     return (
       <div class="field">
-        <FieldHeader id={id} label={this.label} required={this.required} hint={this.hint} error={error} />
-        <div class="box">
+        <FieldHeader id={id} label={this.label} required={this.required} hint={this.hint} error={error} animation={this.errorAnimation} />
+        <div class="box error-frame">
         <Ghost value={this.value} completion={completion} onAccept={this.accept} />
         <input
           ref={(el) => (this.input = el)}

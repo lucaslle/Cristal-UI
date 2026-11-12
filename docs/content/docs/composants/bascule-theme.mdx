@@ -1,0 +1,107 @@
+---
+title: Theme toggle
+description: Switches the page from the light to the dark theme in one click, with an animated transition. Tag cr-theme-toggle, React component CrThemeToggle.
+---
+
+import ThemeToggleProfile from '@/demos/en/theme-toggle-profile';
+import ThemeToggleVariants from '@/demos/en/theme-toggle-variants';
+import ThemeToggleIcons from '@/demos/en/theme-toggle-icons';
+
+## Example
+
+A round button whose sun turns into a moon: its rays tuck in and a disc slides over it to carve the crescent. A click sets `data-theme="dark"` (or `"light"`) on `<html>`, which turns on the [dark theme](/docs/theme#dark-theme) of the whole page, then emits `crChange` with the new theme. Try it: it changes the theme of this whole documentation.
+
+<Preview>
+  <ThemeToggleProfile />
+</Preview>
+
+<include>../../../demos/en/theme-toggle-profile.tsx</include>
+
+<Callout>
+  The dark theme comes from `@cristal/react/tokens-dark.css`: import it after `tokens.css`, otherwise the toggle changes the attribute while the components keep their colours.
+</Callout>
+
+## Variants
+
+`variant` chooses the shape of the toggle:
+
+- `icon` (default): a round button, no text;
+- `switch`: a real switch; the thumb slides carrying the sun or the moon, and the track goes from day (light, a soft sun glow) to night (dark, a few stars);
+- `label`: a pill button, with the icon and the visible label "Dark theme".
+
+<Preview>
+  <ThemeToggleVariants />
+</Preview>
+
+<include>../../../demos/en/theme-toggle-variants.tsx</include>
+
+`icon` and `label` are toggle buttons (`aria-pressed`): "Dark theme, toggle button, pressed". `switch` is a switch (`role="switch"` and `aria-checked`): "Dark theme, switch, on". Same name, same effect; only the way it is announced changes, to match what the user sees.
+
+## Icon animation
+
+`icon` chooses how the sun and the moon animate, in all three variants (inside the thumb for `switch`):
+
+- `morph` (default): the rays tuck in and a disc carves the crescent;
+- `rotate`: the sun spins out and shrinks, the moon spins in;
+- `rise`: the sun sets below a horizon line, then the moon rises;
+- `flip`: a coin flipping in 3D, the sun on one face, the moon on the other;
+- `eclipse`: a disc slides across the sun, its rays fade out and stars light up.
+
+<Preview>
+  <ThemeToggleIcons />
+</Preview>
+
+<include>../../../demos/en/theme-toggle-icons.tsx</include>
+
+## Transitions
+
+`transition` chooses how the new theme replaces the old one, over the whole page, whatever the variant (circle and eclipse start from the centre of the button, or of the switch thumb):
+
+- `circle` (default): a circle growing from the button;
+- `curtain`: the new theme drops from the top like a curtain;
+- `blinds`: horizontal bands switch one after another, top to bottom;
+- `flip`: the page flips in 3D, its back is the other theme;
+- `eclipse`: a huge soft-edged disc glides across the screen;
+- `sweep`: the new theme sweeps the screen like a clock hand;
+- `none`: instant change.
+
+Transitions use the View Transitions API. Where it is missing, and always when the user asked for reduced motion, the theme changes at once, with no transition and no icon animation.
+
+## Initial theme and outside changes
+
+On load, the toggle takes the theme from `data-theme` on `<html>`, otherwise the system preference. It then follows every change of `data-theme`, wherever it comes from: to change the theme from your application, set the attribute and the toggle updates.
+
+This documentation uses that with next-themes: it sets `data-theme` in addition to the `dark` class, and on `crChange` it hands the choice to next-themes (`setTheme`), which keeps it. The toggle and the documentation's theme switcher therefore stay in agreement, both ways.
+
+## Keeping the choice
+
+The toggle remembers nothing: keeping the choice is up to the application, for example in `localStorage`.
+
+```tsx
+<CrThemeToggle onCrChange={(event) => localStorage.setItem('theme', event.detail)} />
+```
+
+To avoid a flash of the wrong theme on reload, set the attribute before the first paint, with an inline script in `<head>`. `suppressHydrationWarning` on `<html>` avoids React's warning for this attribute added before hydration.
+
+```tsx title="app/layout.tsx"
+<html lang="en" suppressHydrationWarning>
+  <head>
+    <script dangerouslySetInnerHTML={{ __html: "const t = localStorage.getItem('theme'); if (t) document.documentElement.dataset.theme = t;" }} />
+  </head>
+  <body>{children}</body>
+</html>
+```
+
+## Accessibility
+
+- A real `<button>` with `aria-pressed`: announced "Dark theme, toggle button, pressed / not pressed", activated by click, Enter or Space. The name follows the page language.
+- `switch`: the same `<button>` with `role="switch"` and `aria-checked`, activated by click, Space or Enter; a 60 × 32 px target. The thumb keeps 3:1 or more against its track, and the track edge 3:1 or more against the page, in both themes. In high contrast mode, track and thumb take the system colours; the state also shows through the thumb position and the icon, not colour alone.
+- `label`: the visible label "Dark theme" never changes and is the whole accessible name (the name always contains the visible text, "label in name"); the state goes through `aria-pressed` and the icon.
+- The icon is decorative (`aria-hidden`); the state is given by `aria-pressed`, not only by the sun or the moon.
+- A 40 × 40 px target, a visible focus outline, and an icon and border at 3:1 or more in both themes; in high contrast mode, icon, border and focus take the system colours.
+- Transitions never fade text in from zero opacity: only shapes (circle, bands, disc, hand) uncover the new theme, already readable.
+- When reduced motion is requested, no transition, no icon animation and no thumb slide: the theme, the icon and the switch change at once.
+
+## API
+
+<ApiReference tag="cr-theme-toggle" />

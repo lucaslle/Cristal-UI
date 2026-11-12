@@ -1,6 +1,6 @@
 import { AttachInternals, Component, Element, Event, EventEmitter, Listen, Prop, State, h } from '@stencil/core';
 import { t } from '../../utils/i18n';
-import { FieldHeader, describedBy } from '../../utils/field';
+import { FieldHeader, describedBy, ErrorAnimation } from '../../utils/field';
 import { reducedMotion } from '../../utils/popup';
 import { handleInvalid } from '../../utils/validation';
 
@@ -11,7 +11,7 @@ import { handleInvalid } from '../../utils/validation';
  */
 @Component({
   tag: 'cr-tag-input',
-  styleUrls: ['../../global/field.css', 'cr-tag-input.css'],
+  styleUrls: ['../../global/field.css', '../../global/field-error.css', '../../global/field-error-motion.css', 'cr-tag-input.css'],
   shadow: { delegatesFocus: true },
   formAssociated: true,
 })
@@ -35,6 +35,8 @@ export class CrTagInput {
   @Prop({ reflect: true }) required = false;
   /** Désactive le champ. */
   @Prop({ reflect: true }) disabled = false;
+  /** Animation de l'erreur quand elle apparaît et à chaque envoi refusé : none (par défaut), zigzag, pop, drop, echo, jitter ou wobble. */
+  @Prop({ reflect: true }) errorAnimation: ErrorAnimation = 'none';
 
   /** Émis quand la liste change ; detail : les étiquettes. */
   @Event() crChange: EventEmitter<string[]>;
@@ -117,8 +119,8 @@ export class CrTagInput {
     const m = t(this.el);
     return (
       <div class="field">
-        <FieldHeader id={id} label={this.label} required={this.required} hint={this.hint} error={error} />
-        <div class={{ tags: true, invalid: !!error, disabled: this.disabled }} onClick={() => this.input?.focus()}>
+        <FieldHeader id={id} label={this.label} required={this.required} hint={this.hint} error={error} animation={this.errorAnimation} />
+        <div class={{ tags: true, 'error-frame': true, invalid: !!error, disabled: this.disabled }} onClick={() => this.input?.focus()}>
           <ul ref={(el) => (this.list = el)} class="list" aria-label={m.tagsList(this.label, this.values.length)}>
             {this.values.map((value) => (
               <li key={value} class={{ tag: true, pop: this.fresh.includes(value) }} part="tag" data-value={value}>

@@ -1,0 +1,83 @@
+:host {
+  display: inline-flex;
+  vertical-align: middle;
+}
+
+:host([hidden]) {
+  display: none;
+}
+
+.button {
+  display: inline-grid;
+  place-items: center;
+  width: var(--cr-control-m);
+  height: var(--cr-control-m);
+  padding: 0;
+  color: var(--cr-color-primary-text);
+  background: transparent;
+  border: 1px solid var(--cr-color-border);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.button:hover {
+  background: var(--cr-color-primary-subtle);
+}
+
+.button:focus-visible,
+.switch:focus-visible {
+  outline: 2px solid var(--cr-color-focus);
+  outline-offset: 2px;
+}
+
+.icon {
+  flex: none;
+  width: 22px;
+  height: 22px;
+  transition: scale 0.15s;
+}
+
+.button:active .icon,
+.switch:active .thumb {
+  scale: 0.88;
+}
+
+/* Bouton avec libellé : l'icône puis le texte, dans une pilule. */
+.pill {
+  display: inline-flex;
+  gap: var(--cr-spacing-sm);
+  width: auto;
+  padding: 0 var(--cr-spacing-lg) 0 var(--cr-spacing-sm);
+  font: inherit;
+  font-size: var(--cr-font-size-m);
+  font-weight: var(--cr-font-weight-medium);
+  border-radius: 999px;
+}
+
+.pill .icon {
+  width: 20px;
+  height: 20px;
+}
+
+.text {
+  color: var(--cr-color-text);
+  white-space: nowrap;
+}
+
+@media (forced-colors: active) {
+  .button,
+  .switch {
+    color: ButtonText;
+    border-color: ButtonText;
+  }
+
+  .text {
+    color: ButtonText;
+  }
+
+  .button:focus-visible,
+  .switch:focus-visible {
+    outline-color: Highlight;
+  }
+}

@@ -19,7 +19,7 @@ interface DateBoxProps {
 
 /** Champ de saisie de la date et bouton qui ouvre le calendrier. */
 export const DateBox = (props: DateBoxProps) => (
-  <div class="box">
+  <div class="box error-frame">
     <input
       ref={props.inputRef}
       id="control"

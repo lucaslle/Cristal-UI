@@ -1,0 +1,61 @@
+---
+title: Nombre animé
+description: Nombre qui s'anime quand sa valeur change, en compteur kilométrique, tableau d'aéroport, flou, cascade, décodage ou comptage. Balise cr-number, composant React CrNumber.
+---
+
+import NumberSteps from '@/demos/number-steps';
+import NumberFormat from '@/demos/number-format';
+
+## Exemple
+
+`cr-number` affiche `value`, formaté dans la langue de la page. C'est un élément en ligne qui prend la taille, la graisse et la couleur du texte autour : stylez-le comme un texte, et écrivez l'unité à côté. Les chiffres ont tous la même largeur : le nombre ne tremble pas pendant qu'il change.
+
+```tsx
+<CrNumber value={pas} style={{ fontSize: 56, fontWeight: 800 }} /> pas
+```
+
+Rien ne bouge au premier affichage : seuls les changements de `value` s'animent. `animation` choisit l'effet.
+
+<Preview column>
+  <NumberSteps />
+</Preview>
+
+<include>../../../demos/number-steps.tsx</include>
+
+| `animation` | Effet |
+|---|---|
+| `roll` | compteur kilométrique : chaque chiffre qui change roule verticalement en passant par les chiffres intermédiaires (par défaut) |
+| `flap` | tableau d'aéroport : chaque chiffre est une plaquette dont la moitié haute bascule en 3D sur le nouveau chiffre |
+| `blur` | le nombre glisse, flouté par la vitesse, vers le haut quand il augmente et vers le bas quand il baisse ; le nouveau arrive de l'autre côté |
+| `stagger` | les chiffres qui changent sont remplacés un à un, de gauche à droite, et se posent avec un rebond |
+| `decode` | les chiffres défilent au hasard puis se figent de gauche à droite |
+| `count` | le nombre compte jusqu'à la nouvelle valeur, teinté de vert quand il monte et de rouge quand il baisse, précédé d'une flèche qui s'efface |
+
+Si la valeur change de nouveau pendant une animation, le nombre repart vers la dernière valeur.
+
+## Format et décimales
+
+Le nombre est formaté avec `Intl.NumberFormat` dans la langue du composant (`lang` sur la page, une zone ou la balise) : `6 482,50` en français, `6,482.50` en anglais. `decimals` fixe le nombre de décimales (0 par défaut) ; le nombre est arrondi. Les séparateurs et le signe moins restent fixes, seuls les chiffres s'animent ; quand le nombre gagne un chiffre (999 → 1 000), le nouveau rang apparaît à gauche sans décaler les autres.
+
+<Preview column>
+  <NumberFormat />
+</Preview>
+
+<include>../../../demos/number-format.tsx</include>
+
+Avec `@cristal/react/ssr`, le HTML serveur contient déjà le nombre formaté. Le composant y est rendu seul, sans voir la langue de la page : donnez-lui `lang` (`<CrNumber lang="fr" … />`) pour que le serveur utilise déjà les séparateurs français.
+
+<Callout>
+  Si l'utilisateur a demandé à son système de réduire les animations, le nombre passe d'un coup à la nouvelle valeur, quelle que soit l'animation. Les lecteurs d'écran lisent toujours la valeur finale, jamais les chiffres intermédiaires.
+</Callout>
+
+## Accessibilité
+
+- Les chiffres animés sont masqués aux lecteurs d'écran (`aria-hidden`). Un texte invisible porte la valeur finale, mise à jour dès le changement : c'est lui que lisent les lecteurs d'écran et que copie le copier-coller.
+- Le changement n'est pas annoncé de lui-même. S'il doit l'être, placez le nombre dans une zone `role="status"` (ou `aria-live="polite"`) avec son unité.
+- Aucun chiffre n'apparaît en fondu depuis la transparence : les chiffres glissent, basculent ou se floutent, et gardent le contraste du texte. Les teintes de `count` et de `decode` gardent un contraste d'au moins 4.5:1 sur `--cr-color-surface`.
+- La couleur de `count` ne fait qu'appuyer le sens du changement ; la flèche est décorative. En contrastes élevés, les chiffres prennent la couleur du texte du système.
+
+## API
+
+<ApiReference tag="cr-number" />

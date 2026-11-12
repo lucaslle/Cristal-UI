@@ -1,0 +1,125 @@
+/* Variantes qui changent la forme ou le fond des cases : stretch, merge et tint (voir cr-otp-motion.css pour les autres). */
+/* stretch : un seul anneau ; le bord qui avance part le premier, l'autre suit, puis il entoure tout le code. */
+.ring {
+  --step: calc(44px + var(--cr-spacing-sm));
+  --fast: 0.18s cubic-bezier(0.3, 0.8, 0.4, 1);
+  --slow: 0.42s 0.05s cubic-bezier(0.3, 1.4, 0.5, 1);
+  --start: var(--slow);
+  --end: var(--fast);
+  position: absolute;
+  inset-block: 0;
+  inset-inline: calc(var(--a) * var(--step)) calc((var(--n) - 1 - var(--b)) * var(--step));
+  box-sizing: border-box;
+  border: 2px solid var(--cr-color-focus);
+  border-radius: var(--cr-radius-m);
+  box-shadow: 0 0 0 3px var(--cr-color-primary-subtle);
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    inset-inline-start var(--start),
+    inset-inline-end var(--end),
+    margin var(--slow),
+    border-radius var(--slow),
+    opacity 0.2s,
+    border-color 0.3s,
+    box-shadow 0.3s;
+}
+
+.back .ring {
+  --start: var(--fast);
+  --end: var(--slow);
+}
+
+.ring.on {
+  opacity: 1;
+}
+
+.complete .ring {
+  --slow: 0.6s 0.1s cubic-bezier(0.3, 1.25, 0.5, 1);
+  /* Il s'écarte de 4px pour entourer les cases sans les toucher. */
+  margin: -4px;
+  border-color: oklch(from var(--cr-color-success) clamp(var(--cr-text-lightness-min), l, var(--cr-text-lightness-max)) c h);
+  border-radius: calc(var(--cr-radius-m) + 4px);
+  box-shadow: none;
+}
+
+/* L'anneau, visible tant que le champ a le focus, est l'indicateur de focus : pas de second contour autour du groupe. */
+:host([animation='stretch']) .otp:focus-within {
+  outline: none;
+}
+
+.invalid .ring {
+  border-color: var(--cr-color-danger);
+}
+
+:host([animation='stretch']) .box.active {
+  border-color: var(--cr-color-border);
+  box-shadow: none;
+}
+
+.otp-input:disabled ~ .ring {
+  display: none;
+}
+
+/* merge : à la fin, les espaces se ferment et les cases deviennent une seule barre arrondie aux deux bouts. */
+:host([animation='merge']) .otp {
+  justify-content: center;
+  width: calc(var(--n) * 44px + (var(--n) - 1) * var(--cr-spacing-sm));
+  transition: gap 0.45s cubic-bezier(0.5, 0, 0.2, 1);
+}
+
+:host([animation='merge']) .box {
+  transition: border-color 0.2s, background 0.25s, box-shadow 0.2s, color 0.25s, border-radius 0.45s, border-width 0.1s;
+}
+
+:host([animation='merge']) .complete {
+  gap: 0;
+}
+
+:host([animation='merge']) .complete .box {
+  border-radius: 0;
+  transition-delay: 0.3s, 0.3s, 0s, 0.3s, 0s, 0.35s;
+}
+
+/* Bordures intérieures retirées (et non transparentes) : pas de jointure visible entre les cases. */
+:host([animation='merge']) .complete .box:not(:first-of-type) {
+  border-inline-start-width: 0;
+}
+
+:host([animation='merge']) .complete .box:not(:last-of-type) {
+  border-inline-end-width: 0;
+}
+
+:host([animation='merge']) .complete .box:first-of-type {
+  border-start-start-radius: 26px;
+  border-end-start-radius: 26px;
+}
+
+:host([animation='merge']) .complete .box:last-of-type {
+  border-start-end-radius: 26px;
+  border-end-end-radius: 26px;
+}
+
+/* tint : une ombre intérieure monte depuis le bas de la case ; contrairement à un dégradé, sa couleur passe au vert en transition. */
+:host([animation='tint']) .box {
+  box-shadow: 0 0 0 0 transparent, inset 0 0 0 0 var(--cr-color-primary-subtle);
+  transition: border-color 0.2s, background 0.25s, box-shadow 0.5s cubic-bezier(0.3, 0.8, 0.4, 1), color 0.25s;
+}
+
+:host([animation='tint']) .box.active {
+  box-shadow: 0 0 0 3px var(--cr-color-primary-subtle), inset 0 0 0 0 var(--cr-color-primary-subtle);
+}
+
+:host([animation='tint']) .box.filled {
+  box-shadow: 0 0 0 0 transparent, inset 0 -52px 0 0 var(--cr-color-primary-subtle);
+}
+
+:host([animation='tint']) .complete .box {
+  box-shadow: 0 0 0 0 transparent, inset 0 -52px 0 0 color-mix(in oklab, var(--cr-color-success) 12%, var(--cr-color-surface));
+  /* La vague verte part de la dernière case, celle qu'on vient de remplir. */
+  transition-delay: calc((var(--n) - 1 - var(--i)) * 70ms);
+}
+
+:host([animation='tint']) .otp-input:disabled ~ .box {
+  box-shadow: none;
+}

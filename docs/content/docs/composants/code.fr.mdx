@@ -4,6 +4,7 @@ description: Code reçu par SMS ou e-mail, une case par chiffre. Balise cr-otp, 
 ---
 
 import OtpBasic from '@/demos/otp-basic';
+import OtpAnimations from '@/demos/otp-animations';
 
 ## Exemple
 
@@ -15,11 +16,36 @@ Les cases se remplissent une à une pendant la frappe ; quand le code est comple
 
 <include>../../../demos/otp-basic.tsx</include>
 
+## Animations
+
+`animation` choisit l'effet de la saisie et du code complet.
+
+<Preview column>
+  <OtpAnimations />
+</Preview>
+
+<include>../../../demos/otp-animations.tsx</include>
+
+| `animation` | Effet |
+|---|---|
+| `pop` | le chiffre apparaît en grossissant ; à la fin, les cases passent au vert en vague (par défaut) |
+| `bounce` | le chiffre tombe dans sa case, qui s'écrase et rebondit ; à la fin, les cases sautent l'une après l'autre |
+| `stretch` | un seul anneau de focus s'étire de case en case pendant la frappe (le bord qui avance part le premier) ; à la fin, il entoure tout le code, en vert |
+| `spin` | les chiffres défilent comme un rouleau de machine à sous avant de s'arrêter ; à la fin, chaque chiffre refait un tour, en vague |
+| `merge` | à la fin, les cases glissent les unes contre les autres et ne forment plus qu'une barre verte arrondie |
+| `zoom` | le chiffre arrive en grand puis se pose ; à la fin, un reflet balaie les cases devenues vertes |
+| `tint` | la case se remplit de couleur par le bas quand son chiffre arrive ; à la fin, le remplissage passe au vert, depuis la dernière case |
+
+Un code collé d'un coup arrive en cascade, chiffre après chiffre ; effacer un chiffre défait l'état complet. Quand l'utilisateur demande moins d'animations (`prefers-reduced-motion`), rien ne bouge : les chiffres et les couleurs changent instantanément.
+
+`error-animation` anime l'erreur quand elle apparaît et à chaque envoi refusé (zigzag, pastille, écho…) : voir [Erreur animée](/docs/composants/champ-texte#erreur-animée).
+
 ## Accessibilité
 
 - Un seul vrai champ, invisible et posé sur les cases : un seul libellé pour les lecteurs d'écran, et le collage (« 123 456 ») comme le remplissage automatique du code reçu par SMS (`autocomplete="one-time-code"`) fonctionnent.
 - Seuls les chiffres sont gardés ; le clavier numérique s'ouvre sur mobile.
 - Un code incomplet bloque l'envoi du formulaire : « Saisissez les 6 chiffres du code. ».
+- Les animations ne touchent que les cases dessinées, masquées aux lecteurs d'écran : quelle que soit `animation`, le champ lu reste le même. Avec `stretch`, l'anneau qui suit la case active est l'indicateur de focus ; en couleurs forcées, il prend la couleur de surbrillance du système, et le code complet est signalé par une bordure plus épaisse.
 
 ## API
 

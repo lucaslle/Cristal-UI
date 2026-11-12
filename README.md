@@ -16,7 +16,7 @@ Un seul paquet : il apporte les composants (`@cristal/core`) et les tokens. Impo
 import '@cristal/react/tokens.css';
 ```
 
-Sans React, installer `@cristal/core` et importer `@cristal/tokens/tokens.css`.
+Sans React, installer `@cristal/core` et importer `@cristal/react/tokens.css`.
 
 ### Avant la publication sur npm
 
@@ -45,6 +45,15 @@ Une ligne suffit pour donner votre couleur à toute l'application ; les nuances 
 ```
 
 Pour un thème limité à une zone : classe `cr-theme` sur le conteneur et `--cr-color-primary` redéfinie dessus. Un générateur avec vérification des contrastes est disponible sur la page « Thème » de la documentation.
+
+### Thème sombre
+
+Optionnel : importer `@cristal/react/tokens-dark.css` après `tokens.css`, puis poser `data-theme="dark"` sur `<html>` (ou la classe `cr-theme-dark` sur un conteneur). Sans l'attribut, rien ne change, même si le système est en mode sombre. La couleur principale reste celle de votre marque ; le texte, le focus et les indicateurs passent à une nuance claire de cette couleur, avec les mêmes contrastes que le thème clair (4,5:1 pour le texte, 3:1 pour les bordures et le focus).
+
+```ts
+import '@cristal/react/tokens.css';
+import '@cristal/react/tokens-dark.css';
+```
 
 ## Langue
 
@@ -135,6 +144,7 @@ Ils participent au `<form>` parent comme des champs natifs (valeur envoyée, val
 | `hint` | tous | texte d'aide, lu par les lecteurs d'écran |
 | `error` | tous | message d'erreur : bordure rouge, `aria-invalid`, lu par les lecteurs d'écran |
 | `required`, `disabled` | tous | comme les champs natifs |
+| `error-animation` | tous, et `cr-textarea`, `cr-otp`, `cr-tag-input`, `cr-card-input`, `cr-radio-group`, `cr-date-picker`, `cr-file-upload` | anime l'erreur quand elle apparaît et à chaque envoi refusé : `none` (par défaut), `zigzag`, `pop`, `drop`, `echo`, `jitter` ou `wobble` ; immobile quand l'utilisateur réduit les animations |
 | `type` | `cr-input` | `text`, `email`, `password`, `number`, `tel`, `url`, `search` |
 | `placeholder` | `cr-input`, `cr-select` | texte indicatif / texte affiché tant qu'aucune option n'est choisie |
 | `autocomplete` | `cr-input` | comme le champ natif |
@@ -169,7 +179,7 @@ Grille d'éléments (pour composer un tableau de bord, par exemple) déplacés p
 | Composant | Rôle |
 |---|---|
 | `cr-textarea` | texte sur plusieurs lignes qui grandit d'une ligne à la fois (`rows`, `maxRows`, slot `end`) |
-| `cr-otp` | code à usage unique, une case par chiffre (`length`, `onCrComplete`) |
+| `cr-otp` | code à usage unique, une case par chiffre (`length`, `onCrComplete`) ; `animation` choisit l'effet : `pop` (par défaut), `bounce`, `stretch`, `spin`, `merge`, `zoom` ou `tint` |
 | `cr-card-input` | carte bancaire : numéro groupé, puis expiration et CVC (`name`, `name-expiry`, `name-cvc`) ; `preview` ajoute une carte dessinée qui se remplit et se retourne, `holder` le champ Titulaire ; `variant="card"` fait tout saisir directement sur la carte |
 | `cr-tag-input` | étiquettes ajoutées avec Entrée ou virgule, retirées avec × (`values`, `onCrChange`) |
 
@@ -262,6 +272,14 @@ Remplaçant de `div` : `display`, `direction`, `gap`, `padding`, `align`, `justi
 <CrBox display="grid" columns="220px" gap="lg" padding="xl">…</CrBox>
 ```
 
+### Bascule de thème : `cr-theme-toggle`
+
+Bouton rond dont le soleil devient une lune ; un clic pose `data-theme="dark"` ou `"light"` sur `<html>` (thème sombre de `tokens-dark.css`), puis émet `crChange` avec le nouveau thème. Au chargement, il prend `data-theme`, sinon la préférence du système, et suit ensuite tout changement de l'attribut. `transition` anime le passage sur toute la page avec l'API View Transitions : `circle` (par défaut, cercle depuis le bouton), `curtain` (rideau), `blinds` (bandes de haut en bas), `flip` (retournement 3D), `eclipse` (disque qui glisse), `sweep` (aiguille d'horloge) ou `none`. Changement immédiat si l'API manque ou si l'utilisateur réduit les animations. `variant` choisit la forme : `icon` (bouton rond, par défaut), `switch` (interrupteur dont la pastille glisse en portant l'icône, rail de jour clair et rail de nuit étoilé) ou `label` (pilule avec l'icône et le libellé visible). `icon` choisit l'animation de l'icône, dans les trois variantes : `morph` (par défaut, le soleil devient un croissant), `rotate` (le soleil part en tournant, la lune arrive), `rise` (coucher de soleil sous l'horizon, lever de lune), `flip` (pièce qui se retourne) ou `eclipse` (un disque passe devant le soleil, les rayons deviennent des étoiles). Vrai bouton avec `aria-pressed` (`icon`, `label`) ou `role="switch"` et `aria-checked` (`switch`), nommé « Thème sombre » / « Dark theme » ; pour `label`, ce nom est le texte affiché. Garder le choix est laissé à l'application :
+
+```tsx
+<CrThemeToggle variant="switch" icon="eclipse" onCrChange={(event) => localStorage.setItem('theme', event.detail)} />
+```
+
 ### Fond animé : `cr-background`
 
 Conteneur dont le contenu s'affiche par-dessus un fond décoratif animé, aux couleurs du thème : `variant` (`aurora` par défaut, `gradient`, `grid`, `dots`, `waves`, `particles` : les points s'écartent du curseur et s'y relient, sauf avec `interactive={false}`). Le contenu reste dans la page, lisible et cliquable. Un bouton pause s'affiche dans le coin (`controls={false}` le masque si l'application a sa propre commande), `paused` arrête l'animation ; elle démarre en pause quand l'utilisateur réduit les animations, et s'arrête hors de l'écran ou quand l'onglet est caché. Couleurs à changer en CSS : `--cr-background-color-1`, `-2`, `-3` et `--cr-background-base`.
@@ -340,6 +358,14 @@ Petite courbe sans axes : `values` (tableau de nombres, en propriété), `label`
 
 ```tsx
 <CrSparkline label="Ventes du mois" values={ventes} variant="area" />
+```
+
+### Nombre animé : `cr-number`
+
+Nombre qui s'anime quand sa valeur change : `value`, `decimals` (0 par défaut), `animation` — `roll` (compteur kilométrique, par défaut), `flap` (tableau d'aéroport), `blur` (le nombre glisse, flouté), `stagger` (les chiffres changent un à un, avec rebond), `decode` (les chiffres défilent au hasard puis se figent), `count` (il compte jusqu'à la nouvelle valeur, teinté en vert ou en rouge selon le sens). Formaté dans la langue (`6 482` en français, `6,482` en anglais) ; il prend la taille, la graisse et la couleur du texte autour. Rien ne bouge au premier affichage, ni quand l'utilisateur réduit les animations ; les lecteurs d'écran lisent toujours la valeur finale (placez-le dans une zone `role="status"` si le changement doit être annoncé).
+
+```tsx
+<CrNumber value={pas} animation="flap" style={{ fontSize: 56, fontWeight: 800 }} /> pas
 ```
 
 ### Bandeau et notification : `cr-alert`, `cr-toaster`

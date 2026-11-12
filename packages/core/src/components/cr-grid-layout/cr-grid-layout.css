@@ -21,8 +21,8 @@
 
 .ghost {
   z-index: 1;
-  background: color-mix(in oklab, var(--cr-color-primary) 10%, transparent);
-  border: 2px dashed var(--cr-color-primary);
+  background: color-mix(in oklab, var(--cr-color-primary-indicator) 10%, transparent);
+  border: 2px dashed var(--cr-color-primary-indicator);
   border-radius: var(--cr-radius-l);
   transition: all 0.2s;
 }

@@ -1,3 +1,8 @@
+/* Pastille de l'erreur animée (pop) dans le champ, avant le bouton du calendrier. */
+:host {
+  --error-end: calc(var(--cr-control-m) + var(--cr-spacing-xs) + var(--cr-spacing-sm));
+}
+
 :host {
   --cr-date-spring: cubic-bezier(0.3, 1.5, 0.5, 1);
 }

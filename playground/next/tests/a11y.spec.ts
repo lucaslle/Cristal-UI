@@ -9,6 +9,14 @@ test('page has no WCAG 2.1 AA violations detectable by axe', async ({ page }) =>
   expect((await audit(page)).violations).toEqual([]);
 });
 
+test('page in the dark theme has no WCAG 2.1 AA violations detectable by axe', async ({ page }) => {
+  await page.goto('/');
+  await page.evaluate(() => (document.documentElement.dataset.theme = 'dark'));
+  // Certains composants font une transition de couleur : l'audit attend les couleurs finales.
+  await page.waitForTimeout(1000);
+  expect((await audit(page)).violations).toEqual([]);
+});
+
 for (const [trigger, name] of [['Supprimer le produit', 'Supprimer le produit ?'], ['Filtres', 'Filtres']]) {
   test(`open overlay "${name}" has no WCAG 2.1 AA violations detectable by axe`, async ({ page }) => {
     await page.goto('/');

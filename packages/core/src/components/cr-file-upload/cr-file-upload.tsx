@@ -1,5 +1,6 @@
 import { AttachInternals, Component, Element, Event, EventEmitter, Prop, State, h } from '@stencil/core';
-import { FieldHeader, describedBy } from '../../utils/field';
+import { replayError } from '../../utils/field-error';
+import { FieldHeader, describedBy, ErrorAnimation } from '../../utils/field';
 import { FileList, accepts, sameFile } from '../../utils/file-upload';
 import { t } from '../../utils/i18n';
 
@@ -15,7 +16,7 @@ import { t } from '../../utils/i18n';
  */
 @Component({
   tag: 'cr-file-upload',
-  styleUrls: ['../../global/field.css', 'cr-file-upload.css'],
+  styleUrls: ['../../global/field.css', '../../global/field-error.css', '../../global/field-error-motion.css', 'cr-file-upload.css'],
   shadow: { delegatesFocus: true },
   formAssociated: true,
 })
@@ -35,6 +36,8 @@ export class CrFileUpload {
   @Prop() multiple = false;
   /** Désactive le champ. */
   @Prop({ reflect: true }) disabled = false;
+  /** Animation de l'erreur quand elle apparaît et à chaque envoi refusé : none (par défaut), zigzag, pop, drop, echo, jitter ou wobble. */
+  @Prop({ reflect: true }) errorAnimation: ErrorAnimation = 'none';
 
   /** Émis quand la liste des fichiers change ; detail : les fichiers. */
   @Event() crChange: EventEmitter<File[]>;
@@ -72,6 +75,7 @@ export class CrFileUpload {
     const m = t(this.el);
     const kept = picked.filter((file) => accepts(file, this.accept));
     this.rejected = picked.filter((file) => !kept.includes(file)).map((file) => file.name);
+    if (this.rejected.length) replayError(this.el);
     const added = this.multiple ? kept.filter((file) => !this.files.some((other) => sameFile(other, file))) : kept.slice(0, 1);
     if (added.length) {
       this.files = this.multiple ? [...this.files, ...added] : added;
@@ -110,8 +114,8 @@ export class CrFileUpload {
     const error = this.rejected.length ? m.filesRejected(this.rejected) : '';
     return (
       <div class="field">
-        <FieldHeader id={id} label={this.label} required={false} hint={this.hint} error={error} />
-        <div class="zone" part="zone" data-over={this.over ? '' : undefined}>
+        <FieldHeader id={id} label={this.label} required={false} hint={this.hint} error={error} animation={this.errorAnimation} />
+        <div class="zone error-frame" part="zone" data-over={this.over ? '' : undefined}>
           <svg class="icon" viewBox="0 0 24 24" width="28" height="28" aria-hidden="true">
             <path d="M12 16V4m0 0L7 9m5-5l5 5M4 15v3a2 2 0 002 2h12a2 2 0 002-2v-3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
           </svg>

@@ -1,0 +1,156 @@
+/* Variantes d'animation ; pop garde le comportement de cr-otp.css. Les chiffres ne partent jamais de la transparence : échelle, translation ou découpe. */
+:host(:not([animation='pop'])) .complete .box {
+  animation: none;
+}
+
+/* bounce : le chiffre tombe, la case s'écrase sur sa base et rebondit ; à la fin, chaque case saute à son tour. */
+:host([animation='bounce']) .box {
+  transform-origin: 50% 100%;
+}
+
+:host([animation='bounce']) .digit {
+  animation: cr-otp-drop 0.5s calc(var(--j) * 60ms) backwards;
+}
+
+:host([animation='bounce']) .box.filled {
+  animation: cr-otp-squash 0.5s calc(var(--j) * 60ms) ease-out;
+}
+
+/* La liste garde l'écrasement en cours de la dernière case ; le saut ne démarre qu'après lui. */
+:host([animation='bounce']) .complete .box {
+  animation:
+    cr-otp-squash 0.5s calc(var(--j) * 60ms) ease-out,
+    cr-otp-hop 0.55s calc(0.55s + var(--i) * 60ms) ease-in-out;
+}
+
+@keyframes cr-otp-drop {
+  from {
+    translate: 0 -30px;
+    animation-timing-function: cubic-bezier(0.5, 0, 1, 0.6);
+  }
+  40%,
+  to {
+    translate: 0 0;
+  }
+}
+
+@keyframes cr-otp-squash {
+  40% {
+    scale: 1;
+  }
+  55% {
+    scale: 1.12 0.84;
+  }
+  75% {
+    scale: 0.95 1.06;
+  }
+}
+
+@keyframes cr-otp-hop {
+  35% {
+    translate: 0 -6px;
+    scale: 0.96 1.06;
+  }
+  60% {
+    translate: 0 0;
+    scale: 1.1 0.88;
+  }
+  80% {
+    scale: 0.98 1.02;
+  }
+}
+
+/* spin : la bande des chiffres précédents (::after) défile dans la case, qui la découpe ; à la fin, un tour complet en vague. */
+:host([animation='spin']) .box {
+  overflow: clip;
+}
+
+:host([animation='spin']) .digit {
+  position: relative;
+  /* Ligne de 34px : les chiffres voisins de la bande tombent hors de la case de 50px, qui les découpe. */
+  line-height: 34px;
+  animation: cr-otp-roll 0.55s calc(var(--j) * 60ms) cubic-bezier(0.2, 0.9, 0.3, 1.1) backwards;
+}
+
+:host([animation='spin']) .digit::after {
+  content: attr(data-reel);
+  position: absolute;
+  top: 100%;
+  inset-inline: 0;
+  text-align: center;
+  word-break: break-all;
+}
+
+/* Le tour finit sur le 10e chiffre de la bande, identique : pas de saut au départ ni à l'arrivée. */
+:host([animation='spin']) .complete .digit {
+  animation:
+    cr-otp-roll 0.55s calc(var(--j) * 60ms) cubic-bezier(0.2, 0.9, 0.3, 1.1) backwards,
+    cr-otp-spin 0.8s calc(0.3s + var(--i) * 70ms) cubic-bezier(0.3, 0, 0.2, 1);
+}
+
+@keyframes cr-otp-roll {
+  from {
+    translate: 0 -170px;
+  }
+}
+
+@keyframes cr-otp-spin {
+  from {
+    transform: translateY(-340px);
+  }
+}
+
+/* zoom : le chiffre arrive en grand et se pose ; à la fin, un reflet balaie les cases devenues vertes. */
+:host([animation='zoom']) .digit {
+  animation: cr-otp-zoom 0.4s calc(var(--j) * 60ms) cubic-bezier(0.2, 0.8, 0.3, 1) backwards;
+}
+
+:host([animation='zoom']) .complete .box {
+  background-image: linear-gradient(105deg, transparent 36%, rgb(255 255 255 / 0.95) 46%, rgb(255 255 255 / 0.95) 52%, transparent 62%);
+  background-position: -50% 0;
+  background-size: 300% 100%;
+  background-repeat: no-repeat;
+  /* Le reflet traverse une case en 0,5 s : décalé de 150 ms par case, il forme une seule bande qui balaie tout le code. */
+  animation: cr-otp-shine 0.5s calc(0.15s + var(--i) * 150ms) linear backwards;
+}
+
+@keyframes cr-otp-zoom {
+  from {
+    scale: 2.5;
+    filter: blur(1.5px);
+  }
+  70% {
+    scale: 0.92;
+    filter: none;
+  }
+}
+
+@keyframes cr-otp-shine {
+  from {
+    background-position: 150% 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .otp,
+  .box,
+  .digit,
+  .ring {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+@media (forced-colors: active) {
+  /* Sinon le texte transparent du vrai champ est forcé en couleur système et s'affiche par-dessus la première case. */
+  .otp-input {
+    forced-color-adjust: none;
+  }
+  .ring {
+    border-color: Highlight;
+  }
+  /* Le vert disparaît en couleurs forcées : une bordure plus épaisse signale le code complet. */
+  .complete .box {
+    border-width: 2px;
+  }
+}

@@ -51,7 +51,7 @@
 
 :host([data-variant='cards']) tbody tr:hover td {
   background: var(--cr-color-surface);
-  border-color: var(--cr-color-primary);
+  border-color: var(--cr-color-primary-indicator);
 }
 
 :host([data-variant='cards']) .toolbar,
@@ -106,7 +106,7 @@
 }
 
 :host([data-variant='grid']) td:hover {
-  outline: 2px solid var(--cr-color-primary);
+  outline: 2px solid var(--cr-color-primary-indicator);
   outline-offset: -2px;
 }
 

@@ -1,0 +1,84 @@
+/* Erreur animée (error-animation). Tout se déclenche quand le message .error apparaît ; replayError() relance à chaque envoi refusé.
+   Le message reste lisible à chaque image : translation, rotation ou décalage, jamais de fondu sur le texte. */
+.error-frame {
+  position: relative;
+  border-radius: var(--cr-radius-m);
+}
+
+.error-text {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.letter {
+  position: relative;
+  top: 0;
+  left: 0;
+}
+
+/* zigzag : un trait rouge plat sous le champ ; l'animation le fait passer en zigzag (--zigzag sert de masque), puis il se remet à plat. */
+:host([error-animation='zigzag']) .field:has(> .error) .error-frame::before {
+  content: '';
+  position: absolute;
+  right: var(--cr-radius-m);
+  bottom: 0;
+  left: var(--cr-radius-m);
+  height: 2px;
+  translate: 0 50%;
+  background: var(--cr-color-danger);
+  --zigzag: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 6' preserveAspectRatio='none'%3E%3Cpath d='M0 5L3 1L6 5L9 1L12 5' fill='none' stroke='%23000' stroke-width='2' stroke-linejoin='round' vector-effect='non-scaling-stroke'/%3E%3C/svg%3E");
+  mask-size: 12px 100%;
+  mask-repeat: repeat-x;
+  pointer-events: none;
+}
+
+/* pop : une pastille « ! » au bout du champ ; le ! est décoratif (texte alternatif vide), le message dit l'erreur. */
+:host([error-animation='pop']) .field:has(> .error) .error-frame::after {
+  content: '!' / '';
+  position: absolute;
+  top: var(--error-top, calc(var(--cr-control-m) / 2));
+  right: var(--error-end, var(--cr-spacing-sm));
+  display: grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  translate: 0 -50%;
+  font-size: 14px;
+  font-weight: var(--cr-font-weight-bold);
+  line-height: 1;
+  color: oklch(from var(--cr-color-danger) clamp(0, (0.62 - l) * 1000, 1) 0 0);
+  background: var(--cr-color-danger);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+:host([error-animation='pop']) .error-frame > input.control {
+  padding-right: 36px;
+}
+
+:host([error-animation='drop']) .error {
+  align-self: flex-start;
+  transform-origin: 0 0;
+}
+
+:host([data-error-replay]) :is(.error-frame, .error, .letter),
+:host([data-error-replay]) .error-frame::before,
+:host([data-error-replay]) .error-frame::after {
+  animation: none !important;
+}
+
+@media (forced-colors: active) {
+  :host(:not([error-animation='none'])) .field:has(> .error) .error-frame::before,
+  :host(:not([error-animation='none'])) .field:has(> .error) .error-frame::after {
+    display: none;
+  }
+
+  :host(:not([error-animation='none'])) .field:has(> .error) .error-frame {
+    outline: 2px solid CanvasText;
+    outline-offset: 4px;
+  }
+}

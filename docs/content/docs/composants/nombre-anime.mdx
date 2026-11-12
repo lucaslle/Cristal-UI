@@ -1,0 +1,61 @@
+---
+title: Animated number
+description: Number that animates when its value changes, as an odometer, a split-flap board, a blur, a stagger, a decode or a count. Tag cr-number, React component CrNumber.
+---
+
+import NumberSteps from '@/demos/en/number-steps';
+import NumberFormat from '@/demos/en/number-format';
+
+## Example
+
+`cr-number` shows `value`, formatted in the page language. It is an inline element that takes the size, weight and colour of the text around it: style it like text, and write the unit next to it. All digits have the same width, so the number does not jitter while it changes.
+
+```tsx
+<CrNumber value={steps} style={{ fontSize: 56, fontWeight: 800 }} /> steps
+```
+
+Nothing moves on first display: only changes to `value` animate. `animation` picks the effect.
+
+<Preview column>
+  <NumberSteps />
+</Preview>
+
+<include>../../../demos/en/number-steps.tsx</include>
+
+| `animation` | Effect |
+|---|---|
+| `roll` | odometer: each changed digit rolls vertically through the digits in between (default) |
+| `flap` | split-flap board: each digit is a tile whose top half flips down in 3D onto the new digit |
+| `blur` | the number slides away, blurred by the speed, up when it increases and down when it decreases; the new one comes in from the other side |
+| `stagger` | the changed digits are replaced one by one, left to right, and land with a bounce |
+| `decode` | the digits scramble through random digits, then lock in left to right |
+| `count` | the number counts to the new value, tinted green when it goes up and red when it goes down, with an arrow before it that fades away |
+
+If the value changes again during an animation, the number heads for the latest value.
+
+## Format and decimals
+
+The number is formatted with `Intl.NumberFormat` in the component language (`lang` on the page, a section or the tag): `6,482.50` in English, `6 482,50` in French. `decimals` sets the number of decimals (0 by default); the number is rounded. Separators and the minus sign stay still, only the digits animate; when the number gains a digit (999 → 1,000), the new place appears on the left without shifting the others.
+
+<Preview column>
+  <NumberFormat />
+</Preview>
+
+<include>../../../demos/en/number-format.tsx</include>
+
+With `@cristal/react/ssr`, the server HTML already contains the formatted number. The component is rendered there on its own, without seeing the page language: give it `lang` (`<CrNumber lang="fr" … />`) so the server already uses the French separators.
+
+<Callout>
+  If the user asked their system to reduce motion, the number switches to the new value at once, whatever the animation. Screen readers always read the final value, never the digits in between.
+</Callout>
+
+## Accessibility
+
+- The animated digits are hidden from screen readers (`aria-hidden`). An invisible text holds the final value, updated as soon as it changes: screen readers read it and copy and paste copies it.
+- The change is not announced on its own. If it must be, put the number with its unit in a `role="status"` (or `aria-live="polite"`) region.
+- No digit fades in from transparent: the digits slide, flip or blur, and keep the text contrast. The `count` and `decode` tints keep a contrast of at least 4.5:1 on `--cr-color-surface`.
+- The `count` colour only backs up the direction of the change; the arrow is decorative. In forced colours, the digits take the system text colour.
+
+## API
+
+<ApiReference tag="cr-number" />

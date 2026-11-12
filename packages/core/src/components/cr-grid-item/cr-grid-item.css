@@ -118,7 +118,7 @@
 }
 
 :host([data-lifted]) .card {
-  border-color: var(--cr-color-primary);
+  border-color: var(--cr-color-primary-indicator);
   box-shadow: 0 24px 48px -16px color-mix(in oklab, var(--cr-color-primary) 45%, transparent);
   scale: 1.02;
 }

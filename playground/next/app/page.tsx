@@ -15,12 +15,15 @@ import { BackgroundDemo } from './background-demo';
 import { PaginationDemo } from './pagination-demo';
 import { BreadcrumbDemo } from './breadcrumb-demo';
 import { SparklineDemo } from './sparkline-demo';
+import { NumberDemo } from './number-demo';
 import { AlertDemo } from './alert-demo';
 import { EmptyStateDemo } from './empty-state-demo';
 import { FileUploadDemo } from './file-upload-demo';
 import { LoadingDemo } from './loading-demo';
 import { TableDemo } from './table-demo';
 import { FieldsDemo } from './fields-demo';
+import { OtpDemo } from './otp-demo';
+import { FieldErrorDemo } from './field-error-demo';
 import { GridLayoutDemo } from './grid-layout-demo';
 import { FormDemo } from './form-demo';
 import { MenuDemo } from './menu-demo';
@@ -32,6 +35,7 @@ import { EnglishDemo } from './english-demo';
 import { IconButtonDemo } from './icon-button-demo';
 import { TooltipDemo } from './tooltip-demo';
 import { PopoverDemo } from './popover-demo';
+import { ThemeToggleDemo } from './theme-toggle-demo';
 
 const row = { display: 'flex', gap: 'var(--cr-spacing-sm)', alignItems: 'center', marginBottom: 'var(--cr-spacing-lg)' };
 const grid = { display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))', gap: 'var(--cr-spacing-lg)' };
@@ -81,6 +85,9 @@ export default function Page() {
         <CrButton>Thème rose</CrButton>
         <CrButton variant="secondary">Secondaire rose</CrButton>
       </div>
+
+      <h2>Bascule de thème</h2>
+      <ThemeToggleDemo />
 
       <h2>États des champs</h2>
       <div style={grid}>
@@ -174,6 +181,9 @@ export default function Page() {
       <h2>Mini-graphiques</h2>
       <SparklineDemo />
 
+      <h2>Nombres animés</h2>
+      <NumberDemo />
+
       <h2>Bandeaux et notifications</h2>
       <AlertDemo />
 
@@ -188,6 +198,10 @@ export default function Page() {
 
       <h2>Champs animés</h2>
       <FieldsDemo />
+      <OtpDemo />
+
+      <h2>Erreurs animées</h2>
+      <FieldErrorDemo />
 
       <h2>Tableau</h2>
       <TableDemo />

@@ -17,7 +17,7 @@
   width: 1.5em;
   height: 1.5em;
   border: 0.2em solid var(--cr-color-disabled);
-  border-top-color: var(--cr-color-primary);
+  border-top-color: var(--cr-color-primary-indicator);
   border-radius: 50%;
   animation: cr-loader-spin 0.8s linear infinite;
 }
@@ -100,7 +100,7 @@
   left: 0;
   width: 1.5em;
   height: 1.5em;
-  color: var(--cr-color-primary);
+  color: var(--cr-color-primary-indicator);
   animation: cr-loader-glide 2.4s ease-in-out infinite;
 }
 

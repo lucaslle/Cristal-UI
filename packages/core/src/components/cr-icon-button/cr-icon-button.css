@@ -63,7 +63,7 @@
   font-weight: var(--cr-font-weight-bold);
   line-height: 18px;
   text-align: center;
-  color: #fff;
+  color: oklch(from var(--cr-color-danger) clamp(0, (0.62 - l) * 1000, 1) 0 0);
   background: var(--cr-color-danger);
   border-radius: 9px;
   box-shadow: 0 0 0 2px var(--cr-color-surface);

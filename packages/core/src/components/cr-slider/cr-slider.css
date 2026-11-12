@@ -4,7 +4,7 @@
 
 /* La hauteur réservée au-dessus du rail accueille la bulle. */
 .slider {
-  --fill: var(--cr-color-primary);
+  --fill: var(--cr-color-primary-indicator);
   position: relative;
   padding-top: var(--cr-spacing-2xl);
 }
@@ -78,7 +78,7 @@
   font-variant-numeric: tabular-nums;
   line-height: 1.3;
   text-align: center;
-  color: var(--cr-color-on-primary);
+  color: oklch(from var(--fill) clamp(0, (0.62 - l) * 1000, 1) 0 0);
   white-space: nowrap;
   pointer-events: none;
   background: var(--fill);

@@ -83,6 +83,8 @@ Comme le [menu](/docs/composants/menu#animations), la liste accepte une proprié
 
 Avec `required`, l'envoi du formulaire est bloqué tant qu'aucune option n'est choisie, et le message « Choisissez une option dans la liste. » s'affiche (« Choisissez au moins une option dans la liste. » avec `multiple`). La propriété `error` remplace ce message.
 
+`error-animation` anime l'erreur quand elle apparaît et à chaque envoi refusé (zigzag, pastille, écho…) : voir [Erreur animée](/docs/composants/champ-texte#erreur-animée).
+
 ## Accessibilité
 
 - Suit le modèle « combobox » du W3C (ARIA Authoring Practices) : le focus reste sur le champ, et l'option active est annoncée grâce à `aria-activedescendant`.

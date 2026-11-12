@@ -6,6 +6,7 @@ description: Text, email, password or number input. Tag cr-input, React componen
 import InputBasic from '@/demos/en/input-basic';
 import FormComplete from '@/demos/en/form-complete';
 import InputExtras from '@/demos/en/input-extras';
+import InputErrorAnimation from '@/demos/en/input-error-animation';
 
 ## Examples
 
@@ -29,6 +30,30 @@ Input errors appear on their own (in English by default, in French with `lang="f
 | Non-numeric `type="number"` | Enter a number. |
 
 On submit, focus moves to the **first invalid field**, and its message is read by screen readers. For an error coming from the server ("this address is already in use"), pass your own message with `error`: it replaces the automatic message.
+
+## Animated error
+
+`error-animation` (`errorAnimation` in React) animates the error when it appears, then again on **every rejected submit**, even when the message is the same. Pick an animation, then click Continue with the field empty or an incomplete address.
+
+<Preview column>
+  <InputErrorAnimation />
+</Preview>
+
+<include>../../../demos/en/input-error-animation.tsx</include>
+
+| `error-animation` | Effect |
+|---|---|
+| `none` | no animation (default) |
+| `zigzag` | the bottom edge of the field snaps into a buzzing red zigzag, then settles flat |
+| `pop` | a red "!" badge springs out at the end of the field with a few sparks, and stays |
+| `drop` | the message drops in and swings from its top-left corner, like a hanging sign |
+| `echo` | the border flashes red twice and sends out two widening echoes |
+| `jitter` | the letters of the message hop and shiver one after another |
+| `wobble` | the field rocks like jelly, then settles |
+
+The same prop exists on the [text area](/docs/composants/zone-de-texte), [one-time code](/docs/composants/code), [select](/docs/composants/liste-deroulante), [tags](/docs/composants/etiquettes), [payment card](/docs/composants/carte-bancaire), [checkbox](/docs/composants/case-a-cocher), [radio group](/docs/composants/boutons-radio), [date picker](/docs/composants/selecteur-de-date) and [file upload](/docs/composants/depot-de-fichiers). On the checkbox and the radio group, the zigzag runs under the box and its label, the badge sits after them and the whole block wobbles; on the one-time code, the badge follows the last box and the echoes wrap all the boxes; on the file upload, the animation plays on every rejected file.
+
+Screen readers still get the message as one sentence (with `jitter`, the hopping letters are a hidden copy), and it stays readable at every frame: it moves, but never fades in from transparent. When the user asks for less motion (`prefers-reduced-motion`), nothing moves: the red border and the message appear at once, with no sparks or echoes. In forced colors mode, the field in error gets a system-coloured outline.
 
 ## Password strength and completion
 

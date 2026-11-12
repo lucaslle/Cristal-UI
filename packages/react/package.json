@@ -6,7 +6,7 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsc -p tsconfig.json && node -e \"require('node:fs').copyFileSync('../tokens/build/tokens.css', 'dist/tokens.css')\""
+    "build": "tsc -p tsconfig.json && node -e \"for (const f of ['tokens.css', 'tokens-dark.css']) require('node:fs').copyFileSync('../tokens/build/' + f, 'dist/' + f)\""
   },
   "dependencies": {
     "@cristal/core": "workspace:*",
@@ -30,6 +30,7 @@
       "types": "./dist/generated/components.server.d.ts",
       "import": "./dist/generated/components.server.js"
     },
-    "./tokens.css": "./dist/tokens.css"
+    "./tokens.css": "./dist/tokens.css",
+    "./tokens-dark.css": "./dist/tokens-dark.css"
   }
 }

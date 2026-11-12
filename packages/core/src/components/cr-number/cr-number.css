@@ -1,0 +1,193 @@
+/* Taille, graisse et couleur viennent du texte autour ; les chiffres ont tous la même largeur, rien ne bouge en largeur. */
+:host {
+  position: relative;
+  display: inline-flex;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.digits {
+  /* Sens du mouvement : en hausse, le nouveau chiffre arrive par le bas et l'ancien part vers le haut. */
+  --enter: 110%;
+  --leave: -110%;
+  display: inline-flex;
+  align-items: baseline;
+  user-select: none;
+  transition: color 0.3s;
+}
+
+.digits[data-trend='down'] {
+  --enter: -110%;
+  --leave: 110%;
+}
+
+.cell {
+  position: relative;
+  display: inline-block;
+}
+
+.sizer {
+  visibility: hidden;
+}
+
+/* roll : la colonne 0-9 glisse dans une fenêtre haute d'une ligne, aux bords fondus comme un tambour. */
+.roll {
+  mask-image: linear-gradient(transparent, #000 0.12em, #000 calc(100% - 0.12em), transparent);
+}
+
+.reel {
+  position: absolute;
+  inset: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transform: translateY(calc(var(--digit) * -10%));
+  transition: transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Un rang qui apparaît (999 → 1 000) roule depuis 0. */
+.reel.enter {
+  animation: cr-number-reel 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes cr-number-reel {
+  from {
+    transform: translateY(0);
+  }
+}
+
+/* stagger et blur : l'ancien chiffre sort par un bord, le nouveau entre par l'autre, coupés à la hauteur de la ligne. */
+.swap {
+  clip-path: inset(0 -0.1em);
+}
+
+.in {
+  display: inline-block;
+}
+
+.out {
+  position: absolute;
+  inset: 0;
+  text-align: center;
+}
+
+:host([animation='stagger']) .in {
+  animation: cr-number-enter 0.6s calc(var(--order) * 90ms) cubic-bezier(0.34, 1.56, 0.64, 1) backwards;
+}
+
+:host([animation='stagger']) .out {
+  animation: cr-number-leave 0.18s calc(var(--order) * 90ms) ease-in forwards;
+}
+
+@keyframes cr-number-enter {
+  from {
+    transform: translateY(var(--enter)) scale(0.6);
+  }
+}
+
+@keyframes cr-number-leave {
+  to {
+    transform: translateY(var(--leave)) scale(0.6);
+  }
+}
+
+/* blur : tous les chiffres glissent ensemble, étirés et floutés comme par la vitesse. */
+:host([animation='blur']) .swap {
+  clip-path: inset(0 -0.3em);
+}
+
+:host([animation='blur']) .in {
+  animation: cr-number-blur-in 0.45s 0.1s cubic-bezier(0.2, 0.8, 0.2, 1) backwards;
+}
+
+:host([animation='blur']) .out {
+  animation: cr-number-blur-out 0.25s cubic-bezier(0.5, 0, 0.75, 0) forwards;
+}
+
+@keyframes cr-number-blur-in {
+  from {
+    filter: blur(0.14em);
+    transform: translateY(var(--enter)) scaleY(1.6);
+  }
+}
+
+@keyframes cr-number-blur-out {
+  to {
+    filter: blur(0.14em);
+    transform: translateY(var(--leave)) scaleY(1.6);
+  }
+}
+
+/* decode : les chiffres pas encore figés, dans la couleur de texte principale (4.5:1 sur la surface). */
+.scrambled {
+  color: var(--cr-color-primary-text);
+}
+
+/* count : teinte foncée de la couleur de succès ou de danger, pour garder 4.5:1 sur la surface. */
+.trend-up {
+  color: oklch(from var(--cr-color-success) clamp(var(--cr-text-lightness-min), l, var(--cr-text-lightness-max)) c h);
+}
+
+.trend-down {
+  color: oklch(from var(--cr-color-danger) clamp(var(--cr-text-lightness-min), l, var(--cr-text-lightness-max)) c h);
+}
+
+/* Flèche dessinée (pas un caractère) : elle s'ouvre, puis se replie et s'efface. */
+.marker {
+  align-self: center;
+  width: 0.45em;
+  height: 0.4em;
+  margin-inline-end: 0.12em;
+  background: currentColor;
+  clip-path: polygon(50% 0, 100% 100%, 0 100%);
+  animation: cr-number-marker 1.3s ease-in-out forwards;
+}
+
+.trend-down .marker {
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+}
+
+@keyframes cr-number-marker {
+  from,
+  to {
+    width: 0;
+    margin-inline-end: 0;
+    opacity: 0;
+    transform: scale(0);
+  }
+  20%,
+  70% {
+    width: 0.45em;
+    margin-inline-end: 0.12em;
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .digits,
+  .reel {
+    transition: none;
+  }
+  .enter,
+  .marker,
+  .in,
+  .out {
+    animation: none !important;
+  }
+}
+
+@media (forced-colors: active) {
+  .marker {
+    display: none;
+  }
+}
