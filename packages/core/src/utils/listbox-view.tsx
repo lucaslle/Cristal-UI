@@ -1,6 +1,6 @@
 import type { Messages } from './i18n';
 import { h } from '@stencil/core';
-import { ListOption } from './listbox';
+import { ListOption, matchRange } from './listbox';
 
 interface OptionListProps {
   options: ListOption[];
@@ -11,7 +11,23 @@ interface OptionListProps {
   open: boolean;
   onHover: (index: number) => void;
   onPick: (index: number) => void;
+  query?: string;
 }
+
+/** Libellé dont la partie qui correspond à la recherche est mise en valeur. */
+const Label = ({ label, query }: { label: string; query?: string }) => {
+  const range = query ? matchRange(label, query) : undefined;
+  if (!range) return <span class="option-label">{label}</span>;
+  return (
+    <span class="option-label">
+      {label.slice(0, range[0])}
+      <span class="match" part="match">
+        {label.slice(range[0], range[1])}
+      </span>
+      {label.slice(range[1])}
+    </span>
+  );
+};
 
 const Check = ({ multiple, checked }: { multiple: boolean; checked: boolean }) =>
   multiple ? (
@@ -27,7 +43,7 @@ const Check = ({ multiple, checked }: { multiple: boolean; checked: boolean }) =
     )
   );
 
-export const OptionList = ({ options, visible, selection, multiple, active, open, onHover, onPick }: OptionListProps) =>
+export const OptionList = ({ options, visible, selection, multiple, active, open, onHover, onPick, query }: OptionListProps) =>
   visible.map((index, position) => {
     const option = options[index];
     const checked = selection.includes(option.value);
@@ -45,7 +61,7 @@ export const OptionList = ({ options, visible, selection, multiple, active, open
         onClick={() => onPick(index)}
       >
         {multiple && <Check multiple checked={checked} />}
-        <span class="option-label">{option.label}</span>
+        <Label label={option.label} query={query} />
         {!multiple && <Check multiple={false} checked={checked} />}
       </div>
     );

@@ -96,3 +96,22 @@
 .empty:empty {
   display: none;
 }
+
+/* Lettres qui correspondent à la recherche : en gras, dans la couleur du thème. */
+.match {
+  font-weight: 800;
+  color: var(--cr-color-primary-text);
+}
+
+/* Option déjà choisie (déjà en gras et en couleur) : un fond léger garde la correspondance visible. */
+.item[aria-selected='true'] .match {
+  background: color-mix(in oklab, var(--cr-color-primary) 16%, transparent);
+  border-radius: 3px;
+}
+
+@media (forced-colors: active) {
+  .match {
+    color: Highlight;
+    text-decoration: underline;
+  }
+}

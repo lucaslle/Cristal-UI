@@ -17,6 +17,7 @@ import { t } from '../../utils/i18n';
  * @part listbox - La liste des options.
  * @part option - Une option.
  * @part search - Le champ de recherche (avec searchable).
+ * @part match - Les lettres d'une option qui correspondent à la recherche.
  * @part hint - Le texte d'aide.
  * @part error - Le message d'erreur.
  */

@@ -14,6 +14,28 @@ export const normalize = (text: string) =>
     .replace(/[̀-ͯ]/g, '')
     .toLowerCase();
 
+/**
+ * Position, dans le libellé d'origine, du texte recherché (sans tenir compte des majuscules ni des accents,
+ * comme le filtre) : [début, fin), ou undefined s'il n'y figure pas.
+ */
+export const matchRange = (label: string, query: string): [number, number] | undefined => {
+  const wanted = normalize(query.trim());
+  if (!wanted) return undefined;
+  // Chaque caractère normalisé garde l'indice de son caractère d'origine (« É » devient « e » mais reste à sa place).
+  const chars = [...label];
+  const origin: number[] = [];
+  let flat = '';
+  chars.forEach((char, index) => {
+    const part = normalize(char);
+    flat += part;
+    for (let i = 0; i < part.length; i++) origin.push(index);
+  });
+  const start = flat.indexOf(wanted);
+  if (start < 0) return undefined;
+  const offset = (count: number) => chars.slice(0, count).join('').length;
+  return [offset(origin[start]), offset(origin[start + wanted.length - 1] + 1)];
+};
+
 export const stepIndex = (options: ListOption[], from: number, step: 1 | -1) => {
   for (let index = from + step; index >= 0 && index < options.length; index += step) {
     if (!options[index].disabled) return index;
