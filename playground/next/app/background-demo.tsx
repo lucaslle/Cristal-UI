@@ -21,6 +21,10 @@ export function BackgroundDemo() {
           <CrButton size="s">Découvrir {title.toLowerCase()}</CrButton>
         </CrBackground>
       ))}
+      <CrBackground data-testid="background-still-particles" variant="particles" interactive={false} style={block}>
+        <h3 style={{ marginTop: 0 }}>Particules sans pointeur</h3>
+        <p>Les points ignorent le curseur.</p>
+      </CrBackground>
       <CrBackground data-testid="background-no-controls" variant="aurora" controls={false} style={block}>
         <h3 style={{ marginTop: 0 }}>Sans bouton pause</h3>
         <p>L’application fournit sa propre commande pour arrêter les animations.</p>

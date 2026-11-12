@@ -168,6 +168,11 @@ export namespace Components {
          */
         "controls": boolean;
         /**
+          * Avec particles, les points s'écartent du pointeur et s'y relient par des traits ; sans effet sur les autres variants.
+          * @default true
+         */
+        "interactive": boolean;
+        /**
           * Met l'animation en pause ; le bouton pause l'inverse. Passe à true au chargement si l'utilisateur a demandé à réduire les animations.
           * @default false
          */
@@ -2596,6 +2601,11 @@ declare namespace LocalJSX {
          */
         "controls"?: boolean;
         /**
+          * Avec particles, les points s'écartent du pointeur et s'y relient par des traits ; sans effet sur les autres variants.
+          * @default true
+         */
+        "interactive"?: boolean;
+        /**
           * Met l'animation en pause ; le bouton pause l'inverse. Passe à true au chargement si l'utilisateur a demandé à réduire les animations.
           * @default false
          */
@@ -4155,6 +4165,7 @@ declare namespace LocalJSX {
     interface CrBackgroundAttributes {
         "variant": BackgroundVariant;
         "controls": boolean;
+        "interactive": boolean;
         "paused": boolean;
     }
     interface CrBadgeAttributes {

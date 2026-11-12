@@ -3,6 +3,10 @@ type Point = { x: number; y: number; radius: number; reach: number; pace: number
 
 /** Distance en pixels sous laquelle deux points sont reliés. */
 const LINK = 100;
+/** Rayon en pixels autour du pointeur : les points s'y écartent et s'y relient. */
+const NEAR = 130;
+/** Écart maximal, en pixels, d'un point collé au pointeur. */
+const PUSH = 36;
 
 // Suite R2 (nombre plastique) : des places bien réparties, et la même première image à chaque chargement.
 const spread = (index: number, step: number) => (0.5 + index * step) % 1;
@@ -21,6 +25,9 @@ export class Particles {
   /** Temps d'animation écoulé, en millisecondes ; il n'avance pas pendant les pauses. */
   private time = 0;
   private resizer = new ResizeObserver(() => this.resize());
+  private target?: { x: number; y: number };
+  /** Pointeur suivi avec un peu de retard, et force de son effet (0 à 1) qui monte et retombe en douceur. */
+  private hover = { x: 0, y: 0, strength: 0 };
 
   constructor(private canvas: HTMLCanvasElement) {
     this.context = canvas.getContext('2d')!;
@@ -36,6 +43,12 @@ export class Particles {
     this.readColors();
     this.last = performance.now();
     this.frame = requestAnimationFrame(this.tick);
+  }
+
+  /** Position du pointeur dans le canvas, ou undefined quand il en sort. */
+  point(position?: { x: number; y: number }) {
+    if (position && !this.target && this.hover.strength < 0.01) Object.assign(this.hover, position);
+    this.target = position;
   }
 
   destroy() {
@@ -73,6 +86,12 @@ export class Particles {
   private tick = (now: number) => {
     this.time += Math.max(0, Math.min(now - this.last, 50));
     this.last = now;
+    const { hover, target } = this;
+    hover.strength += ((target ? 1 : 0) - hover.strength) * 0.08;
+    if (target) {
+      hover.x += (target.x - hover.x) * 0.25;
+      hover.y += (target.y - hover.y) * 0.25;
+    }
     this.draw();
     this.frame = requestAnimationFrame(this.tick);
   };
@@ -83,6 +102,16 @@ export class Particles {
       const angle = time * point.pace + point.phase;
       return { x: point.x + point.reach * Math.sin(angle), y: point.y + point.reach * Math.cos(angle * 0.8), radius: point.radius };
     });
+    const { hover } = this;
+    if (hover.strength > 0.01) {
+      for (const point of at) {
+        const distance = Math.hypot(point.x - hover.x, point.y - hover.y) || 1;
+        if (distance >= NEAR) continue;
+        const push = (1 - distance / NEAR) ** 2 * PUSH * hover.strength;
+        point.x += ((point.x - hover.x) / distance) * push;
+        point.y += ((point.y - hover.y) / distance) * push;
+      }
+    }
     context.clearRect(0, 0, this.width, this.height);
     context.strokeStyle = this.colors[1];
     context.lineWidth = 1;
@@ -94,6 +123,17 @@ export class Particles {
         context.beginPath();
         context.moveTo(at[i].x, at[i].y);
         context.lineTo(at[j].x, at[j].y);
+        context.stroke();
+      }
+    }
+    if (hover.strength > 0.01) {
+      for (const point of at) {
+        const distance = Math.hypot(point.x - hover.x, point.y - hover.y);
+        if (distance >= NEAR * 1.3) continue;
+        context.globalAlpha = (1 - distance / (NEAR * 1.3)) * 0.45 * hover.strength;
+        context.beginPath();
+        context.moveTo(hover.x, hover.y);
+        context.lineTo(point.x, point.y);
         context.stroke();
       }
     }

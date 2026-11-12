@@ -94,3 +94,33 @@ test('backgrounds hydrate without console errors, on a frame already in the serv
   await page.waitForTimeout(500);
   expect(errors).toEqual([]);
 });
+
+/** Densité d'encre du canvas autour du pointeur, rapportée à celle de tout le canvas, après 1,5 s de survol. */
+const inkAroundPointer = (page: Page, testid: string) =>
+  page.getByTestId(testid).evaluate(async (el) => {
+    await new Promise((resolve) => setTimeout(resolve, 1500));
+    const canvas = el.shadowRoot!.querySelector('canvas')!;
+    const data = canvas.getContext('2d')!.getImageData(0, 0, canvas.width, canvas.height).data;
+    const ink = (x0: number, y0: number, size: number) => {
+      let sum = 0;
+      for (let y = y0; y < y0 + size; y++) for (let x = x0; x < x0 + size; x++) sum += data[(y * canvas.width + x) * 4 + 3];
+      return sum / (size * size);
+    };
+    const size = Math.round(50 * (canvas.width / canvas.clientWidth));
+    return ink(Math.round((canvas.width - size) / 2), Math.round((canvas.height - size) / 2), size) / ink(0, 0, Math.min(canvas.width, canvas.height));
+  });
+
+test('particles react to the pointer by default, not with interactive={false}', async ({ page }) => {
+  await page.goto('/');
+  const ratios: number[] = [];
+  for (const testid of ['background-particles', 'background-still-particles']) {
+    const target = page.getByTestId(testid);
+    await target.scrollIntoViewIfNeeded();
+    const box = (await target.boundingBox())!;
+    await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+    ratios.push(await inkAroundPointer(page, testid));
+  }
+  // Les traits qui convergent vers le curseur concentrent l'encre autour de lui.
+  expect(ratios[0]).toBeGreaterThan(2);
+  expect(ratios[1]).toBeLessThan(2);
+});

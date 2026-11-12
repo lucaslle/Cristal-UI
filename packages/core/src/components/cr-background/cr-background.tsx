@@ -28,6 +28,8 @@ export class CrBackground {
   @Prop({ reflect: true }) variant: BackgroundVariant = 'aurora';
   /** Affiche le bouton pause dans le coin. À false seulement si l'application a sa propre commande pour arrêter les animations. */
   @Prop() controls = true;
+  /** Avec particles, les points s'écartent du pointeur et s'y relient par des traits ; sans effet sur les autres variants. */
+  @Prop() interactive = true;
   /** Met l'animation en pause ; le bouton pause l'inverse. Passe à true au chargement si l'utilisateur a demandé à réduire les animations. */
   @Prop({ mutable: true, reflect: true }) paused = false;
 
@@ -70,6 +72,12 @@ export class CrBackground {
     this.particles.toggle(this.shown && !this.paused);
   }
 
+  private onPointer = (event: PointerEvent) => {
+    const box = this.canvas?.getBoundingClientRect();
+    const inside = this.interactive && box && event.type !== 'pointerleave';
+    this.particles?.point(inside ? { x: event.clientX - box.left, y: event.clientY - box.top } : undefined);
+  };
+
   private updateShown = () => {
     this.shown = this.onScreen && !document.hidden;
   };
@@ -96,7 +104,7 @@ export class CrBackground {
   render() {
     const running = this.shown && !this.paused;
     return (
-      <Host>
+      <Host onPointerMove={this.onPointer} onPointerLeave={this.onPointer}>
         <div class="layer" part="layer" aria-hidden="true" data-running={running ? '' : undefined}>
           {this.renderEffect()}
         </div>
