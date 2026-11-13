@@ -22,7 +22,7 @@ export default function GridLayoutBasic() {
           <strong style={{ fontSize: 26 }}>64 €</strong>
         </CrGridItem>
         <CrGridItem id="notes" label="Notes" x={0} y={2} w={4} h={2} minW={2}>
-          Glissez une carte par sa poignée, tirez son coin pour changer sa taille.
+          Glissez une carte, tirez son coin pour changer sa taille.
         </CrGridItem>
       </CrGridLayout>
     </div>

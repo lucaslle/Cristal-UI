@@ -75,3 +75,11 @@ export const holdStill = (event: PointerEvent, onHold: () => void) => {
   window.addEventListener('pointerup', stop);
   window.addEventListener('pointercancel', stop);
 };
+
+/** Vrai si le pointeur est sur la barre de défilement de l'élément visé : elle doit rester utilisable sans attraper la carte. */
+export const onScrollbar = (event: PointerEvent) => {
+  const el = event.composedPath()[0];
+  if (!(el instanceof HTMLElement) || (el.scrollHeight <= el.clientHeight && el.scrollWidth <= el.clientWidth)) return false;
+  const rect = el.getBoundingClientRect();
+  return event.clientX - rect.left - el.clientLeft > el.clientWidth || event.clientY - rect.top - el.clientTop > el.clientHeight;
+};

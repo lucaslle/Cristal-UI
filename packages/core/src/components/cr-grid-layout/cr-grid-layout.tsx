@@ -1,11 +1,12 @@
 import { Component, Element, Event, EventEmitter, Host, Listen, Method, Prop, State, h } from '@stencil/core';
 import { t } from '../../utils/i18n';
-import { holdStill, onControl, rectsOf, settle, slide, track } from '../../utils/grid-drag';
+import { holdStill, onControl, onScrollbar, rectsOf, settle, slide, track } from '../../utils/grid-drag';
 import { GridLayoutItem, describe, itemOf, keyLayout, loadItems, plain, saveItems } from '../../utils/grid-keys';
-import { GridItem, moveItem, placeAll, resizeItem, rowsOf, sameLayout } from '../../utils/grid-layout';
+import { GridItem, moveItem, placeAll, resizeItem, sameLayout, updateItem } from '../../utils/grid-layout';
+import { GridOverlay } from '../../utils/grid-overlay';
 
 /**
- * Grille déplaçable : des éléments cr-grid-item que l'utilisateur déplace (poignée ou appui maintenu) et redimensionne par leur coin.
+ * Grille déplaçable : des éléments cr-grid-item que l'utilisateur déplace (poignée ou carte entière) et redimensionne par leur coin ou leurs bords.
  * Les autres éléments s'écartent pendant le déplacement, puis tout se tasse vers le haut.
  * @slot - Les éléments cr-grid-item.
  */
@@ -25,6 +26,8 @@ export class CrGridLayout {
   @Prop() gap = 16;
   /** Permet de déplacer et de redimensionner les éléments. */
   @Prop() editable = true;
+  /** Où attraper une carte à la souris : n'importe où (`surface`), après un appui maintenu (`hold`, le texte reste sélectionnable) ou par la poignée seule (`handle`). */
+  @Prop({ reflect: true }) grab: 'surface' | 'hold' | 'handle' = 'surface';
   /** Nom de la grille, lu par les lecteurs d’écran (« Grid », ou « Grille » en français, par défaut). */
   @Prop() label?: string;
   /** Largeur (px) sous laquelle les éléments s'empilent sur toute la largeur, sans poignées. */
@@ -112,10 +115,7 @@ export class CrGridLayout {
   onGridItemUpdate(event: Event) {
     const widget = event.target as HTMLCrGridItemElement;
     if (widget.parentElement !== this.el || !this.layout.length) return;
-    const props = this.fromProps(widget);
-    const placed = this.layout.map((item) => (item.id === props.id ? { ...item, ...props, x: props.x < 0 ? item.x : props.x, y: props.y < 0 ? item.y : props.y } : item));
-    const item = placed.find((i) => i.id === props.id)!;
-    this.apply(resizeItem(moveItem(placed, item.id, item.x, item.y, this.columns), item.id, item.w, item.h, this.columns));
+    this.apply(updateItem(this.layout, this.fromProps(widget), this.columns));
   }
 
   private grid?: HTMLElement;
@@ -126,18 +126,19 @@ export class CrGridLayout {
     const widget = path.find((el) => el.tagName === 'CR-GRID-ITEM' && el.parentElement === this.el) as HTMLCrGridItemElement | undefined;
     if (!widget || !this.editable || this.narrow || event.button !== 0) return;
     const part = path.find((el) => el.getAttribute?.('part') === 'handle' || el.getAttribute?.('part') === 'resize');
-    if (part) return this.drag(event, widget, part, part.getAttribute('part') === 'resize');
-    // Appui maintenu sur la carte (souris, stylet) : elle se soulève puis suit le pointeur. Au doigt, la poignée seule, pour garder le défilement.
-    if (event.pointerType === 'touch' || onControl(path, widget)) return;
+    if (part) return this.drag(event, widget, part, part.dataset.axis ?? '');
+    // Au doigt, la poignée seule, pour garder le défilement de la page.
+    if (this.grab === 'handle' || event.pointerType === 'touch' || onControl(path, widget) || onScrollbar(event)) return;
+    if (this.grab === 'surface') return this.drag(event, widget, widget, '');
     holdStill(event, () => {
       getSelection()?.removeAllRanges();
       document.documentElement.style.userSelect = 'none';
       widget.toggleAttribute('data-lifted', true);
-      this.drag(event, widget, widget, false);
+      this.drag(event, widget, widget, '');
     });
   }
 
-  private drag(event: PointerEvent, widget: HTMLCrGridItemElement, target: HTMLElement, resize: boolean) {
+  private drag(event: PointerEvent, widget: HTMLCrGridItemElement, target: HTMLElement, axis: string) {
     if (!this.grid) return;
     const id = this.idOf(widget);
     const base = this.layout;
@@ -149,11 +150,11 @@ export class CrGridLayout {
       target,
       (dx, dy) => {
         widget.toggleAttribute('data-lifted', true);
-        const next = resize
-          ? resizeItem(base, id, Math.round(origin.w + dx / stepX), Math.round(origin.h + dy / stepY), this.columns)
+        const next = axis
+          ? resizeItem(base, id, Math.round(origin.w + (axis.includes('x') ? dx / stepX : 0)), Math.round(origin.h + (axis.includes('y') ? dy / stepY : 0)), this.columns)
           : moveItem(base, id, Math.round(origin.x + dx / stepX), Math.round(origin.y + dy / stepY), this.columns);
         const placed = next.find((i) => i.id === id)!;
-        if (!resize) widget.style.translate = `${(origin.x - placed.x) * stepX + dx}px ${(origin.y - placed.y) * stepY + dy}px`;
+        if (!axis) widget.style.translate = `${(origin.x - placed.x) * stepX + dx}px ${(origin.y - placed.y) * stepY + dy}px`;
         if (!sameLayout(next, this.layout)) this.apply(next, widget);
         this.ghost = placed;
       },
@@ -162,7 +163,7 @@ export class CrGridLayout {
         document.documentElement.style.userSelect = '';
         settle(widget);
         this.ghost = undefined;
-        if (moved) this.commit(describe(this.layout.find((i) => i.id === id)!, widget.label, resize, t(this.el)));
+        if (moved) this.commit(describe(this.layout.find((i) => i.id === id)!, widget.label, !!axis, t(this.el)));
       },
     );
   }
@@ -181,13 +182,10 @@ export class CrGridLayout {
   }
 
   render() {
-    const rows = rowsOf(this.layout) + (this.ghost ? 2 : 0);
     return (
       <Host>
         <div ref={(el) => (this.grid = el)} class={{ grid: true, dragging: !!this.ghost }} role="group" aria-label={this.label ?? t(this.el).grid} style={{ '--cols': `${this.columns}`, '--row': `${this.rowHeight}px`, '--gap': `${this.gap}px` }}>
-          {this.ghost &&
-            Array.from({ length: this.columns * rows }, (_, i) => <span class="cell" aria-hidden="true" style={{ gridColumn: `${(i % this.columns) + 1}`, gridRow: `${Math.floor(i / this.columns) + 1}` }} />)}
-          {this.ghost && <span class="ghost" aria-hidden="true" style={{ gridColumn: `${this.ghost.x + 1} / span ${this.ghost.w}`, gridRow: `${this.ghost.y + 1} / span ${this.ghost.h}` }} />}
+          <GridOverlay ghost={this.ghost} layout={this.layout} columns={this.columns} />
           <slot onSlotchange={() => this.layout.length && this.sync()} />
         </div>
         <p class="sr-only" role="status">

@@ -4,10 +4,11 @@ description: A grid of items that each user moves and resizes, to build a dashbo
 ---
 
 import GridLayoutBasic from '@/demos/en/grid-layout-basic';
+import GridLayoutVariants from '@/demos/en/grid-layout-variants';
 
 ## Example
 
-Each `CrGridItem` has a title (`label`), a position (`x`, `y`, in cells starting from 0) and a size (`w` columns, `h` rows). The user moves it by its ⠿ handle, or by holding the pointer down anywhere on the card, and resizes it by dragging its corner: the grid appears, the target slot is drawn with a dashed outline, the other items move aside during the drag, then everything packs upwards.
+Each `CrGridItem` has a title (`label`), a position (`x`, `y`, in cells starting from 0) and a size (`w` columns, `h` rows). The user moves it by grabbing it anywhere (or by its ⠿ handle), and resizes it by dragging its corner: the grid appears, the target slot is drawn with a dashed outline, the other items move aside during the drag, then everything packs upwards.
 
 <Preview column>
   <GridLayoutBasic />
@@ -17,9 +18,39 @@ Each `CrGridItem` has a title (`label`), a position (`x`, `y`, in cells starting
 
 ## Grabbing a card
 
-- By the ⠿ handle: dragging starts immediately.
-- Anywhere on the card: hold the pointer down for a moment (300 ms) without moving, the card lifts, then move it. A click followed by a quick movement selects text as usual, and holding down on a button, a checkbox, a link or a field does not lift the card.
-- With a finger, on a touch screen, only the handle moves the card: swiping on the card scrolls the page.
+The `grab` property of `CrGridLayout` chooses how the mouse grabs a card:
+
+| `grab` | Behaviour |
+|---|---|
+| `surface` (default) | anywhere on the card: dragging starts as soon as the pointer moves |
+| `hold` | anywhere, after holding the pointer down for a moment (300 ms) without moving; a click followed by a quick movement selects text as usual |
+| `handle` | by the ⠿ handle only |
+
+In every case the ⠿ handle moves the card immediately, and pressing a button, a checkbox, a link, a field or a scrollbar inside the card does not move it. With a finger, on a touch screen, only the handle moves the card: swiping on the card scrolls the page.
+
+## Look and resize handles
+
+`variant` changes the look of a `CrGridItem`, `resizeHandle` its resize handle.
+
+<Preview column>
+  <GridLayoutVariants />
+</Preview>
+
+<include>../../../demos/en/grid-layout-variants.tsx</include>
+
+| `variant` | Look |
+|---|---|
+| `card` (default) | bordered card, light shadow |
+| `elevated` | no border, a soft shadow that grows on hover |
+| `soft` | tinted with the primary colour, coloured title |
+| `outline` | outline only, the card shows the background |
+| `glass` | frosted glass: put it on a colourful background or an image, light or dark enough for the text to stay readable |
+
+| `resizeHandle` | Handle |
+|---|---|
+| `corner` (default) | an arc that follows the card's rounded corner |
+| `knob` | a round knob on the corner |
+| `edges` | the corner, plus the right edge (width only) and the bottom edge (height only); a bar shows on the hovered edge |
 
 ## Grid
 
@@ -29,6 +60,7 @@ Each `CrGridItem` has a title (`label`), a position (`x`, `y`, in cells starting
 | `rowHeight` | height of a row in pixels (80 by default) |
 | `gap` | space between items in pixels (16 by default) |
 | `editable` | `false` to lock the layout (no handles) |
+| `grab` | where the mouse grabs a card: `surface`, `hold` or `handle` |
 | `stackBelow` | width in pixels below which items stack (480 by default) |
 | `storageKey` | remembers the user's layout from one visit to the next |
 

@@ -22,7 +22,7 @@ export default function GridLayoutBasic() {
           <strong style={{ fontSize: 26 }}>$64</strong>
         </CrGridItem>
         <CrGridItem id="notes" label="Notes" x={0} y={2} w={4} h={2} minW={2}>
-          Drag a card by its handle, pull its corner to resize it.
+          Drag a card, pull its corner to resize it.
         </CrGridItem>
       </CrGridLayout>
     </div>

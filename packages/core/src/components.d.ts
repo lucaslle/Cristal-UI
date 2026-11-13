@@ -616,7 +616,7 @@ export namespace Components {
         "name"?: string;
     }
     /**
-     * Élément d'un cr-grid-layout. Se déplace par sa poignée et se redimensionne par son coin.
+     * Élément d'un cr-grid-layout. Se déplace par sa poignée ou sa surface et se redimensionne par son coin ou ses bords.
      * Donnez-lui un id pour retrouver sa place dans les réglages enregistrés.
      */
     interface CrGridItem {
@@ -655,6 +655,16 @@ export namespace Components {
          */
         "removable": boolean;
         /**
+          * Poignée d'agrandissement : arc dans le coin (`corner`), pastille (`knob`) ou bords droit et bas en plus du coin (`edges`).
+          * @default 'corner'
+         */
+        "resizeHandle": 'corner' | 'knob' | 'edges';
+        /**
+          * Apparence : carte bordée (`card`), ombrée (`elevated`), teintée (`soft`), simple contour (`outline`) ou verre dépoli (`glass`).
+          * @default 'card'
+         */
+        "variant": 'card' | 'elevated' | 'soft' | 'outline' | 'glass';
+        /**
           * Largeur en colonnes.
           * @default 3
          */
@@ -669,7 +679,7 @@ export namespace Components {
         "y"?: number;
     }
     /**
-     * Grille déplaçable : des éléments cr-grid-item que l'utilisateur déplace (poignée ou appui maintenu) et redimensionne par leur coin.
+     * Grille déplaçable : des éléments cr-grid-item que l'utilisateur déplace (poignée ou carte entière) et redimensionne par leur coin ou leurs bords.
      * Les autres éléments s'écartent pendant le déplacement, puis tout se tasse vers le haut.
      */
     interface CrGridLayout {
@@ -688,6 +698,11 @@ export namespace Components {
           * @default 16
          */
         "gap": number;
+        /**
+          * Où attraper une carte à la souris : n'importe où (`surface`), après un appui maintenu (`hold`, le texte reste sélectionnable) ou par la poignée seule (`handle`).
+          * @default 'surface'
+         */
+        "grab": 'surface' | 'hold' | 'handle';
         /**
           * Nom de la grille, lu par les lecteurs d’écran (« Grid », ou « Grille » en français, par défaut).
          */
@@ -2123,7 +2138,7 @@ declare global {
         "crGridItemUpdate": void;
     }
     /**
-     * Élément d'un cr-grid-layout. Se déplace par sa poignée et se redimensionne par son coin.
+     * Élément d'un cr-grid-layout. Se déplace par sa poignée ou sa surface et se redimensionne par son coin ou ses bords.
      * Donnez-lui un id pour retrouver sa place dans les réglages enregistrés.
      */
     interface HTMLCrGridItemElement extends Components.CrGridItem, HTMLStencilElement {
@@ -2144,7 +2159,7 @@ declare global {
         "crLayoutChange": GridLayoutItem[];
     }
     /**
-     * Grille déplaçable : des éléments cr-grid-item que l'utilisateur déplace (poignée ou appui maintenu) et redimensionne par leur coin.
+     * Grille déplaçable : des éléments cr-grid-item que l'utilisateur déplace (poignée ou carte entière) et redimensionne par leur coin ou leurs bords.
      * Les autres éléments s'écartent pendant le déplacement, puis tout se tasse vers le haut.
      */
     interface HTMLCrGridLayoutElement extends Components.CrGridLayout, HTMLStencilElement {
@@ -3371,7 +3386,7 @@ declare namespace LocalJSX {
         "onCrChange"?: (event: CrFileUploadCustomEvent<File[]>) => void;
     }
     /**
-     * Élément d'un cr-grid-layout. Se déplace par sa poignée et se redimensionne par son coin.
+     * Élément d'un cr-grid-layout. Se déplace par sa poignée ou sa surface et se redimensionne par son coin ou ses bords.
      * Donnez-lui un id pour retrouver sa place dans les réglages enregistrés.
      */
     interface CrGridItem {
@@ -3418,6 +3433,16 @@ declare namespace LocalJSX {
          */
         "removable"?: boolean;
         /**
+          * Poignée d'agrandissement : arc dans le coin (`corner`), pastille (`knob`) ou bords droit et bas en plus du coin (`edges`).
+          * @default 'corner'
+         */
+        "resizeHandle"?: 'corner' | 'knob' | 'edges';
+        /**
+          * Apparence : carte bordée (`card`), ombrée (`elevated`), teintée (`soft`), simple contour (`outline`) ou verre dépoli (`glass`).
+          * @default 'card'
+         */
+        "variant"?: 'card' | 'elevated' | 'soft' | 'outline' | 'glass';
+        /**
           * Largeur en colonnes.
           * @default 3
          */
@@ -3432,7 +3457,7 @@ declare namespace LocalJSX {
         "y"?: number;
     }
     /**
-     * Grille déplaçable : des éléments cr-grid-item que l'utilisateur déplace (poignée ou appui maintenu) et redimensionne par leur coin.
+     * Grille déplaçable : des éléments cr-grid-item que l'utilisateur déplace (poignée ou carte entière) et redimensionne par leur coin ou leurs bords.
      * Les autres éléments s'écartent pendant le déplacement, puis tout se tasse vers le haut.
      */
     interface CrGridLayout {
@@ -3451,6 +3476,11 @@ declare namespace LocalJSX {
           * @default 16
          */
         "gap"?: number;
+        /**
+          * Où attraper une carte à la souris : n'importe où (`surface`), après un appui maintenu (`hold`, le texte reste sélectionnable) ou par la poignée seule (`handle`).
+          * @default 'surface'
+         */
+        "grab"?: 'surface' | 'hold' | 'handle';
         /**
           * Nom de la grille, lu par les lecteurs d’écran (« Grid », ou « Grille » en français, par défaut).
          */
@@ -4760,6 +4790,8 @@ declare namespace LocalJSX {
         "minH": number;
         "maxW": number;
         "maxH": number;
+        "variant": 'card' | 'elevated' | 'soft' | 'outline' | 'glass';
+        "resizeHandle": 'corner' | 'knob' | 'edges';
         "removable": boolean;
     }
     interface CrGridLayoutAttributes {
@@ -4767,6 +4799,7 @@ declare namespace LocalJSX {
         "rowHeight": number;
         "gap": number;
         "editable": boolean;
+        "grab": 'surface' | 'hold' | 'handle';
         "label": string;
         "stackBelow": number;
         "storageKey": string;
@@ -5154,12 +5187,12 @@ declare module "@stencil/core" {
              */
             "cr-file-upload": LocalJSX.IntrinsicElements["cr-file-upload"] & JSXBase.HTMLAttributes<HTMLCrFileUploadElement>;
             /**
-             * Élément d'un cr-grid-layout. Se déplace par sa poignée et se redimensionne par son coin.
+             * Élément d'un cr-grid-layout. Se déplace par sa poignée ou sa surface et se redimensionne par son coin ou ses bords.
              * Donnez-lui un id pour retrouver sa place dans les réglages enregistrés.
              */
             "cr-grid-item": LocalJSX.IntrinsicElements["cr-grid-item"] & JSXBase.HTMLAttributes<HTMLCrGridItemElement>;
             /**
-             * Grille déplaçable : des éléments cr-grid-item que l'utilisateur déplace (poignée ou appui maintenu) et redimensionne par leur coin.
+             * Grille déplaçable : des éléments cr-grid-item que l'utilisateur déplace (poignée ou carte entière) et redimensionne par leur coin ou leurs bords.
              * Les autres éléments s'écartent pendant le déplacement, puis tout se tasse vers le haut.
              */
             "cr-grid-layout": LocalJSX.IntrinsicElements["cr-grid-layout"] & JSXBase.HTMLAttributes<HTMLCrGridLayoutElement>;
