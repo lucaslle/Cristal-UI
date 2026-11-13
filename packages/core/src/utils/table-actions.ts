@@ -10,7 +10,7 @@ export interface ActionResult {
 }
 
 /** Applique un raccourci d'en-tête (hors déplacement du focus) et prépare le message annoncé. */
-export const applyAction = (action: Exclude<HeaderAction, { type: 'focus' }>, state: ColumnState[], key: string, label: string, fit: () => number, m: Messages): ActionResult => {
+export const applyAction = (action: Exclude<HeaderAction, { type: 'focus' | 'sort' }>, state: ColumnState[], key: string, label: string, fit: () => number, m: Messages): ActionResult => {
   const column = state.find((c) => c.key === key)!;
   const shown = state.filter((c) => !c.hidden).length;
   if (action.type === 'move') {

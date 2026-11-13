@@ -13,6 +13,14 @@ export interface TableColumn {
   hidden?: boolean;
   /** Affiche la valeur en pastille colorée : { Payée: 'success', 'En attente': 'warning' }. */
   badges?: Record<string, BadgeTone>;
+  /** L'en-tête trie les lignes : croissant, décroissant, puis ordre d'origine. */
+  sortable?: boolean;
+  /** Texte affiché à partir de la valeur brute, qui sert toujours au tri : (value, row) => string. */
+  format?: (value: unknown, row: Record<string, unknown>) => string;
+  /** La cellule devient un bouton qui émet crRowClick ; un clic ailleurs sur la ligne fait de même. */
+  primary?: boolean;
+  /** La cellule affiche l'élément enfant slot="<key>-<id de la ligne>" (boutons, menus, liens). */
+  slot?: boolean;
 }
 
 export interface ColumnState {
@@ -80,8 +88,8 @@ export const summary = (state: ColumnState[], density: TableDensity, m: Messages
 };
 
 /** Décalage gauche de chaque colonne fixée visible, pour position: sticky. */
-export const pinOffsets = (state: ColumnState[]) => {
-  let left = 0;
+export const pinOffsets = (state: ColumnState[], start = 0) => {
+  let left = start;
   return new Map(
     state
       .filter((column) => column.pinned && !column.hidden)

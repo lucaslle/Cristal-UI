@@ -1,0 +1,172 @@
+/* Couleurs de la palette, dans un ordre fixe : la couleur suit la série, jamais son rang. */
+.s1 { --c: var(--cr-color-chart-1); }
+.s2 { --c: var(--cr-color-chart-2); }
+.s3 { --c: var(--cr-color-chart-3); }
+.s4 { --c: var(--cr-color-chart-4); }
+.s5 { --c: var(--cr-color-chart-5); }
+.s6 { --c: var(--cr-color-chart-6); }
+.s7 { --c: var(--cr-color-chart-7); }
+.s8 { --c: var(--cr-color-chart-8); }
+
+svg {
+  display: block;
+  overflow: visible;
+}
+
+/* Axes et grille : traits fins et discrets, la donnée seule est appuyée. */
+.grid {
+  stroke: var(--cr-color-disabled);
+  stroke-width: 1;
+}
+
+.baseline {
+  stroke: color-mix(in oklab, var(--cr-color-border) 60%, var(--cr-color-surface));
+  stroke-width: 1;
+}
+
+.tick {
+  font-size: var(--cr-font-size-s);
+  font-variant-numeric: tabular-nums;
+  fill: var(--cr-color-text-muted);
+}
+
+.tick.on {
+  font-weight: var(--cr-font-weight-bold);
+  fill: var(--cr-color-text);
+}
+
+.crosshair {
+  stroke: var(--cr-color-border);
+  stroke-width: 1;
+}
+
+.hit {
+  fill: transparent;
+}
+
+.column {
+  fill: var(--c);
+  transform-box: fill-box;
+  transform-origin: bottom;
+  transition: opacity 0.2s;
+  animation: cr-chart-grow 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) backwards;
+}
+
+.column.dim,
+.slice.dim {
+  opacity: 0.4;
+}
+
+@keyframes cr-chart-grow {
+  from {
+    transform: scaleY(0);
+  }
+}
+
+.line {
+  fill: none;
+  stroke: var(--c);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 1 1;
+  animation: cr-chart-draw 0.9s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes cr-chart-draw {
+  from {
+    stroke-dashoffset: 1;
+  }
+}
+
+.area {
+  fill: var(--c);
+  fill-opacity: 0.1;
+}
+
+/* Points : 8 px, cerclés de la couleur du fond pour rester lisibles sur les traits. */
+.dot {
+  fill: var(--c);
+  stroke: var(--cr-color-surface);
+  stroke-width: 2;
+}
+
+.end-label {
+  font-size: var(--cr-font-size-s);
+  font-weight: var(--cr-font-weight-bold);
+  font-variant-numeric: tabular-nums;
+  fill: var(--cr-color-text);
+}
+
+/* Barres : 4 px d'arrondi au bout, carrées au départ. */
+.bar {
+  flex: none;
+  width: calc((100% - 6em) * var(--ratio));
+  min-width: 2px;
+  height: 12px;
+  background: var(--c);
+  border-radius: 0 4px 4px 0;
+  transform-origin: left;
+  animation: cr-chart-grow-x 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) backwards;
+}
+
+@keyframes cr-chart-grow-x {
+  from {
+    transform: scaleX(0);
+  }
+}
+
+.slice {
+  fill: var(--c);
+  stroke: var(--cr-color-surface);
+  stroke-width: 2;
+  transition: opacity 0.2s;
+}
+
+.swatch {
+  flex: none;
+  width: 10px;
+  height: 10px;
+  background: var(--c);
+  border-radius: 2px;
+}
+
+.swatch.line-key,
+.key {
+  width: 14px;
+  height: 2px;
+  background: var(--c);
+  border-radius: 1px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .column,
+  .line,
+  .bar {
+    animation: none;
+  }
+}
+
+/* Contraste élevé : les couleurs disparaissent ; la légende, les valeurs et le tableau portent le sens. */
+@media (forced-colors: active) {
+  .column,
+  .slice,
+  .bar,
+  .swatch,
+  .key,
+  .dot {
+    forced-color-adjust: none;
+    fill: CanvasText;
+    background: CanvasText;
+  }
+  .slice {
+    stroke: Canvas;
+  }
+  .line {
+    stroke: CanvasText;
+  }
+  .column.dim,
+  .slice.dim {
+    fill: GrayText;
+  }
+}

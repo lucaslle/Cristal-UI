@@ -13,6 +13,7 @@ import { BoxDisplay } from "./components/cr-box/cr-box";
 import { ButtonSize, ButtonType, ButtonVariant } from "./components/cr-button/cr-button";
 import { ErrorAnimation } from "./utils/field";
 import { CardValue } from "./components/cr-card-input/cr-card-input";
+import { ChartSeries, ChartType } from "./utils/chart-scale";
 import { GridLayoutItem } from "./utils/grid-keys";
 import { IconButtonVariant, TooltipPlacement } from "./components/cr-icon-button/cr-icon-button";
 import { ButtonSize as ButtonSize1, ButtonType as ButtonType1 } from "./components/cr-button/cr-button";
@@ -22,6 +23,7 @@ import { NumberAnimation } from "./utils/number-views";
 import { QuantityAnimation } from "./utils/quantity";
 import { StepperVariant } from "./utils/stepper";
 import { TableColumn, TableDensity, TableLayout, TableVariant } from "./utils/table-layout";
+import { TableSort } from "./utils/table-sort";
 import { Theme, ThemeToggleVariant } from "./components/cr-theme-toggle/cr-theme-toggle";
 import { ThemeTransition } from "./utils/theme-transitions";
 import { ThemeToggleIcon } from "./utils/theme-toggle-views";
@@ -35,6 +37,7 @@ export { BoxDisplay } from "./components/cr-box/cr-box";
 export { ButtonSize, ButtonType, ButtonVariant } from "./components/cr-button/cr-button";
 export { ErrorAnimation } from "./utils/field";
 export { CardValue } from "./components/cr-card-input/cr-card-input";
+export { ChartSeries, ChartType } from "./utils/chart-scale";
 export { GridLayoutItem } from "./utils/grid-keys";
 export { IconButtonVariant, TooltipPlacement } from "./components/cr-icon-button/cr-icon-button";
 export { ButtonSize as ButtonSize1, ButtonType as ButtonType1 } from "./components/cr-button/cr-button";
@@ -44,6 +47,7 @@ export { NumberAnimation } from "./utils/number-views";
 export { QuantityAnimation } from "./utils/quantity";
 export { StepperVariant } from "./utils/stepper";
 export { TableColumn, TableDensity, TableLayout, TableVariant } from "./utils/table-layout";
+export { TableSort } from "./utils/table-sort";
 export { Theme, ThemeToggleVariant } from "./components/cr-theme-toggle/cr-theme-toggle";
 export { ThemeTransition } from "./utils/theme-transitions";
 export { ThemeToggleIcon } from "./utils/theme-toggle-views";
@@ -391,6 +395,40 @@ export namespace Components {
           * @default 'fields'
          */
         "variant": 'fields' | 'card';
+    }
+    /**
+     * Graphique : colonnes, barres horizontales, courbe, surface ou donut, aux couleurs de la palette --cr-color-chart-1 à 8.
+     * Chaque valeur se lit au survol, au clavier (flèches) et dans le tableau « Afficher les données ».
+     */
+    interface CrChart {
+        /**
+          * Mise en forme des valeurs (Intl.NumberFormat) : { style: 'currency', currency: 'EUR' }, { style: 'percent' }…
+         */
+        "format"?: Intl.NumberFormatOptions;
+        /**
+          * Masque visuellement le titre, quand la carte qui contient le graphique l'affiche déjà.
+          * @default false
+         */
+        "hideLabel": boolean;
+        /**
+          * Titre du graphique, aussi son nom pour les lecteurs d'écran (obligatoire).
+         */
+        "label": string;
+        /**
+          * Les catégories, dans l'ordre : mois, produits…
+          * @default []
+         */
+        "labels": string[];
+        /**
+          * Les séries : { name, values }, une valeur par catégorie ; 8 au plus. Le donut n'utilise que la première.
+          * @default []
+         */
+        "series": ChartSeries[];
+        /**
+          * column (colonnes, évolution), bar (barres horizontales, classement), line, area (courbe et surface) ou donut (parts d'un tout).
+          * @default 'column'
+         */
+        "type": ChartType;
     }
     /**
      * Case à cocher.
@@ -1517,10 +1555,12 @@ export namespace Components {
     }
     /**
      * Tableau dont chaque utilisateur règle les colonnes : largeur, ordre, colonnes fixées et masquées, densité des lignes.
+     * Options : tri par colonne (sortable), cases de sélection (selectable), ligne cliquable (colonne primary),
+     * cellules libres remplies par des enfants slot="<colonne>-<id>" (colonne slot).
      */
     interface CrTable {
         /**
-          * Colonnes : key, label, width (px, 160 par défaut), align ('start' ou 'end'), pinned, hidden.
+          * Colonnes : key, label, width (px, 160 par défaut), align ('start' ou 'end'), pinned, hidden, badges, sortable, format, primary, slot.
           * @default []
          */
         "columns": TableColumn[];
@@ -1534,10 +1574,29 @@ export namespace Components {
          */
         "label": string;
         /**
+          * Champ des lignes qui les identifie : sélection et cellules slot.
+          * @default 'id'
+         */
+        "rowKey": string;
+        /**
           * Lignes : un objet par ligne, avec une valeur par clé de colonne.
           * @default []
          */
         "rows": Record<string, unknown>[];
+        /**
+          * Ajoute une case à cocher par ligne et une case « tout sélectionner ».
+          * @default false
+         */
+        "selectable": boolean;
+        /**
+          * Lignes cochées : leurs valeurs de rowKey.
+          * @default []
+         */
+        "selected": unknown[];
+        /**
+          * Tri en cours : { key, direction: 'ascending' | 'descending' } ; absent pour l'ordre d'origine.
+         */
+        "sort"?: TableSort;
         /**
           * Clé localStorage : les réglages de l'utilisateur sont retenus d'une visite à l'autre.
          */
@@ -1995,6 +2054,16 @@ declare global {
     var HTMLCrCardInputElement: {
         prototype: HTMLCrCardInputElement;
         new (): HTMLCrCardInputElement;
+    };
+    /**
+     * Graphique : colonnes, barres horizontales, courbe, surface ou donut, aux couleurs de la palette --cr-color-chart-1 à 8.
+     * Chaque valeur se lit au survol, au clavier (flèches) et dans le tableau « Afficher les données ».
+     */
+    interface HTMLCrChartElement extends Components.CrChart, HTMLStencilElement {
+    }
+    var HTMLCrChartElement: {
+        prototype: HTMLCrChartElement;
+        new (): HTMLCrChartElement;
     };
     interface HTMLCrCheckboxElementEventMap {
         "crChange": boolean;
@@ -2586,9 +2655,14 @@ declare global {
     };
     interface HTMLCrTableElementEventMap {
         "crLayoutChange": TableLayout;
+        "crSortChange": TableSort | null;
+        "crSelectionChange": unknown[];
+        "crRowClick": Record<string, unknown>;
     }
     /**
      * Tableau dont chaque utilisateur règle les colonnes : largeur, ordre, colonnes fixées et masquées, densité des lignes.
+     * Options : tri par colonne (sortable), cases de sélection (selectable), ligne cliquable (colonne primary),
+     * cellules libres remplies par des enfants slot="<colonne>-<id>" (colonne slot).
      */
     interface HTMLCrTableElement extends Components.CrTable, HTMLStencilElement {
         addEventListener<K extends keyof HTMLCrTableElementEventMap>(type: K, listener: (this: HTMLCrTableElement, ev: CrTableCustomEvent<HTMLCrTableElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -2711,6 +2785,7 @@ declare global {
         "cr-button": HTMLCrButtonElement;
         "cr-card": HTMLCrCardElement;
         "cr-card-input": HTMLCrCardInputElement;
+        "cr-chart": HTMLCrChartElement;
         "cr-checkbox": HTMLCrCheckboxElement;
         "cr-command-palette": HTMLCrCommandPaletteElement;
         "cr-date-picker": HTMLCrDatePickerElement;
@@ -3121,6 +3196,40 @@ declare namespace LocalJSX {
           * @default 'fields'
          */
         "variant"?: 'fields' | 'card';
+    }
+    /**
+     * Graphique : colonnes, barres horizontales, courbe, surface ou donut, aux couleurs de la palette --cr-color-chart-1 à 8.
+     * Chaque valeur se lit au survol, au clavier (flèches) et dans le tableau « Afficher les données ».
+     */
+    interface CrChart {
+        /**
+          * Mise en forme des valeurs (Intl.NumberFormat) : { style: 'currency', currency: 'EUR' }, { style: 'percent' }…
+         */
+        "format"?: Intl.NumberFormatOptions;
+        /**
+          * Masque visuellement le titre, quand la carte qui contient le graphique l'affiche déjà.
+          * @default false
+         */
+        "hideLabel"?: boolean;
+        /**
+          * Titre du graphique, aussi son nom pour les lecteurs d'écran (obligatoire).
+         */
+        "label": string;
+        /**
+          * Les catégories, dans l'ordre : mois, produits…
+          * @default []
+         */
+        "labels"?: string[];
+        /**
+          * Les séries : { name, values }, une valeur par catégorie ; 8 au plus. Le donut n'utilise que la première.
+          * @default []
+         */
+        "series"?: ChartSeries[];
+        /**
+          * column (colonnes, évolution), bar (barres horizontales, classement), line, area (courbe et surface) ou donut (parts d'un tout).
+          * @default 'column'
+         */
+        "type"?: ChartType;
     }
     /**
      * Case à cocher.
@@ -4419,10 +4528,12 @@ declare namespace LocalJSX {
     }
     /**
      * Tableau dont chaque utilisateur règle les colonnes : largeur, ordre, colonnes fixées et masquées, densité des lignes.
+     * Options : tri par colonne (sortable), cases de sélection (selectable), ligne cliquable (colonne primary),
+     * cellules libres remplies par des enfants slot="<colonne>-<id>" (colonne slot).
      */
     interface CrTable {
         /**
-          * Colonnes : key, label, width (px, 160 par défaut), align ('start' ou 'end'), pinned, hidden.
+          * Colonnes : key, label, width (px, 160 par défaut), align ('start' ou 'end'), pinned, hidden, badges, sortable, format, primary, slot.
           * @default []
          */
         "columns"?: TableColumn[];
@@ -4440,10 +4551,41 @@ declare namespace LocalJSX {
          */
         "onCrLayoutChange"?: (event: CrTableCustomEvent<TableLayout>) => void;
         /**
+          * Émis au clic sur la cellule primary ou ailleurs sur la ligne ; detail : la ligne.
+         */
+        "onCrRowClick"?: (event: CrTableCustomEvent<Record<string, unknown>>) => void;
+        /**
+          * Émis quand une case est cochée ou décochée ; detail : les valeurs de rowKey des lignes cochées.
+         */
+        "onCrSelectionChange"?: (event: CrTableCustomEvent<unknown[]>) => void;
+        /**
+          * Émis au changement de tri ; detail : le tri, ou null pour l'ordre d'origine.
+         */
+        "onCrSortChange"?: (event: CrTableCustomEvent<TableSort | null>) => void;
+        /**
+          * Champ des lignes qui les identifie : sélection et cellules slot.
+          * @default 'id'
+         */
+        "rowKey"?: string;
+        /**
           * Lignes : un objet par ligne, avec une valeur par clé de colonne.
           * @default []
          */
         "rows"?: Record<string, unknown>[];
+        /**
+          * Ajoute une case à cocher par ligne et une case « tout sélectionner ».
+          * @default false
+         */
+        "selectable"?: boolean;
+        /**
+          * Lignes cochées : leurs valeurs de rowKey.
+          * @default []
+         */
+        "selected"?: unknown[];
+        /**
+          * Tri en cours : { key, direction: 'ascending' | 'descending' } ; absent pour l'ordre d'origine.
+         */
+        "sort"?: TableSort;
         /**
           * Clé localStorage : les réglages de l'utilisateur sont retenus d'une visite à l'autre.
          */
@@ -4726,6 +4868,11 @@ declare namespace LocalJSX {
         "holder": boolean;
         "variant": 'fields' | 'card';
     }
+    interface CrChartAttributes {
+        "label": string;
+        "hideLabel": boolean;
+        "type": ChartType;
+    }
     interface CrCheckboxAttributes {
         "label": string;
         "name": string;
@@ -4990,6 +5137,8 @@ declare namespace LocalJSX {
         "variant": TableVariant;
         "density": TableDensity;
         "storageKey": string;
+        "rowKey": string;
+        "selectable": boolean;
     }
     interface CrTagInputAttributes {
         "label": string;
@@ -5043,6 +5192,7 @@ declare namespace LocalJSX {
         "cr-button": Omit<CrButton, keyof CrButtonAttributes> & { [K in keyof CrButton & keyof CrButtonAttributes]?: CrButton[K] } & { [K in keyof CrButton & keyof CrButtonAttributes as `attr:${K}`]?: CrButtonAttributes[K] } & { [K in keyof CrButton & keyof CrButtonAttributes as `prop:${K}`]?: CrButton[K] };
         "cr-card": CrCard;
         "cr-card-input": Omit<CrCardInput, keyof CrCardInputAttributes> & { [K in keyof CrCardInput & keyof CrCardInputAttributes]?: CrCardInput[K] } & { [K in keyof CrCardInput & keyof CrCardInputAttributes as `attr:${K}`]?: CrCardInputAttributes[K] } & { [K in keyof CrCardInput & keyof CrCardInputAttributes as `prop:${K}`]?: CrCardInput[K] } & OneOf<"label", CrCardInput["label"], CrCardInputAttributes["label"]>;
+        "cr-chart": Omit<CrChart, keyof CrChartAttributes> & { [K in keyof CrChart & keyof CrChartAttributes]?: CrChart[K] } & { [K in keyof CrChart & keyof CrChartAttributes as `attr:${K}`]?: CrChartAttributes[K] } & { [K in keyof CrChart & keyof CrChartAttributes as `prop:${K}`]?: CrChart[K] } & OneOf<"label", CrChart["label"], CrChartAttributes["label"]>;
         "cr-checkbox": Omit<CrCheckbox, keyof CrCheckboxAttributes> & { [K in keyof CrCheckbox & keyof CrCheckboxAttributes]?: CrCheckbox[K] } & { [K in keyof CrCheckbox & keyof CrCheckboxAttributes as `attr:${K}`]?: CrCheckboxAttributes[K] } & { [K in keyof CrCheckbox & keyof CrCheckboxAttributes as `prop:${K}`]?: CrCheckbox[K] } & OneOf<"label", CrCheckbox["label"], CrCheckboxAttributes["label"]>;
         "cr-command-palette": Omit<CrCommandPalette, keyof CrCommandPaletteAttributes> & { [K in keyof CrCommandPalette & keyof CrCommandPaletteAttributes]?: CrCommandPalette[K] } & { [K in keyof CrCommandPalette & keyof CrCommandPaletteAttributes as `attr:${K}`]?: CrCommandPaletteAttributes[K] } & { [K in keyof CrCommandPalette & keyof CrCommandPaletteAttributes as `prop:${K}`]?: CrCommandPalette[K] } & OneOf<"label", CrCommandPalette["label"], CrCommandPaletteAttributes["label"]>;
         "cr-date-picker": Omit<CrDatePicker, keyof CrDatePickerAttributes> & { [K in keyof CrDatePicker & keyof CrDatePickerAttributes]?: CrDatePicker[K] } & { [K in keyof CrDatePicker & keyof CrDatePickerAttributes as `attr:${K}`]?: CrDatePickerAttributes[K] } & { [K in keyof CrDatePicker & keyof CrDatePickerAttributes as `prop:${K}`]?: CrDatePicker[K] } & OneOf<"label", CrDatePicker["label"], CrDatePickerAttributes["label"]>;
@@ -5151,6 +5301,11 @@ declare module "@stencil/core" {
              * Envoie name (numéro sans espaces), name-expiry, name-cvc (et name-holder avec holder) avec le formulaire.
              */
             "cr-card-input": LocalJSX.IntrinsicElements["cr-card-input"] & JSXBase.HTMLAttributes<HTMLCrCardInputElement>;
+            /**
+             * Graphique : colonnes, barres horizontales, courbe, surface ou donut, aux couleurs de la palette --cr-color-chart-1 à 8.
+             * Chaque valeur se lit au survol, au clavier (flèches) et dans le tableau « Afficher les données ».
+             */
+            "cr-chart": LocalJSX.IntrinsicElements["cr-chart"] & JSXBase.HTMLAttributes<HTMLCrChartElement>;
             /**
              * Case à cocher.
              */
@@ -5314,6 +5469,8 @@ declare module "@stencil/core" {
             "cr-tab-panel": LocalJSX.IntrinsicElements["cr-tab-panel"] & JSXBase.HTMLAttributes<HTMLCrTabPanelElement>;
             /**
              * Tableau dont chaque utilisateur règle les colonnes : largeur, ordre, colonnes fixées et masquées, densité des lignes.
+             * Options : tri par colonne (sortable), cases de sélection (selectable), ligne cliquable (colonne primary),
+             * cellules libres remplies par des enfants slot="<colonne>-<id>" (colonne slot).
              */
             "cr-table": LocalJSX.IntrinsicElements["cr-table"] & JSXBase.HTMLAttributes<HTMLCrTableElement>;
             /**

@@ -372,6 +372,14 @@ Court statut ou compteur : texte en contenu, `variant` (`neutral` par défaut, `
 <CrBadge variant="primary" count={nonLus} live>Non lus</CrBadge>
 ```
 
+### Graphique : `cr-chart`
+
+`type` : `column` (par défaut), `bar` (barres horizontales), `line`, `area` ou `donut`. `labels` donne les catégories, `series` les séries `{ name, values }` (8 au plus), `format` les options d'`Intl.NumberFormat`. Légende dès deux séries, bulle au survol et au clavier (flèches), tableau « Afficher les données ». Couleurs `--cr-color-chart-1` à `8`, vérifiées pour le daltonisme en clair et en sombre ; hauteur `--cr-chart-height` (240 px).
+
+```tsx
+<CrChart label="Ventes" labels={mois} series={[{ name: 'Ventes', values: ventes }]} format={{ style: 'currency', currency: 'EUR' }} />
+```
+
 ### Mini-graphique : `cr-sparkline`
 
 Petite courbe sans axes : `values` (tableau de nombres, en propriété), `label` obligatoire, `variant` (`line` par défaut, `area`). C'est une image nommée par le libellé et un résumé (« Ventes : dernière valeur 190, minimum 120, maximum 190, en hausse »). La ligne se trace au premier affichage, puis glisse point par point vers les nouvelles valeurs. Taille par défaut 120 × 32 pixels, à changer en CSS.
@@ -499,22 +507,32 @@ Chaque utilisateur règle les colonnes : ordre (glisser un en-tête ou Alt + fl�
 | Propriété | Description |
 |---|---|
 | `label` | titre du tableau |
-| `columns` | `{ key, label, width?, align?, pinned?, hidden?, badges? }[]` |
+| `columns` | `{ key, label, width?, align?, pinned?, hidden?, badges?, sortable?, format?, primary?, slot? }[]` |
 | `variant` | `default`, `striped`, `cards`, `minimal`, `grid` |
 | `rows` | un objet par ligne, avec une valeur par `key` |
 | `density` | `comfortable`, `normal` (par défaut), `compact` |
 | `storageKey` | clé localStorage pour retenir les réglages |
+| `selectable` | case à cocher par ligne et « tout sélectionner » ; `selected` contient les `rowKey` (`id` par défaut) cochés |
+| `sort` | tri en cours `{ key, direction: 'ascending' \| 'descending' }` |
 
-Événement `onCrLayoutChange` avec la présentation dans `event.detail`. Les grandes listes s'affichent par paquets de 100 lignes pendant le défilement.
+Colonnes : `sortable` trie au clic sur l'en-tête (ou S), `format` met en forme la valeur brute qui sert au tri, `primary` fait de la cellule le bouton de la ligne (clic sur la ligne compris), `slot` affiche l'enfant `slot="<key>-<id>"` (boutons, menus).
+
+Événements `onCrLayoutChange` (présentation), `onCrSortChange`, `onCrSelectionChange` et `onCrRowClick` (la ligne). Les grandes listes s'affichent par paquets de 100 lignes pendant le défilement.
 
 ```tsx
 <CrTable label="Commandes" columns={columns} rows={rows} storageKey="commandes" />
+
+<CrTable label="Stock" columns={[{ key: 'name', label: 'Produit', sortable: true, primary: true }, { key: 'actions', label: 'Actions', slot: true }]}
+  rows={products} selectable selected={ids} onCrSelectionChange={(e) => setIds(e.detail)} onCrRowClick={(e) => open(e.detail)}>
+  {products.map((p) => <CrButton key={p.id} slot={`actions-${p.id}`} size="xs">Modifier</CrButton>)}
+</CrTable>
 ```
 
 ## Développement
 
 ```bash
 pnpm install
+pnpm test        # tests unitaires de la logique pure (Vitest, moins d'une seconde)
 pnpm build
 pnpm --filter playground-next start
 pnpm --filter playground-next test:e2e

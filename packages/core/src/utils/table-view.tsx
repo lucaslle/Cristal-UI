@@ -65,7 +65,7 @@ export const Toolbar = (props: ToolbarProps) => {
   );
 };
 
-export const Footer = ({ state, density, m }: { state: ColumnState[]; density: TableDensity; m: Messages }) => {
+export const Footer = ({ state, density, sortable, m }: { state: ColumnState[]; density: TableDensity; sortable: boolean; m: Messages }) => {
   const help = m.tableHelp;
   return (
     <div class="footer">
@@ -73,6 +73,7 @@ export const Footer = ({ state, density, m }: { state: ColumnState[]; density: T
       <p id="help" class="help">
         {help.onHeader} <kbd>←</kbd> <kbd>→</kbd> {help.neighbour} · <kbd>Alt</kbd> + <kbd>←</kbd> <kbd>→</kbd> {help.move} · <kbd>{help.shift}</kbd> + <kbd>←</kbd> <kbd>→</kbd> {help.width} ·{' '}
         <kbd>F</kbd> {help.pin} · <kbd>M</kbd> {help.hide} · <kbd>{help.enter}</kbd> {help.fit}
+        {sortable && [' · ', <kbd>S</kbd>, ` ${help.sort}`]}
       </p>
     </div>
   );

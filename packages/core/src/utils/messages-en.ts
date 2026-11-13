@@ -138,8 +138,22 @@ export const en = {
   columnWidth: (label: string, width: number) => `${label}: ${width} pixels.`,
   columnsReset: 'Columns reset.',
   tableSummary: (shown: number, total: number, pinned: number, rows: string) => `${shown} of ${total} columns · ${pinned} pinned · ${rows} rows`,
-  tableHelp: { onHeader: 'On a header:', neighbour: 'next column', move: 'move', width: 'width', pin: 'pin', hide: 'hide', fit: 'fit', shift: 'Shift', enter: 'Enter' },
+  tableHelp: { onHeader: 'On a header:', neighbour: 'next column', move: 'move', width: 'width', pin: 'pin', hide: 'hide', fit: 'fit', shift: 'Shift', enter: 'Enter', sort: 'sort' },
   moreRows: (shown: string, total: string) => `${shown} of ${total} rows: more appear as you scroll.`,
+  sorted: (label: string, direction?: 'ascending' | 'descending') => (direction ? `Sorted by ${label}, ${direction}.` : 'Original order restored.'),
+  selectAll: 'Select all rows',
+  selectRow: (name: string) => `Select ${name}`,
+  rowsSelected: (count: number) => (count ? `${count} ${count === 1 ? 'row' : 'rows'} selected.` : 'No rows selected.'),
+
+  chartShowData: 'Show data',
+  chartHideData: 'Hide data',
+  chartHelp: 'Arrow keys go through the values.',
+  chartCategory: 'Category',
+  chartShare: 'Share',
+  chartOther: 'Other',
+  chartTotal: 'Total',
+  chartEmpty: 'No data',
+  chartPoint: (label: string, values: string) => `${label}: ${values}`,
 };
 
 export type Messages = typeof en;

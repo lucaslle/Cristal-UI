@@ -4,6 +4,7 @@ import type React from 'react';
 import { useState } from 'react';
 import { CrCheckbox, CrSelect, CrTable } from '@cristal/react';
 import { orderColumns, orderRows } from './orders';
+import { StockTableDemo } from './stock-table-demo';
 
 const logColumns = [
   { key: 'ref', label: 'Référence', width: 130 },
@@ -34,6 +35,7 @@ export function TableDemo() {
       <CrTable label="Commandes de la semaine" variant={variant} columns={orderColumns} rows={orderRows} storageKey="playground-orders" />
       <CrTable label="Journal" columns={logColumns} rows={alerts ? logRows.filter((row) => row.level === 'Alerte') : logRows} density="compact" style={{ '--cr-table-max-height': '320px' } as React.CSSProperties} />
       <CrCheckbox label="Alertes seulement" checked={alerts} onCrChange={(event) => setAlerts(event.detail)} />
+      <StockTableDemo />
     </div>
   );
 }

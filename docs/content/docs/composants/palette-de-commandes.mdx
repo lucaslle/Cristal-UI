@@ -11,7 +11,7 @@ import CommandPaletteBasic from '@/demos/en/command-palette-basic';
 
 Ctrl+K (⌘K on Mac) opens it from anywhere in the page; `shortcut={false}` turns this shortcut off, if your page already uses it or has several palettes. You can also drive it with `open`. `onCrSelect` gives the chosen value, then the palette closes; set your state back to `false` in `onCrClose`.
 
-Search ignores accents and case ("parametres" finds "Paramètres"). With no match, the palette shows the "No results" [empty state](/docs/composants/etat-vide).
+Search ignores accents and case ("parametres" finds "Paramètres"), and the matching letters turn bold and coloured (`::part(match)` to restyle them). With no match, the palette shows the "No results" [empty state](/docs/composants/etat-vide).
 
 The dialog drops into place with a slight bounce, and the highlight of the active command slides from row to row.
 

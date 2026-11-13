@@ -50,6 +50,38 @@
     "overlay": {
       "$value": "rgba(0, 0, 0, 0.6)",
       "$type": "color"
+    },
+    "chart-1": {
+      "$value": "#9085e9",
+      "$type": "color"
+    },
+    "chart-2": {
+      "$value": "#d95926",
+      "$type": "color"
+    },
+    "chart-3": {
+      "$value": "#199e70",
+      "$type": "color"
+    },
+    "chart-4": {
+      "$value": "#c98500",
+      "$type": "color"
+    },
+    "chart-5": {
+      "$value": "#d55181",
+      "$type": "color"
+    },
+    "chart-6": {
+      "$value": "#008300",
+      "$type": "color"
+    },
+    "chart-7": {
+      "$value": "#3987e5",
+      "$type": "color"
+    },
+    "chart-8": {
+      "$value": "#e66767",
+      "$type": "color"
     }
   },
   "shadow": {
