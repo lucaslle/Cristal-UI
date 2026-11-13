@@ -1,6 +1,6 @@
 {
   "name": "@cristal/tokens",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Design tokens of the Cristal design system as CSS custom properties, light and dark.",
   "keywords": [
     "design-tokens",

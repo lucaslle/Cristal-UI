@@ -1,6 +1,6 @@
 {
   "name": "@cristal/core",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Accessible web components (RGAA, WCAG AA) with a cr- prefix, built with Stencil. Works in any framework.",
   "keywords": [
     "web-components",

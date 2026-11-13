@@ -1,0 +1,13 @@
+# @cristal/tokens
+
+## 0.1.0
+
+### Minor Changes
+
+- 0b8113e: Add cr-input, cr-select and cr-checkbox form fields, cr-dialog and cr-drawer built on the native dialog element, and cr-card. New tokens for border, muted text, overlay, shadow and large radius.
+- a8c3473: Add four components: cr-confirm (a risky action's button turns into an inline question with Confirm and Cancel, focus on Cancel, Escape restores the button), cr-hover-card (link preview opened on hover after a delay or on keyboard focus, hoverable, closed with Escape), cr-code-block (code with a Copy button announced to screen readers, keyboard-scrollable) and cr-kbd (keys and shortcuts, Mod shown as ⌘ on Mac and Ctrl elsewhere). New token `--cr-font-mono`.
+- a2377f2: Add cr-button with primary, secondary, outline and link variants, sizes (xs, s, m, l), disabled and loading states, start/end icon slots, full-width option and native form submit/reset.
+- 523e0a0: Add cr-chart: grouped columns, horizontal bars, lines, areas and donut, with a colour-blind-checked palette (`--cr-color-chart-1` to `8`, light and dark), a legend from two series, hover and keyboard tooltips announced to screen readers, a "Show data" table, value formatting through `Intl.NumberFormat` options, and growing/drawing animations that stop when reduced motion is requested.
+- a88b956: Theming takes one variable: --cr-color-primary. Hover, subtle background, readable text, focus and the text color on primary are derived in CSS, and the cr-theme class scopes a theme to one area. Components use the readable text shade for text, borders and focus.
+- 6c1fc4d: Add an opt-in dark theme. `@cristal/tokens/tokens-dark.css` (also shipped as `@cristal/react/tokens-dark.css`) gives dark values to surface, text, muted text, borders, disabled states, danger, success, overlay and shadow, and sets `color-scheme: dark`, under `:root[data-theme='dark']` and the `cr-theme-dark` class; nothing changes without them, whatever the system preference. The primary colour stays the brand colour; primary-text, focus and the new primary-indicator token (stars, slider, switch, radio, checkbox, loader, sparkline, drop zones) switch to a light shade of it, and primary-subtle mixes with the dark surface. Status texts of badges, chips, inputs, numbers and codes now use the new text-lightness tokens, so they stay readable in both themes, and the icon button badge text follows the danger colour. Text keeps 4.5:1 and borders, focus and indicators 3:1 in dark.
+- 4fe8735: Form fields show French validation messages automatically and focus the first invalid field on submit. cr-select is now a custom accessible listbox (W3C combobox pattern) shown above the page. Violet is the default primary color.

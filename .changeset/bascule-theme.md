@@ -1,8 +1,0 @@
----
-"@cristal/core": minor
-"@cristal/react": minor
----
-
-Add cr-theme-toggle (React CrThemeToggle): a round button whose sun morphs into a moon (rays tuck in, a disc slides over to carve the crescent). A click sets data-theme on <html> and emits crChange with the new theme; the initial theme comes from data-theme, otherwise prefers-color-scheme, and later changes of data-theme made elsewhere are followed. transition animates the whole page with the View Transitions API: circle (default, from the button), curtain, blinds, flip, eclipse, sweep or none; the switch is instant where the API is missing or when less motion is requested. It is a real button with aria-pressed and a translated name ("Dark theme" / "Thème sombre"), a 40 px target, a visible focus, a 3:1 icon in both themes and system colours in forced colours. Keeping the choice is left to the application.
-
-variant chooses the shape: icon (round button, default), switch (a real switch whose thumb slides carrying the icon, over a light day track with a sun glow or a dark night track with stars; role="switch" with aria-checked) or label (a pill with the icon and the visible "Dark theme" / "Thème sombre" text, which is the whole accessible name). icon chooses the icon animation in all three variants: morph (default), rotate (the sun spins out as the moon spins in), rise (the sun sets below a horizon, the moon rises), flip (a 3D coin flip) or eclipse (a disc slides across the sun, its rays turn into stars). No icon animation and no thumb slide when less motion is requested; the page transition starts from the switch thumb.
