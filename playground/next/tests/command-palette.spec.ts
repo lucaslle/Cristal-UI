@@ -92,3 +92,16 @@ test('the open palette has no WCAG 2.1 AA violations detectable by axe', async (
   await page.waitForTimeout(300);
   expect((await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa']).analyze()).violations).toEqual([]);
 });
+
+test('the matching letters are bold and coloured, the option name stays whole', async ({ page }) => {
+  await page.getByRole('button', { name: 'Ouvrir la palette (Ctrl+K)' }).click();
+  await input(page).fill('parametres');
+  const match = dialog(page).locator('.match');
+  await expect(match).toHaveText(['Paramètres']);
+  await expect(option(page, 'Paramètres')).toBeVisible();
+  await input(page).fill('er');
+  await expect(option(page, 'Créer une facture').locator('.match')).toHaveText('er');
+  expect(await match.first().evaluate((el) => Number(getComputedStyle(el).fontWeight))).toBeGreaterThanOrEqual(700);
+  await input(page).fill('');
+  await expect(match).toHaveCount(0);
+});

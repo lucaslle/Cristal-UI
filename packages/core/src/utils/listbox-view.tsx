@@ -15,7 +15,7 @@ interface OptionListProps {
 }
 
 /** Libellé dont la partie qui correspond à la recherche est mise en valeur. */
-const Label = ({ label, query }: { label: string; query?: string }) => {
+export const Label = ({ label, query }: { label: string; query?: string }) => {
   const range = query ? matchRange(label, query) : undefined;
   if (!range) return <span class="option-label">{label}</span>;
   return (

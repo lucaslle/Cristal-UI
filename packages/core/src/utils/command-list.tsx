@@ -1,5 +1,6 @@
 import { h } from '@stencil/core';
 import { ListOption } from './listbox';
+import { Label } from './listbox-view';
 
 interface CommandListProps {
   options: ListOption[];
@@ -7,10 +8,11 @@ interface CommandListProps {
   active: number;
   onHover: (index: number) => void;
   onPick: (index: number) => void;
+  query?: string;
 }
 
 /** Options visibles de cr-command-palette, rangées par data-group (dans l'ordre d'apparition) sous un titre de groupe. */
-export const CommandList = ({ options, visible, active, onHover, onPick }: CommandListProps) => {
+export const CommandList = ({ options, visible, active, onHover, onPick, query }: CommandListProps) => {
   const groups: { name?: string; indices: number[] }[] = [];
   visible.forEach((index) => {
     const name = options[index].group;
@@ -30,7 +32,7 @@ export const CommandList = ({ options, visible, active, onHover, onPick }: Comma
       onMouseMove={() => !options[index].disabled && index !== active && onHover(index)}
       onClick={() => onPick(index)}
     >
-      {options[index].label}
+      <Label label={options[index].label} query={query} />
     </div>
   );
   return groups.map((group, position) =>
