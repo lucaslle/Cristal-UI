@@ -64,10 +64,19 @@ function ThemeToggleSync() {
   return null;
 }
 
+/**
+ * Raccourci « d » du thème : fumadocs l'ignore pendant la saisie, mais ne voit que la cible retouchée (cr-input…), pas le champ
+ * dans le shadow DOM des composants. On regarde donc tout le chemin de l'événement.
+ */
+const themeHotKey = (event: KeyboardEvent) => {
+  const typing = event.composedPath().some((el) => el instanceof HTMLElement && (el.isContentEditable || el.matches('input, textarea, select, dialog, [role="dialog"]')));
+  return !typing && !event.metaKey && !event.ctrlKey && !event.altKey && event.key.toLowerCase() === 'd';
+};
+
 // data-theme en plus de la classe dark : les composants Cristal des exemples suivent le thème de la doc.
 export function Provider({ lang, children }: { lang: string; children: ReactNode }) {
   return (
-    <RootProvider search={{ SearchDialog }} i18n={i18nUI.provider(lang)} theme={{ attribute: ['class', 'data-theme'] }}>
+    <RootProvider search={{ SearchDialog }} i18n={i18nUI.provider(lang)} theme={{ attribute: ['class', 'data-theme'], hotKey: themeHotKey }}>
       <ThemeToggleSync />
       {children}
     </RootProvider>
