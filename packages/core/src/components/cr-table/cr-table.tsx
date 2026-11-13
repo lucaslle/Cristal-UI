@@ -1,16 +1,19 @@
 import { Build, Component, Element, Event, EventEmitter, Host, Prop, State, Watch, h } from '@stencil/core';
 import { Popup, createPopup } from '../../utils/popup';
-import { headerAction } from '../../utils/table-keys';
-import { applyAction } from '../../utils/table-actions';
-import { cellProps } from '../../utils/table-cells';
+import { SELECT_WIDTH, SelectCell, cellProps, textOf } from '../../utils/table-cells';
+import { TableColumns } from '../../utils/table-columns';
+import { HeaderCell } from '../../utils/table-head';
+import { selectionOf } from '../../utils/table-selection';
+import { TableSort, nextSort, sortCache } from '../../utils/table-sort';
 import { CHUNK, More, Rows, watchMore } from '../../utils/table-rows';
 import { t } from '../../utils/i18n';
-import { ColumnState, TableColumn, TableDensity, TableLayout, TableVariant, loadLayout, mergeState, moveTo, neighbour, pinOffsets, resize, saveLayout, setHidden } from '../../utils/table-layout';
-import { columnLefts, dragColumn, dragResize, fitWidth, flipColumns } from '../../utils/table-pointer';
-import { Footer, Pin, Toolbar } from '../../utils/table-view';
+import { ColumnState, TableColumn, TableDensity, TableLayout, TableVariant, loadLayout, mergeState, pinOffsets, setHidden } from '../../utils/table-layout';
+import { Footer, Toolbar } from '../../utils/table-view';
 
 /**
  * Tableau dont chaque utilisateur règle les colonnes : largeur, ordre, colonnes fixées et masquées, densité des lignes.
+ * Options : tri par colonne (sortable), cases de sélection (selectable), ligne cliquable (colonne primary),
+ * cellules libres remplies par des enfants slot="<colonne>-<id>" (colonne slot).
  * @part columns - Le panneau « Colonnes ».
  */
 @Component({
@@ -23,7 +26,7 @@ export class CrTable {
 
   /** Titre du tableau. */
   @Prop() label!: string;
-  /** Colonnes : key, label, width (px, 160 par défaut), align ('start' ou 'end'), pinned, hidden. */
+  /** Colonnes : key, label, width (px, 160 par défaut), align ('start' ou 'end'), pinned, hidden, badges, sortable, format, primary, slot. */
   @Prop() columns: TableColumn[] = [];
   /** Lignes : un objet par ligne, avec une valeur par clé de colonne. */
   @Prop() rows: Record<string, unknown>[] = [];
@@ -33,9 +36,23 @@ export class CrTable {
   @Prop({ mutable: true }) density: TableDensity = 'normal';
   /** Clé localStorage : les réglages de l'utilisateur sont retenus d'une visite à l'autre. */
   @Prop() storageKey?: string;
+  /** Champ des lignes qui les identifie : sélection et cellules slot. */
+  @Prop() rowKey = 'id';
+  /** Ajoute une case à cocher par ligne et une case « tout sélectionner ». */
+  @Prop() selectable = false;
+  /** Lignes cochées : leurs valeurs de rowKey. */
+  @Prop({ mutable: true }) selected: unknown[] = [];
+  /** Tri en cours : { key, direction: 'ascending' | 'descending' } ; absent pour l'ordre d'origine. */
+  @Prop({ mutable: true }) sort?: TableSort;
 
   /** Émis à chaque réglage ; detail : les colonnes (ordre, largeur, fixée, masquée) et la densité. */
   @Event() crLayoutChange: EventEmitter<TableLayout>;
+  /** Émis au changement de tri ; detail : le tri, ou null pour l'ordre d'origine. */
+  @Event() crSortChange: EventEmitter<TableSort | null>;
+  /** Émis quand une case est cochée ou décochée ; detail : les valeurs de rowKey des lignes cochées. */
+  @Event() crSelectionChange: EventEmitter<unknown[]>;
+  /** Émis au clic sur la cellule primary ou ailleurs sur la ligne ; detail : la ligne. */
+  @Event() crRowClick: EventEmitter<Record<string, unknown>>;
 
   @State() state: ColumnState[] = [];
   @State() menuOpen = false;
@@ -44,20 +61,18 @@ export class CrTable {
   @State() active?: string;
   @State() limit = CHUNK; // lignes affichées, augmente pendant le défilement
 
-  private table?: HTMLTableElement;
-  private indicator?: HTMLElement;
+  private cols = new TableColumns(this);
+  private sortRows = sortCache();
   private menuButton?: HTMLButtonElement;
   private panel?: HTMLElement;
   private popup?: Popup;
-  private lefts?: Map<string, number>;
-  private focusKey?: string;
-  private initialDensity: TableDensity = 'normal';
   private restored = false;
   private more?: HTMLElement;
   private observer?: IntersectionObserver;
+  private downX = 0;
 
   componentWillLoad() {
-    this.initialDensity = this.density;
+    this.cols.initialDensity = this.density;
     this.restore();
   }
 
@@ -82,114 +97,81 @@ export class CrTable {
     if (!this.popup && this.panel && this.menuButton)
       this.popup = createPopup({ popup: this.panel, anchor: this.menuButton, host: this.el, onOpen: () => (this.menuOpen = true), onClose: () => (this.menuOpen = false) });
     this.observer = watchMore(this.observer, this.more, () => (this.limit += CHUNK));
-    if (this.lefts && this.table) flipColumns(this.table, this.lefts);
-    if (this.focusKey) this.header(this.focusKey)?.focus();
-    this.lefts = this.focusKey = undefined;
+    this.cols.afterRender();
   }
 
-  private labelOf = (key: string) => this.columns.find((column) => column.key === key)?.label ?? key;
-  private header = (key: string) => this.table?.querySelector<HTMLElement>(`th[data-key="${CSS.escape(key)}"]`);
-
-  private commit(next: ColumnState[], message: string, animate = false) {
-    if (animate) this.lefts = columnLefts(this.table);
-    this.state = next;
-    this.message = message;
-    this.changed();
+  private toggleSort(key: string) {
+    this.sort = nextSort(this.sort, key);
+    this.message = t(this.el).sorted(this.cols.labelOf(key), this.sort?.direction);
+    this.crSortChange.emit(this.sort ?? null);
   }
 
-  private changed() {
-    const layout = { columns: this.state, density: this.density };
-    saveLayout(this.storageKey, layout);
-    this.crLayoutChange.emit(layout);
+  private select(next: unknown[]) {
+    this.selected = next;
+    this.message = t(this.el).rowsSelected(next.length);
+    this.crSelectionChange.emit(next);
   }
-
-  private onHeaderKey(event: KeyboardEvent, { key }: ColumnState) {
-    const action = headerAction(event);
-    if (!action) return;
-    event.preventDefault();
-    const visible = this.state.filter((c) => !c.hidden);
-    if (action.type === 'focus') {
-      const to = action.to === 'first' ? visible[0]?.key : action.to === 'last' ? visible[visible.length - 1]?.key : neighbour(this.state, key, action.to);
-      return to && this.header(to)?.focus();
-    }
-    const result = applyAction(action, this.state, key, this.labelOf(key), () => (this.table ? fitWidth(this.table, key) : 160), t(this.el));
-    this.focusKey = result.focus;
-    this.commit(result.next, result.message, result.animate);
-  }
-
-  private startDrag(event: PointerEvent, column: ColumnState) {
-    if (!this.table || !this.indicator) return;
-    const candidates = this.state.filter((c) => !c.hidden && c.pinned === column.pinned).map((c) => c.key);
-    dragColumn({
-      event,
-      key: column.key,
-      table: this.table,
-      indicator: this.indicator,
-      candidates,
-      onDrop: (target) => {
-        const next = moveTo(this.state, column.key, target);
-        const position = next.filter((c) => !c.hidden).findIndex((c) => c.key === column.key) + 1;
-        this.commit(next, t(this.el).columnMoved(this.labelOf(column.key), position), true);
-      },
-    });
-  }
-
-  private startResize(event: PointerEvent, column: ColumnState) {
-    dragResize(event, column.width, (width) => (this.state = resize(this.state, column.key, width)), () => this.commit(this.state, t(this.el).columnWidth(this.labelOf(column.key), this.state.find((c) => c.key === column.key)!.width)));
-  }
-
-  private reset = () => {
-    this.density = this.initialDensity;
-    this.commit(mergeState(this.columns), t(this.el).columnsReset, true);
-    saveLayout(this.storageKey, null);
-  };
 
   render() {
+    const { cols } = this;
     const visible = this.state.filter((c) => !c.hidden);
-    const offsets = pinOffsets(this.state);
+    const offsets = pinOffsets(this.state, this.selectable ? SELECT_WIDTH : 0);
     const lastPinned = Array.from(offsets.keys()).pop();
     const meta = new Map(this.columns.map((c) => [c.key, c]));
     const active = visible.some((c) => c.key === this.active) ? this.active : visible[0]?.key;
     const cell = (c: ColumnState) => cellProps(c, meta.get(c.key), offsets, lastPinned);
+    const sortable = (key: string) => !!meta.get(key)?.sortable;
     const m = t(this.el);
+    const picked = selectionOf(this.rows, this.selected, this.rowKey);
+    const naming = meta.get(visible.find((c) => meta.get(c.key)?.primary)?.key ?? visible[0]?.key);
     return (
       <Host data-density={this.density} data-variant={this.variant}>
         <Toolbar
-          {...{ m, label: this.label, state: this.state, labelOf: this.labelOf, density: this.density, menuOpen: this.menuOpen }}
+          {...{ m, label: this.label, state: this.state, labelOf: cols.labelOf, density: this.density, menuOpen: this.menuOpen }}
           buttonRef={(el) => (this.menuButton = el)}
           panelRef={(el) => (this.panel = el)}
           onMenu={() => (this.popup?.isOpen() ? this.popup.close() : this.popup?.open())}
           onMenuKey={(event) => event.key === 'Escape' && (this.popup?.close(), this.menuButton?.focus())}
-          onHidden={(key, hidden) => this.commit(setHidden(this.state, key, hidden), m.columnToggled(this.labelOf(key), hidden), true)}
-          onDensity={(density) => ((this.density = density), (this.message = m.densityMessage(m.densityRows[density])), this.changed())}
-          onReset={this.reset}
+          onHidden={(key, hidden) => cols.commit(setHidden(this.state, key, hidden), m.columnToggled(cols.labelOf(key), hidden), true)}
+          onDensity={(density) => ((this.density = density), (this.message = m.densityMessage(m.densityRows[density])), cols.changed())}
+          onReset={cols.reset}
         />
         <div class={{ scroll: true, scrolled: this.scrolled }} onScroll={(event) => (this.scrolled = (event.target as HTMLElement).scrollLeft > 0)}>
-          <table ref={(el) => (this.table = el)} aria-labelledby="title" aria-rowcount={this.rows.length + 1} style={{ width: `${visible.reduce((sum, c) => sum + c.width, 0)}px` }}>
+          <table ref={(el) => (cols.table = el)} aria-labelledby="title" aria-rowcount={this.rows.length + 1} style={{ width: `${visible.reduce((sum, c) => sum + c.width, this.selectable ? SELECT_WIDTH : 0)}px` }}>
             <colgroup>
+              {this.selectable && <col style={{ width: `${SELECT_WIDTH}px` }} />}
               {visible.map((c) => (
                 <col style={{ width: `${c.width}px` }} />
               ))}
             </colgroup>
             <thead>
               <tr aria-rowindex={1}>
+                {this.selectable && <SelectCell head checked={picked.all} indeterminate={picked.some} label={m.selectAll} onChange={() => this.select(picked.toggleAll())} />}
                 {visible.map((c) => (
-                  <th scope="col" {...cell(c)} tabIndex={c.key === active ? 0 : -1} aria-describedby="help" onFocus={() => (this.active = c.key)} onKeyDown={(e) => this.onHeaderKey(e, c)} onPointerDown={(e) => this.startDrag(e, c)}>
-                    <span class="text">{this.labelOf(c.key)}</span>
-                    {c.pinned && <Pin m={m} />}
-                    <span class="handle" aria-hidden="true" onPointerDown={(e) => this.startResize(e, c)} onDblClick={() => this.table && this.commit(resize(this.state, c.key, fitWidth(this.table, c.key)), m.columnFitted(this.labelOf(c.key)))} />
-                  </th>
+                  <HeaderCell
+                    {...{ column: c, meta: meta.get(c.key), attributes: cell(c), active: c.key === active, sort: this.sort?.key === c.key ? this.sort.direction : undefined, m }}
+                    onFocus={() => (this.active = c.key)}
+                    onKeyDown={(e) => cols.onKey(e, c.key, sortable(c.key) ? () => this.toggleSort(c.key) : undefined)}
+                    onPointerDown={(e) => ((this.downX = e.clientX), cols.startDrag(e, c))}
+                    onClick={(e) => sortable(c.key) && Math.abs(e.clientX - this.downX) < 6 && this.toggleSort(c.key)}
+                    onResize={(e) => cols.startResize(e, c)}
+                    onFit={() => cols.fit(c.key)}
+                  />
                 ))}
               </tr>
             </thead>
             <tbody>
-              <Rows rows={this.rows} limit={this.limit} visible={visible} cell={cell} meta={meta} />
+              <Rows
+                {...{ rows: this.sortRows(this.rows, this.sort, m.locale), limit: this.limit, visible, cell, meta, idOf: picked.idOf }}
+                onOpen={(row) => this.crRowClick.emit(row)}
+                selection={this.selectable ? { ids: picked.ids, labelOf: (row) => m.selectRow(textOf(row, naming)), onToggle: (id) => this.select(picked.toggle(id)) } : undefined}
+              />
             </tbody>
           </table>
-          <span ref={(el) => (this.indicator = el)} class="drop" hidden aria-hidden="true" />
+          <span ref={(el) => (cols.indicator = el)} class="drop" hidden aria-hidden="true" />
           <More shown={Math.min(this.limit, this.rows.length)} total={this.rows.length} moreRef={(el) => (this.more = el)} m={m} />
         </div>
-        <Footer state={this.state} density={this.density} m={m} />
+        <Footer state={this.state} density={this.density} sortable={this.columns.some((c) => c.sortable)} m={m} />
         <p class="sr-only" role="status">
           {this.message}
         </p>

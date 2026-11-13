@@ -4,6 +4,7 @@ description: A table whose columns each user can arrange. cr-table tag, CrTable 
 ---
 
 import TableOrders from '@/demos/en/table-orders';
+import TableStock from '@/demos/en/table-stock';
 
 ## Example
 
@@ -46,8 +47,25 @@ With `badges`, a column displays some values as colored badges: `{ Paid: 'succes
 | `pinned` | column pinned to the left, which stays visible when the table scrolls |
 | `hidden` | column hidden initially |
 | `badges` | values displayed as badges, with their tone |
+| `sortable` | the header sorts the rows |
+| `format` | `(value, row) => text` function for display; sorting keeps the raw value |
+| `primary` | the cell becomes the row's button (see "Sort, select, open") |
+| `slot` | the cell displays your own elements (buttons, menus, links) |
 
-`rows` is an array of objects, with one value per `key`. Values are displayed as text: format amounts and dates before passing them.
+`rows` is an array of objects, with one value per `key`. Without `format`, values are displayed as text.
+
+## Sort, select, open
+
+<Preview column>
+  <TableStock />
+</Preview>
+
+<include>../../../demos/en/table-stock.tsx</include>
+
+- **Sort**: with `sortable`, clicking the header (or pressing S) sorts in ascending order, then descending, then back to the original order. Numbers and dates compare by value, text in the language's order ("10" after "9"); empty cells stay at the bottom. Keep raw values in `rows` (numbers, dates) and format them with `format`, so that $1,290 comes after $329. The current sort is in `sort` (`{ key, direction: 'ascending' | 'descending' }`), and `onCrSortChange` gives it on each change.
+- **Select**: `selectable` adds a box per row and a "select all" box (half-checked when only some rows are). `selected` holds the `rowKey` values (`id` by default) of the checked rows; `onCrSelectionChange` gives the new list.
+- **Open a row**: the `primary` column shows a button per row; clicking it, or anywhere else on the row, emits `onCrRowClick` with the row. Checkboxes, buttons and links in the row keep their own action.
+- **Custom cells**: for a `slot` column, put one child with `slot="<key>-<id>"` per row inside the table, for example `slot="actions-3"`. Only displayed rows show their content.
 
 ## Large datasets
 
@@ -70,6 +88,7 @@ Move focus to a header with Tab:
 | Enter | fits the width to the content |
 | F | pins the column to the left, or unpins it |
 | M | hides the column |
+| S | sorts the column, if it is `sortable` |
 
 The table footer recalls these shortcuts and summarizes the layout: "6 of 7 columns · 1 pinned · normal rows".
 
@@ -90,6 +109,9 @@ The table footer recalls these shortcuts and summarizes the layout: "6 of 7 colu
 - Every action is announced: "Status moved to position 3 of 7.", "Product pinned to the left.", "Region hidden: 6 of 7 columns.".
 - A pinned column is announced as "pinned"; at least one column always stays visible.
 - With many rows, the total number is announced even if only the first ones are displayed.
+- The sorted column carries `aria-sort`; each sort is announced: "Sorted by Price, ascending.".
+- Each selection box is named after its row ("Select USB-C cable") and the number of checked rows is announced.
+- A clickable row always has a real button, reachable with Tab: clicking the row is only a mouse shortcut.
 
 ## API
 
