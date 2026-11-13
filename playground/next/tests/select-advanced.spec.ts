@@ -57,6 +57,24 @@ test('search filters options, ignoring accents and case', async ({ page }) => {
   await expect(page.getByRole('listbox', { name: 'Ville' }).getByRole('option')).toHaveText(['Lyon', 'Écully']);
 });
 
+test('search highlights the matching letters in bold and colour, names stay whole', async ({ page }) => {
+  await page.getByRole('combobox', { name: 'Ville' }).click();
+  const search = page.getByRole('searchbox', { name: 'Rechercher dans la liste' });
+  const list = page.getByRole('listbox', { name: 'Ville' });
+  await search.fill('ly');
+  await expect(list.locator('.match')).toHaveText(['Ly', 'ly']);
+  await expect(list.getByRole('option', { name: 'Écully' })).toBeVisible();
+  const style = await list.locator('.match').first().evaluate((el) => {
+    const css = getComputedStyle(el);
+    return [css.fontWeight, css.color === getComputedStyle(el.parentElement!).color];
+  });
+  expect(style).toEqual(['800', false]);
+  await search.fill('EV');
+  await expect(list.locator('.match')).toHaveText(['Év']);
+  await search.fill('');
+  await expect(list.locator('.match')).toHaveCount(0);
+});
+
 test('search: arrows and Enter pick from the filtered options, focus returns to the field', async ({ page }) => {
   const combobox = page.getByRole('combobox', { name: 'Ville' });
   await combobox.focus();
