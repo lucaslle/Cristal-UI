@@ -6,6 +6,11 @@ const widget = (page: Page, id: string) => page.locator(`cr-grid-item#${id}`);
 const area = (page: Page, id: string) => widget(page, id).evaluate((el) => `${(el as HTMLElement).style.gridColumn} | ${(el as HTMLElement).style.gridRow}`);
 const status = (page: Page) => dash(page).locator('[role="status"]');
 const pick = (page: Page, setting: string, option: string) => page.getByRole('radiogroup', { name: setting }).getByRole('radio', { name: option, exact: true }).click();
+// Attend que la grille ait reçu le nouveau mode : un appui donné avant serait traité avec l'ancien.
+const pickGrab = async (page: Page, option: string) => {
+  await pick(page, 'Attraper', option);
+  await expect(dash(page)).toHaveAttribute('grab', option);
+};
 /** Appuie à (x, y), glisse jusqu'à (x + dx, y + dy) et relâche. */
 const dragBy = async (page: Page, x: number, y: number, dx: number, dy: number) => {
   await page.mouse.move(x, y);
@@ -115,8 +120,7 @@ test('by default, pressing anywhere on a card and moving drags it at once', asyn
 });
 
 test('grab="handle": the card surface does not drag, the handle still does', async ({ page }) => {
-  await pick(page, 'Attraper', 'handle');
-  await expect(dash(page)).toHaveAttribute('grab', 'handle');
+  await pickGrab(page, 'handle');
   expect(await widget(page, 'revenus').getByText('48 920 €').evaluate((el) => getComputedStyle(el).cursor)).toBe('auto');
   const box = (await widget(page, 'revenus').getByText('48 920 €').boundingBox())!;
   await dragBy(page, box.x + 20, box.y + 10, 310, 20);
@@ -163,7 +167,7 @@ for (const variant of ['card', 'elevated', 'soft', 'outline', 'glass']) {
 }
 
 test('grab="hold": holding the click anywhere on a card lifts it, then it follows the pointer', async ({ page }) => {
-  await pick(page, 'Attraper', 'hold');
+  await pickGrab(page, 'hold');
   const value = widget(page, 'revenus').getByText('48 920 €');
   const box = (await value.boundingBox())!;
   await page.mouse.move(box.x + 20, box.y + 10);
@@ -178,7 +182,7 @@ test('grab="hold": holding the click anywhere on a card lifts it, then it follow
 });
 
 test('grab="hold": a quick press and move does not drag the card (text stays selectable)', async ({ page }) => {
-  await pick(page, 'Attraper', 'hold');
+  await pickGrab(page, 'hold');
   const value = widget(page, 'revenus').getByText('48 920 €');
   const box = (await value.boundingBox())!;
   await page.mouse.move(box.x + 2, box.y + 10);
