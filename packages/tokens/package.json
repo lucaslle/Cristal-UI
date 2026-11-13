@@ -1,8 +1,29 @@
 {
   "name": "@cristal/tokens",
   "version": "0.0.0",
+  "description": "Design tokens of the Cristal design system as CSS custom properties, light and dark.",
+  "keywords": [
+    "design-tokens",
+    "css-variables",
+    "design-system",
+    "dark-mode"
+  ],
+  "license": "MIT",
+  "author": "Lucas LALICHE",
+  "homepage": "https://lucaslle.github.io/Cristal-UI/",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lucaslle/Cristal-UI.git",
+    "directory": "packages/tokens"
+  },
+  "bugs": "https://github.com/lucaslle/Cristal-UI/issues",
+  "publishConfig": {
+    "access": "public"
+  },
   "type": "module",
-  "files": ["build"],
+  "files": [
+    "build"
+  ],
   "exports": {
     "./tokens.css": "./build/tokens.css",
     "./tokens-dark.css": "./build/tokens-dark.css"

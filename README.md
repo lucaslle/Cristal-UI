@@ -16,7 +16,7 @@ Un seul paquet : il apporte les composants (`@cristal/core`) et les tokens. Impo
 import '@cristal/react/tokens.css';
 ```
 
-Sans React, installer `@cristal/core` et importer `@cristal/react/tokens.css`.
+Sans React, installer `@cristal/core` et `@cristal/tokens`, puis importer `@cristal/tokens/tokens.css`.
 
 ### Avant la publication sur npm
 
