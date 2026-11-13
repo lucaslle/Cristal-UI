@@ -1,5 +1,6 @@
 :host {
-  display: block;
+  display: flex;
+  flex-direction: column;
   font-family: var(--cr-font-family);
   font-size: var(--cr-font-size-m);
   color: var(--cr-color-text);
@@ -43,18 +44,22 @@
   outline-offset: 2px;
 }
 
+/* 240 px par défaut ; dans un conteneur plus haut (carte de tableau de bord, height: 100%), le dessin prend la place libre. */
 .plot {
   position: relative;
-  height: var(--cr-chart-height, 240px);
+  flex: 1 0 var(--cr-chart-height, 240px);
   border-radius: var(--cr-radius-m);
 }
 
 :host([type='bar']) .plot {
-  height: auto;
+  flex: none;
 }
 
-.plot-area {
-  position: relative;
+/* Le dessin suit la taille mesurée de .plot, sans jamais la pousser. */
+.plot-area,
+.donut {
+  position: absolute;
+  inset: 0;
 }
 
 .empty {
@@ -175,7 +180,6 @@
   align-items: center;
   justify-content: center;
   gap: var(--cr-spacing-lg) var(--cr-spacing-2xl, 32px);
-  height: 100%;
 }
 
 .ring {

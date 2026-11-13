@@ -35,7 +35,7 @@ Une seule série n'a pas de légende (le titre suffit) ; sa dernière valeur est
 
 ## Taille et couleurs
 
-- Le graphique prend toute la largeur de son conteneur et 240 pixels de haut ; changez la hauteur avec `--cr-chart-height`. Les barres prennent la hauteur de leurs lignes.
+- Le graphique prend toute la largeur de son conteneur et 240 pixels de haut ; changez la hauteur avec `--cr-chart-height`. Dans un conteneur à hauteur fixe (une carte de tableau de bord), donnez-lui `height: 100%` : le dessin prend toute la place libre. Les barres prennent la hauteur de leurs lignes.
 - `hide-label` (`hideLabel` en React) masque le titre à l'écran quand la carte qui contient le graphique l'affiche déjà ; il reste le nom lu par les lecteurs d'écran.
 - Les séries prennent, dans l'ordre, les couleurs `--cr-color-chart-1` à `--cr-color-chart-8`, avec des nuances dédiées en thème sombre. Cet ordre a été vérifié pour que deux séries voisines restent distinctes pour les personnes daltoniennes : gardez-le, et au-delà de 8 séries, regroupez ou découpez le graphique (les suivantes ne sont pas dessinées).
 

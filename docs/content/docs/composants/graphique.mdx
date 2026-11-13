@@ -35,7 +35,7 @@ A single series has no legend (the title is enough); its last value is written a
 
 ## Size and colours
 
-- The chart takes the full width of its container and is 240 pixels high; change the height with `--cr-chart-height`. Bars take the height of their rows.
+- The chart takes the full width of its container and is 240 pixels high; change the height with `--cr-chart-height`. In a fixed-height container (a dashboard card), give it `height: 100%`: the drawing takes all the free space. Bars take the height of their rows.
 - `hide-label` (`hideLabel` in React) visually hides the title when the card around the chart already shows it; it stays the name read by screen readers.
 - Series take, in order, the colours `--cr-color-chart-1` to `--cr-color-chart-8`, with dedicated shades in the dark theme. This order was checked so that two neighbouring series stay distinct for colour-blind people: keep it, and beyond 8 series, group or split the chart (the extra series are not drawn).
 

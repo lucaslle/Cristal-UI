@@ -5,6 +5,9 @@ import { DataTable, Legend } from '../../utils/chart-parts';
 import { Plot } from '../../utils/chart-plot';
 import { Bars, Donut } from '../../utils/chart-shapes';
 
+/** Diamètre du donut : la légende se place à côté (assez de largeur) ou dessous (environ 22 px par part). */
+const ringSize = (width: number, height: number, parts: number) => Math.max(80, width >= 420 ? Math.min(height, width - 200) : Math.min(width, height - parts * 22 - 16));
+
 const KEYS: Record<string, (index: number, count: number) => number> = {
   ArrowRight: (i, n) => Math.min(n - 1, i + 1),
   ArrowDown: (i, n) => Math.min(n - 1, i + 1),
@@ -122,7 +125,7 @@ export class CrChart {
           {empty ? (
             <p class="empty">{m.chartEmpty}</p>
           ) : donut ? (
-            <Donut {...{ slices, value, share, onActive, active: this.active }} size={Math.min(this.width, this.height)} totalLabel={m.chartTotal} />
+            <Donut {...{ slices, value, share, onActive, active: this.active }} size={ringSize(this.width, this.height, slices.length)} totalLabel={m.chartTotal} />
           ) : this.type === 'bar' ? (
             <Bars {...{ labels: this.labels, series, value, onActive, active: this.active }} />
           ) : (
