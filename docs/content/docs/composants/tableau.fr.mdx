@@ -4,6 +4,7 @@ description: Tableau dont chaque utilisateur règle les colonnes. Balise cr-tabl
 ---
 
 import TableOrders from '@/demos/table-orders';
+import TableStock from '@/demos/table-stock';
 
 ## Exemple
 
@@ -46,8 +47,25 @@ Avec `badges`, une colonne affiche certaines valeurs en pastilles colorées : `{
 | `pinned` | colonne fixée à gauche, qui reste visible quand le tableau défile |
 | `hidden` | colonne masquée au départ |
 | `badges` | valeurs affichées en pastilles, avec leur ton |
+| `sortable` | l'en-tête trie les lignes |
+| `format` | fonction `(valeur, ligne) => texte` pour l'affichage ; le tri garde la valeur brute |
+| `primary` | la cellule devient le bouton de la ligne (voir « Trier, sélectionner, ouvrir ») |
+| `slot` | la cellule affiche vos propres éléments (boutons, menus, liens) |
 
-`rows` est un tableau d'objets, avec une valeur par `key`. Les valeurs sont affichées comme du texte : formatez les montants et les dates avant de les passer.
+`rows` est un tableau d'objets, avec une valeur par `key`. Sans `format`, les valeurs sont affichées comme du texte.
+
+## Trier, sélectionner, ouvrir
+
+<Preview column>
+  <TableStock />
+</Preview>
+
+<include>../../../demos/table-stock.tsx</include>
+
+- **Trier** : avec `sortable`, un clic sur l'en-tête (ou la touche S) trie par ordre croissant, puis décroissant, puis revient à l'ordre d'origine. Les nombres et les dates sont comparés par valeur, les textes dans l'ordre de la langue (« Écran » avec les E, « 10 » après « 9 ») ; les cases vides restent en bas. Gardez les valeurs brutes dans `rows` (nombres, dates) et mettez-les en forme avec `format`, pour que 1 290 € passe bien après 329 €. Le tri en cours est dans `sort` (`{ key, direction: 'ascending' | 'descending' }`), et `onCrSortChange` le donne à chaque changement.
+- **Sélectionner** : `selectable` ajoute une case par ligne et une case « tout sélectionner » (à moitié cochée quand une partie seulement l'est). `selected` contient les valeurs de `rowKey` (`id` par défaut) des lignes cochées ; `onCrSelectionChange` donne la nouvelle liste.
+- **Ouvrir une ligne** : la colonne `primary` affiche un bouton par ligne ; un clic sur ce bouton, ou ailleurs sur la ligne, émet `onCrRowClick` avec la ligne. Les cases, boutons et liens de la ligne gardent leur propre action.
+- **Cellules libres** : pour une colonne `slot`, placez dans le tableau un enfant `slot="<key>-<id>"` par ligne, par exemple `slot="actions-3"`. Seules les lignes affichées montrent leur contenu.
 
 ## Grands volumes
 
@@ -70,6 +88,7 @@ Placez le focus sur un en-tête avec Tab :
 | Entrée | ajuste la largeur au contenu |
 | F | fixe la colonne à gauche, ou la libère |
 | M | masque la colonne |
+| S | trie la colonne, si elle est `sortable` |
 
 Le pied du tableau rappelle ces raccourcis et résume la présentation : « 6 colonnes sur 7 · 1 fixée · lignes normales ».
 
@@ -90,6 +109,9 @@ Le pied du tableau rappelle ces raccourcis et résume la présentation : « 6 co
 - Chaque action est annoncée : « Statut déplacée en position 3 sur 7. », « Produit fixée à gauche. », « Région masquée : 6 colonnes sur 7. ».
 - Une colonne fixée est annoncée « fixée » ; au moins une colonne reste toujours affichée.
 - Avec beaucoup de lignes, le nombre total est annoncé même si seules les premières sont affichées.
+- La colonne triée porte `aria-sort` ; chaque tri est annoncé : « Trié par Prix, ordre croissant. ».
+- Chaque case de sélection est nommée d'après sa ligne (« Sélectionner Câble USB-C ») et le nombre de lignes cochées est annoncé.
+- Une ligne cliquable a toujours un vrai bouton, atteignable avec Tab : le clic sur la ligne n'est qu'un raccourci pour la souris.
 
 ## API
 

@@ -23,6 +23,7 @@ import { NumberAnimation } from "./utils/number-views";
 import { QuantityAnimation } from "./utils/quantity";
 import { StepperVariant } from "./utils/stepper";
 import { TableColumn, TableDensity, TableLayout, TableVariant } from "./utils/table-layout";
+import { TableSort } from "./utils/table-sort";
 import { Theme, ThemeToggleVariant } from "./components/cr-theme-toggle/cr-theme-toggle";
 import { ThemeTransition } from "./utils/theme-transitions";
 import { ThemeToggleIcon } from "./utils/theme-toggle-views";
@@ -46,6 +47,7 @@ export { NumberAnimation } from "./utils/number-views";
 export { QuantityAnimation } from "./utils/quantity";
 export { StepperVariant } from "./utils/stepper";
 export { TableColumn, TableDensity, TableLayout, TableVariant } from "./utils/table-layout";
+export { TableSort } from "./utils/table-sort";
 export { Theme, ThemeToggleVariant } from "./components/cr-theme-toggle/cr-theme-toggle";
 export { ThemeTransition } from "./utils/theme-transitions";
 export { ThemeToggleIcon } from "./utils/theme-toggle-views";
@@ -1553,10 +1555,12 @@ export namespace Components {
     }
     /**
      * Tableau dont chaque utilisateur règle les colonnes : largeur, ordre, colonnes fixées et masquées, densité des lignes.
+     * Options : tri par colonne (sortable), cases de sélection (selectable), ligne cliquable (colonne primary),
+     * cellules libres remplies par des enfants slot="<colonne>-<id>" (colonne slot).
      */
     interface CrTable {
         /**
-          * Colonnes : key, label, width (px, 160 par défaut), align ('start' ou 'end'), pinned, hidden.
+          * Colonnes : key, label, width (px, 160 par défaut), align ('start' ou 'end'), pinned, hidden, badges, sortable, format, primary, slot.
           * @default []
          */
         "columns": TableColumn[];
@@ -1570,10 +1574,29 @@ export namespace Components {
          */
         "label": string;
         /**
+          * Champ des lignes qui les identifie : sélection et cellules slot.
+          * @default 'id'
+         */
+        "rowKey": string;
+        /**
           * Lignes : un objet par ligne, avec une valeur par clé de colonne.
           * @default []
          */
         "rows": Record<string, unknown>[];
+        /**
+          * Ajoute une case à cocher par ligne et une case « tout sélectionner ».
+          * @default false
+         */
+        "selectable": boolean;
+        /**
+          * Lignes cochées : leurs valeurs de rowKey.
+          * @default []
+         */
+        "selected": unknown[];
+        /**
+          * Tri en cours : { key, direction: 'ascending' | 'descending' } ; absent pour l'ordre d'origine.
+         */
+        "sort"?: TableSort;
         /**
           * Clé localStorage : les réglages de l'utilisateur sont retenus d'une visite à l'autre.
          */
@@ -2632,9 +2655,14 @@ declare global {
     };
     interface HTMLCrTableElementEventMap {
         "crLayoutChange": TableLayout;
+        "crSortChange": TableSort | null;
+        "crSelectionChange": unknown[];
+        "crRowClick": Record<string, unknown>;
     }
     /**
      * Tableau dont chaque utilisateur règle les colonnes : largeur, ordre, colonnes fixées et masquées, densité des lignes.
+     * Options : tri par colonne (sortable), cases de sélection (selectable), ligne cliquable (colonne primary),
+     * cellules libres remplies par des enfants slot="<colonne>-<id>" (colonne slot).
      */
     interface HTMLCrTableElement extends Components.CrTable, HTMLStencilElement {
         addEventListener<K extends keyof HTMLCrTableElementEventMap>(type: K, listener: (this: HTMLCrTableElement, ev: CrTableCustomEvent<HTMLCrTableElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -4500,10 +4528,12 @@ declare namespace LocalJSX {
     }
     /**
      * Tableau dont chaque utilisateur règle les colonnes : largeur, ordre, colonnes fixées et masquées, densité des lignes.
+     * Options : tri par colonne (sortable), cases de sélection (selectable), ligne cliquable (colonne primary),
+     * cellules libres remplies par des enfants slot="<colonne>-<id>" (colonne slot).
      */
     interface CrTable {
         /**
-          * Colonnes : key, label, width (px, 160 par défaut), align ('start' ou 'end'), pinned, hidden.
+          * Colonnes : key, label, width (px, 160 par défaut), align ('start' ou 'end'), pinned, hidden, badges, sortable, format, primary, slot.
           * @default []
          */
         "columns"?: TableColumn[];
@@ -4521,10 +4551,41 @@ declare namespace LocalJSX {
          */
         "onCrLayoutChange"?: (event: CrTableCustomEvent<TableLayout>) => void;
         /**
+          * Émis au clic sur la cellule primary ou ailleurs sur la ligne ; detail : la ligne.
+         */
+        "onCrRowClick"?: (event: CrTableCustomEvent<Record<string, unknown>>) => void;
+        /**
+          * Émis quand une case est cochée ou décochée ; detail : les valeurs de rowKey des lignes cochées.
+         */
+        "onCrSelectionChange"?: (event: CrTableCustomEvent<unknown[]>) => void;
+        /**
+          * Émis au changement de tri ; detail : le tri, ou null pour l'ordre d'origine.
+         */
+        "onCrSortChange"?: (event: CrTableCustomEvent<TableSort | null>) => void;
+        /**
+          * Champ des lignes qui les identifie : sélection et cellules slot.
+          * @default 'id'
+         */
+        "rowKey"?: string;
+        /**
           * Lignes : un objet par ligne, avec une valeur par clé de colonne.
           * @default []
          */
         "rows"?: Record<string, unknown>[];
+        /**
+          * Ajoute une case à cocher par ligne et une case « tout sélectionner ».
+          * @default false
+         */
+        "selectable"?: boolean;
+        /**
+          * Lignes cochées : leurs valeurs de rowKey.
+          * @default []
+         */
+        "selected"?: unknown[];
+        /**
+          * Tri en cours : { key, direction: 'ascending' | 'descending' } ; absent pour l'ordre d'origine.
+         */
+        "sort"?: TableSort;
         /**
           * Clé localStorage : les réglages de l'utilisateur sont retenus d'une visite à l'autre.
          */
@@ -5076,6 +5137,8 @@ declare namespace LocalJSX {
         "variant": TableVariant;
         "density": TableDensity;
         "storageKey": string;
+        "rowKey": string;
+        "selectable": boolean;
     }
     interface CrTagInputAttributes {
         "label": string;
@@ -5406,6 +5469,8 @@ declare module "@stencil/core" {
             "cr-tab-panel": LocalJSX.IntrinsicElements["cr-tab-panel"] & JSXBase.HTMLAttributes<HTMLCrTabPanelElement>;
             /**
              * Tableau dont chaque utilisateur règle les colonnes : largeur, ordre, colonnes fixées et masquées, densité des lignes.
+             * Options : tri par colonne (sortable), cases de sélection (selectable), ligne cliquable (colonne primary),
+             * cellules libres remplies par des enfants slot="<colonne>-<id>" (colonne slot).
              */
             "cr-table": LocalJSX.IntrinsicElements["cr-table"] & JSXBase.HTMLAttributes<HTMLCrTableElement>;
             /**

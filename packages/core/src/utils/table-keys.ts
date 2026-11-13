@@ -4,7 +4,8 @@ export type HeaderAction =
   | { type: 'resize'; delta: number }
   | { type: 'pin' }
   | { type: 'hide' }
-  | { type: 'fit' };
+  | { type: 'fit' }
+  | { type: 'sort' };
 
 /** Raccourcis sur un en-tête de colonne. */
 export const headerAction = (event: KeyboardEvent): HeaderAction | undefined => {
@@ -16,6 +17,7 @@ export const headerAction = (event: KeyboardEvent): HeaderAction | undefined => 
   if (event.ctrlKey || event.metaKey || event.altKey) return undefined;
   if (event.key.toLowerCase() === 'f') return { type: 'pin' };
   if (event.key.toLowerCase() === 'm') return { type: 'hide' };
+  if (event.key.toLowerCase() === 's') return { type: 'sort' };
   if (event.key === 'Enter') return { type: 'fit' };
   return undefined;
 };

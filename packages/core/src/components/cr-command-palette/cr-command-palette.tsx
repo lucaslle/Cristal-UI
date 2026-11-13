@@ -22,6 +22,7 @@ const focused = () => {
  * @part listbox - La liste des commandes.
  * @part option - Une commande.
  * @part group - Un titre de groupe.
+ * @part match - Les lettres qui correspondent à la recherche.
  */
 @Component({
   tag: 'cr-command-palette',
@@ -171,7 +172,7 @@ export class CrCommandPalette {
         </div>
         <div class="list" id="listbox" part="listbox" role="listbox" aria-label={this.label} hidden={empty} ref={(el) => (this.listbox = el)}>
           <span class="thumb" aria-hidden="true" ref={(el) => (this.thumb = el)} />
-          <CommandList options={this.options} visible={visible} active={this.active} onHover={(index) => (this.active = index)} onPick={(index) => this.pick(index)} />
+          <CommandList options={this.options} visible={visible} active={this.active} query={this.query} onHover={(index) => (this.active = index)} onPick={(index) => this.pick(index)} />
         </div>
         <div role="status">
           {empty && this.open && (

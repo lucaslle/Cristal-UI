@@ -130,6 +130,86 @@ tbody tr:hover td {
   color: var(--cr-color-primary-text);
 }
 
+/* Tri : flèche discrète sur les colonnes triables, pleine sur la colonne triée. */
+th.sortable {
+  cursor: pointer;
+}
+
+.sort {
+  margin-inline-start: var(--cr-spacing-xs);
+  vertical-align: -2px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  opacity: 0.45;
+}
+
+th.sortable:hover .sort,
+.sort.on {
+  opacity: 1;
+  color: var(--cr-color-primary-text);
+}
+
+/* Cases de sélection, collées à gauche. */
+.select {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  padding-inline: 0;
+  text-align: center;
+}
+
+th.select {
+  z-index: 3;
+}
+
+.select input {
+  width: 18px;
+  height: 18px;
+  margin: 0;
+  vertical-align: middle;
+  accent-color: var(--cr-color-primary);
+  cursor: pointer;
+}
+
+tbody tr.selected td {
+  background: color-mix(in oklab, var(--cr-color-primary-subtle) 70%, var(--cr-color-surface));
+}
+
+/* Ligne cliquable : la cellule primary porte le vrai bouton, la ligne entière y renvoie. */
+tr.clickable {
+  cursor: pointer;
+}
+
+.open {
+  display: inline-block;
+  max-width: 100%;
+  vertical-align: bottom;
+  padding: 0;
+  overflow: hidden;
+  font: inherit;
+  font-weight: var(--cr-font-weight-medium);
+  color: var(--cr-color-primary-text);
+  text-align: inherit;
+  text-overflow: ellipsis;
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+
+.open:hover {
+  text-decoration: underline;
+}
+
+.open:focus-visible,
+.select input:focus-visible {
+  outline: 2px solid var(--cr-color-focus);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
 /* Colonnes fixées : collées à gauche, avec une ombre dès que le tableau défile. */
 td.pinned {
   position: sticky;
@@ -223,6 +303,11 @@ th.flying {
 }
 
 @media (forced-colors: active) {
+  tbody tr.selected td {
+    outline: 1px solid Highlight;
+    outline-offset: -1px;
+  }
+
   .flying,
   .drop {
     outline: 2px solid Highlight;
