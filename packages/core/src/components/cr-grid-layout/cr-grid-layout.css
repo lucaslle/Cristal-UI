@@ -31,6 +31,11 @@
   z-index: 2;
 }
 
+/* En édition, la carte s'attrape aussi par sa surface, sauf avec grab="handle" ; le curseur passe au contenu par héritage. */
+:host(:not([grab='handle'])) ::slotted(cr-grid-item[data-editable]) {
+  cursor: grab;
+}
+
 .sr-only {
   position: absolute;
   width: 1px;

@@ -1,9 +1,18 @@
+import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type Page } from '@playwright/test';
 
 const dash = (page: Page) => page.locator('cr-grid-layout');
 const widget = (page: Page, id: string) => page.locator(`cr-grid-item#${id}`);
 const area = (page: Page, id: string) => widget(page, id).evaluate((el) => `${(el as HTMLElement).style.gridColumn} | ${(el as HTMLElement).style.gridRow}`);
 const status = (page: Page) => dash(page).locator('[role="status"]');
+const pick = (page: Page, setting: string, option: string) => page.getByRole('radiogroup', { name: setting }).getByRole('radio', { name: option, exact: true }).click();
+/** Appuie à (x, y), glisse jusqu'à (x + dx, y + dy) et relâche. */
+const dragBy = async (page: Page, x: number, y: number, dx: number, dy: number) => {
+  await page.mouse.move(x, y);
+  await page.mouse.down();
+  await page.mouse.move(x + dx, y + dy, { steps: 10 });
+  await page.mouse.up();
+};
 
 test.beforeEach(async ({ page }) => {
   await page.goto('/');
@@ -91,7 +100,70 @@ test('others slide into place, except with reduced motion', async ({ page }) => 
   expect(await widget(page, 'visites').evaluate((el) => el.getAnimations().length)).toBe(0);
 });
 
-test('holding the click anywhere on a card lifts it, then it follows the pointer', async ({ page }) => {
+test('by default, pressing anywhere on a card and moving drags it at once', async ({ page }) => {
+  await expect(dash(page)).toHaveAttribute('grab', 'surface');
+  expect(await widget(page, 'revenus').getByText('48 920 €').evaluate((el) => getComputedStyle(el).cursor)).toBe('grab');
+  const box = (await widget(page, 'revenus').getByText('48 920 €').boundingBox())!;
+  await page.mouse.move(box.x + 20, box.y + 10);
+  await page.mouse.down();
+  await page.mouse.move(box.x + 120, box.y + 20, { steps: 5 });
+  await expect(widget(page, 'revenus')).toHaveAttribute('data-lifted', '');
+  await page.mouse.move(box.x + 330, box.y + 30, { steps: 5 });
+  await page.mouse.up();
+  expect(await area(page, 'revenus')).toBe('4 / span 4 | 1 / span 2');
+  expect(await page.evaluate(() => getSelection()?.toString())).toBe('');
+});
+
+test('grab="handle": the card surface does not drag, the handle still does', async ({ page }) => {
+  await pick(page, 'Attraper', 'handle');
+  await expect(dash(page)).toHaveAttribute('grab', 'handle');
+  expect(await widget(page, 'revenus').getByText('48 920 €').evaluate((el) => getComputedStyle(el).cursor)).toBe('auto');
+  const box = (await widget(page, 'revenus').getByText('48 920 €').boundingBox())!;
+  await dragBy(page, box.x + 20, box.y + 10, 310, 20);
+  expect(await area(page, 'revenus')).toBe('1 / span 4 | 1 / span 2');
+  const handle = (await dash(page).getByRole('button', { name: 'Déplacer Revenus' }).boundingBox())!;
+  await dragBy(page, handle.x + 10, handle.y + 10, 320, 20);
+  expect(await area(page, 'revenus')).toBe('4 / span 4 | 1 / span 2');
+});
+
+test('resize-handle="edges": the right edge changes the width only, the bottom edge the height only', async ({ page }) => {
+  await pick(page, 'Agrandir', 'edges');
+  const item = widget(page, 'revenus');
+  await expect(item.locator('.resize')).toHaveCount(3);
+  const right = (await item.locator('.resize-x').boundingBox())!;
+  await dragBy(page, right.x + right.width / 2, right.y + right.height / 2, 200, 120);
+  expect(await area(page, 'revenus')).toBe('1 / span 6 | 1 / span 2');
+  const bottom = (await item.locator('.resize-y').boundingBox())!;
+  await dragBy(page, bottom.x + bottom.width / 2, bottom.y + bottom.height / 2, 200, 100);
+  expect(await area(page, 'revenus')).toBe('1 / span 6 | 1 / span 3');
+});
+
+test('the knob and the corner arc resize in both directions', async ({ page }) => {
+  for (const handle of ['knob', 'corner']) {
+    await page.evaluate(() => localStorage.clear());
+    await page.reload();
+    await pick(page, 'Agrandir', handle);
+    await expect(widget(page, 'revenus')).toHaveAttribute('resize-handle', handle);
+    const corner = (await widget(page, 'revenus').locator('.resize').boundingBox())!;
+    expect(corner.width).toBeGreaterThanOrEqual(24);
+    await dragBy(page, corner.x + 12, corner.y + 12, 120, 100);
+    expect(await area(page, 'revenus')).toBe('1 / span 5 | 1 / span 3');
+  }
+});
+
+for (const variant of ['card', 'elevated', 'soft', 'outline', 'glass']) {
+  test(`variant ${variant} keeps the grid accessible and draggable`, async ({ page }) => {
+    await pick(page, 'Apparence', variant);
+    await expect(widget(page, 'revenus')).toHaveAttribute('variant', variant);
+    expect((await new AxeBuilder({ page }).include('cr-grid-layout').withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa']).analyze()).violations).toEqual([]);
+    const box = (await widget(page, 'revenus').getByText('48 920 €').boundingBox())!;
+    await dragBy(page, box.x + 20, box.y + 10, 320, 20);
+    expect(await area(page, 'revenus')).toBe('4 / span 4 | 1 / span 2');
+  });
+}
+
+test('grab="hold": holding the click anywhere on a card lifts it, then it follows the pointer', async ({ page }) => {
+  await pick(page, 'Attraper', 'hold');
   const value = widget(page, 'revenus').getByText('48 920 €');
   const box = (await value.boundingBox())!;
   await page.mouse.move(box.x + 20, box.y + 10);
@@ -105,7 +177,8 @@ test('holding the click anywhere on a card lifts it, then it follows the pointer
   expect(await page.evaluate(() => getSelection()?.toString())).toBe('');
 });
 
-test('a quick press and move does not drag the card (text stays selectable)', async ({ page }) => {
+test('grab="hold": a quick press and move does not drag the card (text stays selectable)', async ({ page }) => {
+  await pick(page, 'Attraper', 'hold');
   const value = widget(page, 'revenus').getByText('48 920 €');
   const box = (await value.boundingBox())!;
   await page.mouse.move(box.x + 2, box.y + 10);

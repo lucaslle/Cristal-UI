@@ -2,16 +2,16 @@ import { Component, Element, Event, EventEmitter, Host, Prop, State, Watch, h } 
 import { t } from '../../utils/i18n';
 
 /**
- * Élément d'un cr-grid-layout. Se déplace par sa poignée et se redimensionne par son coin.
+ * Élément d'un cr-grid-layout. Se déplace par sa poignée ou sa surface et se redimensionne par son coin ou ses bords.
  * Donnez-lui un id pour retrouver sa place dans les réglages enregistrés.
  * @slot - Le contenu.
  * @slot actions - Boutons placés dans l'en-tête.
  * @part handle - La poignée de déplacement.
- * @part resize - La poignée de redimensionnement.
+ * @part resize - Les poignées de redimensionnement.
  */
 @Component({
   tag: 'cr-grid-item',
-  styleUrl: 'cr-grid-item.css',
+  styleUrls: ['cr-grid-item.css', 'cr-grid-item-variants.css', 'cr-grid-item-resize.css'],
   shadow: true,
 })
 export class CrGridItem {
@@ -35,6 +35,10 @@ export class CrGridItem {
   @Prop() maxW = 12;
   /** Hauteur maximale en lignes. */
   @Prop() maxH = 12;
+  /** Apparence : carte bordée (`card`), ombrée (`elevated`), teintée (`soft`), simple contour (`outline`) ou verre dépoli (`glass`). */
+  @Prop({ reflect: true }) variant: 'card' | 'elevated' | 'soft' | 'outline' | 'glass' = 'card';
+  /** Poignée d'agrandissement : arc dans le coin (`corner`), pastille (`knob`) ou bords droit et bas en plus du coin (`edges`). */
+  @Prop({ reflect: true }) resizeHandle: 'corner' | 'knob' | 'edges' = 'corner';
   /** Ajoute un bouton × qui émet crRemove. */
   @Prop() removable = false;
 
@@ -110,7 +114,10 @@ export class CrGridItem {
           <div ref={(el) => (this.body = el)} class="body" {...(this.scrollable ? { tabIndex: 0, role: 'region', 'aria-label': this.label } : {})}>
             <slot onSlotchange={this.watchContent} />
           </div>
-          <span class="resize" part="resize" aria-hidden="true" />
+          {/* data-axis : les sens que la poignée agrandit. */}
+          {(this.resizeHandle === 'edges' ? ['x', 'y', 'xy'] : ['xy']).map((axis) => (
+            <span class={`resize resize-${axis}`} part="resize" data-axis={axis} aria-hidden="true" />
+          ))}
         </div>
       </Host>
     );

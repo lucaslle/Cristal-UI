@@ -4,10 +4,11 @@ description: Grille d’éléments que chaque utilisateur déplace et redimensio
 ---
 
 import GridLayoutBasic from '@/demos/grid-layout-basic';
+import GridLayoutVariants from '@/demos/grid-layout-variants';
 
 ## Exemple
 
-Chaque `CrGridItem` a un titre (`label`), une position (`x`, `y`, en cases à partir de 0) et une taille (`w` colonnes, `h` lignes). L'utilisateur le déplace par sa poignée ⠿, ou en maintenant le clic n'importe où sur la carte, et change sa taille en tirant son coin : la grille apparaît, l'emplacement visé est dessiné en pointillés, les autres éléments s'écartent pendant le déplacement puis tout se tasse vers le haut.
+Chaque `CrGridItem` a un titre (`label`), une position (`x`, `y`, en cases à partir de 0) et une taille (`w` colonnes, `h` lignes). L'utilisateur le déplace en l'attrapant n'importe où (ou par sa poignée ⠿), et change sa taille en tirant son coin : la grille apparaît, l'emplacement visé est dessiné en pointillés, les autres éléments s'écartent pendant le déplacement puis tout se tasse vers le haut.
 
 <Preview column>
   <GridLayoutBasic />
@@ -17,9 +18,39 @@ Chaque `CrGridItem` a un titre (`label`), une position (`x`, `y`, en cases à pa
 
 ## Attraper une carte
 
-- Par la poignée ⠿ : le déplacement commence tout de suite.
-- N'importe où sur la carte : maintenez le clic un instant (300 ms) sans bouger, la carte se soulève, puis déplacez-la. Un clic suivi d'un mouvement rapide sélectionne du texte comme d'habitude, et maintenir le clic sur un bouton, une case à cocher, un lien ou un champ ne soulève pas la carte.
-- Au doigt, sur écran tactile, seule la poignée déplace la carte : glisser sur la carte fait défiler la page.
+La propriété `grab` de `CrGridLayout` choisit comment la souris attrape une carte :
+
+| `grab` | Comportement |
+|---|---|
+| `surface` (défaut) | n'importe où sur la carte : le déplacement commence dès que le pointeur bouge |
+| `hold` | n'importe où, après un appui maintenu un instant (300 ms) sans bouger ; un clic suivi d'un mouvement rapide sélectionne du texte comme d'habitude |
+| `handle` | par la poignée ⠿ seulement |
+
+Dans tous les cas, la poignée ⠿ déplace la carte tout de suite, et appuyer sur un bouton, une case à cocher, un lien, un champ ou une barre de défilement de la carte ne la déplace pas. Au doigt, sur écran tactile, seule la poignée déplace la carte : glisser sur la carte fait défiler la page.
+
+## Apparence et poignées d'agrandissement
+
+`variant` change l'apparence d'un `CrGridItem`, `resizeHandle` sa poignée d'agrandissement.
+
+<Preview column>
+  <GridLayoutVariants />
+</Preview>
+
+<include>../../../demos/grid-layout-variants.tsx</include>
+
+| `variant` | Apparence |
+|---|---|
+| `card` (défaut) | carte bordée, ombre légère |
+| `elevated` | sans bordure, une ombre douce qui grandit au survol |
+| `soft` | teintée de la couleur principale, titre coloré |
+| `outline` | simple contour, la carte laisse voir le fond |
+| `glass` | verre dépoli : à poser sur un fond coloré ou une image, assez clair ou sombre pour que le texte reste lisible |
+
+| `resizeHandle` | Poignée |
+|---|---|
+| `corner` (défaut) | un arc qui épouse le coin arrondi de la carte |
+| `knob` | une pastille ronde sur le coin |
+| `edges` | le coin, plus les bords droit (largeur seule) et bas (hauteur seule) ; une barre apparaît sur le bord survolé |
 
 ## Grille
 
@@ -29,6 +60,7 @@ Chaque `CrGridItem` a un titre (`label`), une position (`x`, `y`, en cases à pa
 | `rowHeight` | hauteur d'une ligne en pixels (80 par défaut) |
 | `gap` | espace entre les éléments en pixels (16 par défaut) |
 | `editable` | `false` pour figer la disposition (sans poignées) |
+| `grab` | où attraper une carte à la souris : `surface`, `hold` ou `handle` |
 | `stackBelow` | largeur en pixels sous laquelle les éléments s'empilent (480 par défaut) |
 | `storageKey` | retient la disposition de l'utilisateur d'une visite à l'autre |
 

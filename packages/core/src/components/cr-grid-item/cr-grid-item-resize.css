@@ -1,0 +1,133 @@
+/* Poignées d'agrandissement : une zone de 24 px au moins, et un repère dessiné par ::after. */
+.resize {
+  position: absolute;
+  z-index: 1;
+  touch-action: none;
+}
+
+.resize::after {
+  position: absolute;
+  content: '';
+  opacity: 0.55;
+  transition: opacity 0.2s, scale 0.2s, color 0.2s, background-color 0.2s;
+}
+
+:host(:hover) .resize::after,
+.resize:hover::after {
+  opacity: 1;
+}
+
+.resize:hover {
+  color: var(--cr-color-primary-indicator);
+}
+
+.resize-xy {
+  right: 0;
+  bottom: 0;
+  width: 24px;
+  height: 24px;
+  cursor: nwse-resize;
+}
+
+/* corner : un arc qui épouse l'arrondi de la carte, comme un coin de widget. */
+.resize-xy::after {
+  right: 5px;
+  bottom: 5px;
+  width: 12px;
+  height: 12px;
+  color: var(--cr-color-text-muted);
+  border-right: 3px solid currentColor;
+  border-bottom: 3px solid currentColor;
+  border-bottom-right-radius: calc(var(--cr-radius-l) - 4px);
+}
+
+.resize-xy:hover::after {
+  color: inherit;
+}
+
+/* knob : une pastille ronde posée sur le coin. */
+:host([resize-handle='knob']) .resize-xy::after {
+  right: 6px;
+  bottom: 6px;
+  width: 12px;
+  height: 12px;
+  box-sizing: border-box;
+  background: var(--cr-color-surface);
+  border: 2px solid var(--cr-color-primary-indicator);
+  border-radius: 50%;
+  box-shadow: 0 1px 3px color-mix(in oklab, var(--cr-color-text) 25%, transparent);
+}
+
+:host([resize-handle='knob']) .resize-xy:hover::after {
+  scale: 1.3;
+}
+
+/* edges : les bords droit et bas s'attrapent aussi, une barre arrondie apparaît au milieu du bord survolé. */
+.resize-x,
+.resize-y {
+  display: grid;
+  place-items: center;
+}
+
+.resize-x {
+  top: var(--cr-spacing-lg);
+  right: 0;
+  bottom: 24px;
+  width: 12px;
+  cursor: ew-resize;
+}
+
+.resize-y {
+  right: 24px;
+  bottom: 0;
+  left: var(--cr-spacing-lg);
+  height: 12px;
+  cursor: ns-resize;
+}
+
+.resize-x::after,
+.resize-y::after {
+  position: static;
+  background: var(--cr-color-text-muted);
+  border-radius: 999px;
+  opacity: 0;
+}
+
+.resize-x::after {
+  width: 4px;
+  height: min(32px, 40%);
+}
+
+.resize-y::after {
+  width: min(32px, 40%);
+  height: 4px;
+}
+
+:host(:hover) .resize-x::after,
+:host(:hover) .resize-y::after {
+  opacity: 0.55;
+}
+
+.resize-x:hover::after,
+.resize-y:hover::after {
+  background: var(--cr-color-primary-indicator);
+  opacity: 1;
+  scale: 1.15;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .resize::after {
+    transition: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .resize::after {
+    color: CanvasText;
+    background-color: CanvasText;
+    border-color: CanvasText;
+  }
+  :host([resize-handle='knob']) .resize-xy::after {
+    background: Canvas;
+  }
+}

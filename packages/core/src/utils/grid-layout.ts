@@ -90,3 +90,10 @@ export const sameLayout = (a: GridItem[], b: GridItem[]) =>
 /** Place les éléments sans position (x ou y négatif) à la première place libre, puis tasse. */
 export const placeAll = (items: GridItem[], columns: number) =>
   compact(items.reduce<GridItem[]>((all, item) => [...all, item.x < 0 || item.y < 0 ? firstFree(all, item, columns) : item], []));
+
+/** Reprend les nouvelles props d'un élément ; sans x ni y, il garde sa place. */
+export const updateItem = (items: GridItem[], props: GridItem, columns: number) => {
+  const placed = items.map((item) => (item.id === props.id ? { ...item, ...props, x: props.x < 0 ? item.x : props.x, y: props.y < 0 ? item.y : props.y } : item));
+  const item = placed.find((i) => i.id === props.id)!;
+  return resizeItem(moveItem(placed, item.id, item.x, item.y, columns), item.id, item.w, item.h, columns);
+};
