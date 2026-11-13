@@ -1,0 +1,37 @@
+---
+title: Inline confirmation
+description: The button of a risky action turns into a question in place. Tag cr-confirm, React component CrConfirm.
+---
+
+import ConfirmBasic from '@/demos/en/confirm-basic';
+
+## Example
+
+`cr-confirm` wraps the button of an action one might regret. On click, the button gives way to a question (`question`) and two buttons: the one that confirms (`confirmLabel`, "Confirm" by default) and Cancel. The action runs in `onCrConfirm`.
+
+<Preview>
+  <ConfirmBasic />
+</Preview>
+
+<include>../../../demos/en/confirm-basic.tsx</include>
+
+## When to use it
+
+For a one-off action in a list or a table row (delete a file, remove a member), the inline confirmation avoids interrupting the page. For a heavy action whose consequences need explaining, prefer a [dialog](/docs/composants/modale).
+
+The confirm button carries the action verb ("Delete"), not a mere "Yes": users know what they accept without reading the question again.
+
+<Callout>
+  If the user asked their system to reduce motion, the question appears directly, without sliding.
+</Callout>
+
+## Accessibility
+
+- The question and its two buttons form a group named by the question, read when focus enters it.
+- Focus goes to Cancel: two quick presses on Enter are not enough to confirm by mistake.
+- Escape or Cancel bring back the original button and move focus back to it; focus moving elsewhere also cancels the question.
+- Inside a dialog, Escape cancels the question without closing the dialog.
+
+## API
+
+<ApiReference tag="cr-confirm" />

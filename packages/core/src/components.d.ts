@@ -482,6 +482,21 @@ export namespace Components {
         "value": string;
     }
     /**
+     * Bloc de code avec bouton Copier : commande d'installation, extrait de configuration, exemple d'appel.
+     * Le code garde ses espaces et défile en largeur au besoin (au clavier aussi) ; la copie est annoncée aux lecteurs d'écran.
+     * shortcut: pas de coloration syntaxique ; à ajouter avec un surligneur si la doc en a besoin.
+     */
+    interface CrCodeBlock {
+        /**
+          * Le code à afficher, tel quel (obligatoire).
+         */
+        "code": string;
+        /**
+          * Titre affiché au-dessus du code : nom de fichier, langage ou « Terminal ». Il complète aussi le nom du bouton (« Copier package.json »).
+         */
+        "label"?: string;
+    }
+    /**
      * Palette de commandes : une fenêtre modale avec un champ qui filtre une liste de commandes (motif combobox).
      * Les commandes sont des éléments option enfants ; data-group les range sous un titre de groupe.
      * Ctrl+K (⌘K sur Mac) l'ouvre de n'importe où dans la page. Haut et Bas parcourent les commandes, Entrée choisit, Échap ferme.
@@ -506,6 +521,25 @@ export namespace Components {
           * @default true
          */
         "shortcut": boolean;
+    }
+    /**
+     * Confirmation en une ligne : le bouton d'une action à risque se change, sur place, en « Supprimer ce fichier ? Supprimer · Annuler ».
+     * Plus léger qu'une modale pour une action qu'on peut regretter mais qui ne mérite pas d'interrompre la page.
+     * Le focus va sur Annuler ; Échap, Annuler ou un focus qui part ailleurs rendent le bouton d'origine.
+     */
+    interface CrConfirm {
+        /**
+          * Libellé du bouton qui annule ; « Annuler » par défaut.
+         */
+        "cancelLabel"?: string;
+        /**
+          * Libellé du bouton qui confirme, le verbe de l'action (« Supprimer ») ; « Confirmer » par défaut.
+         */
+        "confirmLabel"?: string;
+        /**
+          * Question posée à la place du bouton, courte et précise : « Supprimer ce fichier ? » (obligatoire).
+         */
+        "question": string;
     }
     /**
      * Champ de date : saisie au clavier dans le format de la langue (JJ/MM/AAAA en français, MM/DD/YYYY en anglais),
@@ -765,6 +799,17 @@ export namespace Components {
         "storageKey"?: string;
     }
     /**
+     * Carte au survol : aperçu d'un lien (profil, page, produit) qui s'ouvre quand le pointeur s'y attarde ou que le focus clavier y arrive.
+     * On peut la survoler sans qu'elle se ferme ; Échap la ferme. C'est un aperçu : tout ce qu'elle montre doit aussi se trouver derrière le lien.
+     */
+    interface CrHoverCard {
+        /**
+          * Délai avant l'ouverture au survol, en millisecondes : un simple passage du pointeur n'ouvre rien.
+          * @default 500
+         */
+        "openDelay": number;
+    }
+    /**
      * Bouton réduit à une icône. Le libellé lui donne son nom et s'affiche en infobulle au survol et au focus.
      */
     interface CrIconButton {
@@ -911,6 +956,16 @@ export namespace Components {
           * @default ''
          */
         "value": string;
+    }
+    /**
+     * Touche du clavier, ou raccourci de plusieurs touches (« Ctrl + K »), dans le texte courant ou un menu.
+     * Avec keys, Mod devient ⌘ sur Mac et Ctrl ailleurs ; les symboles Mac sont lus en toutes lettres par les lecteurs d'écran.
+     */
+    interface CrKbd {
+        /**
+          * Raccourci, touches séparées par + : « Mod+K », « Shift+Alt+P ». Mod, Ctrl, Alt et Shift s'adaptent au système.
+         */
+        "keys"?: string;
     }
     /**
      * Indicateur de chargement de durée inconnue. Sa taille suit la taille du texte (font-size).
@@ -1799,6 +1854,10 @@ export interface CrCommandPaletteCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLCrCommandPaletteElement;
 }
+export interface CrConfirmCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLCrConfirmElement;
+}
 export interface CrDatePickerCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLCrDatePickerElement;
@@ -2085,6 +2144,17 @@ declare global {
         prototype: HTMLCrCheckboxElement;
         new (): HTMLCrCheckboxElement;
     };
+    /**
+     * Bloc de code avec bouton Copier : commande d'installation, extrait de configuration, exemple d'appel.
+     * Le code garde ses espaces et défile en largeur au besoin (au clavier aussi) ; la copie est annoncée aux lecteurs d'écran.
+     * shortcut: pas de coloration syntaxique ; à ajouter avec un surligneur si la doc en a besoin.
+     */
+    interface HTMLCrCodeBlockElement extends Components.CrCodeBlock, HTMLStencilElement {
+    }
+    var HTMLCrCodeBlockElement: {
+        prototype: HTMLCrCodeBlockElement;
+        new (): HTMLCrCodeBlockElement;
+    };
     interface HTMLCrCommandPaletteElementEventMap {
         "crSelect": string;
         "crClose": void;
@@ -2108,6 +2178,28 @@ declare global {
     var HTMLCrCommandPaletteElement: {
         prototype: HTMLCrCommandPaletteElement;
         new (): HTMLCrCommandPaletteElement;
+    };
+    interface HTMLCrConfirmElementEventMap {
+        "crConfirm": void;
+    }
+    /**
+     * Confirmation en une ligne : le bouton d'une action à risque se change, sur place, en « Supprimer ce fichier ? Supprimer · Annuler ».
+     * Plus léger qu'une modale pour une action qu'on peut regretter mais qui ne mérite pas d'interrompre la page.
+     * Le focus va sur Annuler ; Échap, Annuler ou un focus qui part ailleurs rendent le bouton d'origine.
+     */
+    interface HTMLCrConfirmElement extends Components.CrConfirm, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLCrConfirmElementEventMap>(type: K, listener: (this: HTMLCrConfirmElement, ev: CrConfirmCustomEvent<HTMLCrConfirmElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLCrConfirmElementEventMap>(type: K, listener: (this: HTMLCrConfirmElement, ev: CrConfirmCustomEvent<HTMLCrConfirmElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLCrConfirmElement: {
+        prototype: HTMLCrConfirmElement;
+        new (): HTMLCrConfirmElement;
     };
     interface HTMLCrDatePickerElementEventMap {
         "crChange": string;
@@ -2245,6 +2337,16 @@ declare global {
         prototype: HTMLCrGridLayoutElement;
         new (): HTMLCrGridLayoutElement;
     };
+    /**
+     * Carte au survol : aperçu d'un lien (profil, page, produit) qui s'ouvre quand le pointeur s'y attarde ou que le focus clavier y arrive.
+     * On peut la survoler sans qu'elle se ferme ; Échap la ferme. C'est un aperçu : tout ce qu'elle montre doit aussi se trouver derrière le lien.
+     */
+    interface HTMLCrHoverCardElement extends Components.CrHoverCard, HTMLStencilElement {
+    }
+    var HTMLCrHoverCardElement: {
+        prototype: HTMLCrHoverCardElement;
+        new (): HTMLCrHoverCardElement;
+    };
     interface HTMLCrIconButtonElementEventMap {
         "crToggle": boolean;
     }
@@ -2295,6 +2397,16 @@ declare global {
     var HTMLCrInputElement: {
         prototype: HTMLCrInputElement;
         new (): HTMLCrInputElement;
+    };
+    /**
+     * Touche du clavier, ou raccourci de plusieurs touches (« Ctrl + K »), dans le texte courant ou un menu.
+     * Avec keys, Mod devient ⌘ sur Mac et Ctrl ailleurs ; les symboles Mac sont lus en toutes lettres par les lecteurs d'écran.
+     */
+    interface HTMLCrKbdElement extends Components.CrKbd, HTMLStencilElement {
+    }
+    var HTMLCrKbdElement: {
+        prototype: HTMLCrKbdElement;
+        new (): HTMLCrKbdElement;
     };
     /**
      * Indicateur de chargement de durée inconnue. Sa taille suit la taille du texte (font-size).
@@ -2787,7 +2899,9 @@ declare global {
         "cr-card-input": HTMLCrCardInputElement;
         "cr-chart": HTMLCrChartElement;
         "cr-checkbox": HTMLCrCheckboxElement;
+        "cr-code-block": HTMLCrCodeBlockElement;
         "cr-command-palette": HTMLCrCommandPaletteElement;
+        "cr-confirm": HTMLCrConfirmElement;
         "cr-date-picker": HTMLCrDatePickerElement;
         "cr-dialog": HTMLCrDialogElement;
         "cr-drawer": HTMLCrDrawerElement;
@@ -2795,9 +2909,11 @@ declare global {
         "cr-file-upload": HTMLCrFileUploadElement;
         "cr-grid-item": HTMLCrGridItemElement;
         "cr-grid-layout": HTMLCrGridLayoutElement;
+        "cr-hover-card": HTMLCrHoverCardElement;
         "cr-icon-button": HTMLCrIconButtonElement;
         "cr-image": HTMLCrImageElement;
         "cr-input": HTMLCrInputElement;
+        "cr-kbd": HTMLCrKbdElement;
         "cr-loader": HTMLCrLoaderElement;
         "cr-menu": HTMLCrMenuElement;
         "cr-number": HTMLCrNumberElement;
@@ -3291,6 +3407,21 @@ declare namespace LocalJSX {
         "value"?: string;
     }
     /**
+     * Bloc de code avec bouton Copier : commande d'installation, extrait de configuration, exemple d'appel.
+     * Le code garde ses espaces et défile en largeur au besoin (au clavier aussi) ; la copie est annoncée aux lecteurs d'écran.
+     * shortcut: pas de coloration syntaxique ; à ajouter avec un surligneur si la doc en a besoin.
+     */
+    interface CrCodeBlock {
+        /**
+          * Le code à afficher, tel quel (obligatoire).
+         */
+        "code": string;
+        /**
+          * Titre affiché au-dessus du code : nom de fichier, langage ou « Terminal ». Il complète aussi le nom du bouton (« Copier package.json »).
+         */
+        "label"?: string;
+    }
+    /**
      * Palette de commandes : une fenêtre modale avec un champ qui filtre une liste de commandes (motif combobox).
      * Les commandes sont des éléments option enfants ; data-group les range sous un titre de groupe.
      * Ctrl+K (⌘K sur Mac) l'ouvre de n'importe où dans la page. Haut et Bas parcourent les commandes, Entrée choisit, Échap ferme.
@@ -3323,6 +3454,29 @@ declare namespace LocalJSX {
           * @default true
          */
         "shortcut"?: boolean;
+    }
+    /**
+     * Confirmation en une ligne : le bouton d'une action à risque se change, sur place, en « Supprimer ce fichier ? Supprimer · Annuler ».
+     * Plus léger qu'une modale pour une action qu'on peut regretter mais qui ne mérite pas d'interrompre la page.
+     * Le focus va sur Annuler ; Échap, Annuler ou un focus qui part ailleurs rendent le bouton d'origine.
+     */
+    interface CrConfirm {
+        /**
+          * Libellé du bouton qui annule ; « Annuler » par défaut.
+         */
+        "cancelLabel"?: string;
+        /**
+          * Libellé du bouton qui confirme, le verbe de l'action (« Supprimer ») ; « Confirmer » par défaut.
+         */
+        "confirmLabel"?: string;
+        /**
+          * Émis quand l'utilisateur confirme : c'est là que l'action s'exécute.
+         */
+        "onCrConfirm"?: (event: CrConfirmCustomEvent<void>) => void;
+        /**
+          * Question posée à la place du bouton, courte et précise : « Supprimer ce fichier ? » (obligatoire).
+         */
+        "question": string;
     }
     /**
      * Champ de date : saisie au clavier dans le format de la langue (JJ/MM/AAAA en français, MM/DD/YYYY en anglais),
@@ -3614,6 +3768,17 @@ declare namespace LocalJSX {
         "storageKey"?: string;
     }
     /**
+     * Carte au survol : aperçu d'un lien (profil, page, produit) qui s'ouvre quand le pointeur s'y attarde ou que le focus clavier y arrive.
+     * On peut la survoler sans qu'elle se ferme ; Échap la ferme. C'est un aperçu : tout ce qu'elle montre doit aussi se trouver derrière le lien.
+     */
+    interface CrHoverCard {
+        /**
+          * Délai avant l'ouverture au survol, en millisecondes : un simple passage du pointeur n'ouvre rien.
+          * @default 500
+         */
+        "openDelay"?: number;
+    }
+    /**
      * Bouton réduit à une icône. Le libellé lui donne son nom et s'affiche en infobulle au survol et au focus.
      */
     interface CrIconButton {
@@ -3784,6 +3949,16 @@ declare namespace LocalJSX {
           * @default ''
          */
         "value"?: string;
+    }
+    /**
+     * Touche du clavier, ou raccourci de plusieurs touches (« Ctrl + K »), dans le texte courant ou un menu.
+     * Avec keys, Mod devient ⌘ sur Mac et Ctrl ailleurs ; les symboles Mac sont lus en toutes lettres par les lecteurs d'écran.
+     */
+    interface CrKbd {
+        /**
+          * Raccourci, touches séparées par + : « Mod+K », « Shift+Alt+P ». Mod, Ctrl, Alt et Shift s'adaptent au système.
+         */
+        "keys"?: string;
     }
     /**
      * Indicateur de chargement de durée inconnue. Sa taille suit la taille du texte (font-size).
@@ -4885,11 +5060,20 @@ declare namespace LocalJSX {
         "disabled": boolean;
         "errorAnimation": ErrorAnimation;
     }
+    interface CrCodeBlockAttributes {
+        "code": string;
+        "label": string;
+    }
     interface CrCommandPaletteAttributes {
         "open": boolean;
         "label": string;
         "placeholder": string;
         "shortcut": boolean;
+    }
+    interface CrConfirmAttributes {
+        "question": string;
+        "confirmLabel": string;
+        "cancelLabel": string;
     }
     interface CrDatePickerAttributes {
         "label": string;
@@ -4951,6 +5135,9 @@ declare namespace LocalJSX {
         "stackBelow": number;
         "storageKey": string;
     }
+    interface CrHoverCardAttributes {
+        "openDelay": number;
+    }
     interface CrIconButtonAttributes {
         "label": string;
         "variant": IconButtonVariant;
@@ -4984,6 +5171,9 @@ declare namespace LocalJSX {
         "disabled": boolean;
         "errorAnimation": ErrorAnimation;
         "strength": boolean;
+    }
+    interface CrKbdAttributes {
+        "keys": string;
     }
     interface CrLoaderAttributes {
         "variant": 'spinner' | 'bounce' | 'search';
@@ -5194,7 +5384,9 @@ declare namespace LocalJSX {
         "cr-card-input": Omit<CrCardInput, keyof CrCardInputAttributes> & { [K in keyof CrCardInput & keyof CrCardInputAttributes]?: CrCardInput[K] } & { [K in keyof CrCardInput & keyof CrCardInputAttributes as `attr:${K}`]?: CrCardInputAttributes[K] } & { [K in keyof CrCardInput & keyof CrCardInputAttributes as `prop:${K}`]?: CrCardInput[K] } & OneOf<"label", CrCardInput["label"], CrCardInputAttributes["label"]>;
         "cr-chart": Omit<CrChart, keyof CrChartAttributes> & { [K in keyof CrChart & keyof CrChartAttributes]?: CrChart[K] } & { [K in keyof CrChart & keyof CrChartAttributes as `attr:${K}`]?: CrChartAttributes[K] } & { [K in keyof CrChart & keyof CrChartAttributes as `prop:${K}`]?: CrChart[K] } & OneOf<"label", CrChart["label"], CrChartAttributes["label"]>;
         "cr-checkbox": Omit<CrCheckbox, keyof CrCheckboxAttributes> & { [K in keyof CrCheckbox & keyof CrCheckboxAttributes]?: CrCheckbox[K] } & { [K in keyof CrCheckbox & keyof CrCheckboxAttributes as `attr:${K}`]?: CrCheckboxAttributes[K] } & { [K in keyof CrCheckbox & keyof CrCheckboxAttributes as `prop:${K}`]?: CrCheckbox[K] } & OneOf<"label", CrCheckbox["label"], CrCheckboxAttributes["label"]>;
+        "cr-code-block": Omit<CrCodeBlock, keyof CrCodeBlockAttributes> & { [K in keyof CrCodeBlock & keyof CrCodeBlockAttributes]?: CrCodeBlock[K] } & { [K in keyof CrCodeBlock & keyof CrCodeBlockAttributes as `attr:${K}`]?: CrCodeBlockAttributes[K] } & { [K in keyof CrCodeBlock & keyof CrCodeBlockAttributes as `prop:${K}`]?: CrCodeBlock[K] } & OneOf<"code", CrCodeBlock["code"], CrCodeBlockAttributes["code"]>;
         "cr-command-palette": Omit<CrCommandPalette, keyof CrCommandPaletteAttributes> & { [K in keyof CrCommandPalette & keyof CrCommandPaletteAttributes]?: CrCommandPalette[K] } & { [K in keyof CrCommandPalette & keyof CrCommandPaletteAttributes as `attr:${K}`]?: CrCommandPaletteAttributes[K] } & { [K in keyof CrCommandPalette & keyof CrCommandPaletteAttributes as `prop:${K}`]?: CrCommandPalette[K] } & OneOf<"label", CrCommandPalette["label"], CrCommandPaletteAttributes["label"]>;
+        "cr-confirm": Omit<CrConfirm, keyof CrConfirmAttributes> & { [K in keyof CrConfirm & keyof CrConfirmAttributes]?: CrConfirm[K] } & { [K in keyof CrConfirm & keyof CrConfirmAttributes as `attr:${K}`]?: CrConfirmAttributes[K] } & { [K in keyof CrConfirm & keyof CrConfirmAttributes as `prop:${K}`]?: CrConfirm[K] } & OneOf<"question", CrConfirm["question"], CrConfirmAttributes["question"]>;
         "cr-date-picker": Omit<CrDatePicker, keyof CrDatePickerAttributes> & { [K in keyof CrDatePicker & keyof CrDatePickerAttributes]?: CrDatePicker[K] } & { [K in keyof CrDatePicker & keyof CrDatePickerAttributes as `attr:${K}`]?: CrDatePickerAttributes[K] } & { [K in keyof CrDatePicker & keyof CrDatePickerAttributes as `prop:${K}`]?: CrDatePicker[K] } & OneOf<"label", CrDatePicker["label"], CrDatePickerAttributes["label"]>;
         "cr-dialog": Omit<CrDialog, keyof CrDialogAttributes> & { [K in keyof CrDialog & keyof CrDialogAttributes]?: CrDialog[K] } & { [K in keyof CrDialog & keyof CrDialogAttributes as `attr:${K}`]?: CrDialogAttributes[K] } & { [K in keyof CrDialog & keyof CrDialogAttributes as `prop:${K}`]?: CrDialog[K] } & OneOf<"label", CrDialog["label"], CrDialogAttributes["label"]>;
         "cr-drawer": Omit<CrDrawer, keyof CrDrawerAttributes> & { [K in keyof CrDrawer & keyof CrDrawerAttributes]?: CrDrawer[K] } & { [K in keyof CrDrawer & keyof CrDrawerAttributes as `attr:${K}`]?: CrDrawerAttributes[K] } & { [K in keyof CrDrawer & keyof CrDrawerAttributes as `prop:${K}`]?: CrDrawer[K] } & OneOf<"label", CrDrawer["label"], CrDrawerAttributes["label"]>;
@@ -5202,9 +5394,11 @@ declare namespace LocalJSX {
         "cr-file-upload": Omit<CrFileUpload, keyof CrFileUploadAttributes> & { [K in keyof CrFileUpload & keyof CrFileUploadAttributes]?: CrFileUpload[K] } & { [K in keyof CrFileUpload & keyof CrFileUploadAttributes as `attr:${K}`]?: CrFileUploadAttributes[K] } & { [K in keyof CrFileUpload & keyof CrFileUploadAttributes as `prop:${K}`]?: CrFileUpload[K] } & OneOf<"label", CrFileUpload["label"], CrFileUploadAttributes["label"]>;
         "cr-grid-item": Omit<CrGridItem, keyof CrGridItemAttributes> & { [K in keyof CrGridItem & keyof CrGridItemAttributes]?: CrGridItem[K] } & { [K in keyof CrGridItem & keyof CrGridItemAttributes as `attr:${K}`]?: CrGridItemAttributes[K] } & { [K in keyof CrGridItem & keyof CrGridItemAttributes as `prop:${K}`]?: CrGridItem[K] } & OneOf<"label", CrGridItem["label"], CrGridItemAttributes["label"]>;
         "cr-grid-layout": Omit<CrGridLayout, keyof CrGridLayoutAttributes> & { [K in keyof CrGridLayout & keyof CrGridLayoutAttributes]?: CrGridLayout[K] } & { [K in keyof CrGridLayout & keyof CrGridLayoutAttributes as `attr:${K}`]?: CrGridLayoutAttributes[K] } & { [K in keyof CrGridLayout & keyof CrGridLayoutAttributes as `prop:${K}`]?: CrGridLayout[K] };
+        "cr-hover-card": Omit<CrHoverCard, keyof CrHoverCardAttributes> & { [K in keyof CrHoverCard & keyof CrHoverCardAttributes]?: CrHoverCard[K] } & { [K in keyof CrHoverCard & keyof CrHoverCardAttributes as `attr:${K}`]?: CrHoverCardAttributes[K] } & { [K in keyof CrHoverCard & keyof CrHoverCardAttributes as `prop:${K}`]?: CrHoverCard[K] };
         "cr-icon-button": Omit<CrIconButton, keyof CrIconButtonAttributes> & { [K in keyof CrIconButton & keyof CrIconButtonAttributes]?: CrIconButton[K] } & { [K in keyof CrIconButton & keyof CrIconButtonAttributes as `attr:${K}`]?: CrIconButtonAttributes[K] } & { [K in keyof CrIconButton & keyof CrIconButtonAttributes as `prop:${K}`]?: CrIconButton[K] } & OneOf<"label", CrIconButton["label"], CrIconButtonAttributes["label"]>;
         "cr-image": Omit<CrImage, keyof CrImageAttributes> & { [K in keyof CrImage & keyof CrImageAttributes]?: CrImage[K] } & { [K in keyof CrImage & keyof CrImageAttributes as `attr:${K}`]?: CrImageAttributes[K] } & { [K in keyof CrImage & keyof CrImageAttributes as `prop:${K}`]?: CrImage[K] } & OneOf<"src", CrImage["src"], CrImageAttributes["src"]> & OneOf<"alt", CrImage["alt"], CrImageAttributes["alt"]>;
         "cr-input": Omit<CrInput, keyof CrInputAttributes> & { [K in keyof CrInput & keyof CrInputAttributes]?: CrInput[K] } & { [K in keyof CrInput & keyof CrInputAttributes as `attr:${K}`]?: CrInputAttributes[K] } & { [K in keyof CrInput & keyof CrInputAttributes as `prop:${K}`]?: CrInput[K] } & OneOf<"label", CrInput["label"], CrInputAttributes["label"]>;
+        "cr-kbd": Omit<CrKbd, keyof CrKbdAttributes> & { [K in keyof CrKbd & keyof CrKbdAttributes]?: CrKbd[K] } & { [K in keyof CrKbd & keyof CrKbdAttributes as `attr:${K}`]?: CrKbdAttributes[K] } & { [K in keyof CrKbd & keyof CrKbdAttributes as `prop:${K}`]?: CrKbd[K] };
         "cr-loader": Omit<CrLoader, keyof CrLoaderAttributes> & { [K in keyof CrLoader & keyof CrLoaderAttributes]?: CrLoader[K] } & { [K in keyof CrLoader & keyof CrLoaderAttributes as `attr:${K}`]?: CrLoaderAttributes[K] } & { [K in keyof CrLoader & keyof CrLoaderAttributes as `prop:${K}`]?: CrLoader[K] };
         "cr-menu": Omit<CrMenu, keyof CrMenuAttributes> & { [K in keyof CrMenu & keyof CrMenuAttributes]?: CrMenu[K] } & { [K in keyof CrMenu & keyof CrMenuAttributes as `attr:${K}`]?: CrMenuAttributes[K] } & { [K in keyof CrMenu & keyof CrMenuAttributes as `prop:${K}`]?: CrMenu[K] } & OneOf<"label", CrMenu["label"], CrMenuAttributes["label"]>;
         "cr-number": Omit<CrNumber, keyof CrNumberAttributes> & { [K in keyof CrNumber & keyof CrNumberAttributes]?: CrNumber[K] } & { [K in keyof CrNumber & keyof CrNumberAttributes as `attr:${K}`]?: CrNumberAttributes[K] } & { [K in keyof CrNumber & keyof CrNumberAttributes as `prop:${K}`]?: CrNumber[K] };
@@ -5311,12 +5505,24 @@ declare module "@stencil/core" {
              */
             "cr-checkbox": LocalJSX.IntrinsicElements["cr-checkbox"] & JSXBase.HTMLAttributes<HTMLCrCheckboxElement>;
             /**
+             * Bloc de code avec bouton Copier : commande d'installation, extrait de configuration, exemple d'appel.
+             * Le code garde ses espaces et défile en largeur au besoin (au clavier aussi) ; la copie est annoncée aux lecteurs d'écran.
+             * shortcut: pas de coloration syntaxique ; à ajouter avec un surligneur si la doc en a besoin.
+             */
+            "cr-code-block": LocalJSX.IntrinsicElements["cr-code-block"] & JSXBase.HTMLAttributes<HTMLCrCodeBlockElement>;
+            /**
              * Palette de commandes : une fenêtre modale avec un champ qui filtre une liste de commandes (motif combobox).
              * Les commandes sont des éléments option enfants ; data-group les range sous un titre de groupe.
              * Ctrl+K (⌘K sur Mac) l'ouvre de n'importe où dans la page. Haut et Bas parcourent les commandes, Entrée choisit, Échap ferme.
              * La fenêtre tombe en place avec un ressort, et le surlignage de la commande active glisse d'une ligne à l'autre.
              */
             "cr-command-palette": LocalJSX.IntrinsicElements["cr-command-palette"] & JSXBase.HTMLAttributes<HTMLCrCommandPaletteElement>;
+            /**
+             * Confirmation en une ligne : le bouton d'une action à risque se change, sur place, en « Supprimer ce fichier ? Supprimer · Annuler ».
+             * Plus léger qu'une modale pour une action qu'on peut regretter mais qui ne mérite pas d'interrompre la page.
+             * Le focus va sur Annuler ; Échap, Annuler ou un focus qui part ailleurs rendent le bouton d'origine.
+             */
+            "cr-confirm": LocalJSX.IntrinsicElements["cr-confirm"] & JSXBase.HTMLAttributes<HTMLCrConfirmElement>;
             /**
              * Champ de date : saisie au clavier dans le format de la langue (JJ/MM/AAAA en français, MM/DD/YYYY en anglais),
              * ou choix dans un calendrier ouvert par le bouton voisin. Le calendrier suit le motif Date Picker Dialog de l'APG ;
@@ -5352,6 +5558,11 @@ declare module "@stencil/core" {
              */
             "cr-grid-layout": LocalJSX.IntrinsicElements["cr-grid-layout"] & JSXBase.HTMLAttributes<HTMLCrGridLayoutElement>;
             /**
+             * Carte au survol : aperçu d'un lien (profil, page, produit) qui s'ouvre quand le pointeur s'y attarde ou que le focus clavier y arrive.
+             * On peut la survoler sans qu'elle se ferme ; Échap la ferme. C'est un aperçu : tout ce qu'elle montre doit aussi se trouver derrière le lien.
+             */
+            "cr-hover-card": LocalJSX.IntrinsicElements["cr-hover-card"] & JSXBase.HTMLAttributes<HTMLCrHoverCardElement>;
+            /**
              * Bouton réduit à une icône. Le libellé lui donne son nom et s'affiche en infobulle au survol et au focus.
              */
             "cr-icon-button": LocalJSX.IntrinsicElements["cr-icon-button"] & JSXBase.HTMLAttributes<HTMLCrIconButtonElement>;
@@ -5364,6 +5575,11 @@ declare module "@stencil/core" {
              * Champ de saisie de texte.
              */
             "cr-input": LocalJSX.IntrinsicElements["cr-input"] & JSXBase.HTMLAttributes<HTMLCrInputElement>;
+            /**
+             * Touche du clavier, ou raccourci de plusieurs touches (« Ctrl + K »), dans le texte courant ou un menu.
+             * Avec keys, Mod devient ⌘ sur Mac et Ctrl ailleurs ; les symboles Mac sont lus en toutes lettres par les lecteurs d'écran.
+             */
+            "cr-kbd": LocalJSX.IntrinsicElements["cr-kbd"] & JSXBase.HTMLAttributes<HTMLCrKbdElement>;
             /**
              * Indicateur de chargement de durée inconnue. Sa taille suit la taille du texte (font-size).
              */

@@ -1,0 +1,28 @@
+---
+title: Keyboard key
+description: A key or keyboard shortcut in running text. Tag cr-kbd, React component CrKbd.
+---
+
+import KbdBasic from '@/demos/en/kbd-basic';
+
+## Example
+
+`cr-kbd` draws a keyboard key in running text, help or a menu. The content is the key name: `<CrKbd>Enter</CrKbd>`.
+
+For a shortcut of several keys, `keys` separates them with `+`: `keys="Mod+K"`. `Mod` becomes ⌘ on Mac and Ctrl elsewhere; `Alt`, `Shift` and `Ctrl` become ⌥, ⇧ and ⌃ on Mac. A single letter is uppercased.
+
+<Preview>
+  <KbdBasic />
+</Preview>
+
+<include>../../../demos/en/kbd-basic.tsx</include>
+
+## Accessibility
+
+- Each key is a `kbd` element, and a shortcut is a `kbd` grouping them, as HTML specifies.
+- Mac symbols are hidden from screen readers, which read their name instead ("Command + K").
+- The key is text: it grows with the size of the surrounding text.
+
+## API
+
+<ApiReference tag="cr-kbd" />

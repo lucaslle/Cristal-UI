@@ -1,0 +1,32 @@
+---
+title: Code block
+description: Code to read and copy in one click. Tag cr-code-block, React component CrCodeBlock.
+---
+
+import CodeBlockBasic from '@/demos/en/code-block-basic';
+
+## Example
+
+`cr-code-block` shows code (`code`) as is, in a monospace font, with a Copy button. `label` adds a title above: file name, language or "Terminal". A line that is too long scrolls the block sideways instead of wrapping.
+
+<Preview>
+  <CodeBlockBasic />
+</Preview>
+
+<include>../../../demos/en/code-block-basic.tsx</include>
+
+## Copying
+
+The button copies the code to the clipboard and turns into "Copied" for two seconds. If the browser refuses the copy (insecure page, permission denied), a message asks to select the code.
+
+The block adds no syntax highlighting.
+
+## Accessibility
+
+- The button is named after the block title ("Copy package.json"): several blocks on a page stay distinct.
+- The copy is announced to screen readers ("Copied"), without moving focus.
+- The code scrolls with the keyboard: the block takes focus with Tab, then the arrows scroll it.
+
+## API
+
+<ApiReference tag="cr-code-block" />

@@ -1,0 +1,104 @@
+:host {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  font-family: var(--cr-font-family);
+  color: var(--cr-color-text);
+  background: color-mix(in oklab, var(--cr-color-text) 4%, var(--cr-color-surface));
+  border: 1px solid var(--cr-color-border);
+  border-radius: var(--cr-radius-m);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--cr-spacing-sm);
+  min-height: var(--cr-control-s);
+  padding: 0 var(--cr-spacing-xs) 0 var(--cr-spacing-lg);
+  border-bottom: 1px solid var(--cr-color-border);
+}
+
+.label {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  font-size: var(--cr-font-size-s);
+  font-weight: var(--cr-font-weight-medium);
+  color: var(--cr-color-text-muted);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.copy {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--cr-spacing-xs);
+  min-height: 28px;
+  padding: 0 var(--cr-spacing-sm);
+  font: inherit;
+  font-size: var(--cr-font-size-s);
+  font-weight: var(--cr-font-weight-medium);
+  color: var(--cr-color-text-muted);
+  background: transparent;
+  border: none;
+  border-radius: var(--cr-radius-m);
+  cursor: pointer;
+}
+
+.copy:hover {
+  color: var(--cr-color-text);
+  background: color-mix(in oklab, var(--cr-color-text) 8%, transparent);
+}
+
+.copy:focus-visible,
+pre:focus-visible {
+  outline: 2px solid var(--cr-color-focus);
+  outline-offset: -2px;
+}
+
+/* La coche apparaît avec un petit rebond quand la copie a réussi. */
+.copy[data-copied='done'] {
+  color: var(--cr-color-primary-text);
+}
+
+.copy[data-copied='done'] svg {
+  animation: cr-code-copied 0.3s cubic-bezier(0.3, 1.5, 0.5, 1);
+}
+
+@keyframes cr-code-copied {
+  from {
+    scale: 0.4;
+  }
+}
+
+pre {
+  margin: 0;
+  padding: var(--cr-spacing-lg);
+  overflow-x: auto;
+  font-family: var(--cr-font-mono);
+  font-size: var(--cr-font-size-m);
+  line-height: 1.6;
+  tab-size: 2;
+}
+
+.status {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .copy[data-copied='done'] svg {
+    animation: none;
+  }
+}
+
+@media (forced-colors: active) {
+  :host {
+    border-color: CanvasText;
+  }
+}

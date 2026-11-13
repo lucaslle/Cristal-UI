@@ -78,3 +78,7 @@ export const CrQuantity = withAttributes(generated.CrQuantity, elements.CrQuanti
 export const CrPagination = withAttributes(generated.CrPagination, elements.CrPagination);
 export const CrBreadcrumb = withAttributes(generated.CrBreadcrumb, elements.CrBreadcrumb);
 export const CrCommandPalette = withAttributes(generated.CrCommandPalette, elements.CrCommandPalette);
+export const CrKbd = withAttributes(generated.CrKbd, elements.CrKbd);
+export const CrConfirm = withAttributes(generated.CrConfirm, elements.CrConfirm);
+export const CrHoverCard = withAttributes(generated.CrHoverCard, elements.CrHoverCard);
+export const CrCodeBlock = withAttributes(generated.CrCodeBlock, elements.CrCodeBlock);

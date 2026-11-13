@@ -156,4 +156,15 @@ export const fr: Messages = {
   chartTotal: 'Total',
   chartEmpty: 'Aucune donnée',
   chartPoint: (label, values) => `${label} : ${values}`,
+
+  copy: 'Copier',
+  copied: 'Copié',
+  copyFailed: 'Copie impossible : sélectionnez le code pour le copier.',
+  copyCode: (label) => `Copier ${label}`,
+  confirm: 'Confirmer',
+  cancel: 'Annuler',
+  keyCommand: 'Commande',
+  keyOption: 'Option',
+  keyShift: 'Maj',
+  keyControl: 'Contrôle',
 };

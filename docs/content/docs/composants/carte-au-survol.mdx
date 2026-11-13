@@ -1,0 +1,34 @@
+---
+title: Hover card
+description: Preview of a link that opens when the pointer lingers on it. Tag cr-hover-card, React component CrHoverCard.
+---
+
+import HoverCardBasic from '@/demos/en/hover-card-basic';
+
+## Example
+
+`cr-hover-card` wraps a link (a name, a page, a product) and shows a preview of its destination when the pointer lingers on it for half a second (`openDelay`, in milliseconds) or keyboard focus reaches it. The card content goes in `slot="card"`.
+
+<Preview>
+  <HoverCardBasic />
+</Preview>
+
+<include>../../../demos/en/hover-card-basic.tsx</include>
+
+## What goes in it
+
+The card is a preview: everything it shows must also be found behind the link, since it cannot be seen with a finger and screen readers do not read it. It holds no button or link: they could not be reached with the keyboard. For a panel with actions, use a [popover](/docs/composants/fenetre-contextuelle); for short help text, a [tooltip](/docs/composants/infobulle).
+
+<Callout>
+  If the user asked their system to reduce motion, the card appears directly, without unfolding.
+</Callout>
+
+## Accessibility
+
+- The card opens on keyboard focus as on hover, and stays open while the pointer moves from the link to the card.
+- Escape closes it, wherever focus is; it also closes when focus leaves the link.
+- With a finger, a tap follows the link without opening the card.
+
+## API
+
+<ApiReference tag="cr-hover-card" />

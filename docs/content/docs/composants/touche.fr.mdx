@@ -1,0 +1,28 @@
+---
+title: Touche du clavier
+description: Une touche ou un raccourci clavier dans le texte. Balise cr-kbd, composant React CrKbd.
+---
+
+import KbdBasic from '@/demos/kbd-basic';
+
+## Exemple
+
+`cr-kbd` dessine une touche du clavier dans le texte courant, une aide ou un menu. Le contenu est le nom de la touche : `<CrKbd>Entrée</CrKbd>`.
+
+Pour un raccourci de plusieurs touches, `keys` les sépare par `+` : `keys="Mod+K"`. `Mod` devient ⌘ sur Mac et Ctrl ailleurs ; `Alt`, `Shift` et `Ctrl` deviennent ⌥, ⇧ et ⌃ sur Mac. Une lettre seule est mise en majuscule.
+
+<Preview>
+  <KbdBasic />
+</Preview>
+
+<include>../../../demos/kbd-basic.tsx</include>
+
+## Accessibilité
+
+- Chaque touche est un élément `kbd`, et un raccourci un `kbd` qui les regroupe, comme le prévoit HTML.
+- Les symboles Mac sont masqués aux lecteurs d'écran, qui lisent leur nom à la place (« Commande + K »).
+- La touche est du texte : elle grandit avec la taille du texte qui l'entoure.
+
+## API
+
+<ApiReference tag="cr-kbd" />

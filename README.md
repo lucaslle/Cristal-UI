@@ -122,6 +122,16 @@ Bouton réduit à une icône (slot par défaut, avec `aria-hidden="true"`). `lab
 </CrIconButton>
 ```
 
+### Confirmation en une ligne : `cr-confirm`
+
+Entoure le bouton d'une action à risque : au clic, il laisse sa place à `question` et à deux boutons, celui qui confirme (`confirmLabel`, « Confirmer » par défaut) et Annuler (`cancelLabel`). Le focus va sur Annuler ; Échap, Annuler ou un focus qui part ailleurs rendent le bouton. L'action s'exécute dans `onCrConfirm`.
+
+```tsx
+<CrConfirm question="Supprimer ce fichier ?" confirmLabel="Supprimer" onCrConfirm={supprimer}>
+  <CrButton variant="outline">Supprimer</CrButton>
+</CrConfirm>
+```
+
 ### Infobulle : `cr-tooltip`
 
 Court texte d'aide (`text`, obligatoire) autour d'un seul élément focalisable : bouton ou lien natif, `cr-button`. Elle s'affiche au focus clavier et au survol, reste survolable et se ferme avec Échap ; le texte décrit aussi le déclencheur pour les lecteurs d'écran. `placement` : `top` (défaut), `bottom`, `start`, `end`. Elle grandit depuis le déclencheur avec un léger rebond.
@@ -352,6 +362,29 @@ Petit panneau non modal (`role="dialog"`) ancré sous un bouton, pour du contenu
   <CrButton onClick={() => setOpen(false)}>Inviter</CrButton>
 </CrPopover>
 ```
+
+### Carte au survol : `cr-hover-card`
+
+Aperçu d'un lien (profil, page, produit) dans `slot="card"`, ouvert quand le pointeur s'attarde sur le lien (`openDelay`, 500 ms par défaut) ou que le focus clavier y arrive. La carte reste ouverte quand on la survole, Échap la ferme, un appui au doigt suit le lien. C'est un aperçu : sans bouton ni lien, et tout ce qu'elle montre doit aussi se trouver derrière le lien.
+
+```tsx
+<CrHoverCard>
+  <a href="/equipe/mia">Mia Laurent</a>
+  <div slot="card">Designer produit · Lyon</div>
+</CrHoverCard>
+```
+
+### Bloc de code : `cr-code-block`
+
+Code affiché tel quel (`code`, obligatoire) en police à chasse fixe (`--cr-font-mono`), avec un bouton Copier qui devient « Copié » et l'annonce aux lecteurs d'écran. `label` ajoute un titre (nom de fichier, « Terminal ») qui nomme aussi le bouton. Les lignes longues défilent en largeur, au clavier aussi. Pas de coloration syntaxique.
+
+```tsx
+<CrCodeBlock label="Terminal" code="pnpm add @cristal/react" />
+```
+
+### Touche du clavier : `cr-kbd`
+
+Une touche dans le texte (`<CrKbd>Entrée</CrKbd>`) ou un raccourci avec `keys` (`"Mod+K"`) : `Mod` devient ⌘ sur Mac et Ctrl ailleurs, `Alt`, `Shift` et `Ctrl` deviennent ⌥, ⇧ et ⌃ sur Mac, lus en toutes lettres par les lecteurs d'écran.
 
 ### Avatar : `cr-avatar`, `cr-avatar-group`
 

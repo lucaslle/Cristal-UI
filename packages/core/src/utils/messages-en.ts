@@ -154,6 +154,16 @@ export const en = {
   chartTotal: 'Total',
   chartEmpty: 'No data',
   chartPoint: (label: string, values: string) => `${label}: ${values}`,
+  copy: 'Copy',
+  copied: 'Copied',
+  copyFailed: 'Copy failed: select the code to copy it.',
+  copyCode: (label: string) => `Copy ${label}`,
+  confirm: 'Confirm',
+  cancel: 'Cancel',
+  keyCommand: 'Command',
+  keyOption: 'Option',
+  keyShift: 'Shift',
+  keyControl: 'Control',
 };
 
 export type Messages = typeof en;

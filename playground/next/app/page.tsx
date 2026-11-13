@@ -39,6 +39,7 @@ import { IconButtonDemo } from './icon-button-demo';
 import { TooltipDemo } from './tooltip-demo';
 import { PopoverDemo } from './popover-demo';
 import { ThemeToggleDemo } from './theme-toggle-demo';
+import { ContentDemo } from './content-demo';
 
 const row = { display: 'flex', gap: 'var(--cr-spacing-sm)', alignItems: 'center', marginBottom: 'var(--cr-spacing-lg)' };
 const grid = { display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))', gap: 'var(--cr-spacing-lg)' };
@@ -226,6 +227,9 @@ export default function Page() {
 
       <h2>Palette de commandes</h2>
       <CommandPaletteDemo />
+
+      <h2>Contenu</h2>
+      <ContentDemo />
 
       <h2 lang="en">In English</h2>
       <EnglishDemo />

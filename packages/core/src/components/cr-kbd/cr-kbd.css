@@ -1,0 +1,51 @@
+:host {
+  display: inline-flex;
+  vertical-align: baseline;
+}
+
+.combo {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  font: inherit;
+}
+
+/* Touche en relief : bordure plus épaisse en bas, comme une touche enfoncée de quelques pixels. */
+.key {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  min-width: 1.6em;
+  padding: 0 0.4em;
+  font-family: var(--cr-font-mono);
+  font-size: 0.85em;
+  font-weight: var(--cr-font-weight-medium);
+  line-height: 1.6;
+  color: var(--cr-color-text);
+  white-space: nowrap;
+  background: var(--cr-color-surface);
+  border: 1px solid var(--cr-color-border);
+  border-bottom-width: 2px;
+  border-radius: var(--cr-radius-m);
+}
+
+.plus {
+  font-size: 0.85em;
+  color: var(--cr-color-text-muted);
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+@media (forced-colors: active) {
+  .key {
+    border-color: CanvasText;
+  }
+}
