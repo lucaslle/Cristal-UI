@@ -140,6 +140,10 @@ export const fr: Messages = {
   columnWidth: (label, width) => `${label} : ${width} pixels.`,
   columnsReset: 'Colonnes réinitialisées.',
   tableSummary: (shown, total, pinned, rows) => `${shown} colonnes sur ${total} · ${pinned} ${pinned > 1 ? 'fixées' : 'fixée'} · lignes ${rows}`,
-  tableHelp: { onHeader: 'Sur un en-tête :', neighbour: 'colonne voisine', move: 'déplacer', width: 'largeur', pin: 'fixer', hide: 'masquer', fit: 'ajuster', shift: 'Maj', enter: 'Entrée' },
+  tableHelp: { onHeader: 'Sur un en-tête :', neighbour: 'colonne voisine', move: 'déplacer', width: 'largeur', pin: 'fixer', hide: 'masquer', fit: 'ajuster', shift: 'Maj', enter: 'Entrée', sort: 'trier' },
   moreRows: (shown, total) => `${shown} lignes sur ${total} : la suite s'affiche en défilant.`,
+  sorted: (label, direction) => (direction ? `Trié par ${label}, ordre ${direction === 'ascending' ? 'croissant' : 'décroissant'}.` : "Ordre d'origine rétabli."),
+  selectAll: 'Sélectionner toutes les lignes',
+  selectRow: (name) => `Sélectionner ${name}`,
+  rowsSelected: (count) => (count ? `${count} ${count > 1 ? 'lignes sélectionnées' : 'ligne sélectionnée'}.` : 'Aucune ligne sélectionnée.'),
 };
