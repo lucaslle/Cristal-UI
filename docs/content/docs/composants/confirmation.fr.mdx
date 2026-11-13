@@ -1,0 +1,37 @@
+---
+title: Confirmation en une ligne
+description: Le bouton d'une action à risque se change sur place en question. Balise cr-confirm, composant React CrConfirm.
+---
+
+import ConfirmBasic from '@/demos/confirm-basic';
+
+## Exemple
+
+`cr-confirm` entoure le bouton d'une action qu'on peut regretter. Au clic, le bouton laisse sa place à une question (`question`) et à deux boutons : celui qui confirme (`confirmLabel`, « Confirmer » par défaut) et Annuler. L'action s'exécute dans `onCrConfirm`.
+
+<Preview>
+  <ConfirmBasic />
+</Preview>
+
+<include>../../../demos/confirm-basic.tsx</include>
+
+## Quand l'utiliser
+
+Pour une action ponctuelle dans une liste ou une ligne de tableau (supprimer un fichier, retirer un membre), la confirmation en une ligne évite d'interrompre la page. Pour une action lourde qui demande d'en expliquer les conséquences, préférez une [modale](/docs/composants/modale).
+
+Le bouton de confirmation porte le verbe de l'action (« Supprimer »), pas un simple « Oui » : on sait ce qu'on accepte sans relire la question.
+
+<Callout>
+  Si l'utilisateur a demandé à son système de réduire les animations, la question apparaît directement, sans glisser.
+</Callout>
+
+## Accessibilité
+
+- La question et ses deux boutons forment un groupe nommé par la question, lue quand le focus y entre.
+- Le focus va sur Annuler : deux appuis rapides sur Entrée ne suffisent pas à confirmer par erreur.
+- Échap ou Annuler rendent le bouton d'origine et y remettent le focus ; un focus qui part ailleurs annule aussi la question.
+- Dans une modale, Échap annule la question sans fermer la modale.
+
+## API
+
+<ApiReference tag="cr-confirm" />

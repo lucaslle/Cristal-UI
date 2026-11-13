@@ -1,0 +1,34 @@
+---
+title: Carte au survol
+description: Aperçu d'un lien qui s'ouvre quand le pointeur s'y attarde. Balise cr-hover-card, composant React CrHoverCard.
+---
+
+import HoverCardBasic from '@/demos/hover-card-basic';
+
+## Exemple
+
+`cr-hover-card` entoure un lien (un nom, une page, un produit) et montre un aperçu de sa destination quand le pointeur s'y attarde une demi-seconde (`openDelay`, en millisecondes) ou que le focus clavier y arrive. Le contenu de la carte va dans `slot="card"`.
+
+<Preview>
+  <HoverCardBasic />
+</Preview>
+
+<include>../../../demos/hover-card-basic.tsx</include>
+
+## Ce qu'on y met
+
+La carte est un aperçu : tout ce qu'elle montre doit aussi se trouver derrière le lien, car on ne la voit pas au doigt et les lecteurs d'écran ne la lisent pas. Elle ne contient ni bouton ni lien : ils ne seraient pas atteignables au clavier. Pour un panneau avec des actions, utilisez une [fenêtre contextuelle](/docs/composants/fenetre-contextuelle) ; pour un court texte d'aide, une [infobulle](/docs/composants/infobulle).
+
+<Callout>
+  Si l'utilisateur a demandé à son système de réduire les animations, la carte apparaît directement, sans se déplier.
+</Callout>
+
+## Accessibilité
+
+- La carte s'ouvre au focus clavier comme au survol, et reste ouverte quand le pointeur passe du lien à la carte.
+- Échap la ferme, où que soit le focus ; elle se ferme aussi quand le focus quitte le lien.
+- Au doigt, un appui suit le lien sans ouvrir la carte.
+
+## API
+
+<ApiReference tag="cr-hover-card" />

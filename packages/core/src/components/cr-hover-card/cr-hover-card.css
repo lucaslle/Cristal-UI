@@ -1,0 +1,48 @@
+:host {
+  display: inline;
+}
+
+.anchor {
+  display: inline;
+}
+
+.card {
+  max-width: min(320px, calc(100vw - 2 * var(--cr-spacing-sm)));
+  padding: var(--cr-spacing-lg);
+  line-height: 1.5;
+}
+
+/* La carte se déplie depuis le lien, avec un léger fondu. */
+.card[data-state='open'] {
+  animation: cr-hover-card-in 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+@keyframes cr-hover-card-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px) scale(0.97);
+  }
+}
+
+.card[data-placement='above'][data-state='open'] {
+  animation-name: cr-hover-card-in-above;
+}
+
+@keyframes cr-hover-card-in-above {
+  from {
+    opacity: 0;
+    transform: translateY(4px) scale(0.97);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card[data-state='open'] {
+    animation: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .card {
+    border-color: CanvasText;
+  }
+}

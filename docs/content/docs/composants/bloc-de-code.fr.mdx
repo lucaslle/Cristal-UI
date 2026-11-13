@@ -1,0 +1,32 @@
+---
+title: Bloc de code
+description: Code à lire et à copier en un clic. Balise cr-code-block, composant React CrCodeBlock.
+---
+
+import CodeBlockBasic from '@/demos/code-block-basic';
+
+## Exemple
+
+`cr-code-block` affiche du code (`code`) tel quel, dans une police à chasse fixe, avec un bouton Copier. `label` ajoute un titre au-dessus : nom de fichier, langage ou « Terminal ». Une ligne trop longue fait défiler le bloc en largeur au lieu de passer à la ligne.
+
+<Preview>
+  <CodeBlockBasic />
+</Preview>
+
+<include>../../../demos/code-block-basic.tsx</include>
+
+## Copier
+
+Le bouton copie le code dans le presse-papiers et devient « Copié » pendant deux secondes. Si le navigateur refuse la copie (page non sécurisée, permission refusée), un message invite à sélectionner le code.
+
+Le bloc n'ajoute pas de coloration syntaxique.
+
+## Accessibilité
+
+- Le bouton est nommé par le titre du bloc (« Copier package.json ») : plusieurs blocs dans une page restent distincts.
+- La copie est annoncée aux lecteurs d'écran (« Copié »), sans déplacer le focus.
+- Le code défile au clavier : le bloc reçoit le focus avec Tab, puis les flèches le font défiler.
+
+## API
+
+<ApiReference tag="cr-code-block" />

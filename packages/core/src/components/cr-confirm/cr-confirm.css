@@ -1,0 +1,41 @@
+:host {
+  display: inline-flex;
+  vertical-align: middle;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+.trigger {
+  display: inline-flex;
+}
+
+.row {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--cr-spacing-sm);
+  font-family: var(--cr-font-family);
+  font-size: var(--cr-font-size-m);
+  color: var(--cr-color-text);
+  /* La question glisse depuis l'emplacement du bouton. */
+  transition: opacity 0.18s ease-out, translate 0.18s ease-out;
+}
+
+@starting-style {
+  .row {
+    opacity: 0;
+    translate: -8px 0;
+  }
+}
+
+.question {
+  font-weight: var(--cr-font-weight-medium);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .row {
+    transition: none;
+  }
+}
