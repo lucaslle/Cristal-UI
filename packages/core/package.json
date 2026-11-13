@@ -25,14 +25,16 @@
     "./dist/*": "./dist/*"
   },
   "scripts": {
-    "build": "stencil build"
+    "build": "stencil build",
+    "test": "vitest run"
   },
   "dependencies": {
     "@cristal/tokens": "workspace:*"
   },
   "devDependencies": {
     "@stencil/core": "^4.45.2",
-    "@stencil/react-output-target": "^1.7.0"
+    "@stencil/react-output-target": "^1.7.0",
+    "vitest": "^5.1.0"
   },
   "collection": "dist/collection/collection-manifest.json"
 }

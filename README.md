@@ -515,6 +515,7 @@ Chaque utilisateur règle les colonnes : ordre (glisser un en-tête ou Alt + fl�
 
 ```bash
 pnpm install
+pnpm test        # tests unitaires de la logique pure (Vitest, moins d'une seconde)
 pnpm build
 pnpm --filter playground-next start
 pnpm --filter playground-next test:e2e
