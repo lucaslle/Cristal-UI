@@ -16,7 +16,9 @@ export const Bars = ({ labels, series, active, value, onActive }: BarsProps) => 
     <ul class="bars">
       {labels.map((label, i) => (
         <li class={{ row: true, on: i === active, dim: active !== undefined && i !== active }} onPointerEnter={() => onActive(i)}>
-          <span class="bar-label">{label}</span>
+          <span class="bar-label" title={label}>
+            {label}
+          </span>
           <span class="bar-track">
             {series.map((s, j) => (
               <span class="bar-line">
@@ -74,7 +76,7 @@ export const Donut = ({ slices, size, active, value, share, totalLabel, onActive
             ) : null,
           )}
         </svg>
-        <div class="center" aria-hidden="true">
+        <div class="center" aria-hidden="true" style={{ fontSize: `${Math.round(Math.min(24, Math.max(13, size * 0.1)))}px` }}>
           <strong>{value(focus ? focus.value : total)}</strong>
           <span>{focus ? `${focus.label} · ${share(focus.value)}` : totalLabel}</span>
         </div>

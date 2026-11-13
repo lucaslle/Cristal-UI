@@ -57,7 +57,7 @@ export const Plot = ({ type, labels, series, width, height, active, value, tick,
           </text>,
         ])}
         {labels.map((label, i) =>
-          i % every && i !== active ? null : (
+          i !== active && (i % every || (active !== undefined && Math.abs(i - active) < every)) ? null : (
             <text class={{ tick: true, on: i === active }} x={fixed(x(i))} y={height - 8} text-anchor={type === 'column' || n < 2 ? 'middle' : i === 0 ? 'start' : i === n - 1 ? 'end' : 'middle'}>
               {label}
             </text>

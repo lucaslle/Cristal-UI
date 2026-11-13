@@ -5,8 +5,8 @@ import { DataTable, Legend } from '../../utils/chart-parts';
 import { Plot } from '../../utils/chart-plot';
 import { Bars, Donut } from '../../utils/chart-shapes';
 
-/** Diamètre du donut : la légende se place à côté (assez de largeur) ou dessous (environ 22 px par part). */
-const ringSize = (width: number, height: number, parts: number) => Math.max(80, width >= 420 ? Math.min(height, width - 200) : Math.min(width, height - parts * 22 - 16));
+/** Diamètre du donut : le plus grand possible, légende à côté (environ 190 px) ou dessous (environ 22 px par part). */
+const ringSize = (width: number, height: number, parts: number) => Math.max(80, Math.min(height, width - 190), Math.min(width, height - parts * 22 - 16));
 
 const KEYS: Record<string, (index: number, count: number) => number> = {
   ArrowRight: (i, n) => Math.min(n - 1, i + 1),
