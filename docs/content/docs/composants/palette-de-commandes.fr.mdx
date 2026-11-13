@@ -11,7 +11,7 @@ import CommandPaletteBasic from '@/demos/command-palette-basic';
 
 Ctrl+K (⌘K sur Mac) l'ouvre de n'importe où dans la page ; `shortcut={false}` désactive ce raccourci, si votre page l'utilise déjà ou s'il y a plusieurs palettes. Vous pouvez aussi la piloter avec `open`. `onCrSelect` donne la valeur choisie, puis la palette se ferme ; remettez votre état à `false` dans `onCrClose`.
 
-La recherche ignore les accents et la casse (« parametres » trouve « Paramètres »). Sans résultat, la palette affiche l'[état vide](/docs/composants/etat-vide) « Aucun résultat ».
+La recherche ignore les accents et la casse (« parametres » trouve « Paramètres »), et les lettres trouvées passent en gras et en couleur (`::part(match)` pour changer leur style). Sans résultat, la palette affiche l'[état vide](/docs/composants/etat-vide) « Aucun résultat ».
 
 La fenêtre tombe en place avec un léger rebond, et le surlignage de la commande active glisse d'une ligne à l'autre.
 
