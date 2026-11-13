@@ -186,6 +186,9 @@ test('the pointer wipes the fog under it', async ({ page }) => {
   await card(page, 'fog').scrollIntoViewIfNeeded();
   // En pause, seul le doigt change le verre : la buée ne dérive pas pendant la mesure.
   await pause(page, 'fog').click();
+  await expect(card(page, 'fog')).toHaveAttribute('paused', '');
+  // Laisse passer l'image déjà demandée avant la pause : elle ferait encore dériver la buée pendant la mesure.
+  await card(page, 'fog').evaluate(() => new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve))));
   const box = (await card(page, 'fog').boundingBox())!;
   const [x, y] = [box.width / 2, box.height / 2];
   const before = await inkAt(page, 'fog', x, y);
