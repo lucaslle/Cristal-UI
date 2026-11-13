@@ -140,6 +140,16 @@ export const en = {
   tableSummary: (shown: number, total: number, pinned: number, rows: string) => `${shown} of ${total} columns · ${pinned} pinned · ${rows} rows`,
   tableHelp: { onHeader: 'On a header:', neighbour: 'next column', move: 'move', width: 'width', pin: 'pin', hide: 'hide', fit: 'fit', shift: 'Shift', enter: 'Enter' },
   moreRows: (shown: string, total: string) => `${shown} of ${total} rows: more appear as you scroll.`,
+
+  chartShowData: 'Show data',
+  chartHideData: 'Hide data',
+  chartHelp: 'Arrow keys go through the values.',
+  chartCategory: 'Category',
+  chartShare: 'Share',
+  chartOther: 'Other',
+  chartTotal: 'Total',
+  chartEmpty: 'No data',
+  chartPoint: (label: string, values: string) => `${label}: ${values}`,
 };
 
 export type Messages = typeof en;

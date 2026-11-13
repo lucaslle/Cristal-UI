@@ -142,4 +142,14 @@ export const fr: Messages = {
   tableSummary: (shown, total, pinned, rows) => `${shown} colonnes sur ${total} · ${pinned} ${pinned > 1 ? 'fixées' : 'fixée'} · lignes ${rows}`,
   tableHelp: { onHeader: 'Sur un en-tête :', neighbour: 'colonne voisine', move: 'déplacer', width: 'largeur', pin: 'fixer', hide: 'masquer', fit: 'ajuster', shift: 'Maj', enter: 'Entrée' },
   moreRows: (shown, total) => `${shown} lignes sur ${total} : la suite s'affiche en défilant.`,
+
+  chartShowData: 'Afficher les données',
+  chartHideData: 'Masquer les données',
+  chartHelp: 'Flèches : parcourir les valeurs.',
+  chartCategory: 'Catégorie',
+  chartShare: 'Part',
+  chartOther: 'Autres',
+  chartTotal: 'Total',
+  chartEmpty: 'Aucune donnée',
+  chartPoint: (label, values) => `${label} : ${values}`,
 };

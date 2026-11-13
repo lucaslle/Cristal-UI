@@ -1,0 +1,57 @@
+---
+title: Chart
+description: Columns, bars, lines, areas or donut, readable on hover, with the keyboard and as a table. cr-chart tag, CrChart React component.
+---
+
+import ChartSales from '@/demos/en/chart-sales';
+import ChartParts from '@/demos/en/chart-parts';
+
+## Change over time: columns, lines, areas
+
+`labels` gives the categories (months, for example) and `series` one or more series `{ name, values }`, with one value per category. `format` formats the values with `Intl.NumberFormat` options: `{ style: 'currency', currency: 'USD' }`, `{ style: 'percent' }`… Axis ticks switch to compact notation ("$20K") from 10,000.
+
+<Preview column>
+  <ChartSales />
+</Preview>
+
+<include>../../../demos/en/chart-sales.tsx</include>
+
+- `column` (default): grouped columns, one colour per series.
+- `line`: one line per series; on hover, a vertical hairline and one dot per series.
+- `area`: the line, with a tinted area below it.
+
+A single series has no legend (the title is enough); its last value is written at the end of the line. From two series on, a legend names them.
+
+## Ranking and parts: bars, donut
+
+<Preview column>
+  <ChartParts />
+</Preview>
+
+<include>../../../demos/en/chart-parts.tsx</include>
+
+- `bar`: horizontal bars, to compare categories with long names; the value is written at the tip of each bar.
+- `donut`: parts of a whole, with the total in the centre; on hover, the centre shows the part and its percentage. It uses the first series. Beyond 6 parts, the smallest are grouped into "Other". To compare close values, prefer bars.
+
+## Size and colours
+
+- The chart takes the full width of its container and is 240 pixels high; change the height with `--cr-chart-height`. Bars take the height of their rows.
+- `hide-label` (`hideLabel` in React) visually hides the title when the card around the chart already shows it; it stays the name read by screen readers.
+- Series take, in order, the colours `--cr-color-chart-1` to `--cr-color-chart-8`, with dedicated shades in the dark theme. This order was checked so that two neighbouring series stay distinct for colour-blind people: keep it, and beyond 8 series, group or split the chart (the extra series are not drawn).
+
+`labels`, `series` and `format` are properties: in HTML, set them in JavaScript (`chart.series = [...]`), not as attributes.
+
+<Callout>
+  If the user asked their system to reduce motion, columns, bars and lines appear without growing or drawing.
+</Callout>
+
+## Accessibility
+
+- "Show data" opens a real table with every value: the equivalent of the drawing for screen readers, and for anyone who wants the exact numbers.
+- The drawing area can be reached with Tab; arrow keys (and Home, End) go through the categories: the tooltip shows as on hover and the value is announced, for example "Mar: Sales $14,100, Returns $1,300". Escape closes the tooltip.
+- Colour is never the only information: legend, written values, tooltip and table name every series. In high contrast mode, marks take the text colour.
+- Texts (ticks, values, legend) keep the text colour, never the series colour, to keep their contrast.
+
+## API
+
+<ApiReference tag="cr-chart" />

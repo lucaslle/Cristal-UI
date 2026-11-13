@@ -16,6 +16,7 @@ import { WeatherDemo } from './weather-demo';
 import { PaginationDemo } from './pagination-demo';
 import { BreadcrumbDemo } from './breadcrumb-demo';
 import { SparklineDemo } from './sparkline-demo';
+import { ChartDemo } from './chart-demo';
 import { NumberDemo } from './number-demo';
 import { AlertDemo } from './alert-demo';
 import { EmptyStateDemo } from './empty-state-demo';
@@ -185,6 +186,9 @@ export default function Page() {
 
       <h2>Mini-graphiques</h2>
       <SparklineDemo />
+
+      <h2>Graphiques</h2>
+      <ChartDemo />
 
       <h2>Nombres animés</h2>
       <NumberDemo />

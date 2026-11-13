@@ -1,0 +1,57 @@
+---
+title: Graphique
+description: Colonnes, barres, courbes, surfaces ou donut, lisibles au survol, au clavier et en tableau. Balise cr-chart, composant React CrChart.
+---
+
+import ChartSales from '@/demos/chart-sales';
+import ChartParts from '@/demos/chart-parts';
+
+## Évolution : colonnes, courbes, surfaces
+
+`labels` donne les catégories (les mois, par exemple) et `series` une ou plusieurs séries `{ name, values }`, avec une valeur par catégorie. `format` met les valeurs en forme avec les options d'`Intl.NumberFormat` : `{ style: 'currency', currency: 'EUR' }`, `{ style: 'percent' }`… Les graduations passent en notation compacte (« 20 k€ ») à partir de 10 000.
+
+<Preview column>
+  <ChartSales />
+</Preview>
+
+<include>../../../demos/chart-sales.tsx</include>
+
+- `column` (par défaut) : colonnes groupées, une couleur par série.
+- `line` : une courbe par série ; au survol, un trait vertical et un point par série.
+- `area` : la courbe, et sous elle une surface teintée.
+
+Une seule série n'a pas de légende (le titre suffit) ; sa dernière valeur est écrite au bout de la courbe. Dès deux séries, une légende les nomme.
+
+## Classement et parts : barres, donut
+
+<Preview column>
+  <ChartParts />
+</Preview>
+
+<include>../../../demos/chart-parts.tsx</include>
+
+- `bar` : barres horizontales, pour comparer des catégories aux noms longs ; la valeur est écrite au bout de chaque barre.
+- `donut` : les parts d'un tout, avec le total au centre ; au survol, le centre affiche la part et son pourcentage. Il utilise la première série. Au-delà de 6 parts, les plus petites sont regroupées dans « Autres ». Pour comparer des valeurs proches, préférez les barres.
+
+## Taille et couleurs
+
+- Le graphique prend toute la largeur de son conteneur et 240 pixels de haut ; changez la hauteur avec `--cr-chart-height`. Les barres prennent la hauteur de leurs lignes.
+- `hide-label` (`hideLabel` en React) masque le titre à l'écran quand la carte qui contient le graphique l'affiche déjà ; il reste le nom lu par les lecteurs d'écran.
+- Les séries prennent, dans l'ordre, les couleurs `--cr-color-chart-1` à `--cr-color-chart-8`, avec des nuances dédiées en thème sombre. Cet ordre a été vérifié pour que deux séries voisines restent distinctes pour les personnes daltoniennes : gardez-le, et au-delà de 8 séries, regroupez ou découpez le graphique (les suivantes ne sont pas dessinées).
+
+`labels`, `series` et `format` sont des propriétés : en HTML, donnez-les en JavaScript (`chart.series = [...]`), pas en attribut.
+
+<Callout>
+  Si l'utilisateur a demandé à son système de réduire les animations, colonnes, barres et courbes s'affichent sans pousser ni se tracer.
+</Callout>
+
+## Accessibilité
+
+- « Afficher les données » ouvre un vrai tableau avec toutes les valeurs : l'équivalent du dessin pour les lecteurs d'écran, et pour quiconque veut les chiffres exacts.
+- La zone du dessin est atteignable avec Tab ; les flèches (et Début, Fin) parcourent les catégories : la bulle s'affiche comme au survol et la valeur est annoncée, par exemple « Mars : Ventes 14 100 €, Retours 1 300 € ». Échap ferme la bulle.
+- La couleur n'est jamais la seule information : légende, valeurs écrites, bulle et tableau nomment chaque série. En contraste élevé, les marques passent à la couleur du texte.
+- Les textes (graduations, valeurs, légende) restent à la couleur du texte, jamais à celle des séries, pour garder leur contraste.
+
+## API
+
+<ApiReference tag="cr-chart" />
