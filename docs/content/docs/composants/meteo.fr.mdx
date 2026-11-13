@@ -1,0 +1,85 @@
+---
+title: Carte météo
+description: Carte en verre dépoli sur laquelle le temps se voit, gouttes de pluie, buée, givre, chaleur ou vent, derrière votre contenu. Balise cr-weather, composant React CrWeather.
+---
+
+import WeatherCard from '@/demos/weather-card';
+
+## Exemple
+
+`CrWeather` est une carte en verre dépoli : le flou laisse passer les couleurs de ce qu'il y a derrière, et le temps qu'il fait se dessine sur le verre, derrière le contenu. Le contenu est le vôtre (ville, température, détails) : il reste dans la page, lisible et cliquable. `condition` choisit le temps ; changer de temps passe d'un effet à l'autre en fondu.
+
+```tsx
+<CrWeather condition="rain">
+  <h3>Lyon</h3>
+  <p>14°</p>
+  <p>Pluie fine</p>
+</CrWeather>
+```
+
+<Preview column>
+  <WeatherCard />
+</Preview>
+
+<include>../../../demos/weather-card.tsx</include>
+
+| `condition` | Sur le verre |
+|---|---|
+| `clear` | un soleil doux dans le coin, ses reflets, un éclat qui balaie lentement le verre et quelques scintillements (par défaut) |
+| `rain` | des gouttes se posent, grossissent en fusionnant, puis coulent en laissant une traînée et de petites gouttelettes |
+| `storm` | forte pluie : beaucoup plus de gouttes, des filets de pluie rapides, des gouttes qui ruissellent ; pas d'éclair |
+| `fog` | une buée qui dérive ; le pointeur l'essuie comme un doigt sur une vitre embuée, et elle revient lentement |
+| `frost` | des cristaux de glace poussent depuis les bords et les coins, puis restent avec un léger scintillement |
+| `heat` | une lueur chaude qui monte du bas, et les reflets du verre qui ondulent comme dans l'air brûlant |
+| `wind` | de fins filets d'air, des poussières et quelques feuilles emportés par rafales |
+
+La carte prend la taille de son contenu : réglez `padding`, `width` ou `border-radius` comme sur une `div`. Laissez un peu de marge en bas à droite pour le bouton pause. Posez-la sur un fond coloré (une photo, un [fond animé](/docs/composants/fond-anime)) : c'est lui qui donne sa couleur au verre.
+
+## Couleurs
+
+Le verre et la météo suivent le thème, clair ou sombre. Pour les changer, donnez ces propriétés CSS sur la carte ou sur un parent :
+
+| Propriété CSS | Par défaut |
+|---|---|
+| `--cr-weather-glass` | la surface, à 58 % d'opacité en thème clair, 70 % en sombre |
+| `--cr-weather-tint` | blanc en thème clair, gris clair à 28 % d'opacité en sombre : reflets, buée, givre, filets de vent |
+| `--cr-weather-warm` | ambre, plus sombre en thème sombre : soleil, chaleur, feuilles |
+
+```css
+cr-weather {
+  --cr-weather-glass: rgb(255 255 255 / 0.7);
+  --cr-weather-tint: #e0f2fe;
+}
+```
+
+Derrière le verre, le fond est flouté, ses contrastes resserrés puis éclairci en thème clair, assombri en sombre : c'est ce qui permet au verre de rester translucide tout en gardant le texte lisible quel que soit le fond. Si vous rendez le verre plus transparent ou la météo plus vive, vérifiez le contraste.
+
+## Pause et animations réduites
+
+Une animation qui démarre seule et dure plus de 5 secondes doit pouvoir être arrêtée : un petit bouton pause est donc affiché dans le coin en bas à droite, comme sur le [fond animé](/docs/composants/fond-anime). La météo s'arrête aussi d'elle-même quand la carte sort de l'écran ou que l'onglet est caché, et repart quand elle revient, sauf si elle est en pause.
+
+Si votre application a déjà sa propre commande pour arrêter les animations, masquez le bouton avec `controls={false}` et pilotez la pause avec `paused` :
+
+```tsx
+<CrWeather condition="frost" controls={false} paused={!animations}>
+  …
+</CrWeather>
+```
+
+<Callout>
+  Si l'utilisateur a demandé à son système de réduire les animations, la carte démarre en pause sur une image fixe déjà installée : gouttes posées, givre poussé, buée sur le verre. Le bouton permet quand même de lancer l'animation.
+</Callout>
+
+## Accessibilité
+
+- La météo est décorative : sa couche est masquée aux lecteurs d'écran (`aria-hidden`) et ne contient rien de focalisable. Dites le temps dans le contenu (« Pluie fine »), c'est lui qui porte l'information.
+- Le texte en `--cr-color-text` garde un contraste d'au moins 4,5:1 à chaque image, pour chaque temps, en thème clair comme en sombre : le verre est assez opaque et la météo assez discrète. Gardez le texte de la carte en `--cr-color-text` ; `--cr-color-text-muted` n'est pas garanti sur le verre.
+- Pas d'éclair avec `storm` : rien ne clignote.
+- Essuyer la buée au pointeur est une décoration : aucune information n'en dépend, rien ne se fait au clavier.
+- Le bouton pause est un vrai bouton, nommé « Mettre en pause l'animation » (« Pause the animation » en anglais), annoncé enfoncé quand l'animation est arrêtée.
+- En mode contrastes élevés, la météo et son bouton disparaissent ; le verre devient un panneau aux couleurs du système, bordé.
+- En pause, hors de l'écran ou dans un onglet caché, la carte ne calcule plus rien.
+
+## API
+
+<ApiReference tag="cr-weather" />

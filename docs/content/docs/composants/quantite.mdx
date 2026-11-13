@@ -1,0 +1,77 @@
+---
+title: Quantity
+description: Quantity picker, a number between a − button and a + button. Tag cr-quantity, React component CrQuantity.
+---
+
+import QuantityProduct from '@/demos/en/quantity-product';
+import QuantityForm from '@/demos/en/quantity-form';
+
+## Example
+
+The number sits between two round buttons, in a pill. Each click adds or removes one step; the number can also be typed, and is committed with Enter or when leaving the field. `onCrInput` gives every new value in `event.detail`, `onCrChange` every committed value (a step, or committed typing).
+
+`animation` picks the effect of a step, played on click and on keyboard alike, in the direction of the change.
+
+<Preview column>
+  <QuantityProduct />
+</Preview>
+
+<include>../../../demos/en/quantity-product.tsx</include>
+
+| `animation` | Effect |
+|---|---|
+| `press` | the button squishes softly, the new number pops up from small (default) |
+| `slide` | the pill nudges toward the button, the new number slides in from that side and pushes the old one out |
+| `ripple` | a ripple spreads from the button across the pill and reveals the new number as it passes |
+| `stretch` | the pill stretches toward the button and springs back; the number wobbles |
+| `spin` | the − or + glyph spins half a turn, the number flips over edge-on |
+| `halo` | a glow ring bursts from the button, the new number zooms down from a larger size |
+
+When the user asks for less motion (`prefers-reduced-motion`), nothing moves: the number changes instantly.
+
+## Bounds and step
+
+`min` (0 by default), `max` (none by default) and `step` (1 by default) bound the value. Without `value`, the picker starts at 0, brought between `min` and `max`. Steps start from `min`: with `min={5}` and `step={5}`, the allowed values are 5, 10, 15… The decimals of `step` set those of the number, shown in the page language format (`2.5` in English).
+
+At a bound, the matching button becomes inactive but keeps the focus: one more click does nothing. A typed number outside the bounds is brought back inside when committed.
+
+## Forms and validation
+
+The picker sends its value under its `name` and goes back to its initial value with the form reset button. Errors show up by themselves, in English on an English page:
+
+| Case | Message |
+|---|---|
+| `required` and emptied | This field is required. |
+| Out of bounds (value set by code) | Choose a value between 5 and 50. |
+| Off step (7 with a step of 5) | Choose 5 or 10 (steps of 5). |
+
+`error-animation` animates the error when it appears and on every rejected submit: see [Animated error](/docs/composants/champ-texte#animated-error). Type 7 then click Order.
+
+<Preview column>
+  <QuantityForm />
+</Preview>
+
+<include>../../../demos/en/quantity-form.tsx</include>
+
+## Keyboard
+
+| Key | Effect |
+|---|---|
+| Up / Down Arrow | one step more / less |
+| Page Up / Page Down | ten steps more / less |
+| Home | the minimum value |
+| End | the maximum value (when `max` is set) |
+| Digits, then Enter | types a number and commits it; a second Enter submits the form |
+| Tab | moves from − to the number, then to + |
+
+## Accessibility
+
+- The number is a `role="spinbutton"` field (APG Spinbutton pattern), named by the label, with `aria-valuenow`, `aria-valuemin` and `aria-valuemax`; the numeric keyboard opens on mobile.
+- − and + are real buttons, named "Decrease" and "Increase" followed by the label ("Increase Quantity"): two pickers on the same page have distinct buttons. They point to the number with `aria-controls`.
+- At a bound, the button gets `aria-disabled="true"`, not `disabled`: the focus stays on it, and the screen reader announces it as unavailable.
+- After a click on − or +, the new value is read by an invisible `role="status"` region; with the arrows in the field the screen reader already reads the value, so nothing is repeated.
+- 40 px buttons, 2 px visible focus, contrasted glyph and number in light and dark themes (the buttons lighten on a dark background). The new number never fades in from transparent: it grows, slides, flips or is revealed. In forced colours, the pill, buttons and focus take the system colours.
+
+## API
+
+<ApiReference tag="cr-quantity" />

@@ -1,0 +1,77 @@
+---
+title: Quantité
+description: Sélecteur de quantité, un nombre entre un bouton − et un bouton +. Balise cr-quantity, composant React CrQuantity.
+---
+
+import QuantityProduct from '@/demos/quantity-product';
+import QuantityForm from '@/demos/quantity-form';
+
+## Exemple
+
+Le nombre est encadré de deux boutons ronds, dans une pastille. Chaque clic ajoute ou retire un pas ; le nombre peut aussi être tapé, il est validé par Entrée ou en quittant le champ. `onCrInput` donne chaque nouvelle valeur dans `event.detail`, `onCrChange` chaque valeur validée (un pas, ou la frappe validée).
+
+`animation` choisit l'effet d'un pas, joué aussi bien au clic qu'au clavier, dans le sens du changement.
+
+<Preview column>
+  <QuantityProduct />
+</Preview>
+
+<include>../../../demos/quantity-product.tsx</include>
+
+| `animation` | Effet |
+|---|---|
+| `press` | le bouton s'écrase doucement, le nouveau nombre surgit en grandissant (par défaut) |
+| `slide` | la pastille glisse vers le bouton, le nouveau nombre arrive de ce côté et pousse l'ancien |
+| `ripple` | une onde part du bouton, traverse la pastille et dévoile le nouveau nombre en passant |
+| `stretch` | la pastille s'étire vers le bouton puis revient en ressort ; le nombre tangue |
+| `spin` | le signe − ou + fait un demi-tour, le nombre bascule sur la tranche |
+| `halo` | un anneau lumineux jaillit du bouton, le nouveau nombre descend d'une taille plus grande |
+
+Quand l'utilisateur demande moins d'animations (`prefers-reduced-motion`), rien ne bouge : le nombre change instantanément.
+
+## Bornes et pas
+
+`min` (0 par défaut), `max` (aucun par défaut) et `step` (1 par défaut) bornent la valeur. Sans `value`, le sélecteur part de 0, ramené entre `min` et `max`. Les pas partent de `min` : avec `min={5}` et `step={5}`, les valeurs permises sont 5, 10, 15… Les décimales de `step` donnent celles du nombre, affiché dans le format de la langue (`2,5` en français).
+
+Arrivé à une borne, le bouton correspondant passe à l'état inactif mais garde le focus : un clic de plus ne fait rien. Un nombre tapé hors des bornes y est ramené quand il est validé.
+
+## Formulaires et validation
+
+Le sélecteur envoie sa valeur sous son `name` et revient à sa valeur de départ avec le bouton de réinitialisation du formulaire. Les erreurs s'affichent toutes seules, en français sur une page en `lang="fr"` :
+
+| Cas | Message |
+|---|---|
+| `required` et champ vidé | Ce champ est obligatoire. |
+| Hors des bornes (valeur fixée par le code) | Choisissez une valeur entre 5 et 50. |
+| Hors du pas (7 avec un pas de 5) | Choisissez 5 ou 10 (par pas de 5). |
+
+`error-animation` anime l'erreur quand elle apparaît et à chaque envoi refusé : voir [Erreur animée](/docs/composants/champ-texte#erreur-animée). Tapez 7 puis cliquez sur Commander.
+
+<Preview column>
+  <QuantityForm />
+</Preview>
+
+<include>../../../demos/quantity-form.tsx</include>
+
+## Clavier
+
+| Touche | Effet |
+|---|---|
+| Flèche haut / bas | un pas de plus / de moins |
+| Page précédente / suivante | dix pas de plus / de moins |
+| Début | la valeur minimale |
+| Fin | la valeur maximale (si `max` est défini) |
+| Chiffres, puis Entrée | tape un nombre et le valide ; un deuxième Entrée envoie le formulaire |
+| Tab | passe de − au nombre, puis à + |
+
+## Accessibilité
+
+- Le nombre est un champ `role="spinbutton"` (motif Spinbutton de l'APG), nommé par le libellé, avec `aria-valuenow`, `aria-valuemin` et `aria-valuemax` ; le clavier numérique s'ouvre sur mobile.
+- − et + sont de vrais boutons, nommés « Diminuer » et « Augmenter » suivis du libellé (« Augmenter Quantité ») : deux sélecteurs sur la même page ont des boutons distincts. Ils sont reliés au nombre par `aria-controls`.
+- À une borne, le bouton reçoit `aria-disabled="true"` et non `disabled` : le focus reste dessus, et le lecteur d'écran l'annonce comme indisponible.
+- Après un clic sur − ou +, la nouvelle valeur est lue par une zone `role="status"` invisible ; avec les flèches dans le champ, le lecteur d'écran lit déjà la valeur, rien n'est répété.
+- Boutons de 40 px, focus visible de 2 px, signe et nombre contrastés en thème clair comme en thème sombre (les boutons s'éclaircissent sur fond sombre). Le nouveau nombre n'apparaît jamais en fondu depuis la transparence : il grandit, glisse, bascule ou se dévoile. En couleurs forcées, la pastille, les boutons et le focus prennent les couleurs du système.
+
+## API
+
+<ApiReference tag="cr-quantity" />

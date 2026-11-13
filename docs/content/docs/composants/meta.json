@@ -16,6 +16,7 @@
     "interrupteur",
     "boutons-radio",
     "curseur",
+    "quantite",
     "selecteur-de-date",
     "notation",
     "depot-de-fichiers",
@@ -47,6 +48,7 @@
     "---Layout---",
     "boite",
     "carte",
-    "fond-anime"
+    "fond-anime",
+    "meteo"
   ]
 }

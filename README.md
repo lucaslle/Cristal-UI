@@ -144,7 +144,7 @@ Ils participent au `<form>` parent comme des champs natifs (valeur envoyée, val
 | `hint` | tous | texte d'aide, lu par les lecteurs d'écran |
 | `error` | tous | message d'erreur : bordure rouge, `aria-invalid`, lu par les lecteurs d'écran |
 | `required`, `disabled` | tous | comme les champs natifs |
-| `error-animation` | tous, et `cr-textarea`, `cr-otp`, `cr-tag-input`, `cr-card-input`, `cr-radio-group`, `cr-date-picker`, `cr-file-upload` | anime l'erreur quand elle apparaît et à chaque envoi refusé : `none` (par défaut), `zigzag`, `pop`, `drop`, `echo`, `jitter` ou `wobble` ; immobile quand l'utilisateur réduit les animations |
+| `error-animation` | tous, et `cr-textarea`, `cr-otp`, `cr-tag-input`, `cr-card-input`, `cr-radio-group`, `cr-date-picker`, `cr-quantity`, `cr-file-upload` | anime l'erreur quand elle apparaît et à chaque envoi refusé : `none` (par défaut), `zigzag`, `pop`, `drop`, `echo`, `jitter` ou `wobble` ; immobile quand l'utilisateur réduit les animations |
 | `type` | `cr-input` | `text`, `email`, `password`, `number`, `tel`, `url`, `search` |
 | `placeholder` | `cr-input`, `cr-select` | texte indicatif / texte affiché tant qu'aucune option n'est choisie |
 | `autocomplete` | `cr-input` | comme le champ natif |
@@ -208,6 +208,14 @@ Choix d'une valeur numérique dans un intervalle : `input type="range"` natif (f
 
 ```tsx
 <CrSlider label="Volume" name="volume" step={5} value={volume} onCrInput={(event) => setVolume(event.detail)} />
+```
+
+### Quantité : `cr-quantity`
+
+Sélecteur de quantité associé aux formulaires : un nombre entre un bouton − et un bouton +, dans une pastille (motif Spinbutton de l'APG : flèches pour un pas, Page précédente/suivante pour dix, Début, Fin ; le nombre peut aussi être tapé, validé par Entrée ou en quittant le champ et ramené entre les bornes). `label` obligatoire et visible, `name`, `value` (0 ramené entre les bornes par défaut), `min` (0), `max`, `step` (1), `hint`, `error`, `required`, `disabled`, `error-animation`. Messages de validation traduits (bornes, pas, champ vide). Les boutons s'appellent « Diminuer » et « Augmenter » suivis du libellé ; à une borne ils passent en `aria-disabled` et gardent le focus, et une valeur changée par un bouton est annoncée. `animation` choisit l'effet d'un pas, au clic comme au clavier : `press` (le bouton s'écrase, le nombre surgit, par défaut), `slide` (le nombre arrive du côté du bouton), `ripple` (une onde dévoile le nombre), `stretch` (la pastille s'étire, le nombre tangue), `spin` (le signe fait un demi-tour, le nombre bascule) ou `halo` (un anneau jaillit, le nombre descend) ; immobile quand l'utilisateur réduit les animations. Événements `onCrInput` (chaque nouvelle valeur, frappe comprise) et `onCrChange` (chaque valeur validée : un pas, ou la frappe validée).
+
+```tsx
+<CrQuantity label="Quantité" name="quantite" max={9} value={quantite} animation="ripple" onCrInput={(event) => setQuantite(event.detail)} />
 ```
 
 ### Sélecteur de date : `cr-date-picker`
@@ -288,6 +296,18 @@ Conteneur dont le contenu s'affiche par-dessus un fond décoratif animé, aux co
 <CrBackground variant="aurora">
   <h1>Vos factures, sans effort</h1>
 </CrBackground>
+```
+
+### Carte météo : `cr-weather`
+
+Carte en verre dépoli (flou d'arrière-plan, bord clair, ombre douce) dont le temps se voit sur le verre, derrière le contenu de l'application : `condition` vaut `clear` (par défaut, soleil doux et reflets qui balaient le verre), `rain` (gouttes qui perlent, fusionnent et coulent), `storm` (forte pluie, sans éclair), `fog` (buée que le pointeur essuie, et qui revient), `frost` (givre qui pousse depuis les bords), `heat` (lueur chaude et reflets qui ondulent) ou `wind` (filets d'air, feuilles). Un changement passe d'un effet à l'autre en fondu. Le contenu reste dans la page, lisible et cliquable ; le texte en `--cr-color-text` garde 4,5:1 sur le verre. Bouton pause dans le coin (`controls={false}` le masque), `paused` arrête l'animation ; elle démarre en pause sur une image fixe quand l'utilisateur réduit les animations, et s'arrête hors de l'écran ou quand l'onglet est caché. Couleurs à changer en CSS : `--cr-weather-glass`, `--cr-weather-tint` et `--cr-weather-warm`.
+
+```tsx
+<CrWeather condition="rain">
+  <h3>Lyon</h3>
+  <p>14°</p>
+  <p>Pluie fine</p>
+</CrWeather>
 ```
 
 ### Modale et panneau latéral : `cr-dialog`, `cr-drawer`

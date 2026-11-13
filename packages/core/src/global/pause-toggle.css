@@ -1,0 +1,42 @@
+/* Bouton pause des animations décoratives, en bas à droite du composant (utils/pause-toggle.tsx). */
+.toggle {
+  position: absolute;
+  z-index: 1;
+  inset-block-end: var(--cr-spacing-sm);
+  inset-inline-end: var(--cr-spacing-sm);
+  display: grid;
+  place-items: center;
+  width: var(--cr-control-xs);
+  height: var(--cr-control-xs);
+  padding: 0;
+  color: var(--cr-color-text);
+  background: var(--cr-color-surface);
+  border: 1px solid var(--cr-color-border);
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.toggle:hover {
+  background: var(--cr-color-primary-subtle);
+}
+
+.toggle:focus-visible {
+  outline: 2px solid var(--cr-color-focus);
+  outline-offset: 2px;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* Contrastes élevés : la couche décorative disparaît, son bouton avec. */
+@media (forced-colors: active) {
+  .toggle {
+    display: none;
+  }
+}

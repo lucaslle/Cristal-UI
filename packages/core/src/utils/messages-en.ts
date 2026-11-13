@@ -30,6 +30,11 @@ export const en = {
 
   otpDigits: (count: number) => `Enter the ${count} digits of the code.`,
 
+  quantityRange: (min: string, max?: string) => (max === undefined ? `Choose ${min} or more.` : `Choose a value between ${min} and ${max}.`),
+  quantityStep: (lower: string, upper: string | undefined, step: string) => `Choose ${upper === undefined ? lower : `${lower} or ${upper}`} (steps of ${step}).`,
+  quantityDecrease: (label: string) => `Decrease ${label}`,
+  quantityIncrease: (label: string) => `Increase ${label}`,
+
   cardDigits: (count: number) => `Enter the ${count} digits of the card.`,
   cardInvalid: 'This card number is not valid. Check the digits.',
   expiryFormat: 'Enter the expiry date as MM/YY.',

@@ -1,0 +1,118 @@
+/* Animations d'un pas : .run sur la pastille après un pas, .up ou .down pour le sens, .hit sur le bouton du côté du pas (clic ou flèche).
+   replayStep() les relance à chaque pas. Le nouveau nombre n'est jamais transparent : il grandit, glisse, bascule ou se dévoile. */
+.up {
+  --side: 1;
+  --origin: calc(100% - var(--pad) - var(--size) / 2) 50%;
+  --origin-number: calc(100% + var(--pad) + var(--size) / 2) 50%;
+}
+
+.down {
+  --side: -1;
+  --origin: calc(var(--pad) + var(--size) / 2) 50%;
+  --origin-number: calc(0px - var(--pad) - var(--size) / 2) 50%;
+}
+
+.pill {
+  /* Rayon de l'onde (ripple) : de quoi couvrir la pastille depuis un bouton. */
+  --reach: calc(var(--size) * 2.5 + var(--chars) * 14px);
+}
+
+:host([data-step-replay]) :is(.pill, .pill *),
+:host([data-step-replay]) :is(.pill, .pill *)::before,
+:host([data-step-replay]) :is(.pill, .pill *)::after {
+  animation: none !important;
+}
+
+:host([animation='slide']) .number {
+  overflow: clip;
+}
+
+:host([animation='spin']) .number {
+  perspective: 160px;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  /* press : le bouton s'écrase doucement, le nombre surgit en grandissant. */
+  :host([animation='press']) .run .hit {
+    animation: cr-q-squish 0.34s cubic-bezier(0.3, 0.7, 0.4, 1.5);
+  }
+
+  :host([animation='press']) .run .spin {
+    animation: cr-q-pop 0.38s cubic-bezier(0.2, 0.9, 0.3, 1.5);
+  }
+
+  /* slide : la pastille glisse vers le bouton, le nombre arrive de ce côté et pousse l'ancien de l'autre. */
+  :host([animation='slide']) .run {
+    animation: cr-q-nudge 0.32s ease-out;
+  }
+
+  :host([animation='slide']) .run .spin {
+    animation: cr-q-slide-in 0.34s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+
+  :host([animation='slide']) .run .ghost {
+    animation: cr-q-slide-out 0.34s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+
+  /* ripple : une onde teintée part du bouton, couvre l'ancien nombre et dévoile le nouveau en passant, puis s'efface. */
+  :host([animation='ripple']) .fx {
+    background: var(--cr-color-primary-subtle);
+    opacity: 0;
+  }
+
+  :host([animation='ripple']) .run .fx {
+    animation: cr-q-ripple 0.75s ease-out;
+  }
+
+  :host([animation='ripple']) .run .spin {
+    animation: cr-q-reveal 0.41s ease-out;
+  }
+
+  :host([animation='ripple']) .run .ghost {
+    animation: cr-q-keep 0.41s;
+  }
+
+  /* stretch : la pastille s'étire vers le bouton, qui l'accompagne, puis revient en ressort ; le nombre tangue. */
+  :host([animation='stretch']) .run.up::before {
+    animation: cr-q-stretch-right 0.6s ease-out;
+  }
+
+  :host([animation='stretch']) .run.down::before {
+    animation: cr-q-stretch-left 0.6s ease-out;
+  }
+
+  :host([animation='stretch']) .run .hit {
+    animation: cr-q-reach 0.6s ease-out;
+  }
+
+  :host([animation='stretch']) .run .spin {
+    animation: cr-q-wobble 0.6s ease-in-out;
+  }
+
+  /* spin : le signe fait un demi-tour, l'ancien nombre bascule sur la tranche et le nouveau arrive par l'autre face. */
+  :host([animation='spin']) .run .hit .glyph {
+    animation: cr-q-turn 0.5s cubic-bezier(0.3, 1.4, 0.5, 1);
+  }
+
+  :host([animation='spin']) .run .ghost {
+    animation: cr-q-flip-out 0.18s ease-in;
+  }
+
+  :host([animation='spin']) .run .spin {
+    animation: cr-q-flip-in 0.42s cubic-bezier(0.3, 1.3, 0.5, 1);
+  }
+
+  /* halo : un anneau lumineux jaillit du bouton, le nombre descend d'une taille plus grande. */
+  :host([animation='halo']) .run .hit::after {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    border-radius: 50%;
+    pointer-events: none;
+    animation: cr-q-halo 0.6s ease-out;
+  }
+
+  :host([animation='halo']) .run .spin {
+    animation: cr-q-zoom 0.4s cubic-bezier(0.2, 0.8, 0.3, 1.2);
+  }
+}

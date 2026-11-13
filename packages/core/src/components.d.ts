@@ -19,12 +19,14 @@ import { ButtonSize as ButtonSize1, ButtonType as ButtonType1 } from "./componen
 import { InputType } from "./components/cr-input/cr-input";
 import { PopupAnimation } from "./utils/popup";
 import { NumberAnimation } from "./utils/number-views";
+import { QuantityAnimation } from "./utils/quantity";
 import { StepperVariant } from "./utils/stepper";
 import { TableColumn, TableDensity, TableLayout, TableVariant } from "./utils/table-layout";
 import { Theme, ThemeToggleVariant } from "./components/cr-theme-toggle/cr-theme-toggle";
 import { ThemeTransition } from "./utils/theme-transitions";
 import { ThemeToggleIcon } from "./utils/theme-toggle-views";
 import { TooltipPlacement as TooltipPlacement1 } from "./components/cr-icon-button/cr-icon-button";
+import { WeatherCondition } from "./utils/weather-engine";
 export { AccordionAnimation, AccordionVariant } from "./utils/accordion";
 export { AvatarStatus } from "./components/cr-avatar/cr-avatar";
 export { BackgroundVariant } from "./components/cr-background/cr-background";
@@ -39,12 +41,14 @@ export { ButtonSize as ButtonSize1, ButtonType as ButtonType1 } from "./componen
 export { InputType } from "./components/cr-input/cr-input";
 export { PopupAnimation } from "./utils/popup";
 export { NumberAnimation } from "./utils/number-views";
+export { QuantityAnimation } from "./utils/quantity";
 export { StepperVariant } from "./utils/stepper";
 export { TableColumn, TableDensity, TableLayout, TableVariant } from "./utils/table-layout";
 export { Theme, ThemeToggleVariant } from "./components/cr-theme-toggle/cr-theme-toggle";
 export { ThemeTransition } from "./utils/theme-transitions";
 export { ThemeToggleIcon } from "./utils/theme-toggle-views";
 export { TooltipPlacement as TooltipPlacement1 } from "./components/cr-icon-button/cr-icon-button";
+export { WeatherCondition } from "./utils/weather-engine";
 export namespace Components {
     /**
      * Accordéon : sections cr-accordion-item qui s'ouvrent et se ferment.
@@ -1046,6 +1050,65 @@ export namespace Components {
         "steps": string[];
     }
     /**
+     * Sélecteur de quantité (motif spinbutton de l'APG) : un nombre, qui peut aussi être tapé, entre un bouton − et un bouton +, dans une pastille.
+     */
+    interface CrQuantity {
+        /**
+          * Animation d'un pas (bouton ou flèches) : press (le bouton s'écrase, le nombre surgit en grandissant, par défaut), slide (le nombre arrive du côté du bouton), ripple (une onde part du bouton et dévoile le nombre), stretch (la pastille s'étire, le nombre tangue), spin (le signe tourne, le nombre bascule) ou halo (un anneau jaillit, le nombre descend).
+          * @default 'press'
+         */
+        "animation": QuantityAnimation;
+        /**
+          * Désactive le sélecteur.
+          * @default false
+         */
+        "disabled": boolean;
+        /**
+          * Message d'erreur ; remplace le message automatique de validation.
+         */
+        "error"?: string;
+        /**
+          * Animation de l'erreur quand elle apparaît et à chaque envoi refusé : none (par défaut), zigzag, pop, drop, echo, jitter ou wobble.
+          * @default 'none'
+         */
+        "errorAnimation": ErrorAnimation;
+        /**
+          * Texte d'aide, lu par les lecteurs d'écran.
+         */
+        "hint"?: string;
+        /**
+          * Libellé affiché au-dessus du sélecteur ; il nomme aussi les boutons (« Augmenter Quantité »).
+         */
+        "label": string;
+        /**
+          * Valeur maximale ; aucune par défaut.
+         */
+        "max"?: number;
+        /**
+          * Valeur minimale ; les pas partent d'elle.
+          * @default 0
+         */
+        "min": number;
+        /**
+          * Nom envoyé avec le formulaire.
+         */
+        "name"?: string;
+        /**
+          * Rend la saisie obligatoire (le champ ne peut pas rester vide).
+          * @default false
+         */
+        "required": boolean;
+        /**
+          * Écart entre deux valeurs permises ; ses décimales donnent celles du nombre affiché.
+          * @default 1
+         */
+        "step": number;
+        /**
+          * Quantité choisie ; undefined quand l'utilisateur a vidé le champ. Par défaut : 0 ramené entre min et max.
+         */
+        "value"?: number;
+    }
+    /**
      * Choix d'une seule option dans une liste de boutons radio empilés, sous un titre visible.
      * Les options sont des éléments option enfants. Le point du bouton choisi coule jusqu'au nouveau choix.
      */
@@ -1618,6 +1681,29 @@ export namespace Components {
          */
         "text": string;
     }
+    /**
+     * Carte de verre dépoli dont le temps qu'il fait se voit sur le verre : gouttes qui perlent et coulent, buée, givre, chaleur, vent.
+     * Le contenu (ville, température, détails) est celui de l'application, dans la page, lisible et cliquable ; l'effet est décoratif,
+     * derrière lui. Un bouton dans le coin met l'animation en pause ; elle démarre en pause, sur une image fixe, quand l'utilisateur
+     * a demandé à réduire les animations, et s'arrête d'elle-même hors de l'écran ou quand l'onglet est caché.
+     */
+    interface CrWeather {
+        /**
+          * Temps sur le verre : clear (dégagé, reflets de soleil, par défaut), rain (pluie fine, gouttes qui perlent et coulent), storm (forte pluie), fog (buée que le pointeur essuie), frost (givre qui pousse depuis les bords), heat (chaleur qui monte et fait onduler les reflets) ou wind (vent, filets d'air et feuilles). Un changement passe d'un effet à l'autre en fondu.
+          * @default 'clear'
+         */
+        "condition": WeatherCondition;
+        /**
+          * Affiche le bouton pause dans le coin. À false seulement si l'application a sa propre commande pour arrêter les animations.
+          * @default true
+         */
+        "controls": boolean;
+        /**
+          * Met l'animation en pause ; le bouton pause l'inverse. Passe à true au chargement si l'utilisateur a demandé à réduire les animations.
+          * @default false
+         */
+        "paused": boolean;
+    }
 }
 export interface CrAccordionItemCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -1686,6 +1772,10 @@ export interface CrPaginationCustomEvent<T> extends CustomEvent<T> {
 export interface CrPopoverCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLCrPopoverElement;
+}
+export interface CrQuantityCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLCrQuantityElement;
 }
 export interface CrRadioGroupCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -2246,6 +2336,27 @@ declare global {
         prototype: HTMLCrProgressStepsElement;
         new (): HTMLCrProgressStepsElement;
     };
+    interface HTMLCrQuantityElementEventMap {
+        "crInput": number | undefined;
+        "crChange": number | undefined;
+    }
+    /**
+     * Sélecteur de quantité (motif spinbutton de l'APG) : un nombre, qui peut aussi être tapé, entre un bouton − et un bouton +, dans une pastille.
+     */
+    interface HTMLCrQuantityElement extends Components.CrQuantity, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLCrQuantityElementEventMap>(type: K, listener: (this: HTMLCrQuantityElement, ev: CrQuantityCustomEvent<HTMLCrQuantityElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLCrQuantityElementEventMap>(type: K, listener: (this: HTMLCrQuantityElement, ev: CrQuantityCustomEvent<HTMLCrQuantityElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLCrQuantityElement: {
+        prototype: HTMLCrQuantityElement;
+        new (): HTMLCrQuantityElement;
+    };
     interface HTMLCrRadioGroupElementEventMap {
         "crChange": string;
     }
@@ -2560,6 +2671,18 @@ declare global {
         prototype: HTMLCrTooltipElement;
         new (): HTMLCrTooltipElement;
     };
+    /**
+     * Carte de verre dépoli dont le temps qu'il fait se voit sur le verre : gouttes qui perlent et coulent, buée, givre, chaleur, vent.
+     * Le contenu (ville, température, détails) est celui de l'application, dans la page, lisible et cliquable ; l'effet est décoratif,
+     * derrière lui. Un bouton dans le coin met l'animation en pause ; elle démarre en pause, sur une image fixe, quand l'utilisateur
+     * a demandé à réduire les animations, et s'arrête d'elle-même hors de l'écran ou quand l'onglet est caché.
+     */
+    interface HTMLCrWeatherElement extends Components.CrWeather, HTMLStencilElement {
+    }
+    var HTMLCrWeatherElement: {
+        prototype: HTMLCrWeatherElement;
+        new (): HTMLCrWeatherElement;
+    };
     interface HTMLElementTagNameMap {
         "cr-accordion": HTMLCrAccordionElement;
         "cr-accordion-item": HTMLCrAccordionItemElement;
@@ -2593,6 +2716,7 @@ declare global {
         "cr-popover": HTMLCrPopoverElement;
         "cr-progress": HTMLCrProgressElement;
         "cr-progress-steps": HTMLCrProgressStepsElement;
+        "cr-quantity": HTMLCrQuantityElement;
         "cr-radio-group": HTMLCrRadioGroupElement;
         "cr-rating": HTMLCrRatingElement;
         "cr-search": HTMLCrSearchElement;
@@ -2611,6 +2735,7 @@ declare global {
         "cr-theme-toggle": HTMLCrThemeToggleElement;
         "cr-toaster": HTMLCrToasterElement;
         "cr-tooltip": HTMLCrTooltipElement;
+        "cr-weather": HTMLCrWeatherElement;
     }
 }
 declare namespace LocalJSX {
@@ -3736,6 +3861,77 @@ declare namespace LocalJSX {
         "steps"?: string[];
     }
     /**
+     * Sélecteur de quantité (motif spinbutton de l'APG) : un nombre, qui peut aussi être tapé, entre un bouton − et un bouton +, dans une pastille.
+     */
+    interface CrQuantity {
+        /**
+          * Animation d'un pas (bouton ou flèches) : press (le bouton s'écrase, le nombre surgit en grandissant, par défaut), slide (le nombre arrive du côté du bouton), ripple (une onde part du bouton et dévoile le nombre), stretch (la pastille s'étire, le nombre tangue), spin (le signe tourne, le nombre bascule) ou halo (un anneau jaillit, le nombre descend).
+          * @default 'press'
+         */
+        "animation"?: QuantityAnimation;
+        /**
+          * Désactive le sélecteur.
+          * @default false
+         */
+        "disabled"?: boolean;
+        /**
+          * Message d'erreur ; remplace le message automatique de validation.
+         */
+        "error"?: string;
+        /**
+          * Animation de l'erreur quand elle apparaît et à chaque envoi refusé : none (par défaut), zigzag, pop, drop, echo, jitter ou wobble.
+          * @default 'none'
+         */
+        "errorAnimation"?: ErrorAnimation;
+        /**
+          * The `id` of a `<form>` element to associate this element with.
+         */
+        "form"?: string;
+        /**
+          * Texte d'aide, lu par les lecteurs d'écran.
+         */
+        "hint"?: string;
+        /**
+          * Libellé affiché au-dessus du sélecteur ; il nomme aussi les boutons (« Augmenter Quantité »).
+         */
+        "label": string;
+        /**
+          * Valeur maximale ; aucune par défaut.
+         */
+        "max"?: number;
+        /**
+          * Valeur minimale ; les pas partent d'elle.
+          * @default 0
+         */
+        "min"?: number;
+        /**
+          * Nom envoyé avec le formulaire.
+         */
+        "name"?: string;
+        /**
+          * Émis quand une valeur est validée : chaque pas, ou la frappe validée par Entrée ou en quittant le champ ; detail : la quantité.
+         */
+        "onCrChange"?: (event: CrQuantityCustomEvent<number | undefined>) => void;
+        /**
+          * Émis à chaque nouvelle valeur : chaque pas, et pendant la frappe ; detail : la quantité (undefined si le champ est vide).
+         */
+        "onCrInput"?: (event: CrQuantityCustomEvent<number | undefined>) => void;
+        /**
+          * Rend la saisie obligatoire (le champ ne peut pas rester vide).
+          * @default false
+         */
+        "required"?: boolean;
+        /**
+          * Écart entre deux valeurs permises ; ses décimales donnent celles du nombre affiché.
+          * @default 1
+         */
+        "step"?: number;
+        /**
+          * Quantité choisie ; undefined quand l'utilisateur a vidé le champ. Par défaut : 0 ramené entre min et max.
+         */
+        "value"?: number;
+    }
+    /**
      * Choix d'une seule option dans une liste de boutons radio empilés, sous un titre visible.
      * Les options sont des éléments option enfants. Le point du bouton choisi coule jusqu'au nouveau choix.
      */
@@ -4396,6 +4592,29 @@ declare namespace LocalJSX {
          */
         "text": string;
     }
+    /**
+     * Carte de verre dépoli dont le temps qu'il fait se voit sur le verre : gouttes qui perlent et coulent, buée, givre, chaleur, vent.
+     * Le contenu (ville, température, détails) est celui de l'application, dans la page, lisible et cliquable ; l'effet est décoratif,
+     * derrière lui. Un bouton dans le coin met l'animation en pause ; elle démarre en pause, sur une image fixe, quand l'utilisateur
+     * a demandé à réduire les animations, et s'arrête d'elle-même hors de l'écran ou quand l'onglet est caché.
+     */
+    interface CrWeather {
+        /**
+          * Temps sur le verre : clear (dégagé, reflets de soleil, par défaut), rain (pluie fine, gouttes qui perlent et coulent), storm (forte pluie), fog (buée que le pointeur essuie), frost (givre qui pousse depuis les bords), heat (chaleur qui monte et fait onduler les reflets) ou wind (vent, filets d'air et feuilles). Un changement passe d'un effet à l'autre en fondu.
+          * @default 'clear'
+         */
+        "condition"?: WeatherCondition;
+        /**
+          * Affiche le bouton pause dans le coin. À false seulement si l'application a sa propre commande pour arrêter les animations.
+          * @default true
+         */
+        "controls"?: boolean;
+        /**
+          * Met l'animation en pause ; le bouton pause l'inverse. Passe à true au chargement si l'utilisateur a demandé à réduire les animations.
+          * @default false
+         */
+        "paused"?: boolean;
+    }
 
     interface CrAccordionAttributes {
         "multiple": boolean;
@@ -4632,6 +4851,20 @@ declare namespace LocalJSX {
         "current": number;
         "label": string;
     }
+    interface CrQuantityAttributes {
+        "label": string;
+        "name": string;
+        "value": number;
+        "min": number;
+        "max": number;
+        "step": number;
+        "hint": string;
+        "error": string;
+        "required": boolean;
+        "disabled": boolean;
+        "errorAnimation": ErrorAnimation;
+        "animation": QuantityAnimation;
+    }
     interface CrRadioGroupAttributes {
         "label": string;
         "name": string;
@@ -4758,6 +4991,11 @@ declare namespace LocalJSX {
         "text": string;
         "placement": TooltipPlacement;
     }
+    interface CrWeatherAttributes {
+        "condition": WeatherCondition;
+        "controls": boolean;
+        "paused": boolean;
+    }
 
     interface IntrinsicElements {
         "cr-accordion": Omit<CrAccordion, keyof CrAccordionAttributes> & { [K in keyof CrAccordion & keyof CrAccordionAttributes]?: CrAccordion[K] } & { [K in keyof CrAccordion & keyof CrAccordionAttributes as `attr:${K}`]?: CrAccordionAttributes[K] } & { [K in keyof CrAccordion & keyof CrAccordionAttributes as `prop:${K}`]?: CrAccordion[K] };
@@ -4792,6 +5030,7 @@ declare namespace LocalJSX {
         "cr-popover": Omit<CrPopover, keyof CrPopoverAttributes> & { [K in keyof CrPopover & keyof CrPopoverAttributes]?: CrPopover[K] } & { [K in keyof CrPopover & keyof CrPopoverAttributes as `attr:${K}`]?: CrPopoverAttributes[K] } & { [K in keyof CrPopover & keyof CrPopoverAttributes as `prop:${K}`]?: CrPopover[K] } & OneOf<"label", CrPopover["label"], CrPopoverAttributes["label"]>;
         "cr-progress": Omit<CrProgress, keyof CrProgressAttributes> & { [K in keyof CrProgress & keyof CrProgressAttributes]?: CrProgress[K] } & { [K in keyof CrProgress & keyof CrProgressAttributes as `attr:${K}`]?: CrProgressAttributes[K] } & { [K in keyof CrProgress & keyof CrProgressAttributes as `prop:${K}`]?: CrProgress[K] };
         "cr-progress-steps": Omit<CrProgressSteps, keyof CrProgressStepsAttributes> & { [K in keyof CrProgressSteps & keyof CrProgressStepsAttributes]?: CrProgressSteps[K] } & { [K in keyof CrProgressSteps & keyof CrProgressStepsAttributes as `attr:${K}`]?: CrProgressStepsAttributes[K] } & { [K in keyof CrProgressSteps & keyof CrProgressStepsAttributes as `prop:${K}`]?: CrProgressSteps[K] };
+        "cr-quantity": Omit<CrQuantity, keyof CrQuantityAttributes> & { [K in keyof CrQuantity & keyof CrQuantityAttributes]?: CrQuantity[K] } & { [K in keyof CrQuantity & keyof CrQuantityAttributes as `attr:${K}`]?: CrQuantityAttributes[K] } & { [K in keyof CrQuantity & keyof CrQuantityAttributes as `prop:${K}`]?: CrQuantity[K] } & OneOf<"label", CrQuantity["label"], CrQuantityAttributes["label"]>;
         "cr-radio-group": Omit<CrRadioGroup, keyof CrRadioGroupAttributes> & { [K in keyof CrRadioGroup & keyof CrRadioGroupAttributes]?: CrRadioGroup[K] } & { [K in keyof CrRadioGroup & keyof CrRadioGroupAttributes as `attr:${K}`]?: CrRadioGroupAttributes[K] } & { [K in keyof CrRadioGroup & keyof CrRadioGroupAttributes as `prop:${K}`]?: CrRadioGroup[K] } & OneOf<"label", CrRadioGroup["label"], CrRadioGroupAttributes["label"]>;
         "cr-rating": Omit<CrRating, keyof CrRatingAttributes> & { [K in keyof CrRating & keyof CrRatingAttributes]?: CrRating[K] } & { [K in keyof CrRating & keyof CrRatingAttributes as `attr:${K}`]?: CrRatingAttributes[K] } & { [K in keyof CrRating & keyof CrRatingAttributes as `prop:${K}`]?: CrRating[K] } & OneOf<"label", CrRating["label"], CrRatingAttributes["label"]>;
         "cr-search": Omit<CrSearch, keyof CrSearchAttributes> & { [K in keyof CrSearch & keyof CrSearchAttributes]?: CrSearch[K] } & { [K in keyof CrSearch & keyof CrSearchAttributes as `attr:${K}`]?: CrSearchAttributes[K] } & { [K in keyof CrSearch & keyof CrSearchAttributes as `prop:${K}`]?: CrSearch[K] } & OneOf<"label", CrSearch["label"], CrSearchAttributes["label"]>;
@@ -4810,6 +5049,7 @@ declare namespace LocalJSX {
         "cr-theme-toggle": Omit<CrThemeToggle, keyof CrThemeToggleAttributes> & { [K in keyof CrThemeToggle & keyof CrThemeToggleAttributes]?: CrThemeToggle[K] } & { [K in keyof CrThemeToggle & keyof CrThemeToggleAttributes as `attr:${K}`]?: CrThemeToggleAttributes[K] } & { [K in keyof CrThemeToggle & keyof CrThemeToggleAttributes as `prop:${K}`]?: CrThemeToggle[K] };
         "cr-toaster": CrToaster;
         "cr-tooltip": Omit<CrTooltip, keyof CrTooltipAttributes> & { [K in keyof CrTooltip & keyof CrTooltipAttributes]?: CrTooltip[K] } & { [K in keyof CrTooltip & keyof CrTooltipAttributes as `attr:${K}`]?: CrTooltipAttributes[K] } & { [K in keyof CrTooltip & keyof CrTooltipAttributes as `prop:${K}`]?: CrTooltip[K] } & OneOf<"text", CrTooltip["text"], CrTooltipAttributes["text"]>;
+        "cr-weather": Omit<CrWeather, keyof CrWeatherAttributes> & { [K in keyof CrWeather & keyof CrWeatherAttributes]?: CrWeather[K] } & { [K in keyof CrWeather & keyof CrWeatherAttributes as `attr:${K}`]?: CrWeatherAttributes[K] } & { [K in keyof CrWeather & keyof CrWeatherAttributes as `prop:${K}`]?: CrWeather[K] };
     }
 }
 export { LocalJSX as JSX };
@@ -4976,6 +5216,10 @@ declare module "@stencil/core" {
              */
             "cr-progress-steps": LocalJSX.IntrinsicElements["cr-progress-steps"] & JSXBase.HTMLAttributes<HTMLCrProgressStepsElement>;
             /**
+             * Sélecteur de quantité (motif spinbutton de l'APG) : un nombre, qui peut aussi être tapé, entre un bouton − et un bouton +, dans une pastille.
+             */
+            "cr-quantity": LocalJSX.IntrinsicElements["cr-quantity"] & JSXBase.HTMLAttributes<HTMLCrQuantityElement>;
+            /**
              * Choix d'une seule option dans une liste de boutons radio empilés, sous un titre visible.
              * Les options sont des éléments option enfants. Le point du bouton choisi coule jusqu'au nouveau choix.
              */
@@ -5063,6 +5307,13 @@ declare module "@stencil/core" {
              * Le texte décrit aussi cet élément pour les lecteurs d'écran. Échap la masque ; on peut la survoler sans qu'elle disparaisse.
              */
             "cr-tooltip": LocalJSX.IntrinsicElements["cr-tooltip"] & JSXBase.HTMLAttributes<HTMLCrTooltipElement>;
+            /**
+             * Carte de verre dépoli dont le temps qu'il fait se voit sur le verre : gouttes qui perlent et coulent, buée, givre, chaleur, vent.
+             * Le contenu (ville, température, détails) est celui de l'application, dans la page, lisible et cliquable ; l'effet est décoratif,
+             * derrière lui. Un bouton dans le coin met l'animation en pause ; elle démarre en pause, sur une image fixe, quand l'utilisateur
+             * a demandé à réduire les animations, et s'arrête d'elle-même hors de l'écran ou quand l'onglet est caché.
+             */
+            "cr-weather": LocalJSX.IntrinsicElements["cr-weather"] & JSXBase.HTMLAttributes<HTMLCrWeatherElement>;
         }
     }
 }

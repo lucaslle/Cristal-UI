@@ -12,6 +12,7 @@ import { RatingDemo } from './rating-demo';
 import { AvatarDemo } from './avatar-demo';
 import { BadgeDemo } from './badge-demo';
 import { BackgroundDemo } from './background-demo';
+import { WeatherDemo } from './weather-demo';
 import { PaginationDemo } from './pagination-demo';
 import { BreadcrumbDemo } from './breadcrumb-demo';
 import { SparklineDemo } from './sparkline-demo';
@@ -23,6 +24,7 @@ import { LoadingDemo } from './loading-demo';
 import { TableDemo } from './table-demo';
 import { FieldsDemo } from './fields-demo';
 import { OtpDemo } from './otp-demo';
+import { QuantityDemo } from './quantity-demo';
 import { FieldErrorDemo } from './field-error-demo';
 import { GridLayoutDemo } from './grid-layout-demo';
 import { FormDemo } from './form-demo';
@@ -172,6 +174,9 @@ export default function Page() {
       <h2>Fonds animés</h2>
       <BackgroundDemo />
 
+      <h2 id="meteo">Cartes météo</h2>
+      <WeatherDemo />
+
       <h2>Fil d'Ariane</h2>
       <BreadcrumbDemo />
 
@@ -199,6 +204,9 @@ export default function Page() {
       <h2>Champs animés</h2>
       <FieldsDemo />
       <OtpDemo />
+
+      <h2>Sélecteurs de quantité</h2>
+      <QuantityDemo />
 
       <h2>Erreurs animées</h2>
       <FieldErrorDemo />
