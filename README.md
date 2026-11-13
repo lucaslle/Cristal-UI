@@ -372,6 +372,14 @@ Court statut ou compteur : texte en contenu, `variant` (`neutral` par défaut, `
 <CrBadge variant="primary" count={nonLus} live>Non lus</CrBadge>
 ```
 
+### Graphique : `cr-chart`
+
+`type` : `column` (par défaut), `bar` (barres horizontales), `line`, `area` ou `donut`. `labels` donne les catégories, `series` les séries `{ name, values }` (8 au plus), `format` les options d'`Intl.NumberFormat`. Légende dès deux séries, bulle au survol et au clavier (flèches), tableau « Afficher les données ». Couleurs `--cr-color-chart-1` à `8`, vérifiées pour le daltonisme en clair et en sombre ; hauteur `--cr-chart-height` (240 px).
+
+```tsx
+<CrChart label="Ventes" labels={mois} series={[{ name: 'Ventes', values: ventes }]} format={{ style: 'currency', currency: 'EUR' }} />
+```
+
 ### Mini-graphique : `cr-sparkline`
 
 Petite courbe sans axes : `values` (tableau de nombres, en propriété), `label` obligatoire, `variant` (`line` par défaut, `area`). C'est une image nommée par le libellé et un résumé (« Ventes : dernière valeur 190, minimum 120, maximum 190, en hausse »). La ligne se trace au premier affichage, puis glisse point par point vers les nouvelles valeurs. Taille par défaut 120 × 32 pixels, à changer en CSS.

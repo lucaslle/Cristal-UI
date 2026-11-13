@@ -144,6 +144,16 @@ export const en = {
   selectAll: 'Select all rows',
   selectRow: (name: string) => `Select ${name}`,
   rowsSelected: (count: number) => (count ? `${count} ${count === 1 ? 'row' : 'rows'} selected.` : 'No rows selected.'),
+
+  chartShowData: 'Show data',
+  chartHideData: 'Hide data',
+  chartHelp: 'Arrow keys go through the values.',
+  chartCategory: 'Category',
+  chartShare: 'Share',
+  chartOther: 'Other',
+  chartTotal: 'Total',
+  chartEmpty: 'No data',
+  chartPoint: (label: string, values: string) => `${label}: ${values}`,
 };
 
 export type Messages = typeof en;

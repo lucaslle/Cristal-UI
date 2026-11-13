@@ -146,4 +146,14 @@ export const fr: Messages = {
   selectAll: 'Sélectionner toutes les lignes',
   selectRow: (name) => `Sélectionner ${name}`,
   rowsSelected: (count) => (count ? `${count} ${count > 1 ? 'lignes sélectionnées' : 'ligne sélectionnée'}.` : 'Aucune ligne sélectionnée.'),
+
+  chartShowData: 'Afficher les données',
+  chartHideData: 'Masquer les données',
+  chartHelp: 'Flèches : parcourir les valeurs.',
+  chartCategory: 'Catégorie',
+  chartShare: 'Part',
+  chartOther: 'Autres',
+  chartTotal: 'Total',
+  chartEmpty: 'Aucune donnée',
+  chartPoint: (label, values) => `${label} : ${values}`,
 };

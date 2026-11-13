@@ -32,6 +32,7 @@ export const CrButton = withAttributes(generated.CrButton, elements.CrButton);
 export const CrIconButton = withAttributes(generated.CrIconButton, elements.CrIconButton);
 export const CrCard = withAttributes(generated.CrCard, elements.CrCard);
 export const CrCardInput = withAttributes(generated.CrCardInput, elements.CrCardInput);
+export const CrChart = withAttributes(generated.CrChart, elements.CrChart);
 export const CrCheckbox = withAttributes(generated.CrCheckbox, elements.CrCheckbox);
 export const CrGridLayout = withAttributes(generated.CrGridLayout, elements.CrGridLayout);
 export const CrDialog = withAttributes(generated.CrDialog, elements.CrDialog);
