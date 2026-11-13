@@ -532,6 +532,7 @@ Colonnes : `sortable` trie au clic sur l'en-tête (ou S), `format` met en forme 
 
 ```bash
 pnpm install
+pnpm test        # tests unitaires de la logique pure (Vitest, moins d'une seconde)
 pnpm build
 pnpm --filter playground-next start
 pnpm --filter playground-next test:e2e
