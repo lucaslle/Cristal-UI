@@ -6,6 +6,7 @@ import { CrButton, CrDialog, CrDrawer, CrInput, CrMenu, CrSelect } from '@crista
 export function OverlayDemo() {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [noteOpen, setNoteOpen] = useState(false);
   const [result, setResult] = useState('');
 
   return (
@@ -13,6 +14,9 @@ export function OverlayDemo() {
       <CrButton onClick={() => setDialogOpen(true)}>Supprimer le produit</CrButton>
       <CrButton variant="secondary" onClick={() => setDrawerOpen(true)}>
         Filtres
+      </CrButton>
+      <CrButton variant="outline" onClick={() => setNoteOpen(true)}>
+        Note rapide
       </CrButton>
       <span data-testid="overlay-result">{result}</span>
 
@@ -45,6 +49,10 @@ export function OverlayDemo() {
         <CrButton slot="footer" onClick={() => setDrawerOpen(false)}>
           Appliquer
         </CrButton>
+      </CrDrawer>
+
+      <CrDrawer label="Note" variant="floating" movable resizable open={noteOpen} onCrClose={() => setNoteOpen(false)}>
+        <CrInput label="Titre de la note" />
       </CrDrawer>
     </div>
   );

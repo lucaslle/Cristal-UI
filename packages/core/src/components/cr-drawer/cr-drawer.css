@@ -65,3 +65,125 @@
     transition: none;
   }
 }
+
+/* Variante détachée : le panneau flotte à distance des bords, coins arrondis, et glisse depuis plus loin que son bord. */
+:host([variant='floating']) .drawer {
+  --cr-drawer-gap: var(--cr-spacing-lg);
+  width: min(var(--cr-drawer-width, 400px), 100% - 2 * var(--cr-drawer-gap));
+  height: calc(100% - 2 * var(--cr-drawer-gap));
+  margin-block: var(--cr-drawer-gap);
+  border-radius: var(--cr-radius-l);
+  box-shadow: 0 16px 48px rgba(17, 24, 39, 0.24);
+  overflow: hidden;
+  --cr-drawer-from: calc(100% + var(--cr-drawer-gap));
+}
+
+:host([variant='floating']) .drawer.end {
+  margin-inline-end: var(--cr-drawer-gap);
+}
+
+:host([variant='floating']) .drawer.start {
+  margin-inline-start: var(--cr-drawer-gap);
+}
+
+:host([variant='floating']) .drawer.start,
+:host([variant='floating']) .drawer.end:dir(rtl) {
+  --cr-drawer-from: calc(-100% - var(--cr-drawer-gap));
+}
+
+:host([variant='floating']) .drawer.start:dir(rtl) {
+  --cr-drawer-from: calc(100% + var(--cr-drawer-gap));
+}
+
+/* Déplaçable : l'en-tête sert de poignée. */
+:host([variant='floating'][movable]) .header {
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+}
+
+.drawer[data-dragging] .header {
+  cursor: grabbing;
+}
+
+/* Pendant le déplacement, le panneau suit le pointeur sans transition. */
+.drawer[data-dragging] {
+  transition: none;
+}
+
+.handle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: var(--cr-control-s);
+  height: var(--cr-control-m);
+  margin-inline-end: calc(-1 * var(--cr-spacing-sm));
+  padding: 0;
+  color: var(--cr-color-text-muted);
+  background: transparent;
+  border: none;
+  border-radius: var(--cr-radius-m);
+  cursor: inherit;
+}
+
+.handle:hover {
+  color: var(--cr-color-text);
+  background: var(--cr-color-disabled);
+}
+
+.handle:focus-visible {
+  outline: 2px solid var(--cr-color-focus);
+  outline-offset: 2px;
+}
+
+.title {
+  flex: 1;
+}
+
+/* Coin de redimensionnement, en bas du côté de la page : à gauche d'un panneau placé à droite, et inversement. */
+.resize {
+  position: absolute;
+  bottom: 2px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  color: var(--cr-color-text-muted);
+  background: transparent;
+  border: none;
+  border-radius: var(--cr-radius-m);
+  touch-action: none;
+}
+
+.resize.at-left {
+  left: 2px;
+  cursor: nesw-resize;
+}
+
+.resize.at-left svg {
+  transform: scaleX(-1);
+}
+
+.resize.at-right {
+  right: 2px;
+  cursor: nwse-resize;
+}
+
+.resize:hover {
+  color: var(--cr-color-text);
+  background: var(--cr-color-disabled);
+}
+
+.resize:focus-visible {
+  outline: 2px solid var(--cr-color-focus);
+  outline-offset: -2px;
+}
+
+@media (forced-colors: active) {
+  :host([variant='floating']) .drawer {
+    border: 1px solid CanvasText;
+  }
+}

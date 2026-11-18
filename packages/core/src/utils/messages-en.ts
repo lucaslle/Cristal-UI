@@ -164,6 +164,10 @@ export const en = {
   keyOption: 'Option',
   keyShift: 'Shift',
   keyControl: 'Control',
+  moveDrawer: 'Move the panel',
+  moveDrawerHint: 'Arrow keys move the panel, Shift for bigger steps.',
+  resizeDrawer: 'Resize the panel',
+  resizeDrawerHint: 'Left and right arrows change the width, up and down the height, Shift for bigger steps.',
 };
 
 export type Messages = typeof en;

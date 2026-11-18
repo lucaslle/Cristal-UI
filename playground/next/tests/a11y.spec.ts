@@ -17,7 +17,7 @@ test('page in the dark theme has no WCAG 2.1 AA violations detectable by axe', a
   expect((await audit(page)).violations).toEqual([]);
 });
 
-for (const [trigger, name] of [['Supprimer le produit', 'Supprimer le produit ?'], ['Filtres', 'Filtres']]) {
+for (const [trigger, name] of [['Supprimer le produit', 'Supprimer le produit ?'], ['Filtres', 'Filtres'], ['Note rapide', 'Note']]) {
   test(`open overlay "${name}" has no WCAG 2.1 AA violations detectable by axe`, async ({ page }) => {
     await page.goto('/');
     await page.getByRole('button', { name: trigger }).click();

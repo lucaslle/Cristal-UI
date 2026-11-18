@@ -167,4 +167,8 @@ export const fr: Messages = {
   keyOption: 'Option',
   keyShift: 'Maj',
   keyControl: 'Contrôle',
+  moveDrawer: 'Déplacer le panneau',
+  moveDrawerHint: 'Les flèches déplacent le panneau, Maj pour aller plus loin.',
+  resizeDrawer: 'Redimensionner le panneau',
+  resizeDrawerHint: 'Flèches gauche et droite : largeur, haut et bas : hauteur ; Maj pour aller plus loin.',
 };
