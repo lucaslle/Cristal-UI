@@ -608,7 +608,9 @@ export namespace Components {
         "open": boolean;
     }
     /**
-     * Panneau latéral, basé sur l'élément dialog natif.
+     * Panneau latéral, basé sur l'élément dialog natif. En variante floating, il se détache des bords de l'écran ;
+     * avec movable, on le déplace en glissant son en-tête, ou au clavier avec les flèches sur sa poignée ;
+     * avec resizable, on change sa taille par son coin du bas, à la souris ou avec les flèches.
      */
     interface CrDrawer {
         /**
@@ -625,6 +627,11 @@ export namespace Components {
          */
         "label": string;
         /**
+          * Avec variant="floating" : le panneau se déplace en glissant son en-tête, ou avec les flèches sur sa poignée ; il revient à son bord à la fermeture.
+          * @default false
+         */
+        "movable": boolean;
+        /**
           * Ouvre ou ferme le panneau.
           * @default false
          */
@@ -634,6 +641,16 @@ export namespace Components {
           * @default 'end'
          */
         "placement": 'start' | 'end';
+        /**
+          * Avec variant="floating" : la taille du panneau se change par son coin du bas (côté page), à la souris ou avec les flèches ; elle revient à l'origine à la fermeture.
+          * @default false
+         */
+        "resizable": boolean;
+        /**
+          * Allure : docked (collé au bord, sur toute la hauteur) ou floating (détaché des bords, coins arrondis).
+          * @default 'docked'
+         */
+        "variant": 'docked' | 'floating';
     }
     /**
      * État vide : ce qui s'affiche quand une liste, une recherche ou une page n'a rien à montrer, avec de quoi en sortir.
@@ -2247,7 +2264,9 @@ declare global {
         "crClose": void;
     }
     /**
-     * Panneau latéral, basé sur l'élément dialog natif.
+     * Panneau latéral, basé sur l'élément dialog natif. En variante floating, il se détache des bords de l'écran ;
+     * avec movable, on le déplace en glissant son en-tête, ou au clavier avec les flèches sur sa poignée ;
+     * avec resizable, on change sa taille par son coin du bas, à la souris ou avec les flèches.
      */
     interface HTMLCrDrawerElement extends Components.CrDrawer, HTMLStencilElement {
         addEventListener<K extends keyof HTMLCrDrawerElementEventMap>(type: K, listener: (this: HTMLCrDrawerElement, ev: CrDrawerCustomEvent<HTMLCrDrawerElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -3557,7 +3576,9 @@ declare namespace LocalJSX {
         "open"?: boolean;
     }
     /**
-     * Panneau latéral, basé sur l'élément dialog natif.
+     * Panneau latéral, basé sur l'élément dialog natif. En variante floating, il se détache des bords de l'écran ;
+     * avec movable, on le déplace en glissant son en-tête, ou au clavier avec les flèches sur sa poignée ;
+     * avec resizable, on change sa taille par son coin du bas, à la souris ou avec les flèches.
      */
     interface CrDrawer {
         /**
@@ -3574,6 +3595,11 @@ declare namespace LocalJSX {
          */
         "label": string;
         /**
+          * Avec variant="floating" : le panneau se déplace en glissant son en-tête, ou avec les flèches sur sa poignée ; il revient à son bord à la fermeture.
+          * @default false
+         */
+        "movable"?: boolean;
+        /**
           * Émis à chaque fermeture : Échap, bouton Fermer, clic à côté (avec closeOnBackdrop) ou open à false.
          */
         "onCrClose"?: (event: CrDrawerCustomEvent<void>) => void;
@@ -3587,6 +3613,16 @@ declare namespace LocalJSX {
           * @default 'end'
          */
         "placement"?: 'start' | 'end';
+        /**
+          * Avec variant="floating" : la taille du panneau se change par son coin du bas (côté page), à la souris ou avec les flèches ; elle revient à l'origine à la fermeture.
+          * @default false
+         */
+        "resizable"?: boolean;
+        /**
+          * Allure : docked (collé au bord, sur toute la hauteur) ou floating (détaché des bords, coins arrondis).
+          * @default 'docked'
+         */
+        "variant"?: 'docked' | 'floating';
     }
     /**
      * État vide : ce qui s'affiche quand une liste, une recherche ou une page n'a rien à montrer, avec de quoi en sortir.
@@ -5096,6 +5132,9 @@ declare namespace LocalJSX {
         "label": string;
         "closeLabel": string;
         "placement": 'start' | 'end';
+        "variant": 'docked' | 'floating';
+        "movable": boolean;
+        "resizable": boolean;
         "closeOnBackdrop": boolean;
     }
     interface CrEmptyStateAttributes {
@@ -5534,7 +5573,9 @@ declare module "@stencil/core" {
              */
             "cr-dialog": LocalJSX.IntrinsicElements["cr-dialog"] & JSXBase.HTMLAttributes<HTMLCrDialogElement>;
             /**
-             * Panneau latéral, basé sur l'élément dialog natif.
+             * Panneau latéral, basé sur l'élément dialog natif. En variante floating, il se détache des bords de l'écran ;
+             * avec movable, on le déplace en glissant son en-tête, ou au clavier avec les flèches sur sa poignée ;
+             * avec resizable, on change sa taille par son coin du bas, à la souris ou avec les flèches.
              */
             "cr-drawer": LocalJSX.IntrinsicElements["cr-drawer"] & JSXBase.HTMLAttributes<HTMLCrDrawerElement>;
             /**

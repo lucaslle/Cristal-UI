@@ -44,13 +44,17 @@ export const releaseScroll = () => {
 
 interface OverlayContentProps {
   label: string;
+  /** Élément placé avant le titre, comme la poignée d'un panneau déplaçable. */
+  handle?: unknown;
+  onHeaderPointerDown?: (event: PointerEvent) => void;
   closeLabel: string;
   hasFooter: boolean;
   onCloseClick: () => void;
 }
 
-export const OverlayContent = ({ label, closeLabel, hasFooter, onCloseClick }: OverlayContentProps) => [
-  <div class="header" part="header">
+export const OverlayContent = ({ label, handle, onHeaderPointerDown, closeLabel, hasFooter, onCloseClick }: OverlayContentProps) => [
+  <div class="header" part="header" onPointerDown={onHeaderPointerDown}>
+    {handle}
     <h2 class="title" id="title" part="title">
       {label}
     </h2>

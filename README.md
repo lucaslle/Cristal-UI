@@ -330,6 +330,7 @@ Basés sur l'élément natif `<dialog>` : focus piégé dans la fenêtre, fermet
 | `label` | titre affiché, et nom de la fenêtre pour les lecteurs d'écran (obligatoire) |
 | `closeLabel` | libellé du bouton de fermeture, « Close » par défaut (« Fermer » en français) |
 | `placement` | `cr-drawer` seulement : `end` (droite, par défaut) ou `start` (gauche) |
+| `variant`, `movable`, `resizable` | `cr-drawer` seulement : `floating` détache le panneau des bords de l'écran (coins arrondis) ; avec `movable`, on le déplace en glissant son en-tête ou avec les flèches sur sa poignée ; avec `resizable`, on change sa taille par son coin du bas, côté page (souris ou flèches). Il retrouve son bord et sa taille à la fermeture |
 | `closeOnBackdrop` | un clic sur le fond assombri, à côté, ferme la fenêtre (`true` par défaut ; `false` pour l'empêcher) |
 
 Contenu dans le slot par défaut, boutons d'action dans `slot="footer"`. L'événement `onCrClose` est émis à chaque fermeture (Échap, bouton Fermer, clic à côté, `open` à `false`). Largeur du drawer : variable CSS `--cr-drawer-width` (400px par défaut).

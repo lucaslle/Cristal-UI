@@ -3,6 +3,7 @@ title: Drawer
 description: A side panel for filters, details or a form. cr-drawer tag, CrDrawer React component.
 ---
 
+import DrawerFloating from '@/demos/en/drawer-floating';
 import DrawerFilters from '@/demos/en/drawer-filters';
 
 ## Example
@@ -15,9 +16,19 @@ Works like the [dialog](/docs/composants/modale), but the panel takes the full h
 
 <include>../../../demos/en/drawer-filters.tsx</include>
 
+## Floating, movable and resizable panel
+
+With `variant="floating"`, the panel comes away from the screen edges: it floats at a distance from the edge, top and bottom, with rounded corners, and slides in from beyond its edge. `movable` then lets the user move it on the page to see what it hides: drag its header or, with the keyboard, focus its handle (left of the title) and use the arrow keys, with Shift for bigger steps. With `resizable`, its size can change too: drag the bottom corner on the page side (left of a panel placed on the right) or, with the keyboard, focus that corner and use the arrow keys (left and right for the width, up and down for the height). The panel stays on screen, keeps a minimum size (280 × 200 px), and gets back its edge and size when it closes.
+
+<Preview>
+  <DrawerFloating />
+</Preview>
+
+<include>../../../demos/en/drawer-floating.tsx</include>
+
 ## Accessibility
 
-Same guarantees as the dialog: focus trapped then restored, Escape, inert page and blocked scrolling, title as the panel's name. A click on the dimmed background next to the panel closes it too; `closeOnBackdrop={false}` prevents it.
+Same guarantees as the dialog: focus trapped then restored, Escape, inert page and blocked scrolling, title as the panel's name. The handle of a movable panel is a button named "Move the panel", whose description gives the keys; so is the "Resize the panel" corner. A click on the dimmed background next to the panel closes it too; `closeOnBackdrop={false}` prevents it.
 
 ## API
 

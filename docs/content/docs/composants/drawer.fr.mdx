@@ -3,6 +3,7 @@ title: Drawer
 description: Panneau latéral pour des filtres, des détails ou un formulaire. Balise cr-drawer, composant React CrDrawer.
 ---
 
+import DrawerFloating from '@/demos/drawer-floating';
 import DrawerFilters from '@/demos/drawer-filters';
 
 ## Exemple
@@ -15,9 +16,19 @@ Même fonctionnement que la [modale](/docs/composants/modale), mais le panneau o
 
 <include>../../../demos/drawer-filters.tsx</include>
 
+## Panneau flottant, déplaçable et redimensionnable
+
+Avec `variant="floating"`, le panneau se détache des bords de l'écran : il flotte à distance du bord, du haut et du bas, avec des coins arrondis, et glisse depuis plus loin que son bord. `movable` permet ensuite de le déplacer sur la page pour voir ce qu'il cache : on glisse son en-tête, ou, au clavier, on place le focus sur sa poignée (à gauche du titre) et on utilise les flèches, avec Maj pour aller plus loin. Avec `resizable`, sa taille se change aussi : on tire le coin du bas, côté page (à gauche d'un panneau placé à droite), ou, au clavier, on place le focus sur ce coin et on utilise les flèches (gauche et droite pour la largeur, haut et bas pour la hauteur). Le panneau reste dans l'écran, garde une taille minimale (280 × 200 px), et retrouve son bord et sa taille à la fermeture.
+
+<Preview>
+  <DrawerFloating />
+</Preview>
+
+<include>../../../demos/drawer-floating.tsx</include>
+
 ## Accessibilité
 
-Mêmes garanties que la modale : focus piégé puis restauré, Échap, page inerte et défilement bloqué, titre comme nom du panneau. Un clic sur le fond assombri, à côté du panneau, le ferme aussi ; `closeOnBackdrop={false}` l'empêche.
+Mêmes garanties que la modale : focus piégé puis restauré, Échap, page inerte et défilement bloqué, titre comme nom du panneau. La poignée d'un panneau déplaçable est un bouton nommé « Déplacer le panneau », dont la description indique les touches ; il en va de même du coin « Redimensionner le panneau ». Un clic sur le fond assombri, à côté du panneau, le ferme aussi ; `closeOnBackdrop={false}` l'empêche.
 
 ## API
 
