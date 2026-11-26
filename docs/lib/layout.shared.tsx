@@ -7,7 +7,7 @@ export function baseOptions(lang: string): BaseLayoutProps {
     nav: {
       url: `/${lang}`,
       title: (
-        <span className="font-display inline-flex items-center gap-2 text-lg font-semibold">
+        <span className="font-display inline-flex items-center gap-2 text-2xl">
           <Logo />
           {appName}
         </span>

@@ -1,4 +1,4 @@
-import { Inter, Sora } from 'next/font/google';
+import { Instrument_Serif, Inter } from 'next/font/google';
 import { Provider } from '@/components/provider';
 import '@cristal-ui/react/tokens.css';
 import '@cristal-ui/react/tokens-dark.css';
@@ -9,10 +9,10 @@ const inter = Inter({
   subsets: ['latin'],
 });
 
-const sora = Sora({
+const serif = Instrument_Serif({
   subsets: ['latin'],
-  weight: ['600', '700', '800'],
-  variable: '--font-sora',
+  weight: '400',
+  variable: '--font-serif',
 });
 
 const descriptions: Record<Lang, string> = {
@@ -33,7 +33,7 @@ export function generateStaticParams() {
 export default async function Layout({ children, params }: LayoutProps<'/[lang]'>) {
   const { lang } = await params;
   return (
-    <html lang={lang} className={`${inter.className} ${sora.variable}`} suppressHydrationWarning>
+    <html lang={lang} className={`${inter.className} ${serif.variable}`} suppressHydrationWarning>
       <body className="flex flex-col min-h-screen">
         <Provider lang={lang}>{children}</Provider>
       </body>

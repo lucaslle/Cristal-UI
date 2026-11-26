@@ -16,7 +16,7 @@ export function ThemePlay({ lang }: { lang: string }) {
     <section className="mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-12 px-6 py-24 lg:grid-cols-2">
       <div className="flex flex-col gap-6">
         <p className="text-sm font-medium text-fd-muted-foreground">{c.themeKicker}</p>
-        <h2 className="font-display text-3xl font-semibold sm:text-4xl">{c.themeTitle}</h2>
+        <h2 className="font-display text-4xl sm:text-5xl">{c.themeTitle}</h2>
         <p className="text-lg text-fd-muted-foreground">{c.themeLead}</p>
         <fieldset className="flex flex-wrap gap-3">
           <legend className="mb-3 font-medium">{c.themeLegend}</legend>

@@ -9,7 +9,7 @@ export function Hero({ lang }: { lang: string }) {
     <section className="border-b">
       <div className="mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-12 px-6 py-16 lg:grid-cols-[1fr_1.1fr] lg:gap-16 lg:py-24">
         <div className="flex min-w-0 flex-col items-start gap-6">
-          <h1 className="font-display text-4xl font-semibold leading-[1.1] tracking-[-0.025em] sm:text-5xl lg:text-6xl">{c.title}</h1>
+          <h1 className="font-display text-5xl leading-[1.02] sm:text-6xl lg:text-7xl">{c.title}</h1>
           <p className="max-w-xl text-lg leading-relaxed text-fd-muted-foreground">{c.lead}</p>
           <div className="mt-2 flex flex-wrap gap-3">
             <Link href={`/${lang}/docs/installation`} className="btn-primary">
@@ -26,7 +26,7 @@ export function Hero({ lang }: { lang: string }) {
         {c.stats(data.components.length).map(([value, label]) => (
           <div key={label} className="flex flex-col gap-1 px-6 py-8">
             <dt className="order-2 text-sm text-fd-muted-foreground">{label}</dt>
-            <dd className="font-display order-1 text-3xl font-medium tabular-nums">{value}</dd>
+            <dd className="font-display order-1 text-4xl tabular-nums">{value}</dd>
           </div>
         ))}
       </dl>
