@@ -1,6 +1,6 @@
 {
   "name": "@cristal/react",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "React and Next.js wrappers for the Cristal accessible web components, with server rendering and design tokens.",
   "keywords": [
     "react",
