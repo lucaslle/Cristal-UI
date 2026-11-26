@@ -6,7 +6,7 @@ import { ThemePlay } from '@/components/home/theme-play';
 export default async function HomePage({ params }: PageProps<'/[lang]'>) {
   const { lang } = await params;
   return (
-    <main className="home flex flex-1 flex-col">
+    <main className="flex flex-1 flex-col">
       <Hero lang={lang} />
       <Showcase lang={lang} />
       <ThemePlay lang={lang} />

@@ -7,39 +7,39 @@ html {
 }
 
 :root {
-  --color-fd-background: hsl(255, 25%, 93%);
-  --color-fd-foreground: hsl(255, 30%, 14%);
-  --color-fd-muted: hsl(255, 20%, 90%);
-  --color-fd-muted-foreground: hsl(255, 15%, 35%);
-  --color-fd-popover: hsl(255, 30%, 97%);
-  --color-fd-popover-foreground: hsl(255, 30%, 14%);
-  --color-fd-card: hsl(255, 30%, 96%);
-  --color-fd-card-foreground: hsl(255, 30%, 14%);
-  --color-fd-border: hsla(255, 20%, 60%, 0.35);
+  --color-fd-background: hsl(250, 12%, 96%);
+  --color-fd-foreground: hsl(250, 24%, 13%);
+  --color-fd-muted: hsl(250, 10%, 92%);
+  --color-fd-muted-foreground: hsl(250, 10%, 36%);
+  --color-fd-popover: hsl(250, 14%, 99%);
+  --color-fd-popover-foreground: hsl(250, 24%, 13%);
+  --color-fd-card: hsl(250, 14%, 98.5%);
+  --color-fd-card-foreground: hsl(250, 24%, 13%);
+  --color-fd-border: hsla(250, 20%, 20%, 0.12);
   --color-fd-primary: hsl(262, 69%, 50%);
   --color-fd-primary-foreground: hsl(0, 0%, 100%);
-  --color-fd-secondary: hsl(255, 25%, 89%);
-  --color-fd-secondary-foreground: hsl(255, 30%, 14%);
-  --color-fd-accent: hsl(255, 30%, 86%);
-  --color-fd-accent-foreground: hsl(262, 60%, 25%);
+  --color-fd-secondary: hsl(250, 10%, 91%);
+  --color-fd-secondary-foreground: hsl(250, 24%, 13%);
+  --color-fd-accent: hsl(250, 14%, 90%);
+  --color-fd-accent-foreground: hsl(262, 60%, 30%);
   --color-fd-ring: hsl(262, 69%, 50%);
 }
 
 .dark {
-  --color-fd-background: hsl(255, 18%, 14%);
-  --color-fd-foreground: hsl(255, 30%, 92%);
-  --color-fd-muted: hsl(255, 16%, 19%);
-  --color-fd-muted-foreground: hsl(255, 18%, 72%);
-  --color-fd-popover: hsl(255, 18%, 16%);
-  --color-fd-popover-foreground: hsl(255, 30%, 92%);
-  --color-fd-card: hsl(255, 18%, 17%);
-  --color-fd-card-foreground: hsl(255, 30%, 92%);
-  --color-fd-border: hsla(255, 25%, 60%, 0.25);
+  --color-fd-background: hsl(250, 12%, 11%);
+  --color-fd-foreground: hsl(250, 20%, 92%);
+  --color-fd-muted: hsl(250, 10%, 16%);
+  --color-fd-muted-foreground: hsl(250, 10%, 68%);
+  --color-fd-popover: hsl(250, 12%, 14%);
+  --color-fd-popover-foreground: hsl(250, 20%, 92%);
+  --color-fd-card: hsl(250, 12%, 14%);
+  --color-fd-card-foreground: hsl(250, 20%, 92%);
+  --color-fd-border: hsla(250, 20%, 90%, 0.1);
   --color-fd-primary: hsl(262, 85%, 80%);
-  --color-fd-primary-foreground: hsl(255, 30%, 12%);
-  --color-fd-secondary: hsl(255, 16%, 21%);
-  --color-fd-secondary-foreground: hsl(255, 30%, 92%);
-  --color-fd-accent: hsl(255, 18%, 24%);
+  --color-fd-primary-foreground: hsl(250, 30%, 12%);
+  --color-fd-secondary: hsl(250, 10%, 17%);
+  --color-fd-secondary-foreground: hsl(250, 20%, 92%);
+  --color-fd-accent: hsl(250, 12%, 20%);
   --color-fd-accent-foreground: hsl(262, 70%, 88%);
   --color-fd-ring: hsl(262, 85%, 80%);
 }
@@ -52,20 +52,12 @@ html > body[data-scroll-locked] {
 /* ---------- Vitrine : accueil, cadres d'exemple, titres ---------- */
 
 :root {
-  --glow-violet: #7c3aed;
-  --glow-pink: #d946ef;
-  --glow-cyan: #22d3ee;
   --font-display: var(--font-sora), ui-sans-serif, system-ui, sans-serif;
 }
 
 .font-display {
   font-family: var(--font-display);
   letter-spacing: -0.015em;
-}
-
-/* Accueil : surfaces neutres, l'accent violet seulement sur l'action principale. */
-body:has(main.home) {
-  background-image: none;
 }
 
 /* Planche de spécimens : de vrais composants posés sur une surface calme, qui suit le thème. */
@@ -179,110 +171,59 @@ body:has(main.home) {
   border-radius: 10px;
 }
 
-/* Cadres d'exemple des pages de doc. */
+/* Cadres d'exemple des pages de doc : les composants sur leur surface, sans décor. */
 .preview-frame {
-  color: #111827;
-  color-scheme: light;
-  /* Fond pointillé à l'intérieur, liseré en dégradé sur la bordure. */
-  background:
-    radial-gradient(rgb(109 40 217 / 0.12) 1px, transparent 1px) padding-box 0 0 / 18px 18px,
-    linear-gradient(#f6f4fb, #f6f4fb) padding-box,
-    linear-gradient(135deg, #c4b5fd, #f0abfc 50%, #a5f3fc) border-box;
-  border: 1px solid transparent;
-  border-radius: 20px;
-  box-shadow: 0 24px 60px -36px rgb(109 40 217 / 0.6);
+  color: var(--cr-color-text);
+  background: var(--cr-color-surface);
+  border: 1px solid var(--color-fd-border);
+  border-radius: 12px;
 }
 
-.docs-title {
-  font-family: var(--font-display);
-  letter-spacing: -0.03em;
-  background: linear-gradient(100deg, #4c1d95, #7e22ce 45%, #be185d);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-}
-
-.dark .docs-title {
-  background-image: linear-gradient(100deg, #e9d5ff, #f0abfc 55%, #a5f3fc);
-}
-
-/* ---------- Pages de doc : l'identité du prisme de l'accueil ---------- */
-
-/* Deux halos discrets en haut de l'écran, qui restent en place pendant le défilement. */
-body {
-  background-image:
-    radial-gradient(56rem 26rem at 88% -10rem, rgb(217 70 239 / 0.1), transparent 70%),
-    radial-gradient(48rem 24rem at 28% -12rem, rgb(124 58 237 / 0.12), transparent 70%);
-  background-repeat: no-repeat;
-  background-attachment: fixed;
-}
-
-.dark body {
-  background-image:
-    radial-gradient(56rem 26rem at 88% -10rem, rgb(217 70 239 / 0.14), transparent 70%),
-    radial-gradient(48rem 24rem at 28% -12rem, rgb(124 58 237 / 0.2), transparent 70%);
-}
+/* ---------- Pages de doc ---------- */
 
 .docs-hero {
-  padding-bottom: 1.75rem;
-  margin-bottom: 0.5rem;
+  padding-bottom: 28px;
+  margin-bottom: 8px;
   border-bottom: 1px solid var(--color-fd-border);
 }
 
 .docs-eyebrow {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.6rem;
-  margin: 0 0 0.9rem;
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--color-fd-primary);
-}
-
-.docs-eyebrow::before {
-  content: '';
-  width: 1.75rem;
-  height: 2px;
-  border-radius: 2px;
-  background: linear-gradient(90deg, var(--glow-violet), var(--glow-pink), var(--glow-cyan));
+  margin: 0 0 12px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-fd-muted-foreground);
 }
 
 #nd-page .docs-title {
-  margin-bottom: 0.9rem;
-  font-size: clamp(2.25rem, 4vw, 3.1rem);
-  font-weight: 700;
-  line-height: 1.08;
+  margin-bottom: 12px;
+  font-family: var(--font-display);
+  font-size: clamp(2.25rem, 4vw, 3rem);
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
 }
 
 #nd-page .docs-lead {
   max-width: 44rem;
   margin-bottom: 0;
-  font-size: 1.15rem;
+  font-size: 1.125rem;
   line-height: 1.6;
 }
 
 .docs-tags {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
-  margin: 1.1rem 0 0;
+  gap: 8px;
+  margin: 16px 0 0;
 }
 
 .docs-tags code {
-  padding: 0.3rem 0.7rem;
-  font-size: 0.8rem;
-  color: var(--color-fd-accent-foreground);
-  background: color-mix(in oklab, var(--color-fd-primary) 9%, transparent);
-  border: 1px solid color-mix(in oklab, var(--color-fd-primary) 24%, transparent);
-  border-radius: 999px;
-}
-
-.docs-tags code[data-kind='react'] {
+  padding: 4px 8px;
+  font-size: 13px;
   color: var(--color-fd-foreground);
   background: var(--color-fd-card);
-  border-color: var(--color-fd-border);
+  border: 1px solid var(--color-fd-border);
+  border-radius: 6px;
 }
 
 /* La première section suit l'en-tête de près. */
@@ -290,87 +231,35 @@ body {
   margin-top: 0.75em;
 }
 
-/* Titres de section : police d'affichage et un trait du prisme. */
 #nd-page .prose h2 {
   margin-top: 2.75em;
   font-family: var(--font-display);
-  letter-spacing: -0.02em;
-}
-
-#nd-page .prose h2::before {
-  content: '';
-  flex: none;
-  align-self: stretch;
-  width: 4px;
-  margin: 0.15em 0.5rem 0.15em 0;
-  border-radius: 4px;
-  background: linear-gradient(180deg, var(--glow-violet), var(--glow-pink));
+  font-weight: 600;
+  letter-spacing: -0.015em;
 }
 
 #nd-page .prose h3 {
   font-family: var(--font-display);
-  letter-spacing: -0.015em;
+  font-weight: 600;
 }
 
-#nd-page .prose :not(pre) > code {
-  color: var(--color-fd-accent-foreground);
-  background: color-mix(in oklab, var(--color-fd-primary) 9%, transparent);
-  border-color: color-mix(in oklab, var(--color-fd-primary) 22%, transparent);
-}
-
-/* Blocs de code : un liseré du prisme en haut, une ombre teintée. */
-#nd-page figure.shiki {
-  border-radius: 16px;
-  box-shadow: 0 18px 44px -32px rgb(76 29 149 / 0.5);
-}
-
-#nd-page figure.shiki::before {
-  content: '';
-  position: absolute;
-  inset: 0 0 auto;
-  z-index: 1;
-  height: 2px;
-  background: linear-gradient(90deg, var(--glow-violet), var(--glow-pink), var(--glow-cyan));
-  opacity: 0.75;
-}
-
-/* En mode sombre, les composants passent au thème sombre (data-theme sur <html>) : leurs cadres aussi. */
-.dark .preview-frame {
-  color: var(--cr-color-text);
-  color-scheme: dark;
-  background-color: var(--cr-color-surface);
-  background-image: radial-gradient(rgb(196 181 253 / 0.14) 1px, transparent 1px);
-}
-
-.dark .preview-frame {
-  background:
-    radial-gradient(rgb(196 181 253 / 0.14) 1px, transparent 1px) padding-box 0 0 / 18px 18px,
-    linear-gradient(var(--cr-color-surface), var(--cr-color-surface)) padding-box,
-    linear-gradient(135deg, #6d28d9, #a21caf 50%, #0e7490) border-box;
-  box-shadow: 0 24px 60px -28px rgb(168 85 247 / 0.5);
-}
-
-/* Menu latéral : rubriques en petites capitales, lien actif marqué d'un trait. */
+/* Menu latéral : rubriques en casse normale, lien actif marqué d'un trait. */
 #nd-sidebar p {
-  font-size: 0.7rem;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-fd-muted-foreground);
 }
 
 #nd-sidebar a[data-active='true'] {
-  font-weight: 600;
-  box-shadow: inset 3px 0 0 var(--color-fd-primary);
+  font-weight: 500;
+  box-shadow: inset 2px 0 0 var(--color-fd-primary);
 }
 
-/* Cartes de liens : relief au survol et flèche qui glisse. */
+/* Cartes de liens : la bordure se renforce au survol, une flèche apparaît. */
 .doc-card {
   position: relative;
-  border-radius: 16px;
-  transition:
-    transform 0.2s,
-    box-shadow 0.2s,
-    border-color 0.2s;
+  border-radius: 12px;
+  transition: border-color 150ms cubic-bezier(0.2, 0, 0, 1);
 }
 
 .doc-card h3 {
@@ -382,23 +271,18 @@ body {
   position: absolute;
   top: 50%;
   right: 1.1rem;
-  color: var(--color-fd-primary);
+  color: var(--color-fd-muted-foreground);
   opacity: 0;
-  translate: -6px -50%;
-  transition:
-    opacity 0.2s,
-    translate 0.2s;
+  translate: 0 -50%;
+  transition: opacity 150ms cubic-bezier(0.2, 0, 0, 1);
 }
 
 .doc-card:hover {
-  border-color: color-mix(in oklab, var(--color-fd-primary) 45%, transparent);
-  box-shadow: 0 16px 36px -24px rgb(109 40 217 / 0.55);
-  transform: translateY(-2px);
+  border-color: color-mix(in oklab, var(--color-fd-foreground) 24%, transparent);
 }
 
 .doc-card:hover::after {
   opacity: 1;
-  translate: 0 -50%;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -409,16 +293,8 @@ body {
   .doc-card::after {
     transition: none;
   }
-  .doc-card:hover,
   .btn-primary:active,
   .btn-secondary:active {
     transform: none;
-  }
-}
-
-@media (forced-colors: active) {
-  .docs-title {
-    color: CanvasText;
-    background: none;
   }
 }
