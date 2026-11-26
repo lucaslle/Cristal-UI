@@ -47,7 +47,7 @@
     "./dist/*": "./dist/*"
   },
   "scripts": {
-    "build": "stencil build",
+    "build": "stencil build && node scripts/untrack-hydrate-io.mjs",
     "test": "vitest run"
   },
   "dependencies": {
