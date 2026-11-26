@@ -1,5 +1,12 @@
 # @cristal-ui/react
 
+## 0.1.1
+
+### Patch Changes
+
+- Updated dependencies [fa28e2d]
+  - @cristal-ui/core@0.1.1
+
 ## 0.1.0
 
 ### Minor Changes
