@@ -1,4 +1,4 @@
-import { CrBox, CrLoader } from '@cristal/react';
+import { CrBox, CrLoader } from '@cristal-ui/react';
 
 export default function LoadingLoader() {
   return (

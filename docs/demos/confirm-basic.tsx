@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { CrBox, CrButton, CrConfirm } from '@cristal/react';
+import { CrBox, CrButton, CrConfirm } from '@cristal-ui/react';
 
 export default function ConfirmBasic() {
   const [files, setFiles] = useState(['rapport-mars.pdf', 'devis-client.docx', 'photo-equipe.jpg']);

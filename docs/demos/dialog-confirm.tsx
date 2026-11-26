@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { CrButton, CrDialog } from '@cristal/react';
+import { CrButton, CrDialog } from '@cristal-ui/react';
 
 export default function DialogConfirm() {
   const [open, setOpen] = useState(false);

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { CrMenu } from '@cristal/react';
+import { CrMenu } from '@cristal-ui/react';
 
 export default function MenuActions() {
   const [action, setAction] = useState('');

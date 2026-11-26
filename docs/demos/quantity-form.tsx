@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { CrBox, CrButton, CrQuantity } from '@cristal/react';
+import { CrBox, CrButton, CrQuantity } from '@cristal-ui/react';
 
 export default function QuantityForm() {
   const [sent, setSent] = useState('');

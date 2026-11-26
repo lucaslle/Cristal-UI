@@ -1,4 +1,4 @@
-import { CrIconButton } from '@cristal/react';
+import { CrIconButton } from '@cristal-ui/react';
 import { ArrowDown, ArrowLeft, ArrowRight, ArrowUp } from 'lucide-react';
 
 export default function IconButtonTooltip() {

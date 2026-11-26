@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { CrOtp } from '@cristal/react';
+import { CrOtp } from '@cristal-ui/react';
 
 const animations = ['pop', 'bounce', 'stretch', 'spin', 'merge', 'zoom', 'tint'] as const;
 

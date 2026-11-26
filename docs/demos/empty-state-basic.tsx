@@ -1,6 +1,6 @@
 'use client';
 
-import { CrBox, CrButton, CrEmptyState } from '@cristal/react';
+import { CrBox, CrButton, CrEmptyState } from '@cristal-ui/react';
 
 export default function EmptyStateBasic() {
   return (

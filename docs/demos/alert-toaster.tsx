@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { CrBox, CrButton, CrAlert, CrToaster } from '@cristal/react';
+import { CrBox, CrButton, CrAlert, CrToaster } from '@cristal-ui/react';
 
 const messages = {
   info: 'Une nouvelle version est disponible.',

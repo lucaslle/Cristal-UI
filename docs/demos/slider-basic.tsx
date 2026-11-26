@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { CrBox, CrSlider } from '@cristal/react';
+import { CrBox, CrSlider } from '@cristal-ui/react';
 
 export default function SliderBasic() {
   const [budget, setBudget] = useState(800);

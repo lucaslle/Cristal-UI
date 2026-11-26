@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { CrBox, CrNumber, CrProgress, CrSegmented } from '@cristal/react';
+import { CrBox, CrNumber, CrProgress, CrSegmented } from '@cristal-ui/react';
 
 const animations = [
   ['roll', 'Compteur'],

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { CrGridItem, CrGridLayout, CrSegmented } from '@cristal/react';
+import { CrGridItem, CrGridLayout, CrSegmented } from '@cristal-ui/react';
 
 const variants = ['card', 'elevated', 'soft', 'outline', 'glass'] as const;
 const handles = ['corner', 'knob', 'edges'] as const;

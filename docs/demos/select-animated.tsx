@@ -1,4 +1,4 @@
-import { CrSelect } from '@cristal/react';
+import { CrSelect } from '@cristal-ui/react';
 
 export default function SelectAnimated() {
   return (

@@ -1,5 +1,5 @@
 {
-  "name": "@cristal/core",
+  "name": "@cristal-ui/core",
   "version": "0.1.0",
   "description": "Accessible web components (RGAA, WCAG AA) with a cr- prefix, built with Stencil. Works in any framework.",
   "keywords": [
@@ -51,7 +51,7 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "@cristal/tokens": "workspace:*"
+    "@cristal-ui/tokens": "workspace:*"
   },
   "devDependencies": {
     "@stencil/core": "^4.45.2",

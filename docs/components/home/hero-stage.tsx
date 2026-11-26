@@ -1,6 +1,6 @@
 'use client';
 
-import { CrCardInput, CrIconButton, CrStep, CrStepper, CrTagInput } from '@cristal/react';
+import { CrCardInput, CrIconButton, CrStep, CrStepper, CrTagInput } from '@cristal-ui/react';
 import { Bold, Heart, Italic, Underline } from 'lucide-react';
 import { copyOf } from './copy';
 

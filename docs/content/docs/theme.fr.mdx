@@ -7,7 +7,7 @@ import { ThemeBuilder } from '@/components/theme-builder';
 
 ## Une seule couleur à choisir
 
-Pour donner votre couleur à toute l'application, une ligne suffit, après l'import de `@cristal/react/tokens.css` :
+Pour donner votre couleur à toute l'application, une ligne suffit, après l'import de `@cristal-ui/react/tokens.css` :
 
 ```css title="theme.css"
 :root {
@@ -47,8 +47,8 @@ Ajoutez la classe `cr-theme` à un conteneur et redéfinissez la couleur sur ce 
 Le thème sombre est **optionnel** : importez sa feuille après celle des jetons, puis posez `data-theme="dark"` sur `<html>`. Sans cet attribut, rien ne change, même si le système de l'utilisateur est en mode sombre : c'est vous qui décidez quand l'activer.
 
 ```tsx title="app/layout.tsx"
-import '@cristal/react/tokens.css';
-import '@cristal/react/tokens-dark.css';
+import '@cristal-ui/react/tokens.css';
+import '@cristal-ui/react/tokens-dark.css';
 
 <html lang="fr" data-theme="dark">
 ```

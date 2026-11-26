@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState, type CSSProperties } from 'react';
-import { CrButton, CrCheckbox, CrInput, CrMenu, CrSelect } from '@cristal/react';
+import { CrButton, CrCheckbox, CrInput, CrMenu, CrSelect } from '@cristal-ui/react';
 import { useI18n } from 'fumadocs-ui/contexts/i18n';
 import { contrastRatio, resolvedColor } from '@/lib/contrast';
 import { builderCopy } from './theme-builder-copy';

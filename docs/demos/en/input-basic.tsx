@@ -1,4 +1,4 @@
-import { CrInput } from '@cristal/react';
+import { CrInput } from '@cristal-ui/react';
 
 export default function InputBasic() {
   return (

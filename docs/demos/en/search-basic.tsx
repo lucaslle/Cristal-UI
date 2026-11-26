@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { CrSearch } from '@cristal/react';
+import { CrSearch } from '@cristal-ui/react';
 
 const products = ['Lamp', 'Chair', 'Rug', 'Sofa', 'Vase', 'Clock'];
 

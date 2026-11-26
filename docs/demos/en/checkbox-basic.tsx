@@ -1,4 +1,4 @@
-import { CrCheckbox } from '@cristal/react';
+import { CrCheckbox } from '@cristal-ui/react';
 
 export default function CheckboxBasic() {
   return (

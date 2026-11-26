@@ -9,7 +9,7 @@
     "build": "pnpm -r build",
     "changeset": "changeset",
     "release": "pnpm build && changeset publish",
-    "test": "pnpm --filter @cristal/core test"
+    "test": "pnpm --filter @cristal-ui/core test"
   },
   "devDependencies": {
     "@changesets/cli": "^3.0.3",

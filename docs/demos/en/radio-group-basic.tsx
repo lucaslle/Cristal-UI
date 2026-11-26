@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { CrBox, CrRadioGroup } from '@cristal/react';
+import { CrBox, CrRadioGroup } from '@cristal-ui/react';
 
 export default function RadioGroupBasic() {
   const [delivery, setDelivery] = useState('standard');

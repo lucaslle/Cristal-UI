@@ -1,7 +1,7 @@
 'use client';
 
 import { useRef, useState } from 'react';
-import { CrButton, CrStep, CrStepper } from '@cristal/react';
+import { CrButton, CrStep, CrStepper } from '@cristal-ui/react';
 
 const grid = { display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: 'var(--cr-spacing-xl)' };
 const variants = [

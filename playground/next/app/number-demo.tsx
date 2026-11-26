@@ -1,8 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import { CrButton } from '@cristal/react';
-import { CrNumber } from '@cristal/react/ssr';
+import { CrButton } from '@cristal-ui/react';
+import { CrNumber } from '@cristal-ui/react/ssr';
 
 const animations = ['roll', 'flap', 'blur', 'stagger', 'decode', 'count'] as const;
 // La deuxième valeur gagne un chiffre, la troisième en perd : les rangs apparaissent et disparaissent.

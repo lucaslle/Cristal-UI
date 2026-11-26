@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { CrBox, CrButton, CrOtp, CrSegmented } from '@cristal/react';
+import { CrBox, CrButton, CrOtp, CrSegmented } from '@cristal-ui/react';
 
 const animations = [
   ['pop', 'Pop'],

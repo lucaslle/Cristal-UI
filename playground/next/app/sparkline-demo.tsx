@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { CrButton, CrSparkline } from '@cristal/react';
+import { CrButton, CrSparkline } from '@cristal-ui/react';
 
 const WEEKS = [
   [12, 18, 15, 30, 26, 41],

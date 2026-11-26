@@ -43,7 +43,7 @@ Le nombre est formaté avec `Intl.NumberFormat` dans la langue du composant (`la
 
 <include>../../../demos/number-format.tsx</include>
 
-Avec `@cristal/react/ssr`, le HTML serveur contient déjà le nombre formaté. Le composant y est rendu seul, sans voir la langue de la page : donnez-lui `lang` (`<CrNumber lang="fr" … />`) pour que le serveur utilise déjà les séparateurs français.
+Avec `@cristal-ui/react/ssr`, le HTML serveur contient déjà le nombre formaté. Le composant y est rendu seul, sans voir la langue de la page : donnez-lui `lang` (`<CrNumber lang="fr" … />`) pour que le serveur utilise déjà les séparateurs français.
 
 <Callout>
   Si l'utilisateur a demandé à son système de réduire les animations, le nombre passe d'un coup à la nouvelle valeur, quelle que soit l'animation. Les lecteurs d'écran lisent toujours la valeur finale, jamais les chiffres intermédiaires.

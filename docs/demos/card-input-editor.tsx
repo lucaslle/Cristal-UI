@@ -1,4 +1,4 @@
-import { CrCardInput } from '@cristal/react';
+import { CrCardInput } from '@cristal-ui/react';
 
 export default function CardInputEditor() {
   return <CrCardInput label="Carte bancaire" name="card" variant="card" holder hint="Carte de test : 4242 4242 4242 4242" required />;

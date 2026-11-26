@@ -1,5 +1,5 @@
 import type { CSSProperties } from 'react';
-import { CrBackground, CrBox } from '@cristal/react';
+import { CrBackground, CrBox } from '@cristal-ui/react';
 
 const block: CSSProperties = { padding: '32px 24px 56px', borderRadius: 'var(--cr-radius-l)' };
 

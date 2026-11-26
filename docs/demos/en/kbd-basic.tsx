@@ -1,6 +1,6 @@
 'use client';
 
-import { CrBox, CrKbd } from '@cristal/react';
+import { CrBox, CrKbd } from '@cristal-ui/react';
 
 export default function KbdBasic() {
   return (

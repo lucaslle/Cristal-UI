@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { CrBox, CrSegmented, CrThemeToggle } from '@cristal/react';
+import { CrBox, CrSegmented, CrThemeToggle } from '@cristal-ui/react';
 
 const icons = [
   ['morph', 'Morph'],

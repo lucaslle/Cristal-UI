@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { CrButton, CrCheckbox, CrInput, CrSelect } from '@cristal/react';
+import { CrButton, CrCheckbox, CrInput, CrSelect } from '@cristal-ui/react';
 
 const column = { display: 'flex', flexDirection: 'column', gap: 'var(--cr-spacing-lg)', maxWidth: 400 } as const;
 

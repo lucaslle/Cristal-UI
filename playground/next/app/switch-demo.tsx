@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { CrSwitch } from '@cristal/react';
+import { CrSwitch } from '@cristal-ui/react';
 
 export function SwitchDemo() {
   const [wifi, setWifi] = useState(false);

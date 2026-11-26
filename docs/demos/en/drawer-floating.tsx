@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { CrButton, CrDrawer, CrInput, CrTextarea } from '@cristal/react';
+import { CrButton, CrDrawer, CrInput, CrTextarea } from '@cristal-ui/react';
 
 export default function DrawerFloating() {
   const [open, setOpen] = useState(false);

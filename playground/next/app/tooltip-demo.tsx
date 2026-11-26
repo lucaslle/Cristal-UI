@@ -1,6 +1,6 @@
 'use client';
 
-import { CrButton, CrTooltip } from '@cristal/react';
+import { CrButton, CrTooltip } from '@cristal-ui/react';
 
 export function TooltipDemo() {
   return (

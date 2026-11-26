@@ -1,5 +1,5 @@
 import type React from 'react';
-import { CrAccordion, CrAccordionItem, CrButton, CrIconButton, CrCard, CrCheckbox, CrInput, CrSegmented, CrSelect, CrTabPanel } from '@cristal/react/ssr';
+import { CrAccordion, CrAccordionItem, CrButton, CrIconButton, CrCard, CrCheckbox, CrInput, CrSegmented, CrSelect, CrTabPanel } from '@cristal-ui/react/ssr';
 import { AccordionDemo } from './accordion-demo';
 import { StepperDemo } from './stepper-demo';
 import { SearchDemo } from './search-demo';

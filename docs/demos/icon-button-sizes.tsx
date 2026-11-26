@@ -1,4 +1,4 @@
-import { CrIconButton } from '@cristal/react';
+import { CrIconButton } from '@cristal-ui/react';
 import { Plus } from 'lucide-react';
 
 export default function IconButtonSizes() {

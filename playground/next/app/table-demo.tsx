@@ -2,7 +2,7 @@
 
 import type React from 'react';
 import { useState } from 'react';
-import { CrCheckbox, CrSelect, CrTable } from '@cristal/react';
+import { CrCheckbox, CrSelect, CrTable } from '@cristal-ui/react';
 import { orderColumns, orderRows } from './orders';
 import { StockTableDemo } from './stock-table-demo';
 

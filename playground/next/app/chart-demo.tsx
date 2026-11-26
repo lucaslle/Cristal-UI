@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { CrButton, CrChart } from '@cristal/react';
+import { CrButton, CrChart } from '@cristal-ui/react';
 
 const MONTHS = ['Janv.', 'Févr.', 'Mars', 'Avr.', 'Mai', 'Juin', 'Juil.', 'Août', 'Sept.', 'Oct.', 'Nov.', 'Déc.'];
 const sales = [12400, 15800, 14100, 18900, 21300, 19700, 24800, 22100, 26500, 25200, 29800, 34100];

@@ -10,8 +10,8 @@ export const config: Config = {
     { type: 'docs-json', file: '../../docs/generated/components.json' },
     reactOutputTarget({
       outDir: '../react/src/generated/',
-      hydrateModule: '@cristal/core/hydrate',
-      clientModule: '@cristal/react',
+      hydrateModule: '@cristal-ui/core/hydrate',
+      clientModule: '@cristal-ui/react',
     }),
   ],
 };

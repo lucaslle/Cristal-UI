@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { CrButton, CrCommandPalette } from '@cristal/react';
+import { CrButton, CrCommandPalette } from '@cristal-ui/react';
 
 export function CommandPaletteDemo() {
   const [open, setOpen] = useState(false);

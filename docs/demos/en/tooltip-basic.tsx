@@ -1,4 +1,4 @@
-import { CrButton, CrTooltip } from '@cristal/react';
+import { CrButton, CrTooltip } from '@cristal-ui/react';
 
 export default function TooltipBasic() {
   return (

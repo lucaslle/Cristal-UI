@@ -1,4 +1,4 @@
-import { CrMenu } from '@cristal/react';
+import { CrMenu } from '@cristal-ui/react';
 
 const animations = ['fade', 'anchor-pop', 'turn-over', 'card-deal', 'drum-roll', 'outline-trace', 'tile-build'] as const;
 

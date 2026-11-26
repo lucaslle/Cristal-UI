@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { CrBox, CrButton, CrInput, CrSegmented } from '@cristal/react';
+import { CrBox, CrButton, CrInput, CrSegmented } from '@cristal-ui/react';
 
 const animations = [
   ['zigzag', 'Zigzag'],

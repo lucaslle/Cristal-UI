@@ -1,4 +1,4 @@
-import { CrButton, CrEmptyState } from '@cristal/react';
+import { CrButton, CrEmptyState } from '@cristal-ui/react';
 
 export function EmptyStateDemo() {
   return (

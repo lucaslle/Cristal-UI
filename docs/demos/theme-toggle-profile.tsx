@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useSyncExternalStore } from 'react';
-import { CrAvatar, CrBox, CrSegmented, CrSwitch, CrThemeToggle } from '@cristal/react';
+import { CrAvatar, CrBox, CrSegmented, CrSwitch, CrThemeToggle } from '@cristal-ui/react';
 
 const transitions = [
   ['circle', 'Cercle'],

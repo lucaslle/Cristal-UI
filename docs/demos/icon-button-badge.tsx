@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { CrButton, CrIconButton } from '@cristal/react';
+import { CrButton, CrIconButton } from '@cristal-ui/react';
 import { Bell, Loader, Mail } from 'lucide-react';
 
 export default function IconButtonBadge() {

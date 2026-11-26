@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { CrAlert, CrButton, CrToaster } from '@cristal/react';
+import { CrAlert, CrButton, CrToaster } from '@cristal-ui/react';
 
 interface Toast {
   id: number;

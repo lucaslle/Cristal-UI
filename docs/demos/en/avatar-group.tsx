@@ -1,6 +1,6 @@
 'use client';
 
-import { CrAvatar, CrAvatarGroup } from '@cristal/react';
+import { CrAvatar, CrAvatarGroup } from '@cristal-ui/react';
 
 const team = ['Mary Smith', 'Karim Ali', 'Lea Martin', 'Tom Little', 'Ines Moore', 'Hugo Brown'];
 

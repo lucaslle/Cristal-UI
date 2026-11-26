@@ -6,10 +6,10 @@ description: Ajouter Cristal à un projet React ou Next.js.
 ## Installer les paquets
 
 ```bash
-npm install @cristal/react
+npm install @cristal-ui/react
 ```
 
-Un seul paquet suffit : il apporte les composants (`@cristal/core`) et les tokens.
+Un seul paquet suffit : il apporte les composants (`@cristal-ui/core`) et les tokens.
 
 <Callout type="warn">
   Cristal n'est pas encore publié sur npm. En attendant, les paquets s'installent depuis les archives générées par `pnpm pack` (voir le README du dépôt).
@@ -20,7 +20,7 @@ Un seul paquet suffit : il apporte les composants (`@cristal/core`) et les token
 Une seule fois, à la racine de l'application : `app/layout.tsx` avec Next.js, `main.tsx` avec React.
 
 ```tsx
-import '@cristal/react/tokens.css';
+import '@cristal-ui/react/tokens.css';
 ```
 
 ## Choisir la langue
@@ -38,7 +38,7 @@ Les textes intégrés aux composants (messages d'erreur, boutons, annonces pour 
 ### React
 
 ```tsx
-import { CrButton } from '@cristal/react';
+import { CrButton } from '@cristal-ui/react';
 
 export function Toolbar() {
   return <CrButton onClick={() => alert('Enregistré')}>Enregistrer</CrButton>;
@@ -47,13 +47,13 @@ export function Toolbar() {
 
 ### Next.js
 
-Dans un **composant serveur**, importez depuis `@cristal/react/ssr` : le composant est rendu côté serveur, sans flash au chargement.
+Dans un **composant serveur**, importez depuis `@cristal-ui/react/ssr` : le composant est rendu côté serveur, sans flash au chargement.
 
 ```tsx
-import { CrButton } from '@cristal/react/ssr';
+import { CrButton } from '@cristal-ui/react/ssr';
 ```
 
-Dans un **composant client** (`'use client'`), importez depuis `@cristal/react`.
+Dans un **composant client** (`'use client'`), importez depuis `@cristal-ui/react`.
 
 ## Écouter les événements
 

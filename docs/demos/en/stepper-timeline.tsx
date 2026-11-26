@@ -1,7 +1,7 @@
 'use client';
 
 import { useRef, useState } from 'react';
-import { CrButton, CrStep, CrStepper } from '@cristal/react';
+import { CrButton, CrStep, CrStepper } from '@cristal-ui/react';
 
 export default function StepperTimeline() {
   const steps = useRef<HTMLCrStepperElement>(null);

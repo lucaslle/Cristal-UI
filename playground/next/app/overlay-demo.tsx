@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { CrButton, CrDialog, CrDrawer, CrInput, CrMenu, CrSelect } from '@cristal/react';
+import { CrButton, CrDialog, CrDrawer, CrInput, CrMenu, CrSelect } from '@cristal-ui/react';
 
 export function OverlayDemo() {
   const [dialogOpen, setDialogOpen] = useState(false);
