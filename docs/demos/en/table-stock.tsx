@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { CrButton, CrTable } from '@cristal/react';
+import { CrButton, CrTable } from '@cristal-ui/react';
 
 const dollars = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' });
 

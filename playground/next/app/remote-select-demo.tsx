@@ -1,7 +1,7 @@
 'use client';
 
 import { useRef, useState } from 'react';
-import { CrSelect } from '@cristal/react';
+import { CrSelect } from '@cristal-ui/react';
 
 const communes = [
   { code: '75001', name: 'Paris' },

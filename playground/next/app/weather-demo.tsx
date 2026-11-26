@@ -1,5 +1,5 @@
 import type { CSSProperties } from 'react';
-import { CrBackground, CrWeather } from '@cristal/react/ssr';
+import { CrBackground, CrWeather } from '@cristal-ui/react/ssr';
 
 const conditions = [
   ['clear', 'Dégagé'],

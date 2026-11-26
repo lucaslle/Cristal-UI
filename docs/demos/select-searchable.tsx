@@ -1,4 +1,4 @@
-import { CrSelect } from '@cristal/react';
+import { CrSelect } from '@cristal-ui/react';
 
 const cities = ['Bordeaux', 'Écully', 'Évry', 'Lille', 'Lyon', 'Marseille', 'Nantes', 'Paris', 'Strasbourg', 'Toulouse'];
 

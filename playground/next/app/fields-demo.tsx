@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { CrBox, CrButton, CrCardInput, CrInput, CrOtp, CrTagInput, CrTextarea } from '@cristal/react';
+import { CrBox, CrButton, CrCardInput, CrInput, CrOtp, CrTagInput, CrTextarea } from '@cristal-ui/react';
 
 const emails = ['mia@mail.com', 'mia.dupont@entreprise.fr', 'lucas@exemple.fr'];
 

@@ -1782,7 +1782,7 @@ export namespace Components {
     /**
      * Bascule entre thème clair et thème sombre : un bouton rond, un interrupteur ou un bouton avec libellé, dont le soleil devient une lune.
      * Pose data-theme sur <html> (le thème sombre de
-     * @cristal /tokens/tokens-dark.css), avec une transition animée sur toute la page.
+     * @cristal-ui /tokens/tokens-dark.css), avec une transition animée sur toute la page.
      * Suit aussi les changements de data-theme faits ailleurs (sélecteur de thème de l'application). Garder le choix est laissé à l'application.
      */
     interface CrThemeToggle {
@@ -2855,7 +2855,7 @@ declare global {
     /**
      * Bascule entre thème clair et thème sombre : un bouton rond, un interrupteur ou un bouton avec libellé, dont le soleil devient une lune.
      * Pose data-theme sur <html> (le thème sombre de
-     * @cristal /tokens/tokens-dark.css), avec une transition animée sur toute la page.
+     * @cristal-ui /tokens/tokens-dark.css), avec une transition animée sur toute la page.
      * Suit aussi les changements de data-theme faits ailleurs (sélecteur de thème de l'application). Garder le choix est laissé à l'application.
      */
     interface HTMLCrThemeToggleElement extends Components.CrThemeToggle, HTMLStencilElement {
@@ -4926,7 +4926,7 @@ declare namespace LocalJSX {
     /**
      * Bascule entre thème clair et thème sombre : un bouton rond, un interrupteur ou un bouton avec libellé, dont le soleil devient une lune.
      * Pose data-theme sur <html> (le thème sombre de
-     * @cristal /tokens/tokens-dark.css), avec une transition animée sur toute la page.
+     * @cristal-ui /tokens/tokens-dark.css), avec une transition animée sur toute la page.
      * Suit aussi les changements de data-theme faits ailleurs (sélecteur de thème de l'application). Garder le choix est laissé à l'application.
      */
     interface CrThemeToggle {
@@ -5741,7 +5741,7 @@ declare module "@stencil/core" {
             /**
              * Bascule entre thème clair et thème sombre : un bouton rond, un interrupteur ou un bouton avec libellé, dont le soleil devient une lune.
              * Pose data-theme sur <html> (le thème sombre de
-             * @cristal /tokens/tokens-dark.css), avec une transition animée sur toute la page.
+             * @cristal-ui /tokens/tokens-dark.css), avec une transition animée sur toute la page.
              * Suit aussi les changements de data-theme faits ailleurs (sélecteur de thème de l'application). Garder le choix est laissé à l'application.
              */
             "cr-theme-toggle": LocalJSX.IntrinsicElements["cr-theme-toggle"] & JSXBase.HTMLAttributes<HTMLCrThemeToggleElement>;

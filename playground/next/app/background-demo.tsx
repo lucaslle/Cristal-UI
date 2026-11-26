@@ -1,4 +1,4 @@
-import { CrBackground, CrButton } from '@cristal/react/ssr';
+import { CrBackground, CrButton } from '@cristal-ui/react/ssr';
 
 const variants = [
   ['aurora', 'Aurore', 'Des halos de couleur qui dérivent lentement.'],

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { CrBox, CrButton, CrSparkline } from '@cristal/react';
+import { CrBox, CrButton, CrSparkline } from '@cristal-ui/react';
 
 const random = () => Array.from({ length: 8 }, () => Math.round(20 + Math.random() * 80));
 

@@ -2,7 +2,7 @@
 
 import type { FormEvent, ReactNode } from 'react';
 import { useState } from 'react';
-import { CrButton, CrCheckbox, CrInput, CrOtp } from '@cristal/react';
+import { CrButton, CrCheckbox, CrInput, CrOtp } from '@cristal-ui/react';
 
 const variants = ['zigzag', 'pop', 'drop', 'echo', 'jitter', 'wobble', 'none'] as const;
 

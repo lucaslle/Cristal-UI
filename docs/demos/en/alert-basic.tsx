@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { CrAlert, CrBox, CrButton } from '@cristal/react';
+import { CrAlert, CrBox, CrButton } from '@cristal-ui/react';
 
 export default function AlertBasic() {
   const [error, setError] = useState(0);

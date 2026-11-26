@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { CrAvatar, CrSegmented, CrSwitch, CrThemeToggle } from '@cristal/react';
+import { CrAvatar, CrSegmented, CrSwitch, CrThemeToggle } from '@cristal-ui/react';
 
 const transitions = ['circle', 'curtain', 'blinds', 'flip', 'eclipse', 'sweep', 'none'] as const;
 const icons = [

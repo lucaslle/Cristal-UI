@@ -1,4 +1,4 @@
-import { CrBox, CrSkeleton } from '@cristal/react';
+import { CrBox, CrSkeleton } from '@cristal-ui/react';
 
 export default function LoadingSkeleton() {
   return (

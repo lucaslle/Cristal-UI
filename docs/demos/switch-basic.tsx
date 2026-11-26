@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { CrBox, CrSwitch } from '@cristal/react';
+import { CrBox, CrSwitch } from '@cristal-ui/react';
 
 export default function SwitchBasic() {
   const [notifications, setNotifications] = useState(true);

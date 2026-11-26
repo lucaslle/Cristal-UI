@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { CrButton, CrImage, CrLoader, CrProgress, CrProgressSteps, CrSkeleton } from '@cristal/react';
+import { CrButton, CrImage, CrLoader, CrProgress, CrProgressSteps, CrSkeleton } from '@cristal-ui/react';
 
 const steps = ['Recherche', 'Lecture', 'Rédaction'];
 const grid = { display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))', gap: 'var(--cr-spacing-xl)', alignItems: 'start' };

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { CrFileUpload } from '@cristal/react';
+import { CrFileUpload } from '@cristal-ui/react';
 
 export function FileUploadDemo() {
   const [names, setNames] = useState<string[]>([]);

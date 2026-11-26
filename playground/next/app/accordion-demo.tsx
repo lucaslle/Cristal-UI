@@ -1,7 +1,7 @@
 'use client';
 
 import type React from 'react';
-import { CrAccordion, CrAccordionItem } from '@cristal/react';
+import { CrAccordion, CrAccordionItem } from '@cristal-ui/react';
 
 const grid = { display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: 'var(--cr-spacing-xl)' };
 const scene = (from: string, to: string): React.CSSProperties => ({ height: '100%', minHeight: 140, borderRadius: 'var(--cr-radius-m)', background: `linear-gradient(160deg, ${from}, ${to})` });

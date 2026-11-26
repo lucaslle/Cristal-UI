@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { CrBox, CrFileUpload } from '@cristal/react';
+import { CrBox, CrFileUpload } from '@cristal-ui/react';
 
 export default function FileUploadBasic() {
   const [count, setCount] = useState(0);

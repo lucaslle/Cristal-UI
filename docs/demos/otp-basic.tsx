@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { CrOtp } from '@cristal/react';
+import { CrOtp } from '@cristal-ui/react';
 
 export default function OtpBasic() {
   const [code, setCode] = useState('');

@@ -2,7 +2,7 @@
 
 import type { CSSProperties } from 'react';
 import { useState } from 'react';
-import { CrBackground, CrBox, CrSegmented, CrWeather } from '@cristal/react';
+import { CrBackground, CrBox, CrSegmented, CrWeather } from '@cristal-ui/react';
 
 const conditions = [
   ['rain', 'Pluie fine'],

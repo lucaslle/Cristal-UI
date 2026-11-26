@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { CrBox, CrButton, CrProgressSteps } from '@cristal/react';
+import { CrBox, CrButton, CrProgressSteps } from '@cristal-ui/react';
 
 const steps = ['Recherche', 'Lecture', 'Rédaction'];
 

@@ -1,4 +1,4 @@
-import { CrButton, CrTextarea } from '@cristal/react';
+import { CrButton, CrTextarea } from '@cristal-ui/react';
 
 export default function TextareaBasic() {
   return (

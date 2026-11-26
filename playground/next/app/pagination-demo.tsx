@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { CrPagination } from '@cristal/react';
+import { CrPagination } from '@cristal-ui/react';
 
 export function PaginationDemo() {
   const [page, setPage] = useState(1);

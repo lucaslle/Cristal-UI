@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { CrButton, CrCodeBlock, CrConfirm, CrHoverCard, CrKbd } from '@cristal/react';
+import { CrButton, CrCodeBlock, CrConfirm, CrHoverCard, CrKbd } from '@cristal-ui/react';
 
 export function ContentDemo() {
   const [files, setFiles] = useState(['rapport.pdf', 'devis.docx']);
@@ -28,7 +28,7 @@ export function ContentDemo() {
         </CrHoverCard>
         .
       </div>
-      <CrCodeBlock label="Terminal" code="pnpm add @cristal/react" />
+      <CrCodeBlock label="Terminal" code="pnpm add @cristal-ui/react" />
     </div>
   );
 }

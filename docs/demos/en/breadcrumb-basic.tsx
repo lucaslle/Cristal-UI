@@ -1,4 +1,4 @@
-import { CrBox, CrBreadcrumb } from '@cristal/react';
+import { CrBox, CrBreadcrumb } from '@cristal-ui/react';
 
 export default function BreadcrumbBasic() {
   return (

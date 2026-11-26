@@ -2,7 +2,7 @@ import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 
 const read = (file: string) => {
-  const css = readFileSync(join(process.cwd(), 'node_modules/@cristal/react/dist', file), 'utf8');
+  const css = readFileSync(join(process.cwd(), 'node_modules/@cristal-ui/react/dist', file), 'utf8');
   return [...css.matchAll(/(--cr-[\w-]+):\s*([^;]+);/g)].map(([, name, value]) => ({ name, value }));
 };
 const files = { light: read('tokens.css'), dark: read('tokens-dark.css') };

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { CrBox, CrRating } from '@cristal/react';
+import { CrBox, CrRating } from '@cristal-ui/react';
 
 export default function RatingBasic() {
   const [rating, setRating] = useState(0);

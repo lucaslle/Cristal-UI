@@ -1,4 +1,4 @@
-import { CrButton } from '@cristal/react';
+import { CrButton } from '@cristal-ui/react';
 import { ChevronRight, Plus } from 'lucide-react';
 
 export default function ButtonIcons() {

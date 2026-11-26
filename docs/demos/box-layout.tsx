@@ -1,4 +1,4 @@
-import { CrBox, CrButton } from '@cristal/react';
+import { CrBox, CrButton } from '@cristal-ui/react';
 
 export default function BoxLayout() {
   return (

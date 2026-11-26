@@ -1,7 +1,7 @@
 'use client';
 
 import { useRef } from 'react';
-import { CrButton, CrGridLayout, CrGridItem } from '@cristal/react';
+import { CrButton, CrGridLayout, CrGridItem } from '@cristal-ui/react';
 
 export default function GridLayoutBasic() {
   const grid = useRef<HTMLCrGridLayoutElement>(null);

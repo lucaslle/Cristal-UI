@@ -7,27 +7,27 @@ Documentation : https://lucaslle.github.io/Cristal-UI/
 ## Installation
 
 ```bash
-npm install @cristal/react
+npm install @cristal-ui/react
 ```
 
-Un seul paquet : il apporte les composants (`@cristal/core`) et les tokens. Importer les tokens une seule fois, à la racine de l'application (`app/layout.tsx` avec Next, `main.tsx` avec React) :
+Un seul paquet : il apporte les composants (`@cristal-ui/core`) et les tokens. Importer les tokens une seule fois, à la racine de l'application (`app/layout.tsx` avec Next, `main.tsx` avec React) :
 
 ```tsx
-import '@cristal/react/tokens.css';
+import '@cristal-ui/react/tokens.css';
 ```
 
-Sans React, installer `@cristal/core` et `@cristal/tokens`, puis importer `@cristal/tokens/tokens.css`.
+Sans React, installer `@cristal-ui/core` et `@cristal-ui/tokens`, puis importer `@cristal-ui/tokens/tokens.css`.
 
 ### Avant la publication sur npm
 
-Générer les archives (`pnpm --filter @cristal/react --filter @cristal/core --filter @cristal/tokens exec pnpm pack`), les copier dans le projet, puis déclarer `@cristal/react` et dire à npm où trouver ses dépendances encore non publiées :
+Générer les archives (`pnpm --filter @cristal-ui/react --filter @cristal-ui/core --filter @cristal-ui/tokens exec pnpm pack`), les copier dans le projet, puis déclarer `@cristal-ui/react` et dire à npm où trouver ses dépendances encore non publiées :
 
 ```json
 {
-  "dependencies": { "@cristal/react": "file:vendor/cristal-react-0.0.0.tgz" },
+  "dependencies": { "@cristal-ui/react": "file:vendor/cristal-ui-react-0.0.0.tgz" },
   "overrides": {
-    "@cristal/core": "file:vendor/cristal-core-0.0.0.tgz",
-    "@cristal/tokens": "file:vendor/cristal-tokens-0.0.0.tgz"
+    "@cristal-ui/core": "file:vendor/cristal-ui-core-0.0.0.tgz",
+    "@cristal-ui/tokens": "file:vendor/cristal-ui-tokens-0.0.0.tgz"
   }
 }
 ```
@@ -48,11 +48,11 @@ Pour un thème limité à une zone : classe `cr-theme` sur le conteneur et `--cr
 
 ### Thème sombre
 
-Optionnel : importer `@cristal/react/tokens-dark.css` après `tokens.css`, puis poser `data-theme="dark"` sur `<html>` (ou la classe `cr-theme-dark` sur un conteneur). Sans l'attribut, rien ne change, même si le système est en mode sombre. La couleur principale reste celle de votre marque ; le texte, le focus et les indicateurs passent à une nuance claire de cette couleur, avec les mêmes contrastes que le thème clair (4,5:1 pour le texte, 3:1 pour les bordures et le focus).
+Optionnel : importer `@cristal-ui/react/tokens-dark.css` après `tokens.css`, puis poser `data-theme="dark"` sur `<html>` (ou la classe `cr-theme-dark` sur un conteneur). Sans l'attribut, rien ne change, même si le système est en mode sombre. La couleur principale reste celle de votre marque ; le texte, le focus et les indicateurs passent à une nuance claire de cette couleur, avec les mêmes contrastes que le thème clair (4,5:1 pour le texte, 3:1 pour les bordures et le focus).
 
 ```ts
-import '@cristal/react/tokens.css';
-import '@cristal/react/tokens-dark.css';
+import '@cristal-ui/react/tokens.css';
+import '@cristal-ui/react/tokens-dark.css';
 ```
 
 ## Langue
@@ -70,20 +70,20 @@ Les textes intégrés aux composants (messages d'erreur, boutons « Next », ann
 ### React
 
 ```tsx
-import { CrButton } from '@cristal/react';
+import { CrButton } from '@cristal-ui/react';
 
 <CrButton onClick={save}>Enregistrer</CrButton>
 ```
 
 ### Next.js
 
-Dans un composant serveur, importer depuis `@cristal/react/ssr` : le composant est rendu côté serveur, sans flash au chargement.
+Dans un composant serveur, importer depuis `@cristal-ui/react/ssr` : le composant est rendu côté serveur, sans flash au chargement.
 
 ```tsx
-import { CrButton } from '@cristal/react/ssr';
+import { CrButton } from '@cristal-ui/react/ssr';
 ```
 
-Dans un composant client (`'use client'`), importer depuis `@cristal/react`.
+Dans un composant client (`'use client'`), importer depuis `@cristal-ui/react`.
 
 ## Composants
 
@@ -380,7 +380,7 @@ Aperçu d'un lien (profil, page, produit) dans `slot="card"`, ouvert quand le po
 Code affiché tel quel (`code`, obligatoire) en police à chasse fixe (`--cr-font-mono`), avec un bouton Copier qui devient « Copié » et l'annonce aux lecteurs d'écran. `label` ajoute un titre (nom de fichier, « Terminal ») qui nomme aussi le bouton. Les lignes longues défilent en largeur, au clavier aussi. Pas de coloration syntaxique.
 
 ```tsx
-<CrCodeBlock label="Terminal" code="pnpm add @cristal/react" />
+<CrCodeBlock label="Terminal" code="pnpm add @cristal-ui/react" />
 ```
 
 ### Touche du clavier : `cr-kbd`

@@ -1,4 +1,4 @@
-import { CrAccordion, CrAccordionItem } from '@cristal/react';
+import { CrAccordion, CrAccordionItem } from '@cristal-ui/react';
 
 export default function AccordionBasic() {
   return (

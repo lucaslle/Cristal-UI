@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { CrIconButton } from '@cristal/react';
+import { CrIconButton } from '@cristal-ui/react';
 import { Bold, Heart, Italic, Underline } from 'lucide-react';
 
 export default function IconButtonToggle() {

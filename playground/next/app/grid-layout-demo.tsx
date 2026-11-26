@@ -1,7 +1,7 @@
 'use client';
 
 import { useRef, useState } from 'react';
-import { CrBox, CrButton, CrGridLayout, CrGridItem, CrSegmented } from '@cristal/react';
+import { CrBox, CrButton, CrGridLayout, CrGridItem, CrSegmented } from '@cristal-ui/react';
 import { Activity, Conversion, Revenue, Tasks, Visits } from './grid-layout-items';
 
 const extras = [

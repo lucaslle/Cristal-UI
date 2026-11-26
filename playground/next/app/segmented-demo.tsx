@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { CrSegmented, CrTabPanel } from '@cristal/react';
+import { CrSegmented, CrTabPanel } from '@cristal-ui/react';
 
 const column = { display: 'grid', gap: 'var(--cr-spacing-lg)', justifyItems: 'start' };
 

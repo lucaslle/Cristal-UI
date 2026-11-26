@@ -1,4 +1,4 @@
-import { CrAccordion, CrAccordionItem } from '@cristal/react';
+import { CrAccordion, CrAccordionItem } from '@cristal-ui/react';
 
 const trails = [
   { label: 'Sommets', from: '#4c1d95', to: '#f59e0b', text: '12 randonnées' },

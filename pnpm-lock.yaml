@@ -17,7 +17,7 @@ importers:
 
   docs:
     dependencies:
-      '@cristal/react':
+      '@cristal-ui/react':
         specifier: workspace:*
         version: link:../packages/react
       cn:
@@ -69,7 +69,7 @@ importers:
 
   packages/core:
     dependencies:
-      '@cristal/tokens':
+      '@cristal-ui/tokens':
         specifier: workspace:*
         version: link:../tokens
     devDependencies:
@@ -85,7 +85,7 @@ importers:
 
   packages/react:
     dependencies:
-      '@cristal/core':
+      '@cristal-ui/core':
         specifier: workspace:*
         version: link:../core
       '@stencil/react-output-target':
@@ -110,7 +110,7 @@ importers:
 
   playground/next:
     dependencies:
-      '@cristal/react':
+      '@cristal-ui/react':
         specifier: workspace:*
         version: link:../../packages/react
       next:

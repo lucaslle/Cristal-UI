@@ -1,6 +1,6 @@
 'use client';
 
-import { CrBox, CrThemeToggle } from '@cristal/react';
+import { CrBox, CrThemeToggle } from '@cristal-ui/react';
 
 export default function ThemeToggleVariants() {
   return (

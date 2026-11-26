@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { CrSlider } from '@cristal/react';
+import { CrSlider } from '@cristal-ui/react';
 
 export function SliderDemo() {
   const [volume, setVolume] = useState(40);

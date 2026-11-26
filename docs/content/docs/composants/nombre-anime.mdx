@@ -43,7 +43,7 @@ The number is formatted with `Intl.NumberFormat` in the component language (`lan
 
 <include>../../../demos/en/number-format.tsx</include>
 
-With `@cristal/react/ssr`, the server HTML already contains the formatted number. The component is rendered there on its own, without seeing the page language: give it `lang` (`<CrNumber lang="fr" … />`) so the server already uses the French separators.
+With `@cristal-ui/react/ssr`, the server HTML already contains the formatted number. The component is rendered there on its own, without seeing the page language: give it `lang` (`<CrNumber lang="fr" … />`) so the server already uses the French separators.
 
 <Callout>
   If the user asked their system to reduce motion, the number switches to the new value at once, whatever the animation. Screen readers always read the final value, never the digits in between.

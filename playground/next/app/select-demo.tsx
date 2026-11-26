@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { CrButton, CrSelect } from '@cristal/react';
+import { CrButton, CrSelect } from '@cristal-ui/react';
 
 const languages = ['Français', 'Anglais', 'Espagnol', 'Allemand', 'Italien', 'Portugais', 'Néerlandais', 'Japonais'];
 const cities = ['Paris', 'Lyon', 'Marseille', 'Lille', 'Bordeaux', 'Nantes', 'Strasbourg', 'Évry', 'Écully', 'Toulouse'];

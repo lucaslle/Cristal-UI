@@ -1,4 +1,4 @@
-import { CrAccordion, CrAccordionItem } from '@cristal/react';
+import { CrAccordion, CrAccordionItem } from '@cristal-ui/react';
 
 const lines = [
   { label: 'Subscription', amount: '99', text: '$99.00' },

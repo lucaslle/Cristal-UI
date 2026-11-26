@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { CrBackground, CrBox, CrButton, CrSegmented } from '@cristal/react';
+import { CrBackground, CrBox, CrButton, CrSegmented } from '@cristal-ui/react';
 
 const variants = [
   ['aurora', 'Aurora'],

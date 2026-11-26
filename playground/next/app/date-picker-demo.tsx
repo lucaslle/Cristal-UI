@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { CrButton, CrDatePicker } from '@cristal/react';
+import { CrButton, CrDatePicker } from '@cristal-ui/react';
 
 export function DatePickerDemo() {
   const [delivery, setDelivery] = useState('2025-03-14');

@@ -1,4 +1,4 @@
-import { CrBreadcrumb } from '@cristal/react';
+import { CrBreadcrumb } from '@cristal-ui/react';
 
 export function BreadcrumbDemo() {
   return (

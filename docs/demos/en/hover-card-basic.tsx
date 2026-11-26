@@ -1,6 +1,6 @@
 'use client';
 
-import { CrAvatar, CrBox, CrHoverCard } from '@cristal/react';
+import { CrAvatar, CrBox, CrHoverCard } from '@cristal-ui/react';
 
 export default function HoverCardBasic() {
   return (

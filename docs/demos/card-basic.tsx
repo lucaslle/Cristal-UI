@@ -1,4 +1,4 @@
-import { CrButton, CrCard } from '@cristal/react';
+import { CrButton, CrCard } from '@cristal-ui/react';
 
 export default function CardBasic() {
   return (

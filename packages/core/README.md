@@ -1,16 +1,16 @@
-# @cristal/core
+# @cristal-ui/core
 
-Accessible web components (RGAA, WCAG AA) with a `cr-` prefix, built with Stencil. They work in any framework or none; React users install [`@cristal/react`](https://www.npmjs.com/package/@cristal/react) instead.
+Accessible web components (RGAA, WCAG AA) with a `cr-` prefix, built with Stencil. They work in any framework or none; React users install [`@cristal-ui/react`](https://www.npmjs.com/package/@cristal-ui/react) instead.
 
 Documentation: https://lucaslle.github.io/Cristal-UI/
 
 ```bash
-npm install @cristal/core @cristal/tokens
+npm install @cristal-ui/core @cristal-ui/tokens
 ```
 
 ```js
-import '@cristal/tokens/tokens.css';
-import { defineCustomElements } from '@cristal/core/loader';
+import '@cristal-ui/tokens/tokens.css';
+import { defineCustomElements } from '@cristal-ui/core/loader';
 
 defineCustomElements();
 ```

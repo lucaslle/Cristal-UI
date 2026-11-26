@@ -1,4 +1,4 @@
-# @cristal/core
+# @cristal-ui/core
 
 ## 0.1.0
 
@@ -54,7 +54,7 @@
 - 09cec26: cr-table: column sorting (`sortable`, S key, `sort` prop, `crSortChange`), row selection (`selectable`, `selected`, `rowKey`, `crSelectionChange`), clickable rows through a real button in the `primary` column (`crRowClick`), value formatting that keeps raw values for sorting (`format`), and custom cells filled by `slot="<key>-<id>"` children (`slot` columns).
 - 1011ebb: Add cr-table: a real table whose columns each user can reorder (drag or Alt + arrows), resize (handle, Shift + arrows, Enter or double-click to fit), pin to the left and hide, with three row densities, a reset button, a layout summary, announced actions and optional localStorage persistence (storageKey, crLayoutChange). Five styles (default, striped, cards, minimal, grid), sticky header and coloured status badges per column.
 - a88b956: Theming takes one variable: --cr-color-primary. Hover, subtle background, readable text, focus and the text color on primary are derived in CSS, and the cr-theme class scopes a theme to one area. Components use the readable text shade for text, borders and focus.
-- 6c1fc4d: Add an opt-in dark theme. `@cristal/tokens/tokens-dark.css` (also shipped as `@cristal/react/tokens-dark.css`) gives dark values to surface, text, muted text, borders, disabled states, danger, success, overlay and shadow, and sets `color-scheme: dark`, under `:root[data-theme='dark']` and the `cr-theme-dark` class; nothing changes without them, whatever the system preference. The primary colour stays the brand colour; primary-text, focus and the new primary-indicator token (stars, slider, switch, radio, checkbox, loader, sparkline, drop zones) switch to a light shade of it, and primary-subtle mixes with the dark surface. Status texts of badges, chips, inputs, numbers and codes now use the new text-lightness tokens, so they stay readable in both themes, and the icon button badge text follows the danger colour. Text keeps 4.5:1 and borders, focus and indicators 3:1 in dark.
+- 6c1fc4d: Add an opt-in dark theme. `@cristal-ui/tokens/tokens-dark.css` (also shipped as `@cristal-ui/react/tokens-dark.css`) gives dark values to surface, text, muted text, borders, disabled states, danger, success, overlay and shadow, and sets `color-scheme: dark`, under `:root[data-theme='dark']` and the `cr-theme-dark` class; nothing changes without them, whatever the system preference. The primary colour stays the brand colour; primary-text, focus and the new primary-indicator token (stars, slider, switch, radio, checkbox, loader, sparkline, drop zones) switch to a light shade of it, and primary-subtle mixes with the dark surface. Status texts of badges, chips, inputs, numbers and codes now use the new text-lightness tokens, so they stay readable in both themes, and the icon button badge text follows the danger colour. Text keeps 4.5:1 and borders, focus and indicators 3:1 in dark.
 - 7fcf1ec: cr-drawer gets `variant="floating"`: the panel floats away from the screen edges with rounded corners. With `movable`, users move it by dragging its header, or with the arrow keys on its handle (Shift for bigger steps); with `resizable`, they resize it from its bottom corner on the page side, with the pointer or the arrow keys (minimum 280 × 200 px). It stays on screen and gets back its edge and size when it closes.
 - 4fe8735: Form fields show French validation messages automatically and focus the first invalid field on submit. cr-select is now a custom accessible listbox (W3C combobox pattern) shown above the page. Violet is the default primary color.
 
@@ -69,4 +69,4 @@
 - Updated dependencies [a88b956]
 - Updated dependencies [6c1fc4d]
 - Updated dependencies [4fe8735]
-  - @cristal/tokens@0.1.0
+  - @cristal-ui/tokens@0.1.0

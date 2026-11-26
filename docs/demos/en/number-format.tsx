@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { CrBox, CrButton, CrNumber } from '@cristal/react';
+import { CrBox, CrButton, CrNumber } from '@cristal-ui/react';
 
 export default function NumberFormat() {
   const [price, setPrice] = useState(1249.9);

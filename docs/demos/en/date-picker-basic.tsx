@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { CrBox, CrDatePicker } from '@cristal/react';
+import { CrBox, CrDatePicker } from '@cristal-ui/react';
 
 export default function DatePickerBasic() {
   const [date, setDate] = useState('2025-06-12');

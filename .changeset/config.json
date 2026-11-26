@@ -3,7 +3,7 @@
   "commit": false,
   "fixed": [
     [
-      "@cristal/*"
+      "@cristal-ui/*"
     ]
   ],
   "access": "public",

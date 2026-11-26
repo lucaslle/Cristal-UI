@@ -1,4 +1,4 @@
-import { CrTagInput } from '@cristal/react';
+import { CrTagInput } from '@cristal-ui/react';
 
 export default function TagsBasic() {
   return <CrTagInput label="Topics" name="topics" placeholder="design, animation…" values={['design', 'animation']} style={{ width: '100%', maxWidth: 420 }} />;

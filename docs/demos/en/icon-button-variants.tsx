@@ -1,4 +1,4 @@
-import { CrIconButton } from '@cristal/react';
+import { CrIconButton } from '@cristal-ui/react';
 import { Pencil, Settings, Share2, Trash2 } from 'lucide-react';
 
 export default function IconButtonVariants() {

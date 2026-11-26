@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { CrBox, CrButton, CrProgress } from '@cristal/react';
+import { CrBox, CrButton, CrProgress } from '@cristal-ui/react';
 
 export default function LoadingProgress() {
   const [value, setValue] = useState(0);

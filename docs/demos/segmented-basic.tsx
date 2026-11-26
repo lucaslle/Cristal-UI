@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { CrBox, CrSegmented } from '@cristal/react';
+import { CrBox, CrSegmented } from '@cristal-ui/react';
 
 const variants = ['thumb', 'clip', 'underline', 'outline'] as const;
 

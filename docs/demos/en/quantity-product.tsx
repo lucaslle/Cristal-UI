@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { CrBox, CrQuantity, CrSegmented } from '@cristal/react';
+import { CrBox, CrQuantity, CrSegmented } from '@cristal-ui/react';
 
 const animations = [
   ['press', 'Press'],

@@ -1,4 +1,4 @@
-import { CrButton } from '@cristal/react';
+import { CrButton } from '@cristal-ui/react';
 
 export default function ButtonVariants() {
   return (

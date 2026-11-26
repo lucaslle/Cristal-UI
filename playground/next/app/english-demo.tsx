@@ -1,4 +1,4 @@
-import { CrInput, CrSelect, CrStep, CrStepper, CrTable } from '@cristal/react/ssr';
+import { CrInput, CrSelect, CrStep, CrStepper, CrTable } from '@cristal-ui/react/ssr';
 
 /** Même composants, parent en anglais : les textes intégrés passent en anglais. */
 export function EnglishDemo() {

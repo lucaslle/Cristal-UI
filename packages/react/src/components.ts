@@ -1,7 +1,7 @@
 'use client';
 
 import { createElement, forwardRef } from 'react';
-import * as elements from '@cristal/core/dist/components';
+import * as elements from '@cristal-ui/core/dist/components';
 import * as generated from './generated/components.js';
 
 export type * from './generated/components.js';

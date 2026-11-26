@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { CrButton, CrCheckbox, CrDrawer, CrInput } from '@cristal/react';
+import { CrButton, CrCheckbox, CrDrawer, CrInput } from '@cristal-ui/react';
 
 export default function DrawerFilters() {
   const [open, setOpen] = useState(false);

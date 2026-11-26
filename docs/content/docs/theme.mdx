@@ -7,7 +7,7 @@ import { ThemeBuilder } from '@/components/theme-builder';
 
 ## Just one color to choose
 
-To give the whole application your color, one line is enough, after importing `@cristal/react/tokens.css`:
+To give the whole application your color, one line is enough, after importing `@cristal-ui/react/tokens.css`:
 
 ```css title="theme.css"
 :root {
@@ -47,8 +47,8 @@ Add the `cr-theme` class to a container and redefine the color on that container
 The dark theme is **opt-in**: import its stylesheet after the tokens, then set `data-theme="dark"` on `<html>`. Without that attribute nothing changes, even when the user's system is in dark mode: you decide when to turn it on.
 
 ```tsx title="app/layout.tsx"
-import '@cristal/react/tokens.css';
-import '@cristal/react/tokens-dark.css';
+import '@cristal-ui/react/tokens.css';
+import '@cristal-ui/react/tokens-dark.css';
 
 <html lang="en" data-theme="dark">
 ```

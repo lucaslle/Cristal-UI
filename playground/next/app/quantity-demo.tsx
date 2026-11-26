@@ -2,7 +2,7 @@
 
 import type { FormEvent } from 'react';
 import { useState } from 'react';
-import { CrButton, CrQuantity } from '@cristal/react';
+import { CrButton, CrQuantity } from '@cristal-ui/react';
 
 const animations = ['press', 'slide', 'ripple', 'stretch', 'spin', 'halo'] as const;
 

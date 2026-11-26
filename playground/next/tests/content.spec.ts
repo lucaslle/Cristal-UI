@@ -61,6 +61,6 @@ test('cr-code-block: Copy writes the code to the clipboard and announces it', as
   await block.getByRole('button', { name: 'Copier Terminal' }).click();
   await expect(block.getByRole('status')).toHaveText('Copié');
   await expect(block.getByRole('button', { name: 'Copier Terminal' })).toContainText('Copié');
-  expect(await page.evaluate(() => navigator.clipboard.readText())).toBe('pnpm add @cristal/react');
+  expect(await page.evaluate(() => navigator.clipboard.readText())).toBe('pnpm add @cristal-ui/react');
   await expect(block.getByRole('button')).toContainText('Copier', { timeout: 4000 });
 });

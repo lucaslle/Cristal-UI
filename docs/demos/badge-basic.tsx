@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { CrBadge, CrBox, CrButton } from '@cristal/react';
+import { CrBadge, CrBox, CrButton } from '@cristal-ui/react';
 
 export default function BadgeBasic() {
   const [unread, setUnread] = useState(3);

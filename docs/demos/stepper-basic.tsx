@@ -1,4 +1,4 @@
-import { CrStep, CrStepper } from '@cristal/react';
+import { CrStep, CrStepper } from '@cristal-ui/react';
 
 export default function StepperBasic() {
   return (

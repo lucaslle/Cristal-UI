@@ -17,7 +17,7 @@ const pageTheme = (): Theme => {
 
 /**
  * Bascule entre thème clair et thème sombre : un bouton rond, un interrupteur ou un bouton avec libellé, dont le soleil devient une lune.
- * Pose data-theme sur <html> (le thème sombre de @cristal/tokens/tokens-dark.css), avec une transition animée sur toute la page.
+ * Pose data-theme sur <html> (le thème sombre de @cristal-ui/tokens/tokens-dark.css), avec une transition animée sur toute la page.
  * Suit aussi les changements de data-theme faits ailleurs (sélecteur de thème de l'application). Garder le choix est laissé à l'application.
  * @part button - Le bouton natif (le rail pour l'interrupteur).
  * @part thumb - La pastille de l'interrupteur, qui porte l'icône.

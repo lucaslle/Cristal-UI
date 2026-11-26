@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { CrButton, CrCheckbox, CrInput, CrSelect } from '@cristal/react';
+import { CrButton, CrCheckbox, CrInput, CrSelect } from '@cristal-ui/react';
 
 export default function FormComplete() {
   const [sent, setSent] = useState('');

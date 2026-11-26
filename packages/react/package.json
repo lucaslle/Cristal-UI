@@ -1,5 +1,5 @@
 {
-  "name": "@cristal/react",
+  "name": "@cristal-ui/react",
   "version": "0.1.0",
   "description": "React and Next.js wrappers for the Cristal accessible web components, with server rendering and design tokens.",
   "keywords": [
@@ -31,7 +31,7 @@
     "build": "tsc -p tsconfig.json && node -e \"for (const f of ['tokens.css', 'tokens-dark.css']) require('node:fs').copyFileSync('../tokens/build/' + f, 'dist/' + f)\""
   },
   "dependencies": {
-    "@cristal/core": "workspace:*",
+    "@cristal-ui/core": "workspace:*",
     "@stencil/react-output-target": "^1.7.0"
   },
   "peerDependencies": {

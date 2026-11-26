@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { CrButton, CrCheckbox, CrInput, CrPopover } from '@cristal/react';
+import { CrButton, CrCheckbox, CrInput, CrPopover } from '@cristal-ui/react';
 
 export default function PopoverBasic() {
   const [open, setOpen] = useState(false);

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, type CSSProperties } from 'react';
-import { CrButton, CrCheckbox, CrIconButton, CrInput, CrStep, CrStepper } from '@cristal/react';
+import { CrButton, CrCheckbox, CrIconButton, CrInput, CrStep, CrStepper } from '@cristal-ui/react';
 import { Sparkles } from 'lucide-react';
 import { copyOf } from './copy';
 

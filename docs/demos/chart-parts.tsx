@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { CrChart, CrSegmented } from '@cristal/react';
+import { CrChart, CrSegmented } from '@cristal-ui/react';
 
 const channels = ['Web', 'Boutique', 'Appli', 'Grossiste', 'Téléphone', 'Salons', 'Marketplace'];
 const orders = [1840, 1210, 760, 420, 180, 90, 60];

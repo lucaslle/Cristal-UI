@@ -1,4 +1,4 @@
-import { CrSegmented } from '@cristal/react';
+import { CrSegmented } from '@cristal-ui/react';
 
 export default function SegmentedCounts() {
   return (

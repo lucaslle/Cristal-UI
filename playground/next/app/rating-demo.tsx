@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { CrRating } from '@cristal/react';
+import { CrRating } from '@cristal-ui/react';
 
 export function RatingDemo() {
   const [rating, setRating] = useState(3);

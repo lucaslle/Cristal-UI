@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { CrSelect, CrTable } from '@cristal/react';
+import { CrSelect, CrTable } from '@cristal-ui/react';
 
 const columns = [
   { key: 'amount', label: 'Montant', width: 120, align: 'end' as const, pinned: true },

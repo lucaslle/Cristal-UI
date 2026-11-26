@@ -1,4 +1,4 @@
-import { CrBox, CrSearch } from '@cristal/react';
+import { CrBox, CrSearch } from '@cristal-ui/react';
 
 const variants = ['outline', 'filled', 'underline', 'expand'] as const;
 

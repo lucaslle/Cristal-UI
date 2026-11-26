@@ -1,4 +1,4 @@
-import { CrInput } from '@cristal/react';
+import { CrInput } from '@cristal-ui/react';
 
 const emails = ['mia@mail.com', 'mia.smith@company.com', 'lucas@example.com'];
 
