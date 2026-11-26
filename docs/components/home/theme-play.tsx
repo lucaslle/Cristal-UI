@@ -2,7 +2,7 @@
 
 import { useState, type CSSProperties } from 'react';
 import { CrButton, CrCheckbox, CrIconButton, CrInput, CrStep, CrStepper } from '@cristal-ui/react';
-import { Sparkles } from 'lucide-react';
+import { Lightbulb } from 'lucide-react';
 import { copyOf } from './copy';
 
 const colors = ['#6d28d9', '#e11d48', '#059669', '#0369a1', '#f59e0b', '#111827'];
@@ -15,11 +15,11 @@ export function ThemePlay({ lang }: { lang: string }) {
   return (
     <section className="mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-12 px-6 py-24 lg:grid-cols-2">
       <div className="flex flex-col gap-6">
-        <p className="text-sm font-semibold uppercase tracking-widest text-fd-primary">{c.themeKicker}</p>
-        <h2 className="font-display text-4xl font-bold sm:text-5xl">{c.themeTitle}</h2>
+        <p className="text-sm font-medium text-fd-muted-foreground">{c.themeKicker}</p>
+        <h2 className="font-display text-3xl font-semibold sm:text-4xl">{c.themeTitle}</h2>
         <p className="text-lg text-fd-muted-foreground">{c.themeLead}</p>
         <fieldset className="flex flex-wrap gap-3">
-          <legend className="mb-3 font-semibold">{c.themeLegend}</legend>
+          <legend className="mb-3 font-medium">{c.themeLegend}</legend>
           {colors.map((value, index) => (
             <label key={value} className="flex cursor-pointer items-center gap-2 rounded-full border py-1.5 pl-1.5 pr-4 has-[:checked]:border-fd-primary has-[:checked]:ring-2 has-[:checked]:ring-fd-primary has-[:focus-visible]:outline has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2">
               <input type="radio" name="brand" value={value} checked={color === value} onChange={() => setColor(value)} className="sr-only" />
@@ -28,13 +28,13 @@ export function ThemePlay({ lang }: { lang: string }) {
             </label>
           ))}
         </fieldset>
-        <pre className="overflow-x-auto rounded-2xl bg-[#0b0718] p-5 font-mono text-sm text-violet-100">
-          <span className="text-fuchsia-300">:root</span> {'{'}
-          {'\n'}  <span className="text-cyan-300">--cr-color-primary</span>: {color};{'\n'}
+        <pre className="overflow-x-auto rounded-xl border bg-fd-card p-5 font-mono text-sm">
+          <span className="text-fd-muted-foreground">:root</span> {'{'}
+          {'\n'}  <span className="text-fd-muted-foreground">--cr-color-primary</span>: {color};{'\n'}
           {'}'}
         </pre>
       </div>
-      <div className="cr-theme glass flex flex-col gap-5 p-8" style={{ '--cr-color-primary': color } as CSSProperties}>
+      <div className="home-panel flex flex-col gap-5 p-6 sm:p-8" style={{ '--cr-color-primary': color } as CSSProperties}>
         <CrStepper label={p.stepper} variant="path" current={1}>
           {p.steps.map(([label, text]) => (
             <CrStep key={label} label={label}>
@@ -49,7 +49,7 @@ export function ThemePlay({ lang }: { lang: string }) {
           <CrButton variant="secondary">{p.look}</CrButton>
           <CrButton variant="outline">{p.cancel}</CrButton>
           <CrIconButton label={p.tips} variant="secondary" shape="round" badge={3}>
-            <Sparkles aria-hidden="true" />
+            <Lightbulb aria-hidden="true" />
           </CrIconButton>
         </div>
       </div>
