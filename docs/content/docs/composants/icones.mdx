@@ -1,0 +1,68 @@
+---
+title: Icons
+description: 39 outlined SVG icons, at the size and colour you choose, as React components and HTML elements.
+---
+
+import IconsGallery from '@/demos/en/icons-gallery';
+import IconsSizeColor from '@/demos/en/icons-size-color';
+
+## The icon set
+
+Each icon is its own React component, `CrIconSearch`, `CrIconClose`…: only the ones you import end up in your bundle. They are drawn on a 24 × 24 grid, with a 2-unit stroke and round ends, like the icons inside Cristal components.
+
+<Preview>
+  <IconsGallery />
+</Preview>
+
+```tsx
+import { CrIconSearch } from '@cristal-ui/react';
+
+<CrIconSearch />
+```
+
+Icons are plain SVG: in a server component, import them from `@cristal-ui/react/ssr` and they arrive already drawn in the HTML.
+
+## Size and colour
+
+- `size`: a number of pixels (`size={20}`) or a CSS length (`size="1.25em"`). Without `size`, the icon uses the `--cr-icon-size` variable, otherwise 24 px: set on a container, the variable sizes every icon inside it.
+- `color`: the stroke colour. Without `color`, the icon takes the text colour (`currentColor`): it follows hover, the disabled state and the dark theme with nothing to set.
+
+<Preview>
+  <IconsSizeColor />
+</Preview>
+
+<include>../../../demos/en/icons-size-color.tsx</include>
+
+Other SVG attributes pass through: `className`, `strokeWidth` for a thinner stroke, `onClick`…
+
+## Accessibility
+
+- By default the icon is decorative: it is hidden from screen readers (`aria-hidden`). That is right when nearby text says the same thing.
+- When the icon alone carries information, `label` gives it a name: it becomes an image (`role="img"`) that screen readers announce.
+- In an [icon button](/docs/composants/bouton-icone), keep the icon decorative: the button's `label` names it.
+- Colour alone cannot carry meaning: pair an error or success icon with text.
+
+## Without React
+
+The same icons exist as HTML elements, `cr-icon-search`, `cr-icon-close`… `defineIcons()` declares all of them, or only the ones you name:
+
+```html
+<script type="module">
+  import { defineIcons } from '@cristal-ui/core/dist/components';
+
+  defineIcons('search', 'close');
+</script>
+
+<cr-icon-search size="20" label="Search"></cr-icon-search>
+<cr-icon-close color="#e11d48"></cr-icon-close>
+```
+
+The attributes are the same: `size`, `color` and `label`. These elements draw in the browser; with Next.js, prefer the React components, rendered in the server HTML.
+
+## API
+
+| Property | Type | Default | Role |
+|---|---|---|---|
+| `size` | `number \| string` | `--cr-icon-size`, otherwise 24 px | Width and height: a number of pixels or a CSS length. |
+| `color` | `string` | text colour | Stroke colour. |
+| `label` | `string` | — | Name read by screen readers. Without it, the icon is decorative. |

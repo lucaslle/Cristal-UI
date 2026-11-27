@@ -40,6 +40,7 @@ import { TooltipDemo } from './tooltip-demo';
 import { PopoverDemo } from './popover-demo';
 import { ThemeToggleDemo } from './theme-toggle-demo';
 import { ContentDemo } from './content-demo';
+import { IconDemo } from './icon-demo';
 import { Hydrated } from './hydrated';
 
 const row = { display: 'flex', gap: 'var(--cr-spacing-sm)', alignItems: 'center', marginBottom: 'var(--cr-spacing-lg)' };
@@ -231,6 +232,9 @@ export default function Page() {
 
       <h2>Contenu</h2>
       <ContentDemo />
+
+      <h2>Icônes</h2>
+      <IconDemo />
 
       <h2 lang="en">In English</h2>
       <EnglishDemo />
