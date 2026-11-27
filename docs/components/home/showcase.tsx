@@ -17,6 +17,7 @@ import SelectSearchable from '@/demos/select-searchable';
 import TableOrders from '@/demos/table-orders';
 import TextareaBasic from '@/demos/textarea-basic';
 import { copyOf, type Copy } from './copy';
+import { Keys } from './keys';
 
 type Tile = { key: keyof Copy['tiles']; href: string; demo: Record<'en' | 'fr', ComponentType>; wide?: 2 | 3 };
 
@@ -38,26 +39,28 @@ export function Showcase({ lang }: { lang: string }) {
   const language = lang === 'fr' ? 'fr' : 'en';
   return (
     <section id="composants" className="mx-auto w-full max-w-7xl scroll-mt-20 px-6 py-24">
-      <p className="text-sm font-semibold uppercase tracking-widest text-fd-primary">{c.componentsKicker}</p>
-      <h2 className="font-display mt-3 max-w-3xl text-4xl font-bold sm:text-5xl">{c.componentsTitle}</h2>
+      <p className="text-sm font-medium text-fd-muted-foreground">{c.componentsKicker}</p>
+      <h2 className="font-display mt-2 max-w-3xl text-4xl sm:text-5xl">{c.componentsTitle}</h2>
       <p className="mt-4 max-w-2xl text-lg text-fd-muted-foreground">{c.componentsLead}</p>
       <div className="mt-12 grid grid-cols-1 gap-6 lg:grid-cols-3">
         {tiles.map((tile) => {
           const [title, text] = c.tiles[tile.key];
           const Demo = tile.demo[language];
+          const keys: readonly string[] = c.tileKeys[tile.key];
           return (
             <article key={tile.key} className={`tile ${tile.wide ? span[tile.wide] : ''}`}>
               <div className="flex flex-wrap items-baseline justify-between gap-2">
-                <h3 className="font-display text-xl font-bold">{title}</h3>
-                <Link href={`/${lang}/docs/composants/${tile.href}`} className="text-sm font-semibold text-fd-primary underline-offset-4 hover:underline">
-                  {c.docs} <span className="sr-only">: {title}</span>
-                  <span aria-hidden="true"> →</span>
+                <h3 className="text-lg font-semibold">{title}</h3>
+                <Link href={`/${lang}/docs/composants/${tile.href}`} className="text-sm font-medium text-fd-primary underline-offset-4 hover:underline">
+                  {c.docs}
+                  <span className="sr-only"> : {title}</span>
                 </Link>
               </div>
               <p className="text-fd-muted-foreground">{text}</p>
               <div className="tile-demo">
                 <Demo />
               </div>
+              {keys.length > 0 && <Keys label={c.keyboard} keys={keys} />}
             </article>
           );
         })}
