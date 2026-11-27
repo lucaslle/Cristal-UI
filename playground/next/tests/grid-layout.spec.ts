@@ -1,5 +1,5 @@
 import AxeBuilder from '@axe-core/playwright';
-import { expect, test, type Page } from '@playwright/test';
+import { expect, test, type Page } from './fixtures';
 
 const dash = (page: Page) => page.locator('cr-grid-layout');
 const widget = (page: Page, id: string) => page.locator(`cr-grid-item#${id}`);

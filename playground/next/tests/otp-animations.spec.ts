@@ -1,4 +1,4 @@
-import { expect, test, type Locator, type Page } from '@playwright/test';
+import { expect, test, type Locator, type Page } from './fixtures';
 
 const animations = ['pop', 'bounce', 'stretch', 'spin', 'merge', 'zoom', 'tint'];
 const demo = (page: Page, animation: string) => page.getByTestId(`otp-${animation}`);

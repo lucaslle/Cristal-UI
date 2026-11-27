@@ -1,4 +1,4 @@
-import { expect, test, type Page } from '@playwright/test';
+import { expect, test, type Page } from './fixtures';
 
 const chart = (page: Page, label: string) => page.locator(`cr-chart[label="${label}"]`);
 const plot = (page: Page, label: string) => chart(page, label).getByRole('group', { name: label });

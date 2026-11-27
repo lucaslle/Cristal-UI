@@ -1,4 +1,4 @@
-import { expect, test, type Page } from '@playwright/test';
+import { expect, test, type Page } from './fixtures';
 
 const table = (page: Page) => page.locator('cr-table[label="Stock"]');
 const header = (page: Page, name: string) => table(page).getByRole('columnheader', { name: new RegExp(`^${name}`) });

@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test';
+import { expect, test } from './fixtures';
 
 test('is server-rendered with declarative shadow DOM', async ({ request }) => {
   const html = await (await request.get('/')).text();

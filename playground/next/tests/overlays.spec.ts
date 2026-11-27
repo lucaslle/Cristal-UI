@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test';
+import { expect, test } from './fixtures';
 
 const focusIsInside = (tag: string) =>
   `(() => { let el = document.activeElement; while (el?.shadowRoot?.activeElement) el = el.shadowRoot.activeElement; return !!el && (el.closest('${tag}') !== null || el.getRootNode().host?.closest('${tag}') !== null); })()`;
