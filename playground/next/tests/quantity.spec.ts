@@ -1,4 +1,4 @@
-import { expect, test, type Page } from '@playwright/test';
+import { expect, test, type Page } from './fixtures';
 
 const animations = ['press', 'slide', 'ripple', 'stretch', 'spin', 'halo'];
 const demo = (page: Page, id: string) => page.getByTestId(`quantity-${id}`);

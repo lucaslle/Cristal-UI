@@ -1,5 +1,5 @@
 import AxeBuilder from '@axe-core/playwright';
-import { expect, test, type Locator, type Page } from '@playwright/test';
+import { expect, test, type Locator, type Page } from './fixtures';
 
 const message = 'Saisissez une adresse e-mail valide, par exemple nom@domaine.fr.';
 // Élément animé attendu par variante : classe de l'élément et pseudo-élément éventuel.

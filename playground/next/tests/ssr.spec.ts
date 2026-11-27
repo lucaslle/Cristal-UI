@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test';
+import { expect, test } from './fixtures';
 
 test('client components send their props as attributes in the server HTML', async ({ page }) => {
   const html = await (await page.request.get('/')).text();

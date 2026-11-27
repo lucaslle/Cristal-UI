@@ -1,4 +1,4 @@
-import { expect, test, type Page } from '@playwright/test';
+import { expect, test, type Page } from './fixtures';
 
 const transitions = ['circle', 'curtain', 'blinds', 'flip', 'eclipse', 'sweep', 'none'];
 const toggle = (page: Page) => page.getByTestId('theme-toggle').getByRole('button', { name: 'Thème sombre' });

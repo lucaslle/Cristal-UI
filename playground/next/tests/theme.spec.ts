@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test';
+import { expect, test } from './fixtures';
 
 const style = (page: import('@playwright/test').Page, name: string, property: 'backgroundColor' | 'color') =>
   page.getByRole('button', { name, exact: true }).evaluate((button, key) => getComputedStyle(button)[key], property);

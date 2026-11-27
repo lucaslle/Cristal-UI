@@ -1,4 +1,4 @@
-import { expect, test, type Page } from '@playwright/test';
+import { expect, test, type Page } from './fixtures';
 
 const stepper = (page: Page, name: string) => page.getByRole('group', { name });
 const current = (page: Page, name: string) => stepper(page, name).locator('li[aria-current="step"]');

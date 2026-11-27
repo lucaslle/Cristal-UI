@@ -1,4 +1,4 @@
-import { expect, test, type Page } from '@playwright/test';
+import { expect, test, type Page } from './fixtures';
 
 const table = (page: Page) => page.locator('cr-table[label="Commandes de la semaine"]');
 const order = (page: Page) => table(page).locator('th .text').allTextContents();

@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test';
+import { expect, test } from './fixtures';
 
 test('renders header and footer only when they are provided', async ({ page }) => {
   await page.goto('/');

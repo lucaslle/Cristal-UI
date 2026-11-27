@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test';
+import { expect, test } from './fixtures';
 
 test.beforeEach(async ({ page }) => {
   await page.goto('/');
@@ -102,9 +102,17 @@ test('cascade: amounts count up to their final text and bars grow', async ({ pag
   const amount = page.locator('[data-cr-count="99"]');
   await expect(amount).not.toHaveText('99,00 €');
   await expect(amount).toHaveText('99,00 €');
+  // Les barres poussent en moins d'une seconde : on compte les animations au moment où elles partent, quelle que soit la charge de la machine.
+  await page.evaluate(() => {
+    const animate = Element.prototype.animate;
+    (window as any).grown = 0;
+    Element.prototype.animate = function (...args: Parameters<Element['animate']>) {
+      if (this.hasAttribute('data-cr-grow')) (window as any).grown++;
+      return animate.apply(this, args);
+    };
+  });
   await header(page, /Vues cette semaine/).click();
-  const bar = page.locator('[data-cr-grow]').first();
-  expect(await bar.evaluate((el) => el.getAnimations().length)).toBeGreaterThan(0);
+  await expect.poll(() => page.evaluate(() => (window as any).grown as number)).toBe(7);
 });
 
 test('reduced motion opens instantly, without cascade', async ({ page }) => {
