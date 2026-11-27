@@ -1,0 +1,68 @@
+---
+title: Icônes
+description: 39 icônes SVG au trait, à la taille et à la couleur de votre choix, en composants React et en éléments HTML.
+---
+
+import IconsGallery from '@/demos/icons-gallery';
+import IconsSizeColor from '@/demos/icons-size-color';
+
+## Le jeu d'icônes
+
+Chaque icône est un composant React à part, `CrIconSearch`, `CrIconClose`… : seules celles que vous importez finissent dans votre bundle. Elles sont dessinées sur une grille de 24 × 24, avec un trait de 2 aux bouts arrondis, comme les icônes des composants Cristal.
+
+<Preview>
+  <IconsGallery />
+</Preview>
+
+```tsx
+import { CrIconSearch } from '@cristal-ui/react';
+
+<CrIconSearch />
+```
+
+Les icônes sont des SVG rendus tels quels : dans un composant serveur, importez-les depuis `@cristal-ui/react/ssr`, elles arrivent déjà dessinées dans le HTML.
+
+## Taille et couleur
+
+- `size` : un nombre en pixels (`size={20}`) ou une longueur CSS (`size="1.25em"`). Sans `size`, l'icône prend la variable `--cr-icon-size`, sinon 24 px : posée sur un conteneur, la variable règle toutes les icônes qu'il contient.
+- `color` : la couleur du trait. Sans `color`, l'icône prend la couleur du texte (`currentColor`) : elle suit le survol, l'état désactivé et le thème sombre sans rien régler.
+
+<Preview>
+  <IconsSizeColor />
+</Preview>
+
+<include>../../../demos/icons-size-color.tsx</include>
+
+Les autres attributs SVG passent tels quels : `className`, `strokeWidth` pour un trait plus fin, `onClick`…
+
+## Accessibilité
+
+- Par défaut, l'icône est décorative : elle est masquée aux lecteurs d'écran (`aria-hidden`). C'est le bon choix quand un texte à côté dit la même chose.
+- Quand l'icône est seule à porter une information, `label` lui donne un nom : elle devient une image (`role="img"`) lue par les lecteurs d'écran.
+- Dans un [bouton icône](/docs/composants/bouton-icone), laissez l'icône décorative : c'est le `label` du bouton qui le nomme.
+- Une couleur seule ne suffit pas à porter un sens : accompagnez une icône d'erreur ou de succès d'un texte.
+
+## Sans React
+
+Les mêmes icônes existent en éléments HTML, `cr-icon-search`, `cr-icon-close`… `defineIcons()` les déclare toutes, ou seulement celles que vous nommez :
+
+```html
+<script type="module">
+  import { defineIcons } from '@cristal-ui/core/dist/components';
+
+  defineIcons('search', 'close');
+</script>
+
+<cr-icon-search size="20" label="Rechercher"></cr-icon-search>
+<cr-icon-close color="#e11d48"></cr-icon-close>
+```
+
+Les attributs sont les mêmes : `size`, `color` et `label`. Ces éléments se dessinent dans le navigateur ; avec Next.js, préférez les composants React, rendus dès le HTML du serveur.
+
+## API
+
+| Propriété | Type | Par défaut | Rôle |
+|---|---|---|---|
+| `size` | `number \| string` | `--cr-icon-size`, sinon 24 px | Largeur et hauteur : nombre en pixels ou longueur CSS. |
+| `color` | `string` | couleur du texte | Couleur du trait. |
+| `label` | `string` | — | Nom lu par les lecteurs d'écran. Sans lui, l'icône est décorative. |

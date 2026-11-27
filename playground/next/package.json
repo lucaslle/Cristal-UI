@@ -8,6 +8,7 @@
     "test:e2e": "playwright test"
   },
   "dependencies": {
+    "@cristal-ui/core": "workspace:*",
     "@cristal-ui/react": "workspace:*",
     "next": "^16.4.5",
     "react": "^19.3.1",

@@ -110,6 +110,9 @@ importers:
 
   playground/next:
     dependencies:
+      '@cristal-ui/core':
+        specifier: workspace:*
+        version: link:../../packages/core
       '@cristal-ui/react':
         specifier: workspace:*
         version: link:../../packages/react

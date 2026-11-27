@@ -49,8 +49,8 @@
       "import": "./dist/index.js"
     },
     "./ssr": {
-      "types": "./dist/generated/components.server.d.ts",
-      "import": "./dist/generated/components.server.js"
+      "types": "./dist/ssr.d.ts",
+      "import": "./dist/ssr.js"
     },
     "./tokens.css": "./dist/tokens.css",
     "./tokens-dark.css": "./dist/tokens-dark.css"
